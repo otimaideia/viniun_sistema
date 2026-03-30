@@ -41,6 +41,7 @@ backups/
 # Screenshots (temporary)
 *.png
 !public/images/**/*.png
+!src/assets/**/*.png
 
 # Deploy scripts with credentials
 configure-meta-secrets.sh
