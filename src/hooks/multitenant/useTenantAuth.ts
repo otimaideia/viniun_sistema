@@ -159,9 +159,9 @@ export function useTenantAuth(): TenantAuthReturn {
         }
       }
 
-      // 4. Fallback para tenant padrão (franqueadora/plataforma)
+      // 4. Fallback para tenant padrão (adminviniun/plataforma)
       if (!detectedTenant) {
-        detectedTenant = slugMap.get('franqueadora') || tenants?.[0] || null;
+        detectedTenant = slugMap.get('adminviniun') || tenants?.[0] || null;
         method = 'default';
       }
 

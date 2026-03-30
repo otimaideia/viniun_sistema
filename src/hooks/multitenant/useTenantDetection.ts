@@ -175,9 +175,9 @@ export function useTenantDetection(): TenantDetectionResult {
         }
       }
 
-      // 4. Fallback para tenant padrão (franqueadora/plataforma)
+      // 4. Fallback para tenant padrão (adminviniun/plataforma)
       if (!tenantSlug) {
-        tenantSlug = 'franqueadora';
+        tenantSlug = 'adminviniun';
         method = 'default';
       }
 
@@ -191,11 +191,11 @@ export function useTenantDetection(): TenantDetectionResult {
 
       if (tenantError) {
         // Se não encontrou o tenant específico, tentar o default
-        if (tenantError.code === 'PGRST116' && tenantSlug !== 'franqueadora') {
+        if (tenantError.code === 'PGRST116' && tenantSlug !== 'adminviniun') {
           const { data: defaultTenant, error: defaultError } = await supabase
             .from('mt_tenants')
             .select('*')
-            .eq('slug', 'franqueadora')
+            .eq('slug', 'adminviniun')
             .eq('is_active', true)
             .single();
 
@@ -283,12 +283,12 @@ export async function isCurrentTenant(tenantSlug: string): Promise<boolean> {
 
     if (queryTenant) return queryTenant.toLowerCase() === tenantSlug.toLowerCase();
     if (pathTenant) return pathTenant.toLowerCase() === tenantSlug.toLowerCase();
-    return tenantSlug.toLowerCase() === 'franqueadora';
+    return tenantSlug.toLowerCase() === 'adminviniun';
   }
 
   // Em produção
   const subdomain = extractSubdomain();
-  if (!subdomain) return tenantSlug.toLowerCase() === 'franqueadora';
+  if (!subdomain) return tenantSlug.toLowerCase() === 'adminviniun';
 
   // Buscar o slug real do subdomínio no banco
   const { data } = await supabase
