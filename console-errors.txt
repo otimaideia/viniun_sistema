@@ -1,0 +1,55 @@
+Total messages: 13 (Errors: 5, Warnings: 2)
+Returning 5 messages for level "error"
+
+[ERROR] The above error occurred in the <AgendamentoEdit> component:
+
+    at AgendamentoEdit (http://localhost:8080/src/pages/AgendamentoEdit.tsx:61:20)
+    at ProtectedRoute (http://localhost:8080/src/components/ProtectedRoute.tsx:33:34)
+    at RenderedRoute (http://localhost:8080/node_modules/.vite/deps/react-router-dom.js?v=263d6665:4088:5)
+    at Routes (http://localhost:8080/node_modules/.vite/deps/react-router-dom.js?v=263d6665:4558:5)
+    at BrandingProvider (http://localhost:8080/src/contexts/BrandingContext.tsx:217:36)
+    at TenantProvider (http://localhost:8080/src/contexts/TenantContext.tsx:30:34)
+    at AuthProvider (http://localhost:8080/src/contexts/AuthContext.tsx:50:32)
+    at Router (http://localhost:8080/node_modules/.vite/deps/react-router-dom.js?v=263d6665:4501:15)
+    at BrowserRouter (http://localhost:8080/node_modules/.vite/deps/react-router-dom.js?v=263d6665:5247:5)
+    at Provider (http://localhost:8080/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=ea72ff0f:38:15)
+    at TooltipProvider (http://localhost:8080/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=e65632ce:65:5)
+    at QueryClientProvider (http://localhost:8080/node_modules/.vite/deps/@tanstack_react-query.js?v=fe017c60:2934:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries. @ http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:14031
+[ERROR] Failed to load resource: the server responded with a status of 400 () @ https://supabase-app.yeslaserpraiagrande.com.br/rest/v1/mt_ai_skill_executions?select=*&tenant_id=eq.ebf87fe2-093a-4fba-bb56-c6835cbc1465&user_id=eq.2b326754-016c-47a7-b16e-85e6bc7b991f&status=eq.completed&dismissed_at=is.null&order=created_at.desc&limit=20:0
+TypeError: Cannot read properties of undefined (reading 'filter')
+    at http://localhost:8080/src/pages/AgendamentoEdit.tsx:295:45
+    at updateMemo (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:12210:27)
+    at Object.useMemo (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:12726:24)
+    at useMemo (http://localhost:8080/node_modules/.vite/deps/chunk-QCHXOAYK.js?v=ea72ff0f:1094:29)
+    at AgendamentoEdit (http://localhost:8080/src/pages/AgendamentoEdit.tsx:293:33)
+    at renderWithHooks (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:11548:26)
+    at updateFunctionComponent (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:14582:28)
+    at beginWork (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:3699:24)
+TypeError: Cannot read properties of undefined (reading 'filter')
+    at http://localhost:8080/src/pages/AgendamentoEdit.tsx:295:45
+    at updateMemo (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:12210:27)
+    at Object.useMemo (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:12726:24)
+    at useMemo (http://localhost:8080/node_modules/.vite/deps/chunk-QCHXOAYK.js?v=ea72ff0f:1094:29)
+    at AgendamentoEdit (http://localhost:8080/src/pages/AgendamentoEdit.tsx:293:33)
+    at renderWithHooks (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:11548:26)
+    at updateFunctionComponent (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:14582:28)
+    at beginWork (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:3699:24)
+TypeError: Cannot read properties of undefined (reading 'filter')
+    at http://localhost:8080/src/pages/AgendamentoEdit.tsx:295:45
+    at updateMemo (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:12210:27)
+    at Object.useMemo (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:12726:24)
+    at useMemo (http://localhost:8080/node_modules/.vite/deps/chunk-QCHXOAYK.js?v=ea72ff0f:1094:29)
+    at AgendamentoEdit (http://localhost:8080/src/pages/AgendamentoEdit.tsx:293:33)
+    at renderWithHooks (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:11548:26)
+    at updateFunctionComponent (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:14582:28)
+    at beginWork (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:15924:22)
+    at beginWork$1 (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:19753:22)
+    at performUnitOfWork (http://localhost:8080/node_modules/.vite/deps/chunk-T2SWDQEL.js?v=ea72ff0f:19198:20)

@@ -1,0 +1,368 @@
+import { useState, useMemo } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Smile, Search, Clock, Heart, Utensils, Plane, Trophy, Lightbulb, Flag, Hash } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface EmojiPickerProps {
+  onEmojiSelect: (emoji: string) => void;
+  disabled?: boolean;
+}
+
+// Categorias de emojis
+const EMOJI_CATEGORIES = {
+  recentes: {
+    icon: Clock,
+    label: "Recentes",
+    emojis: [] as string[], // Será preenchido dinamicamente
+  },
+  smileys: {
+    icon: Smile,
+    label: "Smileys",
+    emojis: [
+      "😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "🙃",
+      "😉", "😊", "😇", "🥰", "😍", "🤩", "😘", "😗", "☺️", "😚",
+      "😙", "🥲", "😋", "😛", "😜", "🤪", "😝", "🤑", "🤗", "🤭",
+      "🤫", "🤔", "🤐", "🤨", "😐", "😑", "😶", "😏", "😒", "🙄",
+      "😬", "😮‍💨", "🤥", "😌", "😔", "😪", "🤤", "😴", "😷", "🤒",
+      "🤕", "🤢", "🤮", "🤧", "🥵", "🥶", "🥴", "😵", "🤯", "🤠",
+      "🥳", "🥸", "😎", "🤓", "🧐", "😕", "😟", "🙁", "☹️", "😮",
+      "😯", "😲", "😳", "🥺", "😦", "😧", "😨", "😰", "😥", "😢",
+      "😭", "😱", "😖", "😣", "😞", "😓", "😩", "😫", "🥱", "😤",
+      "😡", "😠", "🤬", "😈", "👿", "💀", "☠️", "💩", "🤡", "👹",
+      "👺", "👻", "👽", "👾", "🤖", "😺", "😸", "😹", "😻", "😼",
+      "😽", "🙀", "😿", "😾", "🙈", "🙉", "🙊"
+    ],
+  },
+  gestos: {
+    icon: Heart,
+    label: "Gestos",
+    emojis: [
+      "👋", "🤚", "🖐️", "✋", "🖖", "👌", "🤌", "🤏", "✌️", "🤞",
+      "🤟", "🤘", "🤙", "👈", "👉", "👆", "🖕", "👇", "☝️", "👍",
+      "👎", "✊", "👊", "🤛", "🤜", "👏", "🙌", "👐", "🤲", "🤝",
+      "🙏", "✍️", "💅", "🤳", "💪", "🦾", "🦿", "🦵", "🦶", "👂",
+      "🦻", "👃", "🧠", "🫀", "🫁", "🦷", "🦴", "👀", "👁️", "👅",
+      "👄", "💋", "🩸", "❤️", "🧡", "💛", "💚", "💙", "💜", "🖤",
+      "🤍", "🤎", "💔", "❣️", "💕", "💞", "💓", "💗", "💖", "💘",
+      "💝", "💟", "♥️", "💯", "💢", "💥", "💫", "💦", "💨", "🕳️",
+      "💣", "💬", "👁️‍🗨️", "🗨️", "🗯️", "💭", "💤"
+    ],
+  },
+  comida: {
+    icon: Utensils,
+    label: "Comida",
+    emojis: [
+      "🍇", "🍈", "🍉", "🍊", "🍋", "🍌", "🍍", "🥭", "🍎", "🍏",
+      "🍐", "🍑", "🍒", "🍓", "🫐", "🥝", "🍅", "🫒", "🥥", "🥑",
+      "🍆", "🥔", "🥕", "🌽", "🌶️", "🫑", "🥒", "🥬", "🥦", "🧄",
+      "🧅", "🍄", "🥜", "🌰", "🍞", "🥐", "🥖", "🫓", "🥨", "🥯",
+      "🥞", "🧇", "🧀", "🍖", "🍗", "🥩", "🥓", "🍔", "🍟", "🍕",
+      "🌭", "🥪", "🌮", "🌯", "🫔", "🥙", "🧆", "🥚", "🍳", "🥘",
+      "🍲", "🫕", "🥣", "🥗", "🍿", "🧈", "🧂", "🥫", "🍱", "🍘",
+      "🍙", "🍚", "🍛", "🍜", "🍝", "🍠", "🍢", "🍣", "🍤", "🍥",
+      "🥮", "🍡", "🥟", "🥠", "🥡", "🦀", "🦞", "🦐", "🦑", "🦪",
+      "🍦", "🍧", "🍨", "🍩", "🍪", "🎂", "🍰", "🧁", "🥧", "🍫",
+      "🍬", "🍭", "🍮", "🍯", "🍼", "🥛", "☕", "🫖", "🍵", "🍶",
+      "🍾", "🍷", "🍸", "🍹", "🍺", "🍻", "🥂", "🥃", "🥤", "🧋",
+      "🧃", "🧉", "🧊"
+    ],
+  },
+  viagem: {
+    icon: Plane,
+    label: "Viagem",
+    emojis: [
+      "🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚐",
+      "🛻", "🚚", "🚛", "🚜", "🦯", "🦽", "🦼", "🛴", "🚲", "🛵",
+      "🏍️", "🛺", "🚨", "🚔", "🚍", "🚘", "🚖", "🚡", "🚠", "🚟",
+      "🚃", "🚋", "🚞", "🚝", "🚄", "🚅", "🚈", "🚂", "🚆", "🚇",
+      "🚊", "🚉", "✈️", "🛫", "🛬", "🛩️", "💺", "🛰️", "🚀", "🛸",
+      "🚁", "🛶", "⛵", "🚤", "🛥️", "🛳️", "⛴️", "🚢", "⚓", "🪝",
+      "⛽", "🚧", "🚦", "🚥", "🚏", "🗺️", "🗿", "🗽", "🗼", "🏰",
+      "🏯", "🏟️", "🎡", "🎢", "🎠", "⛲", "⛱️", "🏖️", "🏝️", "🏜️",
+      "🌋", "⛰️", "🏔️", "🗻", "🏕️", "⛺", "🏠", "🏡", "🏘️", "🏚️",
+      "🏗️", "🏭", "🏢", "🏬", "🏣", "🏤", "🏥", "🏦", "🏨", "🏪",
+      "🏫", "🏩", "💒", "🏛️", "⛪", "🕌", "🕍", "🛕", "🕋", "⛩️",
+      "🛤️", "🛣️", "🗾", "🎑", "🏞️", "🌅", "🌄", "🌠", "🎇", "🎆",
+      "🌇", "🌆", "🏙️", "🌃", "🌌", "🌉", "🌁"
+    ],
+  },
+  atividades: {
+    icon: Trophy,
+    label: "Atividades",
+    emojis: [
+      "⚽", "🏀", "🏈", "⚾", "🥎", "🎾", "🏐", "🏉", "🥏", "🎱",
+      "🪀", "🏓", "🏸", "🏒", "🏑", "🥍", "🏏", "🪃", "🥅", "⛳",
+      "🪁", "🏹", "🎣", "🤿", "🥊", "🥋", "🎽", "🛹", "🛼", "🛷",
+      "⛸️", "🥌", "🎿", "⛷️", "🏂", "🪂", "🏋️", "🤼", "🤸", "⛹️",
+      "🤺", "🤾", "🏌️", "🏇", "⛑️", "🏅", "🎖️", "🥇", "🥈", "🥉",
+      "🏆", "🎪", "🤹", "🎭", "🩰", "🎨", "🎬", "🎤", "🎧", "🎼",
+      "🎹", "🥁", "🪘", "🎷", "🎺", "🪗", "🎸", "🪕", "🎻", "🎲",
+      "♟️", "🎯", "🎳", "🎮", "🎰", "🧩"
+    ],
+  },
+  objetos: {
+    icon: Lightbulb,
+    label: "Objetos",
+    emojis: [
+      "⌚", "📱", "📲", "💻", "⌨️", "🖥️", "🖨️", "🖱️", "🖲️", "🕹️",
+      "🗜️", "💽", "💾", "💿", "📀", "📼", "📷", "📸", "📹", "🎥",
+      "📽️", "🎞️", "📞", "☎️", "📟", "📠", "📺", "📻", "🎙️", "🎚️",
+      "🎛️", "🧭", "⏱️", "⏲️", "⏰", "🕰️", "⌛", "⏳", "📡", "🔋",
+      "🔌", "💡", "🔦", "🕯️", "🪔", "🧯", "🛢️", "💸", "💵", "💴",
+      "💶", "💷", "🪙", "💰", "💳", "💎", "⚖️", "🪜", "🧰", "🪛",
+      "🔧", "🔨", "⚒️", "🛠️", "⛏️", "🪚", "🔩", "⚙️", "🪤", "🧱",
+      "⛓️", "🧲", "🔫", "💣", "🧨", "🪓", "🔪", "🗡️", "⚔️", "🛡️",
+      "🚬", "⚰️", "🪦", "⚱️", "🏺", "🔮", "📿", "🧿", "💈", "⚗️",
+      "🔭", "🔬", "🕳️", "🩹", "🩺", "💊", "💉", "🩸", "🧬", "🦠",
+      "🧫", "🧪", "🌡️", "🧹", "🪠", "🧺", "🧻", "🚽", "🚰", "🚿",
+      "🛁", "🛀", "🧼", "🪥", "🪒", "🧽", "🪣", "🧴", "🛎️", "🔑",
+      "🗝️", "🚪", "🪑", "🛋️", "🛏️", "🛌", "🧸", "🪆", "🖼️", "🪞",
+      "🪟", "🛍️", "🛒", "🎁", "🎈", "🎏", "🎀", "🪄", "🪅", "🎊",
+      "🎉", "🎎", "🏮", "🎐", "🧧", "✉️", "📩", "📨", "📧", "💌",
+      "📥", "📤", "📦", "🏷️", "🪧", "📪", "📫", "📬", "📭", "📮",
+      "📯", "📜", "📃", "📄", "📑", "🧾", "📊", "📈", "📉", "🗒️",
+      "🗓️", "📆", "📅", "🗑️", "📇", "🗃️", "🗳️", "🗄️", "📋", "📁",
+      "📂", "🗂️", "🗞️", "📰", "📓", "📔", "📒", "📕", "📗", "📘",
+      "📙", "📚", "📖", "🔖", "🧷", "🔗", "📎", "🖇️", "📐", "📏",
+      "🧮", "📌", "📍", "✂️", "🖊️", "🖋️", "✒️", "🖌️", "🖍️", "📝",
+      "✏️", "🔍", "🔎", "🔏", "🔐", "🔒", "🔓"
+    ],
+  },
+  simbolos: {
+    icon: Hash,
+    label: "Símbolos",
+    emojis: [
+      "❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎", "💔",
+      "❣️", "💕", "💞", "💓", "💗", "💖", "💘", "💝", "💟", "☮️",
+      "✝️", "☪️", "🕉️", "☸️", "✡️", "🔯", "🕎", "☯️", "☦️", "🛐",
+      "⛎", "♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐",
+      "♑", "♒", "♓", "🆔", "⚛️", "🉑", "☢️", "☣️", "📴", "📳",
+      "🈶", "🈚", "🈸", "🈺", "🈷️", "✴️", "🆚", "💮", "🉐", "㊙️",
+      "㊗️", "🈴", "🈵", "🈹", "🈲", "🅰️", "🅱️", "🆎", "🆑", "🅾️",
+      "🆘", "❌", "⭕", "🛑", "⛔", "📛", "🚫", "💯", "💢", "♨️",
+      "🚷", "🚯", "🚳", "🚱", "🔞", "📵", "🚭", "❗", "❕", "❓",
+      "❔", "‼️", "⁉️", "🔅", "🔆", "〽️", "⚠️", "🚸", "🔱", "⚜️",
+      "🔰", "♻️", "✅", "🈯", "💹", "❇️", "✳️", "❎", "🌐", "💠",
+      "Ⓜ️", "🌀", "💤", "🏧", "🚾", "♿", "🅿️", "🛗", "🈳", "🈂️",
+      "🛂", "🛃", "🛄", "🛅", "🚹", "🚺", "🚼", "⚧️", "🚻", "🚮",
+      "🎦", "📶", "🈁", "🔣", "ℹ️", "🔤", "🔡", "🔠", "🆖", "🆗",
+      "🆙", "🆒", "🆕", "🆓", "0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣",
+      "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "🔢", "#️⃣", "*️⃣", "⏏️", "▶️",
+      "⏸️", "⏯️", "⏹️", "⏺️", "⏭️", "⏮️", "⏩", "⏪", "⏫", "⏬",
+      "◀️", "🔼", "🔽", "➡️", "⬅️", "⬆️", "⬇️", "↗️", "↘️", "↙️",
+      "↖️", "↕️", "↔️", "↪️", "↩️", "⤴️", "⤵️", "🔀", "🔁", "🔂",
+      "🔄", "🔃", "🎵", "🎶", "➕", "➖", "➗", "✖️", "♾️", "💲",
+      "💱", "™️", "©️", "®️", "👁️‍🗨️", "🔚", "🔙", "🔛", "🔝", "🔜",
+      "〰️", "➰", "➿", "✔️", "☑️", "🔘", "🔴", "🟠", "🟡", "🟢",
+      "🔵", "🟣", "⚫", "⚪", "🟤", "🔺", "🔻", "🔸", "🔹", "🔶",
+      "🔷", "🔳", "🔲", "▪️", "▫️", "◾", "◽", "◼️", "◻️", "🟥",
+      "🟧", "🟨", "🟩", "🟦", "🟪", "⬛", "⬜", "🟫", "🔈", "🔇",
+      "🔉", "🔊", "🔔", "🔕", "📣", "📢", "💬", "💭", "🗯️", "♠️",
+      "♣️", "♥️", "♦️", "🃏", "🎴", "🀄", "🕐", "🕑", "🕒", "🕓",
+      "🕔", "🕕", "🕖", "🕗", "🕘", "🕙", "🕚", "🕛", "🕜", "🕝",
+      "🕞", "🕟", "🕠", "🕡", "🕢", "🕣", "🕤", "🕥", "🕦", "🕧"
+    ],
+  },
+  bandeiras: {
+    icon: Flag,
+    label: "Bandeiras",
+    emojis: [
+      "🏁", "🚩", "🎌", "🏴", "🏳️", "🏳️‍🌈", "🏳️‍⚧️", "🏴‍☠️", "🇦🇨", "🇦🇩",
+      "🇦🇪", "🇦🇫", "🇦🇬", "🇦🇮", "🇦🇱", "🇦🇲", "🇦🇴", "🇦🇶", "🇦🇷", "🇦🇸",
+      "🇦🇹", "🇦🇺", "🇦🇼", "🇦🇽", "🇦🇿", "🇧🇦", "🇧🇧", "🇧🇩", "🇧🇪", "🇧🇫",
+      "🇧🇬", "🇧🇭", "🇧🇮", "🇧🇯", "🇧🇱", "🇧🇲", "🇧🇳", "🇧🇴", "🇧🇶", "🇧🇷",
+      "🇧🇸", "🇧🇹", "🇧🇻", "🇧🇼", "🇧🇾", "🇧🇿", "🇨🇦", "🇨🇨", "🇨🇩", "🇨🇫",
+      "🇨🇬", "🇨🇭", "🇨🇮", "🇨🇰", "🇨🇱", "🇨🇲", "🇨🇳", "🇨🇴", "🇨🇵", "🇨🇷",
+      "🇨🇺", "🇨🇻", "🇨🇼", "🇨🇽", "🇨🇾", "🇨🇿", "🇩🇪", "🇩🇬", "🇩🇯", "🇩🇰",
+      "🇩🇲", "🇩🇴", "🇩🇿", "🇪🇦", "🇪🇨", "🇪🇪", "🇪🇬", "🇪🇭", "🇪🇷", "🇪🇸",
+      "🇪🇹", "🇪🇺", "🇫🇮", "🇫🇯", "🇫🇰", "🇫🇲", "🇫🇴", "🇫🇷", "🇬🇦", "🇬🇧",
+      "🇬🇩", "🇬🇪", "🇬🇫", "🇬🇬", "🇬🇭", "🇬🇮", "🇬🇱", "🇬🇲", "🇬🇳", "🇬🇵",
+      "🇬🇶", "🇬🇷", "🇬🇸", "🇬🇹", "🇬🇺", "🇬🇼", "🇬🇾", "🇭🇰", "🇭🇲", "🇭🇳",
+      "🇭🇷", "🇭🇹", "🇭🇺", "🇮🇨", "🇮🇩", "🇮🇪", "🇮🇱", "🇮🇲", "🇮🇳", "🇮🇴",
+      "🇮🇶", "🇮🇷", "🇮🇸", "🇮🇹", "🇯🇪", "🇯🇲", "🇯🇴", "🇯🇵", "🇰🇪", "🇰🇬",
+      "🇰🇭", "🇰🇮", "🇰🇲", "🇰🇳", "🇰🇵", "🇰🇷", "🇰🇼", "🇰🇾", "🇰🇿", "🇱🇦",
+      "🇱🇧", "🇱🇨", "🇱🇮", "🇱🇰", "🇱🇷", "🇱🇸", "🇱🇹", "🇱🇺", "🇱🇻", "🇱🇾",
+      "🇲🇦", "🇲🇨", "🇲🇩", "🇲🇪", "🇲🇫", "🇲🇬", "🇲🇭", "🇲🇰", "🇲🇱", "🇲🇲",
+      "🇲🇳", "🇲🇴", "🇲🇵", "🇲🇶", "🇲🇷", "🇲🇸", "🇲🇹", "🇲🇺", "🇲🇻", "🇲🇼",
+      "🇲🇽", "🇲🇾", "🇲🇿", "🇳🇦", "🇳🇨", "🇳🇪", "🇳🇫", "🇳🇬", "🇳🇮", "🇳🇱",
+      "🇳🇴", "🇳🇵", "🇳🇷", "🇳🇺", "🇳🇿", "🇴🇲", "🇵🇦", "🇵🇪", "🇵🇫", "🇵🇬",
+      "🇵🇭", "🇵🇰", "🇵🇱", "🇵🇲", "🇵🇳", "🇵🇷", "🇵🇸", "🇵🇹", "🇵🇼", "🇵🇾",
+      "🇶🇦", "🇷🇪", "🇷🇴", "🇷🇸", "🇷🇺", "🇷🇼", "🇸🇦", "🇸🇧", "🇸🇨", "🇸🇩",
+      "🇸🇪", "🇸🇬", "🇸🇭", "🇸🇮", "🇸🇯", "🇸🇰", "🇸🇱", "🇸🇲", "🇸🇳", "🇸🇴",
+      "🇸🇷", "🇸🇸", "🇸🇹", "🇸🇻", "🇸🇽", "🇸🇾", "🇸🇿", "🇹🇦", "🇹🇨", "🇹🇩",
+      "🇹🇫", "🇹🇬", "🇹🇭", "🇹🇯", "🇹🇰", "🇹🇱", "🇹🇲", "🇹🇳", "🇹🇴", "🇹🇷",
+      "🇹🇹", "🇹🇻", "🇹🇼", "🇹🇿", "🇺🇦", "🇺🇬", "🇺🇲", "🇺🇳", "🇺🇸", "🇺🇾",
+      "🇺🇿", "🇻🇦", "🇻🇨", "🇻🇪", "🇻🇬", "🇻🇮", "🇻🇳", "🇻🇺", "🇼🇫", "🇼🇸",
+      "🇽🇰", "🇾🇪", "🇾🇹", "🇿🇦", "🇿🇲", "🇿🇼", "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "🏴󠁧󠁢󠁷󠁬󠁳󠁿"
+    ],
+  },
+};
+
+// Chave para localStorage dos recentes
+const RECENT_EMOJIS_KEY = "whatsapp_recent_emojis";
+const MAX_RECENT_EMOJIS = 24;
+
+// Carregar emojis recentes do localStorage
+const loadRecentEmojis = (): string[] => {
+  try {
+    const stored = localStorage.getItem(RECENT_EMOJIS_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+};
+
+// Salvar emojis recentes no localStorage
+const saveRecentEmojis = (emojis: string[]) => {
+  try {
+    localStorage.setItem(RECENT_EMOJIS_KEY, JSON.stringify(emojis.slice(0, MAX_RECENT_EMOJIS)));
+  } catch {
+    // Ignore storage errors
+  }
+};
+
+export function EmojiPicker({ onEmojiSelect, disabled }: EmojiPickerProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [recentEmojis, setRecentEmojis] = useState<string[]>(loadRecentEmojis);
+  const [activeTab, setActiveTab] = useState("smileys");
+
+  // Filtrar emojis pela busca
+  const filteredEmojis = useMemo(() => {
+    if (!searchQuery.trim()) return null;
+
+    const query = searchQuery.toLowerCase();
+    const allEmojis: string[] = [];
+
+    Object.values(EMOJI_CATEGORIES).forEach((category) => {
+      if (category.emojis) {
+        allEmojis.push(...category.emojis);
+      }
+    });
+
+    // Busca simples - retorna todos os emojis que "combinam" com a query
+    // Como não temos descrições, apenas retornamos emojis que correspondem
+    // Em uma implementação mais completa, teríamos um mapa de emoji -> descrições
+    return allEmojis.filter((emoji) => emoji.includes(query));
+  }, [searchQuery]);
+
+  const handleEmojiClick = (emoji: string) => {
+    // Adicionar aos recentes
+    const newRecents = [emoji, ...recentEmojis.filter((e) => e !== emoji)].slice(0, MAX_RECENT_EMOJIS);
+    setRecentEmojis(newRecents);
+    saveRecentEmojis(newRecents);
+
+    // Chamar callback
+    onEmojiSelect(emoji);
+  };
+
+  const renderEmojiGrid = (emojis: string[]) => (
+    <div className="grid grid-cols-8 gap-0.5">
+      {emojis.map((emoji, index) => (
+        <button
+          key={`${emoji}-${index}`}
+          onClick={() => handleEmojiClick(emoji)}
+          className="h-8 w-8 flex items-center justify-center hover:bg-muted rounded text-xl transition-colors"
+          title={emoji}
+        >
+          {emoji}
+        </button>
+      ))}
+    </div>
+  );
+
+  return (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="shrink-0"
+          disabled={disabled}
+        >
+          <Smile className="h-5 w-5 text-muted-foreground" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
+        className="w-[350px] p-0"
+        side="top"
+        align="start"
+        sideOffset={8}
+      >
+        {/* Search */}
+        <div className="p-2 border-b">
+          <div className="relative">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Pesquisar emoji..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-8 h-9"
+            />
+          </div>
+        </div>
+
+        {/* Content */}
+        {searchQuery.trim() ? (
+          // Resultados da busca
+          <ScrollArea className="h-[280px] p-2">
+            {filteredEmojis && filteredEmojis.length > 0 ? (
+              renderEmojiGrid(filteredEmojis)
+            ) : (
+              <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
+                Nenhum emoji encontrado
+              </div>
+            )}
+          </ScrollArea>
+        ) : (
+          // Categorias com tabs
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="w-full justify-start gap-0 h-10 bg-muted/50 rounded-none border-b px-1">
+              {recentEmojis.length > 0 && (
+                <TabsTrigger
+                  value="recentes"
+                  className="data-[state=active]:bg-background px-2"
+                >
+                  <Clock className="h-4 w-4" />
+                </TabsTrigger>
+              )}
+              {Object.entries(EMOJI_CATEGORIES)
+                .filter(([key]) => key !== "recentes")
+                .map(([key, category]) => (
+                  <TabsTrigger
+                    key={key}
+                    value={key}
+                    className="data-[state=active]:bg-background px-2"
+                  >
+                    <category.icon className="h-4 w-4" />
+                  </TabsTrigger>
+                ))}
+            </TabsList>
+
+            <ScrollArea className="h-[240px]">
+              {recentEmojis.length > 0 && (
+                <TabsContent value="recentes" className="p-2 m-0">
+                  <p className="text-xs text-muted-foreground mb-2">Usados recentemente</p>
+                  {renderEmojiGrid(recentEmojis)}
+                </TabsContent>
+              )}
+
+              {Object.entries(EMOJI_CATEGORIES)
+                .filter(([key]) => key !== "recentes")
+                .map(([key, category]) => (
+                  <TabsContent key={key} value={key} className="p-2 m-0">
+                    <p className="text-xs text-muted-foreground mb-2">{category.label}</p>
+                    {renderEmojiGrid(category.emojis)}
+                  </TabsContent>
+                ))}
+            </ScrollArea>
+          </Tabs>
+        )}
+      </PopoverContent>
+    </Popover>
+  );
+}

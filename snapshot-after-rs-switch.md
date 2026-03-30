@@ -1,0 +1,444 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e6]:
+    - complementary [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e9]:
+          - img "YESlaser" [ref=e10]
+          - button [ref=e11] [cursor=pointer]:
+            - img
+        - navigation [ref=e12]:
+          - link "Minha Franquia" [ref=e13] [cursor=pointer]:
+            - /url: /franquia/yeslaser-praia-grande-ltda
+            - img [ref=e14]
+            - text: Minha Franquia
+          - generic [ref=e18]:
+            - generic [ref=e19]: PRINCIPAL
+            - link "Dashboard" [ref=e21] [cursor=pointer]:
+              - /url: /
+              - img [ref=e22]
+              - text: Dashboard
+          - generic [ref=e27]:
+            - generic [ref=e28]: LEADS & VENDAS
+            - generic [ref=e29]:
+              - link "Dashboard Leads" [ref=e30] [cursor=pointer]:
+                - /url: /leads/dashboard
+                - img [ref=e31]
+                - text: Dashboard Leads
+              - link "Leads" [ref=e33] [cursor=pointer]:
+                - /url: /leads
+                - img [ref=e34]
+                - text: Leads
+              - link "Funil de Vendas" [ref=e39] [cursor=pointer]:
+                - /url: /funil
+                - img [ref=e40]
+                - text: Funil de Vendas
+              - link "Indicações" [ref=e44] [cursor=pointer]:
+                - /url: /indicacoes
+                - img [ref=e45]
+                - text: Indicações
+              - link "Metas" [ref=e48] [cursor=pointer]:
+                - /url: /metas
+                - img [ref=e49]
+                - text: Metas
+              - link "Ranking" [ref=e52] [cursor=pointer]:
+                - /url: /ranking
+                - img [ref=e53]
+                - text: Ranking
+              - generic [ref=e59]:
+                - button "Vendas" [ref=e60] [cursor=pointer]:
+                  - img [ref=e61]
+                  - generic [ref=e63]: Vendas
+                  - img [ref=e64]
+                - generic [ref=e66]:
+                  - link "Dashboard" [ref=e67] [cursor=pointer]:
+                    - /url: /vendas
+                    - img [ref=e68]
+                    - text: Dashboard
+                  - link "Todas as Vendas" [ref=e73] [cursor=pointer]:
+                    - /url: /vendas/todas
+                    - img [ref=e74]
+                    - text: Todas as Vendas
+                  - link "Tabela de Preços" [ref=e75] [cursor=pointer]:
+                    - /url: /vendas/tabela-precos
+                    - img [ref=e76]
+                    - text: Tabela de Preços
+                  - link "Planos de Tratamento" [ref=e77] [cursor=pointer]:
+                    - /url: /vendas/tratamentos
+                    - img [ref=e78]
+                    - text: Planos de Tratamento
+                  - link "Comissões" [ref=e81] [cursor=pointer]:
+                    - /url: /vendas/comissoes
+                    - img [ref=e82]
+                    - text: Comissões
+                  - link "Relatórios" [ref=e84] [cursor=pointer]:
+                    - /url: /vendas/relatorios
+                    - img [ref=e85]
+                    - text: Relatórios
+          - generic [ref=e87]:
+            - generic [ref=e88]: COMUNICAÇÃO
+            - generic [ref=e89]:
+              - link "WhatsApp Dashboard" [ref=e90] [cursor=pointer]:
+                - /url: /whatsapp
+                - img [ref=e91]
+                - text: WhatsApp Dashboard
+              - link "Conversas" [ref=e93] [cursor=pointer]:
+                - /url: /whatsapp/conversas
+                - img [ref=e94]
+                - text: Conversas
+              - link "Sessões" [ref=e96] [cursor=pointer]:
+                - /url: /whatsapp/sessoes
+                - img [ref=e97]
+                - text: Sessões
+              - link "Automações WA" [ref=e99] [cursor=pointer]:
+                - /url: /whatsapp/automacoes
+                - img [ref=e100]
+                - text: Automações WA
+              - link "Filas de Atendimento" [ref=e103] [cursor=pointer]:
+                - /url: /whatsapp/filas
+                - img [ref=e104]
+                - text: Filas de Atendimento
+              - link "Disparo em Massa" [ref=e109] [cursor=pointer]:
+                - /url: /whatsapp/broadcast
+                - img [ref=e110]
+                - text: Disparo em Massa
+              - link "Listas Destinatários" [ref=e113] [cursor=pointer]:
+                - /url: /whatsapp/listas
+                - img [ref=e114]
+                - text: Listas Destinatários
+              - link "Grupos WhatsApp" [ref=e115] [cursor=pointer]:
+                - /url: /whatsapp/grupos
+                - img [ref=e116]
+                - text: Grupos WhatsApp
+              - link "Status WA" [ref=e120] [cursor=pointer]:
+                - /url: /whatsapp/status
+                - img [ref=e121]
+                - text: Status WA
+              - button "Integração Híbrida" [ref=e123] [cursor=pointer]:
+                - img [ref=e124]
+                - generic [ref=e126]: Integração Híbrida
+                - img [ref=e127]
+              - link "Config Chatbot" [ref=e129] [cursor=pointer]:
+                - /url: /whatsapp/bot-config
+                - img [ref=e130]
+                - text: Config Chatbot
+              - link "Chatbot IA" [ref=e133] [cursor=pointer]:
+                - /url: /chatbot
+                - img [ref=e134]
+                - text: Chatbot IA
+              - link "Meta Messenger" [ref=e137] [cursor=pointer]:
+                - /url: /meta-messenger/config
+                - img [ref=e138]
+                - text: Meta Messenger
+              - link "Conversas Meta" [ref=e140] [cursor=pointer]:
+                - /url: /meta-messenger/conversations
+                - img [ref=e141]
+                - text: Conversas Meta
+          - generic [ref=e143]:
+            - generic [ref=e144]: OPERAÇÃO
+            - generic [ref=e145]:
+              - link "Agendamentos" [ref=e146] [cursor=pointer]:
+                - /url: /agendamentos
+                - img [ref=e147]
+                - text: Agendamentos
+              - link "Formulários" [ref=e149] [cursor=pointer]:
+                - /url: /formularios
+                - img [ref=e150]
+                - text: Formulários
+              - link "Serviços" [ref=e153] [cursor=pointer]:
+                - /url: /servicos
+                - img [ref=e154]
+                - text: Serviços
+              - link "Franqueados" [ref=e158] [cursor=pointer]:
+                - /url: /franqueados
+                - img [ref=e159]
+                - text: Franqueados
+              - button "Produtividade" [ref=e164] [cursor=pointer]:
+                - img [ref=e165]
+                - generic [ref=e167]: Produtividade
+                - img [ref=e168]
+              - button "Estoque" [ref=e171] [cursor=pointer]:
+                - img [ref=e172]
+                - generic [ref=e177]: Estoque
+                - img [ref=e178]
+          - generic [ref=e180]:
+            - generic [ref=e181]: MARKETING & PARCERIAS
+            - generic [ref=e182]:
+              - link "Dashboard" [ref=e183] [cursor=pointer]:
+                - /url: /marketing
+                - img [ref=e184]
+                - text: Dashboard
+              - link "Campanhas" [ref=e189] [cursor=pointer]:
+                - /url: /marketing/campanhas
+                - img [ref=e190]
+                - text: Campanhas
+              - button "Influenciadoras" [ref=e195] [cursor=pointer]:
+                - img [ref=e196]
+                - generic [ref=e198]: Influenciadoras
+                - img [ref=e199]
+              - link "Parcerias" [ref=e201] [cursor=pointer]:
+                - /url: /parcerias
+                - img [ref=e202]
+                - text: Parcerias
+              - link "Galeria de Artes" [ref=e207] [cursor=pointer]:
+                - /url: /marketing/galeria
+                - img [ref=e208]
+                - text: Galeria de Artes
+          - generic [ref=e214]:
+            - generic [ref=e215]: PROCESSOS
+            - generic [ref=e216]:
+              - link "Dashboard POPs" [ref=e217] [cursor=pointer]:
+                - /url: /processos/dashboard
+                - img [ref=e218]
+                - text: Dashboard POPs
+              - link "Procedimentos" [ref=e223] [cursor=pointer]:
+                - /url: /processos
+                - img [ref=e224]
+                - text: Procedimentos
+              - link "Categorias" [ref=e227] [cursor=pointer]:
+                - /url: /processos/categorias
+                - img [ref=e228]
+                - text: Categorias
+              - link "Perguntas Frequentes" [ref=e233] [cursor=pointer]:
+                - /url: /faq
+                - img [ref=e234]
+                - text: Perguntas Frequentes
+          - generic [ref=e237]:
+            - generic [ref=e238]: TREINAMENTOS
+            - generic [ref=e239]:
+              - link "Dashboard" [ref=e240] [cursor=pointer]:
+                - /url: /treinamentos
+                - img [ref=e241]
+                - text: Dashboard
+              - link "Trilhas" [ref=e246] [cursor=pointer]:
+                - /url: /treinamentos/trilhas
+                - img [ref=e247]
+                - text: Trilhas
+              - link "Meu Aprendizado" [ref=e250] [cursor=pointer]:
+                - /url: /aprender
+                - img [ref=e251]
+                - text: Meu Aprendizado
+              - link "Gamificação" [ref=e253] [cursor=pointer]:
+                - /url: /gamificacao
+                - img [ref=e254]
+                - text: Gamificação
+              - link "Ranking" [ref=e260] [cursor=pointer]:
+                - /url: /gamificacao/ranking
+                - img [ref=e261]
+                - text: Ranking
+              - link "Conquistas" [ref=e267] [cursor=pointer]:
+                - /url: /gamificacao/conquistas
+                - img [ref=e268]
+                - text: Conquistas
+          - generic [ref=e271]:
+            - generic [ref=e272]: RH
+            - link "Recrutamento" [ref=e274] [cursor=pointer]:
+              - /url: /recrutamento
+              - img [ref=e275]
+              - text: Recrutamento
+          - generic [ref=e278]:
+            - generic [ref=e279]: ADMINISTRAÇÃO
+            - generic [ref=e280]:
+              - link "Documentos" [ref=e281] [cursor=pointer]:
+                - /url: /documentos
+                - img [ref=e282]
+                - text: Documentos
+              - link "Relatórios" [ref=e284] [cursor=pointer]:
+                - /url: /relatorios
+                - img [ref=e285]
+                - text: Relatórios
+              - link "Usuários" [ref=e287] [cursor=pointer]:
+                - /url: /usuarios
+                - img [ref=e288]
+                - text: Usuários
+              - link "Aprovações" [ref=e290] [cursor=pointer]:
+                - /url: /aprovacoes
+                - img [ref=e291]
+                - text: Aprovações
+              - button "Financeiro" [ref=e295] [cursor=pointer]:
+                - img [ref=e296]
+                - generic [ref=e299]: Financeiro
+                - img [ref=e300]
+              - link "Precificação" [ref=e302] [cursor=pointer]:
+                - /url: /precificacao
+                - img [ref=e303]
+                - text: Precificação
+              - link "Automações" [ref=e305] [cursor=pointer]:
+                - /url: /automacoes
+                - img [ref=e306]
+                - text: Automações
+              - button "Configurações" [ref=e309] [cursor=pointer]:
+                - img [ref=e310]
+                - generic [ref=e313]: Configurações
+                - img [ref=e314]
+        - button "praiagrande@yeslaserpraiagrande.com.br Unidade" [ref=e317] [cursor=pointer]:
+          - generic [ref=e318]:
+            - img
+          - generic [ref=e319]:
+            - paragraph [ref=e320]: praiagrande@yeslaserpraiagrande.com.br
+            - generic [ref=e322]:
+              - img
+              - text: Unidade
+          - img
+    - main [ref=e323]:
+      - generic [ref=e324]:
+        - generic [ref=e326]:
+          - img [ref=e327]
+          - text: Yeslaser Praia Grande LTDA
+        - button "praiagrande@yeslaserpraiagrande.com.br Unidade" [ref=e330] [cursor=pointer]:
+          - generic [ref=e331]:
+            - img
+          - generic [ref=e333]: praiagrande@yeslaserpraiagrande.com.br
+          - generic [ref=e334]:
+            - img
+            - text: Unidade
+          - img
+      - generic [ref=e336]:
+        - generic [ref=e337]:
+          - generic [ref=e338]:
+            - generic [ref=e339]:
+              - link "Vendas" [ref=e340] [cursor=pointer]:
+                - /url: /vendas
+              - generic [ref=e341]: /
+              - generic [ref=e342]: Nova Venda
+            - heading "Nova Venda" [level=1] [ref=e343]
+          - button "Voltar" [ref=e344] [cursor=pointer]:
+            - img
+            - text: Voltar
+        - generic [ref=e345]:
+          - generic [ref=e346]:
+            - heading "Cliente" [level=3] [ref=e348]
+            - generic [ref=e349]:
+              - generic [ref=e350]:
+                - generic [ref=e510]:
+                  - generic [ref=e511]:
+                    - generic [ref=e512]: Cliente
+                    - generic [ref=e513]: Maria
+                  - generic [ref=e514]:
+                    - link "Ver Lead" [ref=e515] [cursor=pointer]:
+                      - /url: /leads/1e0b6872-ceef-43c4-8887-826381eb0c9d
+                      - img
+                      - text: Ver Lead
+                    - button "Trocar" [ref=e516] [cursor=pointer]:
+                      - img
+                      - text: Trocar
+                - generic [ref=e518]: "Tel: 5513981414829"
+              - generic [ref=e353]:
+                - text: Responsável pela Venda
+                - combobox [ref=e354] [cursor=pointer]:
+                  - generic: Nenhum
+                  - img [ref=e355]
+                - combobox [ref=e357]
+          - generic [ref=e358]:
+            - generic [ref=e359]:
+              - heading "Itens da Venda" [level=3] [ref=e360]
+              - button "Adicionar Item" [ref=e361] [cursor=pointer]:
+                - img
+                - text: Adicionar Item
+            - generic [ref=e362]:
+              - generic [ref=e364]:
+                - generic [ref=e365]:
+                  - generic [ref=e366]:
+                    - text: Tipo
+                    - combobox [ref=e367] [cursor=pointer]:
+                      - generic:
+                        - generic:
+                          - img
+                          - text: Servico
+                      - img [ref=e368]
+                    - combobox [ref=e370]
+                  - generic [ref=e371]:
+                    - text: Servico
+                    - combobox [ref=e372] [cursor=pointer]:
+                      - generic: Axilas
+                      - img [ref=e373]
+                    - combobox [ref=e375]
+                  - generic [ref=e376]:
+                    - text: Descricao
+                    - textbox "Descricao do item" [ref=e377]: Axilas
+                - generic [ref=e378]:
+                  - generic [ref=e379]:
+                    - text: Qtd
+                    - spinbutton [ref=e380]: "1"
+                  - generic [ref=e381]:
+                    - text: Preco Unit.
+                    - generic [ref=e382]: R$ 536,40
+                  - generic [ref=e383]:
+                    - generic [ref=e384]:
+                      - generic [ref=e385]: Desconto
+                      - generic [ref=e386]:
+                        - button "%" [ref=e387] [cursor=pointer]
+                        - button "R$" [active] [ref=e388] [cursor=pointer]
+                    - spinbutton [ref=e389]: "107.28"
+                    - generic [ref=e811]: Máx R$ 178,74 (piso R$ 357,66)
+                  - generic [ref=e391]:
+                    - text: Total
+                    - generic [ref=e392]: R$ 429,12
+                  - generic [ref=e393]:
+                    - button [disabled]:
+                      - img
+              - generic [ref=e394]:
+                - generic [ref=e395]:
+                  - generic [ref=e396]: Subtotal
+                  - generic [ref=e397]: R$ 536,40
+                - generic [ref=e816]:
+                  - generic [ref=e817]: Desc. Itens
+                  - generic [ref=e818]: "- R$ 107,28"
+                - generic [ref=e398]:
+                  - generic [ref=e399]: Desc. Geral R$
+                  - generic [ref=e400]:
+                    - spinbutton [ref=e401]
+                    - generic [ref=e812]: Máx R$ 71,46
+                - generic [ref=e819]:
+                  - generic [ref=e820]: Total Descontos
+                  - generic [ref=e821]: "- R$ 107,28"
+                - generic [ref=e402]:
+                  - generic [ref=e403]: Total
+                  - generic [ref=e404]: R$ 429,12
+          - generic [ref=e405]:
+            - generic [ref=e406]:
+              - heading "Pagamento" [level=3] [ref=e407]:
+                - img [ref=e408]
+                - text: Pagamento
+              - button "Adicionar Forma" [ref=e410] [cursor=pointer]:
+                - img
+                - text: Adicionar Forma
+            - generic [ref=e411]:
+              - generic [ref=e412]:
+                - generic [ref=e414]: Pagamento 1
+                - generic [ref=e415]:
+                  - generic [ref=e416]:
+                    - text: Forma *
+                    - combobox [ref=e417] [cursor=pointer]:
+                      - generic: Selecione
+                      - img [ref=e418]
+                    - combobox [ref=e420]
+                  - generic [ref=e421]:
+                    - text: Tipo
+                    - combobox [ref=e422] [cursor=pointer]:
+                      - generic: À Vista
+                      - img [ref=e423]
+                    - combobox [ref=e425]
+                  - generic [ref=e426]:
+                    - text: Parcelas
+                    - spinbutton [ref=e427]: "1"
+                  - generic [ref=e428]:
+                    - text: Valor (R$)
+                    - spinbutton [ref=e429]
+              - generic [ref=e430]:
+                - generic [ref=e431]:
+                  - generic [ref=e432]: Total dos pagamentos
+                  - generic [ref=e433]: R$ 0,00
+                - generic [ref=e813]:
+                  - generic [ref=e814]: Falta
+                  - generic [ref=e815]: R$ 429,12
+          - generic [ref=e434]:
+            - heading "Observacoes" [level=3] [ref=e436]
+            - textbox "Observacoes sobre a venda..." [ref=e438]
+          - generic [ref=e439]:
+            - button "Cancelar" [ref=e440] [cursor=pointer]
+            - button "Criar Venda" [ref=e441] [cursor=pointer]:
+              - img
+              - text: Criar Venda

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste WAHA - Criar Sessão</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; }
+    .card { border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 8px; }
+    button { padding: 10px 20px; margin: 5px; cursor: pointer; border-radius: 4px; border: none; }
+    .btn-primary { background: #22c55e; color: white; }
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-info { background: #3b82f6; color: white; }
+    input { padding: 10px; width: 300px; margin: 5px; border: 1px solid #ddd; border-radius: 4px; }
+    pre { background: #f5f5f5; padding: 15px; overflow-x: auto; border-radius: 4px; }
+    .success { color: #22c55e; }
+    .error { color: #ef4444; }
+    .info { color: #3b82f6; }
+    h2 { border-bottom: 2px solid #22c55e; padding-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h1>🧪 Teste de Criação WAHA</h1>
+
+  <div class="card">
+    <h2>Configuração</h2>
+    <p>
+      <label>WAHA URL:</label><br>
+      <input type="text" id="wahaUrl" value="https://waha.yeslaser.com.br">
+    </p>
+    <p>
+      <label>API Key:</label><br>
+      <input type="text" id="apiKey" value="GY9SDuKPFnJ4_dr">
+    </p>
+    <p>
+      <label>Nome da Sessão:</label><br>
+      <input type="text" id="sessionName" value="teste_script" placeholder="nome_sessao">
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Ações</h2>
+    <button class="btn-info" onclick="listSessions()">📋 Listar Sessões</button>
+    <button class="btn-primary" onclick="createSession()">➕ Criar Sessão</button>
+    <button class="btn-info" onclick="startSession()">▶️ Iniciar</button>
+    <button class="btn-info" onclick="getStatus()">🔍 Ver Status</button>
+    <button class="btn-info" onclick="getChats()">💬 Ver Chats</button>
+    <button class="btn-danger" onclick="deleteSession()">🗑️ Deletar</button>
+  </div>
+
+  <div class="card">
+    <h2>Log</h2>
+    <div id="log"></div>
+  </div>
+
+  <script>
+    const log = (msg, type = 'info') => {
+      const logDiv = document.getElementById('log');
+      const time = new Date().toLocaleTimeString();
+      const formattedMsg = typeof msg === 'object' ? JSON.stringify(msg, null, 2) : msg;
+      logDiv.innerHTML = `<p class="${type}"><b>[${time}]</b></p><pre>${formattedMsg}</pre>` + logDiv.innerHTML;
+    };
+
+    const getConfig = () => ({
+      url: document.getElementById('wahaUrl').value,
+      key: document.getElementById('apiKey').value,
+      session: document.getElementById('sessionName').value
+    });
+
+    const api = async (endpoint, method = 'GET', body = null) => {
+      const { url, key } = getConfig();
+      const options = {
+        method,
+        headers: {
+          'X-Api-Key': key,
+          'Content-Type': 'application/json'
+        }
+      };
+      if (body) options.body = JSON.stringify(body);
+
+      log(`${method} ${endpoint}`, 'info');
+
+      try {
+        const response = await fetch(`${url}${endpoint}`, options);
+        const data = await response.json();
+        return data;
+      } catch (err) {
+        log(`Erro: ${err.message}`, 'error');
+        throw err;
+      }
+    };
+
+    async function listSessions() {
+      const data = await api('/api/sessions');
+      log(data.map(s => ({
+        name: s.name,
+        status: s.status,
+        store_enabled: s.config?.noweb?.store?.enabled,
+        webhooks: s.config?.webhooks?.length || 0
+      })), 'success');
+    }
+
+    async function createSession() {
+      const { session } = getConfig();
+
+      // Config igual ao código do painel
+      const config = {
+        name: session,
+        config: {
+          noweb: {
+            store: {
+              enabled: true,
+              fullSync: true
+            }
+          }
+        }
+      };
+
+      log(`Criando sessão "${session}" com config:`, 'info');
+      log(config, 'info');
+
+      const data = await api('/api/sessions', 'POST', config);
+      log(data, data.error ? 'error' : 'success');
+    }
+
+    async function startSession() {
+      const { session } = getConfig();
+      log(`Iniciando sessão "${session}"...`, 'info');
+      const data = await api(`/api/sessions/${session}/start`, 'POST');
+      log(data, data.error ? 'error' : 'success');
+
+      // Mostrar QR Code se disponível
+      if (data.status === 'SCAN_QR_CODE') {
+        log('🔲 QR Code disponível! Acesse:', 'success');
+        log(`${getConfig().url}/api/${session}/auth/qr`, 'info');
+      }
+    }
+
+    async function getStatus() {
+      const { session } = getConfig();
+      const data = await api(`/api/sessions/${session}`);
+      log({
+        name: data.name,
+        status: data.status,
+        phone: data.me?.id,
+        noweb_store: data.config?.noweb?.store,
+        webhooks: data.config?.webhooks?.length || 0
+      }, data.error ? 'error' : 'success');
+    }
+
+    async function getChats() {
+      const { session } = getConfig();
+      log(`Buscando chats de "${session}"...`, 'info');
+
+      try {
+        const chats = await api(`/api/${session}/chats?limit=50`);
+        if (Array.isArray(chats)) {
+          log(`Total de chats: ${chats.length}`, chats.length > 0 ? 'success' : 'error');
+          if (chats.length > 0) {
+            log(chats.slice(0, 5).map(c => ({ id: c.id, name: c.name })), 'success');
+          }
+        } else {
+          log(chats, 'error');
+        }
+      } catch (err) {
+        log(`Erro ao buscar chats: ${err.message}`, 'error');
+      }
+    }
+
+    async function deleteSession() {
+      const { session } = getConfig();
+      if (!confirm(`Deletar sessão "${session}"?`)) return;
+
+      log(`Deletando sessão "${session}"...`, 'info');
+      await api(`/api/sessions/${session}`, 'DELETE');
+      log('Sessão deletada!', 'success');
+    }
+
+    // Iniciar listando sessões
+    listSessions();
+  </script>
+</body>
+</html>

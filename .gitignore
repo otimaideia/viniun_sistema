@@ -1,0 +1,65 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+migration_*_log.txt
+console-full.txt
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment files (contain secrets)
+.env
+.env.*
+!.env.example
+supabase/functions/.env
+
+# Playwright MCP screenshots & temp files
+.playwright-mcp/
+
+# Backups
+backup/
+backups/
+
+# Screenshots (temporary)
+*.png
+!public/images/**/*.png
+
+# Deploy scripts with credentials
+configure-meta-secrets.sh
+configure-meta-secrets.sql
+postgrest.conf
+
+# Python migration scripts
+migrate_*.py
+
+# Test files
+test-whatsapp-extractors-*.ts
+
+# Coolify screenshots
+coolify-*.png
+coolify-*.md
+
+# Temp files
+local-proxy.cjs
+start-local.sh
+
+# Secrets (hardcoded fallback keys)
+supabase/functions/_shared/secrets.ts

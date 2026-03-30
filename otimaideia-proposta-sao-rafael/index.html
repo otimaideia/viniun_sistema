@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposta Marketing Digital 360 | Hospital São Rafael</title>
+  <meta name="description" content="Proposta exclusiva de Marketing Digital 360 para o Hospital São Rafael - Ótima Ideia Digital Growth Strategy">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #C62828;
+      --primary-dark: #B50110;
+      --primary-light: #EF2727;
+      --accent: #C62828;
+      --accent-dark: #B50110;
+      --gold: #C62828;
+      --gold-light: #EF5350;
+      --dark: #FFFFFF;
+      --dark-2: #F5F5F5;
+      --dark-3: #E0E0E0;
+      --text: #333333;
+      --text-muted: #666666;
+      --text-subtle: #999999;
+      --white: #FFFFFF;
+      --gradient-primary: linear-gradient(135deg, #C62828 0%, #EF2727 50%, #D32F2F 100%);
+      --gradient-gold: linear-gradient(135deg, #C62828 0%, #EF5350 100%);
+      --gradient-dark: linear-gradient(180deg, #FFFFFF 0%, #F5F5F5 100%);
+      --shadow-xl: 0 25px 50px -12px rgba(0,0,0,0.1);
+      --shadow-glow: 0 0 40px rgba(198,40,40,0.12);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #F5F5F5; }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(60px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInLeft {
+      from { opacity: 0; transform: translateX(-60px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fadeInRight {
+      from { opacity: 0; transform: translateX(60px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    @keyframes countUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes borderGlow {
+      0%, 100% { border-color: rgba(239,39,39,0.3); }
+      50% { border-color: rgba(239,39,39,0.8); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(60px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-60px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-left.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(60px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-right.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.85);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-scale.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.2s; }
+    .stagger-3 { transition-delay: 0.3s; }
+    .stagger-4 { transition-delay: 0.4s; }
+    .stagger-5 { transition-delay: 0.5s; }
+    .stagger-6 { transition-delay: 0.6s; }
+
+    /* ===== LAYOUT ===== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 16px 0;
+      transition: all 0.3s ease;
+      background: transparent;
+    }
+    .navbar.scrolled {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 12px 0;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    }
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar-brand {
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--primary);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .navbar-brand span {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .navbar-cta {
+      background: var(--primary);
+      color: #FFFFFF;
+      padding: 10px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      letter-spacing: -0.3px;
+    }
+    .navbar-cta:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(198,40,40,0.3);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 80px;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -30%;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(198,40,40,0.06) 0%, transparent 70%);
+      animation: float 8s ease-in-out infinite;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(198,40,40,0.04) 0%, transparent 70%);
+      animation: float 10s ease-in-out infinite reverse;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(198,40,40,0.08);
+      border: 1px solid rgba(198,40,40,0.25);
+      padding: 8px 20px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      color: var(--primary);
+      margin-bottom: 32px;
+      animation: fadeInUp 0.8s ease forwards;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.8s ease 0.2s forwards;
+      opacity: 0;
+      letter-spacing: -2px;
+    }
+    .hero h1 .highlight {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% auto;
+      animation: gradientMove 4s ease infinite;
+    }
+    .hero-sub {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+      max-width: 600px;
+      line-height: 1.7;
+      animation: fadeInUp 0.8s ease 0.4s forwards;
+      opacity: 0;
+    }
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.8s ease 0.6s forwards;
+      opacity: 0;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #FFFFFF;
+      padding: 16px 36px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.05rem;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      letter-spacing: -0.3px;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(198,40,40,0.3);
+      background: var(--primary-dark);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      padding: 16px 36px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.05rem;
+      transition: all 0.3s ease;
+      border: 1px solid var(--dark-3);
+    }
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    /* ===== TRUST BAR ===== */
+    .trust-bar {
+      padding: 60px 0;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      background: var(--dark-2);
+    }
+    .trust-items {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      text-align: center;
+    }
+    .trust-item .number {
+      font-size: 2.8rem;
+      font-weight: 900;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+      margin-bottom: 8px;
+      letter-spacing: -2px;
+    }
+    .trust-item .label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ===== SECTION HEADERS ===== */
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .section-label::before {
+      content: '';
+      width: 24px;
+      height: 2px;
+      background: var(--accent);
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      letter-spacing: -1.5px;
+    }
+    .section-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 650px;
+      line-height: 1.7;
+    }
+
+    /* ===== DIAGNOSTICO ===== */
+    .diagnostico {
+      background: var(--dark);
+    }
+    .diagnostico-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      margin-top: 60px;
+    }
+    .diagnostico-card {
+      background: var(--dark-2);
+      border: 1px solid var(--dark-3);
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.4s ease;
+    }
+    .diagnostico-card:hover {
+      border-color: rgba(239,39,39,0.3);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-glow);
+    }
+    .diagnostico-card .icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      background: rgba(239,39,39,0.1);
+    }
+    .diagnostico-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+    .diagnostico-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .diagnostico-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ===== SERVICOS ===== */
+    .servicos {
+      background: var(--dark-2);
+    }
+    .servicos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 60px;
+    }
+    .servico-card {
+      background: var(--dark);
+      border: 1px solid var(--dark-3);
+      border-radius: 20px;
+      padding: 36px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .servico-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gradient-primary);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .servico-card:hover {
+      border-color: rgba(239,39,39,0.3);
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-xl);
+    }
+    .servico-card:hover::before {
+      opacity: 1;
+    }
+    .servico-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      background: rgba(239,39,39,0.15);
+    }
+    .servico-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    .servico-card p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+    .servico-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .servico-tag {
+      background: rgba(239,39,39,0.08);
+      border: 1px solid rgba(239,39,39,0.15);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* ===== FLUXO ===== */
+    .fluxo {
+      background: var(--dark);
+    }
+    .fluxo-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 60px;
+      position: relative;
+    }
+    .fluxo-timeline::before {
+      content: '';
+      position: absolute;
+      left: 40px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--primary), var(--accent));
+    }
+    .fluxo-step {
+      display: flex;
+      gap: 32px;
+      padding: 32px 0;
+      position: relative;
+    }
+    .fluxo-number {
+      width: 80px;
+      height: 80px;
+      min-width: 80px;
+      border-radius: 50%;
+      background: var(--dark-2);
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--accent);
+      position: relative;
+      z-index: 2;
+      transition: all 0.4s ease;
+    }
+    .fluxo-step:hover .fluxo-number {
+      background: var(--accent);
+      color: var(--dark);
+      box-shadow: 0 0 30px rgba(239,39,39,0.4);
+    }
+    .fluxo-content h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+    .fluxo-content p {
+      color: var(--text-muted);
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    /* ===== RESULTADOS ===== */
+    .resultados {
+      background: var(--dark-2);
+    }
+    .resultados-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 60px;
+    }
+    .resultado-card {
+      background: var(--dark);
+      border: 1px solid var(--dark-3);
+      border-radius: 20px;
+      padding: 36px;
+      text-align: center;
+      transition: all 0.4s ease;
+    }
+    .resultado-card:hover {
+      border-color: rgba(239,39,39,0.4);
+      transform: translateY(-6px);
+      box-shadow: 0 25px 50px rgba(239,39,39,0.1);
+    }
+    .resultado-value {
+      font-size: 3rem;
+      font-weight: 900;
+      background: var(--gradient-gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+      margin-bottom: 8px;
+      letter-spacing: -2px;
+    }
+    .resultado-label {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .resultado-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ===== DIFERENCIAIS ===== */
+    .diferenciais {
+      background: var(--dark);
+    }
+    .diff-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 60px;
+    }
+    .diff-card {
+      background: var(--dark-2);
+      border: 1px solid var(--dark-3);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      gap: 20px;
+      transition: all 0.4s ease;
+    }
+    .diff-card:hover {
+      border-color: rgba(239,39,39,0.3);
+      transform: translateX(8px);
+    }
+    .diff-icon {
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      border-radius: 12px;
+      background: rgba(239,39,39,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+    .diff-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+    .diff-card p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.55;
+    }
+
+    /* ===== INVESTIMENTO ===== */
+    .investimento {
+      background: var(--dark-2);
+    }
+    .invest-card {
+      max-width: 700px;
+      margin: 60px auto 0;
+      background: var(--dark);
+      border: 2px solid transparent;
+      border-image: var(--gradient-primary) 1;
+      border-radius: 24px;
+      padding: 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .invest-card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 24px;
+      padding: 2px;
+      background: var(--gradient-primary);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+    }
+    .invest-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .invest-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+      letter-spacing: -3px;
+    }
+    .invest-price .currency {
+      font-size: 1.8rem;
+      vertical-align: top;
+      margin-right: 4px;
+      color: var(--accent);
+    }
+    .invest-period {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 32px;
+    }
+    .invest-divider {
+      height: 1px;
+      background: var(--dark-3);
+      margin: 32px 0;
+    }
+    .invest-setup {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .invest-setup strong {
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+    .invest-note {
+      font-size: 0.85rem;
+      color: var(--text-subtle);
+      margin-top: 24px;
+      line-height: 1.6;
+    }
+    .invest-includes {
+      text-align: left;
+      margin-top: 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .invest-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .invest-item .check {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    /* ===== CTA FINAL ===== */
+    .cta-final {
+      background: var(--dark);
+      text-align: center;
+      padding: 120px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-final::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(198,40,40,0.04) 0%, transparent 70%);
+    }
+    .cta-final h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      margin-bottom: 20px;
+      letter-spacing: -2px;
+      position: relative;
+    }
+    .cta-final p {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      max-width: 550px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+    }
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .btn-whatsapp {
+      background: var(--primary);
+      color: #FFFFFF;
+      padding: 18px 40px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-whatsapp:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(198,40,40,0.3);
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 40px 0;
+      border-top: 1px solid rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .footer p {
+      color: var(--text-subtle);
+      font-size: 0.85rem;
+    }
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 968px) {
+      .servicos-grid { grid-template-columns: repeat(2, 1fr); }
+      .resultados-grid { grid-template-columns: repeat(2, 1fr); }
+      .diagnostico-grid { grid-template-columns: 1fr; }
+      .diff-grid { grid-template-columns: 1fr; }
+      .invest-includes { grid-template-columns: 1fr; }
+      .trust-items { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    }
+    @media (max-width: 640px) {
+      section { padding: 70px 0; }
+      .servicos-grid { grid-template-columns: 1fr; }
+      .resultados-grid { grid-template-columns: 1fr; }
+      .trust-items { grid-template-columns: repeat(2, 1fr); }
+      .hero-ctas { flex-direction: column; }
+      .invest-card { padding: 32px 24px; }
+      .invest-price { font-size: 3rem; }
+      .cta-buttons { flex-direction: column; align-items: center; }
+      .fluxo-number { width: 60px; height: 60px; min-width: 60px; font-size: 1.2rem; }
+      .fluxo-timeline::before { left: 30px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="#" class="navbar-brand"><span>Ótima Ideia</span></a>
+      <a href="#investimento" class="navbar-cta">Ver Investimento</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">Proposta Exclusiva</div>
+        <h1>Marketing Digital <span class="highlight">360</span> para o Hospital São Rafael</h1>
+        <p class="hero-sub">Uma solução completa que une <strong>tráfego pago, SEO, produção audiovisual, redes sociais, atendimento via WhatsApp e inteligência artificial</strong> para posicionar o hospital como referência na região.</p>
+        <div class="hero-ctas">
+          <a href="#servicos" class="btn-primary">Conhecer a Proposta</a>
+          <a href="#investimento" class="btn-outline">Ver Investimento</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <section class="trust-bar">
+    <div class="container">
+      <div class="trust-items">
+        <div class="trust-item reveal stagger-1">
+          <div class="number" data-count="10">R$10M+</div>
+          <div class="label">Geridos em Mídia Digital</div>
+        </div>
+        <div class="trust-item reveal stagger-2">
+          <div class="number">Google</div>
+          <div class="label">Partners Certificado</div>
+        </div>
+        <div class="trust-item reveal stagger-3">
+          <div class="number">GA4</div>
+          <div class="label">Certificação Analytics</div>
+        </div>
+        <div class="trust-item reveal stagger-4">
+          <div class="number">SP + PG</div>
+          <div class="label">Escritórios São Paulo e Praia Grande</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIAGNOSTICO -->
+  <section class="diagnostico" id="diagnostico">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">Diagnóstico</div>
+        <h2 class="section-title">Oportunidades identificadas<br>para o Hospital São Rafael</h2>
+        <p class="section-desc">Analisamos o cenário atual e identificamos pontos estratégicos para potencializar a captação de pacientes e o posicionamento digital.</p>
+      </div>
+      <div class="diagnostico-grid">
+        <div class="diagnostico-list">
+          <div class="diagnostico-card reveal stagger-1">
+            <div class="icon">🔍</div>
+            <h3>Presença nas Buscas</h3>
+            <p>Oportunidade de dominar as buscas orgânicas e pagas para "hospital cirurgia eletiva SP", "hospital zona sul" e termos de especialidades.</p>
+          </div>
+          <div class="diagnostico-card reveal stagger-2">
+            <div class="icon">📱</div>
+            <h3>Redes Sociais</h3>
+            <p>Potencial para humanizar a marca com conteúdo profissional: vídeos de especialistas, bastidores, depoimentos e conteúdo educativo.</p>
+          </div>
+          <div class="diagnostico-card reveal stagger-3">
+            <div class="icon">💬</div>
+            <h3>Atendimento Digital</h3>
+            <p>Centralizar e profissionalizar o atendimento via WhatsApp com múltiplos atendentes, automações e chatbot IA 24/7.</p>
+          </div>
+        </div>
+        <div class="diagnostico-list">
+          <div class="diagnostico-card reveal stagger-2">
+            <div class="icon">🎯</div>
+            <h3>Captação de Pacientes</h3>
+            <p>Gerar leads qualificados via Google Ads e Meta Ads com segmentação por região, especialidade e perfil demográfico.</p>
+          </div>
+          <div class="diagnostico-card reveal stagger-3">
+            <div class="icon">⭐</div>
+            <h3>Reputação Online</h3>
+            <p>Fortalecer a presença no Google Meu Negócio, gestão ativa de avaliações e posicionamento no Google Maps.</p>
+          </div>
+          <div class="diagnostico-card reveal stagger-4">
+            <div class="icon">🔄</div>
+            <h3>Jornada do Paciente</h3>
+            <p>Automatizar follow-up, confirmação de consulta, pós-procedimento e pesquisa de satisfação de ponta a ponta.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICOS -->
+  <section class="servicos" id="servicos">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">O que está incluso</div>
+        <h2 class="section-title">Solução completa.<br>Um único parceiro.</h2>
+        <p class="section-desc">Tudo o que o Hospital São Rafael precisa para dominar o marketing digital da região, sem depender de múltiplos fornecedores.</p>
+      </div>
+      <div class="servicos-grid">
+        <div class="servico-card reveal stagger-1">
+          <div class="servico-icon">📊</div>
+          <h3>Tráfego Pago</h3>
+          <p>Google Ads (Search, Display, YouTube) + Meta Ads (Facebook, Instagram) com campanhas de captação, remarketing e awareness segmentados por região.</p>
+          <div class="servico-tags">
+            <span class="servico-tag">Google Ads</span>
+            <span class="servico-tag">Meta Ads</span>
+            <span class="servico-tag">YouTube</span>
+            <span class="servico-tag">Remarketing</span>
+          </div>
+        </div>
+        <div class="servico-card reveal stagger-2">
+          <div class="servico-icon">🔍</div>
+          <h3>SEO Completo</h3>
+          <p>Auditoria técnica, 8 blog posts/mês, páginas de especialidade, SEO local em +50 diretórios, link building, digital PR e monitoramento de +100 palavras-chave.</p>
+          <div class="servico-tags">
+            <span class="servico-tag">On-Site</span>
+            <span class="servico-tag">Conteúdo</span>
+            <span class="servico-tag">Local</span>
+            <span class="servico-tag">Link Building</span>
+          </div>
+        </div>
+        <div class="servico-card reveal stagger-3">
+          <div class="servico-icon">🎬</div>
+          <h3>Produção Audiovisual</h3>
+          <p>12 vídeos/mês com motion design, 10 fotos profissionais e 1 dia de gravação no hospital com câmeras profissionais, iluminação e direção de arte.</p>
+          <div class="servico-tags">
+            <span class="servico-tag">12 Vídeos</span>
+            <span class="servico-tag">10 Fotos</span>
+            <span class="servico-tag">Motion Design</span>
+          </div>
+        </div>
+        <div class="servico-card reveal stagger-4">
+          <div class="servico-icon">📱</div>
+          <h3>Gestão de Redes Sociais</h3>
+          <p>Calendário editorial, 10 artes/mês para feed, stories diários, gestão de engajamento e relatórios de crescimento mensal.</p>
+          <div class="servico-tags">
+            <span class="servico-tag">Instagram</span>
+            <span class="servico-tag">Facebook</span>
+            <span class="servico-tag">10 Artes</span>
+            <span class="servico-tag">Stories</span>
+          </div>
+        </div>
+        <div class="servico-card reveal stagger-5">
+          <div class="servico-icon">💬</div>
+          <h3>WhatsApp Profissional + CRM</h3>
+          <p>Chat centralizado com múltiplos atendentes, CRM de pacientes com funil visual, formulários online, agendamentos e dashboard em tempo real.</p>
+          <div class="servico-tags">
+            <span class="servico-tag">Chat Central</span>
+            <span class="servico-tag">CRM</span>
+            <span class="servico-tag">Funil</span>
+            <span class="servico-tag">Dashboard</span>
+          </div>
+        </div>
+        <div class="servico-card reveal stagger-6">
+          <div class="servico-icon">🤖</div>
+          <h3>Automações + Chatbot IA</h3>
+          <p>Confirmação de consulta, lembretes, pós-procedimento, reativação, pesquisa NPS + chatbot 24/7 treinado com informações do hospital.</p>
+          <div class="servico-tags">
+            <span class="servico-tag">Chatbot IA</span>
+            <span class="servico-tag">Automações</span>
+            <span class="servico-tag">24/7</span>
+            <span class="servico-tag">NPS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLUXO -->
+  <section class="fluxo" id="fluxo">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">Como funciona</div>
+        <h2 class="section-title">Da captação ao<br>relacionamento</h2>
+        <p class="section-desc">Um fluxo integrado que cobre toda a jornada do paciente, do primeiro contato ao pós-atendimento.</p>
+      </div>
+      <div class="fluxo-timeline">
+        <div class="fluxo-step reveal stagger-1">
+          <div class="fluxo-number">1</div>
+          <div class="fluxo-content">
+            <h3>Atração</h3>
+            <p>Google Ads, Meta Ads, SEO orgânico e redes sociais trabalham juntos para atrair pacientes qualificados que buscam os serviços do hospital na região.</p>
+          </div>
+        </div>
+        <div class="fluxo-step reveal stagger-2">
+          <div class="fluxo-number">2</div>
+          <div class="fluxo-content">
+            <h3>Captação</h3>
+            <p>Landing pages otimizadas e formulários inteligentes convertem visitantes em leads. Todos os contatos caem automaticamente no CRM.</p>
+          </div>
+        </div>
+        <div class="fluxo-step reveal stagger-3">
+          <div class="fluxo-number">3</div>
+          <div class="fluxo-content">
+            <h3>Atendimento</h3>
+            <p>WhatsApp profissional com múltiplos atendentes + chatbot IA 24/7. Resposta em menos de 5 minutos. Nenhum lead perdido.</p>
+          </div>
+        </div>
+        <div class="fluxo-step reveal stagger-4">
+          <div class="fluxo-number">4</div>
+          <div class="fluxo-content">
+            <h3>Agendamento</h3>
+            <p>Confirmação automática via WhatsApp, lembretes 2h antes, controle de presença e gestão de agenda integrada.</p>
+          </div>
+        </div>
+        <div class="fluxo-step reveal stagger-5">
+          <div class="fluxo-number">5</div>
+          <div class="fluxo-content">
+            <h3>Relacionamento</h3>
+            <p>Pós-procedimento automatizado, pesquisa de satisfação, reativação de pacientes inativos e mensagens de aniversário.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTADOS -->
+  <section class="resultados" id="resultados">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">Resultados esperados</div>
+        <h2 class="section-title">Metas para os<br>primeiros 90 dias</h2>
+      </div>
+      <div class="resultados-grid">
+        <div class="resultado-card reveal-scale stagger-1">
+          <div class="resultado-value">+100%</div>
+          <div class="resultado-label">Aumento na Captação</div>
+          <div class="resultado-desc">Dobrar o volume de leads qualificados nos primeiros 3 meses</div>
+        </div>
+        <div class="resultado-card reveal-scale stagger-2">
+          <div class="resultado-value">&lt;5min</div>
+          <div class="resultado-label">Tempo de Resposta</div>
+          <div class="resultado-desc">Atendimento via WhatsApp em menos de 5 minutos</div>
+        </div>
+        <div class="resultado-card reveal-scale stagger-3">
+          <div class="resultado-value">Top 3</div>
+          <div class="resultado-label">Google Maps</div>
+          <div class="resultado-desc">Primeiras posições para buscas relacionadas na região</div>
+        </div>
+        <div class="resultado-card reveal-scale stagger-4">
+          <div class="resultado-value">40%</div>
+          <div class="resultado-label">Taxa de Agendamento</div>
+          <div class="resultado-desc">Conversão de leads em consultas agendadas</div>
+        </div>
+        <div class="resultado-card reveal-scale stagger-5">
+          <div class="resultado-value">+50%</div>
+          <div class="resultado-label">Tráfego Orgânico</div>
+          <div class="resultado-desc">Crescimento via SEO em 6 meses - leads sem custo por clique</div>
+        </div>
+        <div class="resultado-card reveal-scale stagger-6">
+          <div class="resultado-value">Zero</div>
+          <div class="resultado-label">Leads Perdidos</div>
+          <div class="resultado-desc">CRM + automações garantem que nenhum contato fique sem resposta</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFERENCIAIS -->
+  <section class="diferenciais" id="diferenciais">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">Por que a Ótima Ideia</div>
+        <h2 class="section-title">Diferenciais que<br>fazem a diferença</h2>
+      </div>
+      <div class="diff-grid">
+        <div class="diff-card reveal-left stagger-1">
+          <div class="diff-icon">🏢</div>
+          <div>
+            <h3>Tudo em Um Fornecedor</h3>
+            <p>Tráfego, social media, produção audiovisual, SEO, sistema, IA - sem depender de múltiplas agências</p>
+          </div>
+        </div>
+        <div class="diff-card reveal-right stagger-1">
+          <div class="diff-icon">🎬</div>
+          <div>
+            <h3>Produção Profissional</h3>
+            <p>Equipe de filmagem com câmeras profissionais, direção de arte e motion design no hospital</p>
+          </div>
+        </div>
+        <div class="diff-card reveal-left stagger-2">
+          <div class="diff-icon">💻</div>
+          <div>
+            <h3>Sistema Próprio</h3>
+            <p>Plataforma de CRM e WhatsApp desenvolvida por nós - não é ferramenta terceira</p>
+          </div>
+        </div>
+        <div class="diff-card reveal-right stagger-2">
+          <div class="diff-icon">🔍</div>
+          <div>
+            <h3>Especialistas em SEO</h3>
+            <p>Google Partners e GA4 certificados - posicionamento orgânico é nosso DNA</p>
+          </div>
+        </div>
+        <div class="diff-card reveal-left stagger-3">
+          <div class="diff-icon">🤖</div>
+          <div>
+            <h3>IA Integrada</h3>
+            <p>Chatbot treinado com as informações do hospital atendendo 24/7 automaticamente</p>
+          </div>
+        </div>
+        <div class="diff-card reveal-right stagger-3">
+          <div class="diff-icon">📊</div>
+          <div>
+            <h3>Transparência Total</h3>
+            <p>Relatórios detalhados, acesso a todas as métricas, reuniões semanais de alinhamento</p>
+          </div>
+        </div>
+        <div class="diff-card reveal-left stagger-4">
+          <div class="diff-icon">⚡</div>
+          <div>
+            <h3>Agilidade</h3>
+            <p>Tudo rodando em até 3 semanas - setup, campanhas, sistema e treinamento</p>
+          </div>
+        </div>
+        <div class="diff-card reveal-right stagger-4">
+          <div class="diff-icon">🔓</div>
+          <div>
+            <h3>Sem Amarras</h3>
+            <p>Sem fidelidade - cancelamento com 30 dias de aviso. Confiamos no resultado</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INVESTIMENTO -->
+  <section class="investimento" id="investimento">
+    <div class="container">
+      <div class="reveal" style="text-align: center;">
+        <div class="section-label" style="justify-content: center;">Investimento</div>
+        <h2 class="section-title">Pacote Marketing<br>Digital 360</h2>
+        <p class="section-desc" style="margin: 0 auto;">Todos os serviços apresentados nesta proposta, em um único pacote mensal.</p>
+      </div>
+      <div class="invest-card reveal-scale">
+        <div class="invest-label">Mensalidade</div>
+        <div class="invest-price"><span class="currency">R$</span>32.500</div>
+        <div class="invest-period">por mês</div>
+
+        <div class="invest-includes">
+          <div class="invest-item"><span class="check">&#10003;</span> Google Ads (Search + Display + YouTube)</div>
+          <div class="invest-item"><span class="check">&#10003;</span> Meta Ads (Facebook + Instagram)</div>
+          <div class="invest-item"><span class="check">&#10003;</span> SEO Completo (Técnico + Conteúdo + Local)</div>
+          <div class="invest-item"><span class="check">&#10003;</span> Link Building + Digital PR</div>
+          <div class="invest-item"><span class="check">&#10003;</span> 12 Vídeos/mês com Motion Design</div>
+          <div class="invest-item"><span class="check">&#10003;</span> 10 Fotos Profissionais/mês</div>
+          <div class="invest-item"><span class="check">&#10003;</span> 10 Artes para Feed/mês</div>
+          <div class="invest-item"><span class="check">&#10003;</span> Gestão de Redes Sociais</div>
+          <div class="invest-item"><span class="check">&#10003;</span> Google Meu Negócio</div>
+          <div class="invest-item"><span class="check">&#10003;</span> WhatsApp Profissional + CRM</div>
+          <div class="invest-item"><span class="check">&#10003;</span> Automações + Chatbot IA 24/7</div>
+          <div class="invest-item"><span class="check">&#10003;</span> Landing Pages + Email Marketing</div>
+          <div class="invest-item"><span class="check">&#10003;</span> Relatórios Quinzenais</div>
+          <div class="invest-item"><span class="check">&#10003;</span> Reuniões Semanais</div>
+          <div class="invest-item"><span class="check">&#10003;</span> Gerente de Conta Dedicado</div>
+          <div class="invest-item"><span class="check">&#10003;</span> Suporte Prioritário</div>
+        </div>
+
+        <div class="invest-divider"></div>
+
+        <div class="invest-setup">Setup inicial (cobrado apenas no 1o mês): <strong>R$ 7.500,00</strong></div>
+        <div class="invest-setup" style="margin-top: 8px;">Verba de mídia: <strong>R$ 60.000,00/mês</strong></div>
+
+        <div class="invest-note">
+          A verba de mídia é investida diretamente nas plataformas (Google, Meta, YouTube).<br>
+          O hospital tem total acesso e transparência dos valores.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-final">
+    <div class="container">
+      <div class="reveal">
+        <h2>Pronto para posicionar o<br>Hospital São Rafael como<br>referência digital?</h2>
+        <p>Agende uma apresentação e veja a plataforma funcionando ao vivo.</p>
+        <div class="cta-buttons">
+          <a href="https://wa.me/5511919033349?text=Ol%C3%A1%2C%20tenho%20interesse%20na%20proposta%20de%20Marketing%20360%20para%20o%20Hospital%20S%C3%A3o%20Rafael" class="btn-whatsapp" target="_blank">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Falar no WhatsApp
+          </a>
+          <a href="mailto:marketing@otimaideia.com.br?subject=Proposta%20Marketing%20360%20-%20Hospital%20S%C3%A3o%20Rafael" class="btn-outline">Enviar Email</a>
+        </div>
+        <button onclick="gerarPDF()" class="btn-pdf" style="margin-top: 24px; background: var(--primary); border: none; color: #fff; padding: 14px 36px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(198,40,40,0.3);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+          Baixar proposta em PDF
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <p><strong>Ótima Ideia</strong> - Digital Growth Strategy | <a href="https://www.otimaideia.com.br" target="_blank">www.otimaideia.com.br</a> | (11) 91903-3349</p>
+      <p style="margin-top: 8px;">Proposta confidencial e exclusiva para o Hospital São Rafael. Validade: 30 dias.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    reveals.forEach(el => revealObserver.observe(el));
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Counter animation for trust bar numbers
+    const counters = document.querySelectorAll('.trust-item .number');
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animation = 'countUp 0.6s ease forwards';
+        }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(el => counterObserver.observe(el));
+
+    // PDF Generation
+    function gerarPDF() {
+      const btn = document.querySelector('.btn-pdf');
+      btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg> Gerando PDF...';
+      btn.style.pointerEvents = 'none';
+
+      // Force all reveals visible
+      document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => el.classList.add('active'));
+
+      // Hide navbar, CTA buttons and PDF button for print
+      const style = document.createElement('style');
+      style.id = 'print-style';
+      style.textContent = `/* print override already in stylesheet */`;
+      document.head.appendChild(style);
+
+      setTimeout(() => {
+        window.print();
+        // Restore button
+        setTimeout(() => {
+          btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg> Baixar proposta em PDF';
+          btn.style.pointerEvents = 'auto';
+        }, 500);
+      }, 300);
+    }
+  </script>
+
+  <style>
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-pdf:hover { background: rgba(255,255,255,0.25) !important; transform: translateY(-1px); }
+    @page {
+      margin: 0mm;
+      size: A4;
+    }
+    @media print {
+      .navbar, .btn-pdf, .btn-whatsapp, .btn-outline, .cta-buttons { display: none !important; }
+      .reveal, .reveal-left, .reveal-right, .reveal-scale { opacity: 1 !important; transform: none !important; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0; padding: 0; background: #fff !important; color: #111 !important; }
+      section { break-inside: avoid; page-break-inside: avoid; padding-left: 40px !important; padding-right: 40px !important; }
+      .hero { min-height: auto !important; padding: 60px 40px 30px !important; background: #fff !important; color: #111 !important; }
+      .hero h1, .hero p, .hero strong { color: #111 !important; }
+      .hero .badge { color: var(--primary) !important; background: rgba(198,40,40,0.1) !important; }
+      .cta-final { padding: 40px !important; background: #fff !important; }
+      .cta-final h2 { color: #111 !important; }
+      .cta-final p { color: #555 !important; }
+      .footer { padding: 20px 40px !important; background: #f5f5f5 !important; color: #666 !important; }
+      .footer a { color: var(--primary) !important; }
+      .trust-bar { padding: 20px 40px !important; background: #f8f8f8 !important; }
+      .trust-bar .number { color: var(--primary) !important; }
+      .trust-bar .label { color: #555 !important; }
+
+      /* Invest card - forçar legibilidade na impressão */
+      .invest-card { background: #fff !important; border: 2px solid var(--primary) !important; border-image: none !important; }
+      .invest-card::before { display: none !important; }
+      .invest-label { color: var(--primary) !important; }
+      .invest-price { color: #111 !important; }
+      .invest-price .currency { color: var(--primary) !important; }
+      .invest-period { color: #555 !important; }
+      .invest-item { color: #333 !important; }
+      .invest-item .check { color: var(--primary) !important; }
+      .invest-divider { background: #ddd !important; }
+      .invest-setup { color: #333 !important; }
+      .invest-setup strong { color: var(--primary) !important; }
+      .invest-note { color: #666 !important; }
+
+      /* Seções escuras - converter para branco na impressão */
+      .diagnostico, .servicos, .jornada, .resultados, .diferenciais { background: #fff !important; }
+      .diagnostico h2, .servicos h2, .jornada h2, .resultados h2, .diferenciais h2,
+      .diagnostico h3, .servicos h3, .jornada h3, .resultados h3, .diferenciais h3 { color: #111 !important; }
+      .diagnostico p, .servicos p, .jornada p, .diferenciais p { color: #444 !important; }
+      .section-label { color: var(--primary) !important; }
+      .section-header p { color: #555 !important; }
+
+      /* Cards de diagnóstico e serviços */
+      .diag-card, .service-card, .diff-card { background: #f8f8f8 !important; border: 1px solid #ddd !important; }
+      .diag-card h3, .service-card h3, .diff-card h3 { color: #111 !important; }
+      .diag-card p, .service-card p, .diff-card p { color: #444 !important; }
+      .service-tag { background: #eee !important; color: #333 !important; }
+
+      /* Resultados */
+      .result-card { background: #f8f8f8 !important; border: 1px solid #ddd !important; }
+      .result-number { color: var(--primary) !important; }
+      .result-label, .result-desc { color: #333 !important; }
+
+      /* Jornada */
+      .journey-step { background: #fff !important; }
+      .step-number { background: var(--primary) !important; color: #fff !important; }
+      .journey-content h3 { color: #111 !important; }
+      .journey-content p { color: #444 !important; }
+      .journey-line { background: #ddd !important; }
+    }
+  </style>
+
+</body>
+</html>

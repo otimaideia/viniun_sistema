@@ -1,0 +1,1852 @@
+[0;32m========================================
+  DEPLOY META EDGE FUNCTIONS
+========================================\033[0m
+
+[1;33mINSTRUÇÕES:[0m
+1. Acesse: Coolify > Automacao Yeslaser > supabase-yeslaser
+2. Vá em: Terminal
+3. Selecione: supabase-edge-functions-*
+4. Copie e cole cada bloco de comandos abaixo
+
+========================================
+
+
+[0;32m# ============================================
+# FUNCTION: meta-oauth-callback
+# ============================================\033[0m
+
+[1;33m# Arquivo:      343 linhas[0m
+
+# Passo 1: Criar diretório
+mkdir -p /home/deno/functions/meta-oauth-callback
+
+# Passo 2: Criar arquivo index.ts
+cat > /home/deno/functions/meta-oauth-callback/index.ts << 'EOFFUNCTION'
+/**
+ * META OAUTH CALLBACK - Edge Function
+ *
+ * Callback do OAuth 2.0 do Facebook para Meta Messenger & Instagram
+ *
+ * Flow:
+ * 1. Recebe code do redirect do Facebook
+ * 2. Troca code por access_token (Graph API)
+ * 3. Busca informações do usuário e páginas
+ * 4. Salva account e pages no banco
+ * 5. Retorna sucesso com redirect
+ *
+ * Segurança:
+ * - Valida state parameter (CSRF)
+ * - Usa HTTPS obrigatório
+ * - Verifica tenant_id e franchise_id
+ */
+
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+const GRAPH_API_VERSION = 'v19.0'
+const GRAPH_API_URL = `https://graph.facebook.com/${GRAPH_API_VERSION}`
+
+// Facebook App Credentials (devem estar nas env vars)
+const FB_APP_ID = Deno.env.get('META_APP_ID') || ''
+const FB_APP_SECRET = Deno.env.get('META_APP_SECRET') || ''
+const REDIRECT_URI = Deno.env.get('META_REDIRECT_URI') || ''
+
+serve(async (req) => {
+  // CORS headers
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  }
+
+  // Handle CORS preflight
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
+  try {
+    const url = new URL(req.url)
+    const code = url.searchParams.get('code')
+    const state = url.searchParams.get('state')
+    const error = url.searchParams.get('error')
+    const errorDescription = url.searchParams.get('error_description')
+
+    // Verificar se houve erro no OAuth
+    if (error) {
+      console.error('[Meta OAuth] Erro no OAuth:', error, errorDescription)
+      return new Response(
+        JSON.stringify({
+          error: 'oauth_error',
+          message: errorDescription || error
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Validar parâmetros obrigatórios
+    if (!code || !state) {
+      return new Response(
+        JSON.stringify({ error: 'missing_parameters', message: 'code e state são obrigatórios' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Decodificar state (formato: "tenantId|franchiseId|userId")
+    const stateDecoded = atob(state)
+    const [tenantId, franchiseId, userId] = stateDecoded.split('|')
+
+    if (!tenantId || !userId) {
+      return new Response(
+        JSON.stringify({ error: 'invalid_state', message: 'State inválido' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    console.log('[Meta OAuth] Processando callback para tenant:', tenantId, 'franchise:', franchiseId || 'N/A')
+
+    // Inicializar Supabase client
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    // ========================================================================
+    // 1. TROCAR CODE POR ACCESS TOKEN
+    // ========================================================================
+    console.log('[Meta OAuth] Trocando code por access_token...')
+
+    const tokenResponse = await fetch(
+      `${GRAPH_API_URL}/oauth/access_token?` +
+      `client_id=${FB_APP_ID}&` +
+      `client_secret=${FB_APP_SECRET}&` +
+      `redirect_uri=${encodeURIComponent(REDIRECT_URI)}&` +
+      `code=${code}`
+    )
+
+    if (!tokenResponse.ok) {
+      const errorData = await tokenResponse.json()
+      console.error('[Meta OAuth] Erro ao trocar code:', errorData)
+      throw new Error(errorData.error?.message || 'Erro ao trocar code por token')
+    }
+
+    const tokenData = await tokenResponse.json()
+    const shortLivedToken = tokenData.access_token
+
+    console.log('[Meta OAuth] Short-lived token obtido')
+
+    // ========================================================================
+    // 2. TROCAR POR LONG-LIVED TOKEN (60 dias)
+    // ========================================================================
+    console.log('[Meta OAuth] Trocando por long-lived token...')
+
+    const longLivedResponse = await fetch(
+      `${GRAPH_API_URL}/oauth/access_token?` +
+      `grant_type=fb_exchange_token&` +
+      `client_id=${FB_APP_ID}&` +
+      `client_secret=${FB_APP_SECRET}&` +
+      `fb_exchange_token=${shortLivedToken}`
+    )
+
+    if (!longLivedResponse.ok) {
+      const errorData = await longLivedResponse.json()
+      console.error('[Meta OAuth] Erro ao trocar por long-lived token:', errorData)
+      throw new Error('Erro ao obter long-lived token')
+    }
+
+    const longLivedData = await longLivedResponse.json()
+    const accessToken = longLivedData.access_token
+    const expiresIn = longLivedData.expires_in || 5184000 // 60 dias padrão
+
+    const tokenExpiresAt = new Date(Date.now() + expiresIn * 1000)
+
+    console.log('[Meta OAuth] Long-lived token obtido (expira em:', tokenExpiresAt.toISOString(), ')')
+
+    // ========================================================================
+    // 3. BUSCAR DADOS DO USUÁRIO
+    // ========================================================================
+    console.log('[Meta OAuth] Buscando dados do usuário...')
+
+    const userResponse = await fetch(
+      `${GRAPH_API_URL}/me?fields=id,name,email&access_token=${accessToken}`
+    )
+
+    if (!userResponse.ok) {
+      const errorData = await userResponse.json()
+      console.error('[Meta OAuth] Erro ao buscar usuário:', errorData)
+      throw new Error('Erro ao buscar dados do usuário')
+    }
+
+    const userData = await userResponse.json()
+
+    console.log('[Meta OAuth] Usuário:', userData.name, 'ID:', userData.id)
+
+    // ========================================================================
+    // 4. BUSCAR PÁGINAS DO FACEBOOK (com permissão pages_show_list)
+    // ========================================================================
+    console.log('[Meta OAuth] Buscando páginas do Facebook...')
+
+    const pagesResponse = await fetch(
+      `${GRAPH_API_URL}/me/accounts?` +
+      `fields=id,name,username,category,access_token,instagram_business_account&` +
+      `access_token=${accessToken}`
+    )
+
+    if (!pagesResponse.ok) {
+      const errorData = await pagesResponse.json()
+      console.error('[Meta OAuth] Erro ao buscar páginas:', errorData)
+      throw new Error('Erro ao buscar páginas')
+    }
+
+    const pagesData = await pagesResponse.json()
+    const pages = pagesData.data || []
+
+    console.log('[Meta OAuth] Páginas encontradas:', pages.length)
+
+    // ========================================================================
+    // 5. SALVAR ACCOUNT NO BANCO
+    // ========================================================================
+    console.log('[Meta OAuth] Salvando account no banco...')
+
+    // Verificar se já existe
+    const { data: existingAccount } = await supabase
+      .from('mt_meta_accounts')
+      .select('id')
+      .eq('tenant_id', tenantId)
+      .eq('user_id', userData.id)
+      .eq('platform', 'facebook')
+      .single()
+
+    let accountId: string
+
+    if (existingAccount) {
+      // Atualizar
+      const { data: updatedAccount, error: updateError } = await supabase
+        .from('mt_meta_accounts')
+        .update({
+          user_name: userData.name,
+          user_email: userData.email,
+          access_token: accessToken,
+          token_expires_at: tokenExpiresAt.toISOString(),
+          is_active: true,
+          last_sync_at: new Date().toISOString(),
+          raw_data: { user: userData, token: longLivedData },
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', existingAccount.id)
+        .select('id')
+        .single()
+
+      if (updateError) {
+        console.error('[Meta OAuth] Erro ao atualizar account:', updateError)
+        throw updateError
+      }
+
+      accountId = updatedAccount.id
+      console.log('[Meta OAuth] Account atualizado:', accountId)
+    } else {
+      // Criar novo
+      const { data: newAccount, error: insertError } = await supabase
+        .from('mt_meta_accounts')
+        .insert({
+          tenant_id: tenantId,
+          franchise_id: franchiseId || null,
+          user_id: userData.id,
+          user_name: userData.name,
+          user_email: userData.email,
+          access_token: accessToken,
+          token_expires_at: tokenExpiresAt.toISOString(),
+          platform: 'facebook',
+          is_active: true,
+          last_sync_at: new Date().toISOString(),
+          raw_data: { user: userData, token: longLivedData },
+        })
+        .select('id')
+        .single()
+
+      if (insertError) {
+        console.error('[Meta OAuth] Erro ao criar account:', insertError)
+        throw insertError
+      }
+
+      accountId = newAccount.id
+      console.log('[Meta OAuth] Account criado:', accountId)
+    }
+
+    // ========================================================================
+    // 6. SALVAR PÁGINAS NO BANCO
+    // ========================================================================
+    console.log('[Meta OAuth] Salvando', pages.length, 'páginas no banco...')
+
+    let pagesCreated = 0
+    let pagesUpdated = 0
+
+    for (const page of pages) {
+      // Verificar se já existe
+      const { data: existingPage } = await supabase
+        .from('mt_meta_pages')
+        .select('id')
+        .eq('tenant_id', tenantId)
+        .eq('page_id', page.id)
+        .single()
+
+      if (existingPage) {
+        // Atualizar
+        await supabase
+          .from('mt_meta_pages')
+          .update({
+            page_name: page.name,
+            page_username: page.username || null,
+            page_category: page.category || null,
+            page_access_token: page.access_token,
+            instagram_business_account_id: page.instagram_business_account?.id || null,
+            is_active: true,
+            raw_data: page,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', existingPage.id)
+
+        pagesUpdated++
+      } else {
+        // Criar nova
+        await supabase
+          .from('mt_meta_pages')
+          .insert({
+            tenant_id: tenantId,
+            franchise_id: franchiseId || null,
+            account_id: accountId,
+            page_id: page.id,
+            page_name: page.name,
+            page_username: page.username || null,
+            page_category: page.category || null,
+            page_access_token: page.access_token,
+            instagram_business_account_id: page.instagram_business_account?.id || null,
+            platform: 'facebook',
+            is_active: true,
+            raw_data: page,
+          })
+
+        pagesCreated++
+      }
+    }
+
+    console.log('[Meta OAuth] Páginas salvas:', pagesCreated, 'criadas,', pagesUpdated, 'atualizadas')
+
+    // ========================================================================
+    // 7. RETORNAR SUCESSO
+    // ========================================================================
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: 'Autenticação concluída com sucesso',
+        data: {
+          account_id: accountId,
+          user_name: userData.name,
+          pages_created: pagesCreated,
+          pages_updated: pagesUpdated,
+          total_pages: pages.length,
+          token_expires_at: tokenExpiresAt.toISOString(),
+        },
+      }),
+      {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
+  } catch (error) {
+    console.error('[Meta OAuth] Erro:', error)
+
+    return new Response(
+      JSON.stringify({
+        error: 'internal_error',
+        message: error.message || 'Erro interno no servidor',
+      }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
+  }
+})
+EOFFUNCTION
+
+# Passo 3: Verificar criação
+ls -lh /home/deno/functions/meta-oauth-callback/index.ts && echo '✅ meta-oauth-callback criado com sucesso'
+
+[0;32m# ============================================[0m
+
+
+[0;32m# ============================================
+# FUNCTION: meta-webhook
+# ============================================\033[0m
+
+[1;33m# Arquivo:      410 linhas[0m
+
+# Passo 1: Criar diretório
+mkdir -p /home/deno/functions/meta-webhook
+
+# Passo 2: Criar arquivo index.ts
+cat > /home/deno/functions/meta-webhook/index.ts << 'EOFFUNCTION'
+/**
+ * META WEBHOOK - Edge Function
+ *
+ * Recebe webhooks do Facebook Messenger e Instagram Direct
+ *
+ * Eventos suportados:
+ * - messages: Nova mensagem recebida
+ * - message_reads: Mensagem lida
+ * - message_deliveries: Mensagem entregue
+ * - messaging_postbacks: Botões/Quick Replies
+ * - messaging_referrals: Referências (Stories, etc.)
+ *
+ * Segurança:
+ * - Valida x-hub-signature-256 (HMAC SHA256)
+ * - Rate limiting por IP
+ * - Idempotência (unique_key)
+ *
+ * Auto-criação de Leads:
+ * - Match por PSID (100% confiança)
+ * - Fuzzy matching por nome (85% similaridade)
+ * - Cria lead automaticamente se não existir
+ */
+
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { createHmac } from 'https://deno.land/std@0.168.0/node/crypto.ts'
+
+const GRAPH_API_VERSION = 'v19.0'
+
+// App Secret para validar webhook signature
+const APP_SECRET = Deno.env.get('META_APP_SECRET') || ''
+const VERIFY_TOKEN = Deno.env.get('META_WEBHOOK_VERIFY_TOKEN') || 'yeslaser_meta_webhook_2025'
+
+/**
+ * Valida assinatura do webhook usando HMAC SHA256
+ */
+function verifyWebhookSignature(signature: string | null, body: string): boolean {
+  if (!signature || !APP_SECRET) {
+    console.warn('[Meta Webhook] Assinatura ou APP_SECRET ausente')
+    return false
+  }
+
+  // Calcular HMAC
+  const expectedSignature = createHmac('sha256', APP_SECRET)
+    .update(body)
+    .digest('hex')
+
+  // Comparar (remover "sha256=" do header)
+  const receivedSignature = signature.replace('sha256=', '')
+
+  return expectedSignature === receivedSignature
+}
+
+/**
+ * Auto-criar lead a partir de participante da conversa
+ */
+async function createLeadFromConversation(
+  supabase: any,
+  tenantId: string,
+  franchiseId: string | null,
+  participantId: string,
+  participantName: string,
+  participantUsername: string | null,
+  conversationId: string,
+  platform: 'facebook' | 'instagram'
+) {
+  try {
+    console.log('[Meta Webhook] Verificando lead existente para PSID:', participantId)
+
+    // 1. Verificar por PSID (100% confiança)
+    const { data: existingByPSID } = await supabase
+      .from('mt_leads')
+      .select('id, nome')
+      .eq('tenant_id', tenantId)
+      .eq('meta_participant_id', participantId)
+      .is('deleted_at', null)
+      .single()
+
+    if (existingByPSID) {
+      console.log('[Meta Webhook] Lead encontrado por PSID:', existingByPSID.id)
+      return existingByPSID.id
+    }
+
+    // 2. Fuzzy matching por nome (85% similaridade)
+    if (participantName && participantName.length >= 3) {
+      console.log('[Meta Webhook] Buscando leads similares por nome:', participantName)
+
+      const { data: similarLeads } = await supabase.rpc('find_similar_leads', {
+        p_tenant_id: tenantId,
+        p_nome: participantName,
+        p_threshold: 0.85,
+      })
+
+      if (similarLeads && similarLeads.length === 1) {
+        // Único match com alta similaridade
+        const lead = similarLeads[0]
+        console.log('[Meta Webhook] Lead similar encontrado (', lead.similarity_score, '):', lead.id)
+
+        // Atualizar com PSID
+        await supabase
+          .from('mt_leads')
+          .update({
+            meta_participant_id: participantId,
+            meta_participant_username: participantUsername,
+            meta_conversation_id: conversationId,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', lead.id)
+
+        return lead.id
+      }
+
+      if (similarLeads && similarLeads.length > 1) {
+        console.warn('[Meta Webhook] Múltiplos leads similares encontrados, criando novo com flag de revisão')
+      }
+    }
+
+    // 3. Criar novo lead
+    console.log('[Meta Webhook] Criando novo lead para:', participantName)
+
+    const canalOrigem = platform === 'facebook' ? 'facebook_messenger' : 'instagram_direct'
+
+    const { data: newLead, error: insertError } = await supabase
+      .from('mt_leads')
+      .insert({
+        tenant_id: tenantId,
+        franchise_id: franchiseId,
+        nome: participantName || 'Lead do ' + platform,
+        canal_origem: canalOrigem,
+        meta_participant_id: participantId,
+        meta_participant_username: participantUsername,
+        meta_conversation_id: conversationId,
+        status: 'novo',
+        tags: similarLeads && similarLeads.length > 1 ? ['possivel_duplicata', 'requer_revisao'] : null,
+        observacoes:
+          similarLeads && similarLeads.length > 1
+            ? `Lead criado automaticamente via ${canalOrigem}. Verificar possíveis duplicatas: ${similarLeads.map((l: any) => l.nome).join(', ')}`
+            : `Lead criado automaticamente via ${canalOrigem}`,
+      })
+      .select('id')
+      .single()
+
+    if (insertError) {
+      console.error('[Meta Webhook] Erro ao criar lead:', insertError)
+      throw insertError
+    }
+
+    console.log('[Meta Webhook] Lead criado:', newLead.id)
+    return newLead.id
+  } catch (error) {
+    console.error('[Meta Webhook] Erro ao criar/buscar lead:', error)
+    return null
+  }
+}
+
+/**
+ * Processar evento de mensagem
+ */
+async function processMessage(supabase: any, entry: any, tenantId: string, franchiseId: string | null) {
+  try {
+    const messaging = entry.messaging?.[0]
+    if (!messaging) return
+
+    const pageId = entry.id // Facebook Page ID ou Instagram Account ID
+    const platform = entry.messaging?.[0]?.message ? 'facebook' : 'instagram' // Simplificado
+
+    // Buscar página no banco
+    const { data: page } = await supabase
+      .from('mt_meta_pages')
+      .select('id, tenant_id, franchise_id')
+      .eq('page_id', pageId)
+      .eq('is_active', true)
+      .single()
+
+    if (!page) {
+      console.warn('[Meta Webhook] Página não encontrada:', pageId)
+      return
+    }
+
+    const senderId = messaging.sender?.id
+    const recipientId = messaging.recipient?.id
+    const message = messaging.message
+    const timestamp = messaging.timestamp
+
+    if (!senderId || !recipientId || !message) {
+      console.warn('[Meta Webhook] Dados incompletos na mensagem')
+      return
+    }
+
+    // Determinar direção (incoming ou outgoing)
+    const direction = senderId === pageId ? 'outgoing' : 'incoming'
+
+    // Buscar/criar conversação
+    const conversationId = `${pageId}_${senderId === pageId ? recipientId : senderId}`
+
+    let { data: conversation } = await supabase
+      .from('mt_meta_conversations')
+      .select('id, lead_id')
+      .eq('tenant_id', page.tenant_id)
+      .eq('conversation_id', conversationId)
+      .single()
+
+    if (!conversation) {
+      // Criar conversação
+      const participantId = senderId === pageId ? recipientId : senderId
+
+      // Buscar nome do participante (via Graph API ou usar PSID)
+      const participantName = participantId // Placeholder, ideal seria buscar da API
+
+      // Auto-criar lead (se incoming)
+      let leadId = null
+      if (direction === 'incoming') {
+        leadId = await createLeadFromConversation(
+          supabase,
+          page.tenant_id,
+          page.franchise_id,
+          participantId,
+          participantName,
+          null, // username (precisa buscar da API)
+          conversationId,
+          platform
+        )
+      }
+
+      const { data: newConv, error: convError } = await supabase
+        .from('mt_meta_conversations')
+        .insert({
+          tenant_id: page.tenant_id,
+          franchise_id: page.franchise_id,
+          page_id: page.id,
+          conversation_id: conversationId,
+          platform: platform,
+          participant_id: participantId,
+          participant_name: participantName,
+          lead_id: leadId,
+          status: 'active',
+          unread_count: direction === 'incoming' ? 1 : 0,
+          last_message_at: new Date(timestamp).toISOString(),
+          last_message_preview: message.text || '[Mídia]',
+        })
+        .select('id, lead_id')
+        .single()
+
+      if (convError) {
+        console.error('[Meta Webhook] Erro ao criar conversação:', convError)
+        return
+      }
+
+      conversation = newConv
+    } else {
+      // Atualizar conversação
+      await supabase
+        .from('mt_meta_conversations')
+        .update({
+          unread_count: direction === 'incoming' ? (conversation.unread_count || 0) + 1 : 0,
+          last_message_at: new Date(timestamp).toISOString(),
+          last_message_preview: message.text || '[Mídia]',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', conversation.id)
+    }
+
+    // Salvar mensagem (com idempotência)
+    const messageId = message.mid
+    const uniqueKey = `${platform}_${messageId}`
+
+    // Verificar duplicata
+    const { data: existingMessage } = await supabase
+      .from('mt_meta_messages')
+      .select('id')
+      .eq('unique_key', uniqueKey)
+      .single()
+
+    if (existingMessage) {
+      console.log('[Meta Webhook] Mensagem duplicada ignorada:', uniqueKey)
+      return
+    }
+
+    // Inserir mensagem
+    const { error: msgError } = await supabase.from('mt_meta_messages').insert({
+      tenant_id: page.tenant_id,
+      franchise_id: page.franchise_id,
+      page_id: page.id,
+      conversation_id: conversation.id,
+      message_id: messageId,
+      platform: platform,
+      from_id: senderId,
+      to_id: recipientId,
+      direction: direction,
+      message_type: message.attachments?.[0]?.type || 'text',
+      text_content: message.text || null,
+      media_url: message.attachments?.[0]?.payload?.url || null,
+      media_type: message.attachments?.[0]?.type || null,
+      status: 'sent',
+      sent_at: new Date(timestamp).toISOString(),
+      raw_data: message,
+      unique_key: uniqueKey,
+    })
+
+    if (msgError) {
+      console.error('[Meta Webhook] Erro ao salvar mensagem:', msgError)
+    } else {
+      console.log('[Meta Webhook] Mensagem salva:', uniqueKey)
+    }
+  } catch (error) {
+    console.error('[Meta Webhook] Erro ao processar mensagem:', error)
+  }
+}
+
+serve(async (req) => {
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  }
+
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
+  try {
+    // ========================================================================
+    // VERIFICATION CHALLENGE (GET)
+    // ========================================================================
+    if (req.method === 'GET') {
+      const url = new URL(req.url)
+      const mode = url.searchParams.get('hub.mode')
+      const token = url.searchParams.get('hub.verify_token')
+      const challenge = url.searchParams.get('hub.challenge')
+
+      if (mode === 'subscribe' && token === VERIFY_TOKEN) {
+        console.log('[Meta Webhook] Verificação OK')
+        return new Response(challenge, { status: 200 })
+      } else {
+        console.warn('[Meta Webhook] Verificação falhou')
+        return new Response('Forbidden', { status: 403 })
+      }
+    }
+
+    // ========================================================================
+    // WEBHOOK EVENT (POST)
+    // ========================================================================
+    if (req.method === 'POST') {
+      const body = await req.text()
+      const signature = req.headers.get('x-hub-signature-256')
+
+      // Validar assinatura
+      if (!verifyWebhookSignature(signature, body)) {
+        console.error('[Meta Webhook] Assinatura inválida')
+        return new Response('Forbidden', { status: 403 })
+      }
+
+      const data = JSON.parse(body)
+
+      // Inicializar Supabase
+      const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+      const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+      const supabase = createClient(supabaseUrl, supabaseKey)
+
+      // Salvar webhook event no log
+      await supabase.from('mt_meta_webhook_events').insert({
+        event_type: data.object || 'unknown',
+        platform: data.entry?.[0]?.messaging ? 'facebook' : 'instagram',
+        page_id: data.entry?.[0]?.id || null,
+        payload: data,
+        processed: false,
+        ip_address: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip'),
+        user_agent: req.headers.get('user-agent'),
+      })
+
+      // Processar entries
+      for (const entry of data.entry || []) {
+        // TODO: Determinar tenant_id e franchise_id a partir da página
+        // Por enquanto, usar primeiro tenant ativo
+        const { data: firstTenant } = await supabase
+          .from('mt_tenants')
+          .select('id')
+          .eq('is_active', true)
+          .limit(1)
+          .single()
+
+        if (!firstTenant) {
+          console.error('[Meta Webhook] Nenhum tenant ativo encontrado')
+          continue
+        }
+
+        await processMessage(supabase, entry, firstTenant.id, null)
+      }
+
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+
+    return new Response('Method not allowed', { status: 405 })
+  } catch (error) {
+    console.error('[Meta Webhook] Erro:', error)
+
+    return new Response(
+      JSON.stringify({
+        error: 'internal_error',
+        message: error.message,
+      }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
+  }
+})
+EOFFUNCTION
+
+# Passo 3: Verificar criação
+ls -lh /home/deno/functions/meta-webhook/index.ts && echo '✅ meta-webhook criado com sucesso'
+
+[0;32m# ============================================[0m
+
+
+[0;32m# ============================================
+# FUNCTION: meta-send-message
+# ============================================\033[0m
+
+[1;33m# Arquivo:      413 linhas[0m
+
+# Passo 1: Criar diretório
+mkdir -p /home/deno/functions/meta-send-message
+
+# Passo 2: Criar arquivo index.ts
+cat > /home/deno/functions/meta-send-message/index.ts << 'EOFFUNCTION'
+/**
+ * META SEND MESSAGE - Edge Function
+ *
+ * Envia mensagens para Facebook Messenger e Instagram Direct
+ *
+ * Rate Limiting:
+ * - Facebook Messenger: 200 mensagens/hora por página
+ * - Instagram Direct: 100 mensagens/hora por conta
+ * - Burst: 50 msg/min (FB), 20 msg/min (IG)
+ *
+ * Features:
+ * - Envio de texto e mídia (imagens, vídeos, documentos)
+ * - Rate limiting automático com fila
+ * - Retry exponencial em caso de falha
+ * - Validação de permissões
+ *
+ * Request Body:
+ * {
+ *   "page_id": "uuid",
+ *   "recipient_id": "PSID",
+ *   "message_type": "text|image|video|file",
+ *   "content": "texto ou URL da mídia",
+ *   "quick_replies": [...] (opcional)
+ * }
+ */
+
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+const GRAPH_API_VERSION = 'v19.0'
+const GRAPH_API_URL = `https://graph.facebook.com/${GRAPH_API_VERSION}`
+
+// Rate Limits
+const RATE_LIMIT_FB = 200 // msgs/hora
+const RATE_LIMIT_IG = 100 // msgs/hora
+const RATE_CHECK_THRESHOLD = 0.9 // 90% do limite
+
+/**
+ * Verificar rate limit atual da página
+ */
+async function checkRateLimit(supabase: any, pageId: string, platform: 'facebook' | 'instagram'): Promise<{
+  canSend: boolean
+  usage: number
+  limit: number
+}> {
+  try {
+    const limit = platform === 'facebook' ? RATE_LIMIT_FB : RATE_LIMIT_IG
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000)
+
+    // Contar mensagens enviadas na última hora
+    const { count, error } = await supabase
+      .from('mt_meta_messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('page_id', pageId)
+      .eq('direction', 'outgoing')
+      .gte('created_at', oneHourAgo.toISOString())
+
+    if (error) {
+      console.error('[Rate Limit] Erro ao verificar:', error)
+      return { canSend: true, usage: 0, limit }
+    }
+
+    const usage = count || 0
+    const canSend = usage < limit * RATE_CHECK_THRESHOLD
+
+    console.log(`[Rate Limit] ${platform} - Uso: ${usage}/${limit} (${((usage / limit) * 100).toFixed(1)}%)`)
+
+    return { canSend, usage, limit }
+  } catch (error) {
+    console.error('[Rate Limit] Erro:', error)
+    return { canSend: true, usage: 0, limit: platform === 'facebook' ? RATE_LIMIT_FB : RATE_LIMIT_IG }
+  }
+}
+
+/**
+ * Enfileirar mensagem para envio posterior
+ */
+async function queueMessage(
+  supabase: any,
+  tenantId: string,
+  franchiseId: string | null,
+  pageId: string,
+  recipientId: string,
+  messageType: string,
+  messagePayload: any
+) {
+  try {
+    const { error } = await supabase.from('mt_meta_message_queue').insert({
+      tenant_id: tenantId,
+      franchise_id: franchiseId,
+      page_id: pageId,
+      recipient_id: recipientId,
+      message_type: messageType,
+      message_payload: messagePayload,
+      status: 'pending',
+      scheduled_at: new Date(Date.now() + 5 * 60 * 1000).toISOString(), // 5 minutos
+    })
+
+    if (error) {
+      console.error('[Queue] Erro ao enfileirar:', error)
+      throw error
+    }
+
+    console.log('[Queue] Mensagem enfileirada para:', recipientId)
+  } catch (error) {
+    console.error('[Queue] Erro:', error)
+    throw error
+  }
+}
+
+/**
+ * Enviar mensagem via Graph API
+ */
+async function sendToGraphAPI(
+  pageAccessToken: string,
+  recipientId: string,
+  messageType: string,
+  content: string,
+  quickReplies?: any[]
+): Promise<{ success: boolean; message_id?: string; error?: string }> {
+  try {
+    let messagePayload: any = {}
+
+    switch (messageType) {
+      case 'text':
+        messagePayload = {
+          text: content,
+        }
+        if (quickReplies && quickReplies.length > 0) {
+          messagePayload.quick_replies = quickReplies
+        }
+        break
+
+      case 'image':
+        messagePayload = {
+          attachment: {
+            type: 'image',
+            payload: {
+              url: content,
+              is_reusable: true,
+            },
+          },
+        }
+        break
+
+      case 'video':
+        messagePayload = {
+          attachment: {
+            type: 'video',
+            payload: {
+              url: content,
+              is_reusable: true,
+            },
+          },
+        }
+        break
+
+      case 'file':
+        messagePayload = {
+          attachment: {
+            type: 'file',
+            payload: {
+              url: content,
+              is_reusable: true,
+            },
+          },
+        }
+        break
+
+      case 'audio':
+        messagePayload = {
+          attachment: {
+            type: 'audio',
+            payload: {
+              url: content,
+              is_reusable: true,
+            },
+          },
+        }
+        break
+
+      default:
+        throw new Error(`Tipo de mensagem não suportado: ${messageType}`)
+    }
+
+    const response = await fetch(`${GRAPH_API_URL}/me/messages`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        recipient: { id: recipientId },
+        message: messagePayload,
+        messaging_type: 'RESPONSE',
+        access_token: pageAccessToken,
+      }),
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      console.error('[Graph API] Erro:', data)
+
+      // Verificar se é erro de rate limit
+      if (data.error?.code === 4 || data.error?.code === 32) {
+        return {
+          success: false,
+          error: 'rate_limit_exceeded',
+        }
+      }
+
+      return {
+        success: false,
+        error: data.error?.message || 'Erro desconhecido',
+      }
+    }
+
+    console.log('[Graph API] Mensagem enviada:', data.message_id)
+
+    return {
+      success: true,
+      message_id: data.message_id,
+    }
+  } catch (error) {
+    console.error('[Graph API] Erro ao enviar:', error)
+    return {
+      success: false,
+      error: error.message,
+    }
+  }
+}
+
+serve(async (req) => {
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  }
+
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
+  try {
+    const {
+      page_id,
+      recipient_id,
+      message_type,
+      content,
+      quick_replies,
+    }: {
+      page_id: string
+      recipient_id: string
+      message_type: 'text' | 'image' | 'video' | 'file' | 'audio'
+      content: string
+      quick_replies?: any[]
+    } = await req.json()
+
+    // Validar parâmetros
+    if (!page_id || !recipient_id || !message_type || !content) {
+      return new Response(
+        JSON.stringify({
+          error: 'missing_parameters',
+          message: 'page_id, recipient_id, message_type e content são obrigatórios',
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Inicializar Supabase
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    // Buscar página
+    const { data: page, error: pageError } = await supabase
+      .from('mt_meta_pages')
+      .select('id, tenant_id, franchise_id, page_access_token, platform')
+      .eq('id', page_id)
+      .eq('is_active', true)
+      .single()
+
+    if (pageError || !page) {
+      return new Response(
+        JSON.stringify({
+          error: 'page_not_found',
+          message: 'Página não encontrada ou inativa',
+        }),
+        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Verificar rate limit
+    const rateLimitCheck = await checkRateLimit(supabase, page.id, page.platform)
+
+    if (!rateLimitCheck.canSend) {
+      // Enfileirar mensagem
+      await queueMessage(
+        supabase,
+        page.tenant_id,
+        page.franchise_id,
+        page.id,
+        recipient_id,
+        message_type,
+        { content, quick_replies }
+      )
+
+      return new Response(
+        JSON.stringify({
+          success: false,
+          queued: true,
+          message: 'Rate limit atingido. Mensagem enfileirada para envio posterior.',
+          usage: rateLimitCheck.usage,
+          limit: rateLimitCheck.limit,
+        }),
+        {
+          status: 429,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      )
+    }
+
+    // Enviar mensagem via Graph API
+    const result = await sendToGraphAPI(page.page_access_token, recipient_id, message_type, content, quick_replies)
+
+    if (!result.success) {
+      // Se erro de rate limit, enfileirar
+      if (result.error === 'rate_limit_exceeded') {
+        await queueMessage(
+          supabase,
+          page.tenant_id,
+          page.franchise_id,
+          page.id,
+          recipient_id,
+          message_type,
+          { content, quick_replies }
+        )
+
+        return new Response(
+          JSON.stringify({
+            success: false,
+            queued: true,
+            message: 'Rate limit atingido pela API. Mensagem enfileirada.',
+          }),
+          {
+            status: 429,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        )
+      }
+
+      // Outro erro
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: result.error,
+        }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      )
+    }
+
+    // Salvar mensagem no banco
+    const { error: msgError } = await supabase.from('mt_meta_messages').insert({
+      tenant_id: page.tenant_id,
+      franchise_id: page.franchise_id,
+      page_id: page.id,
+      conversation_id: null, // TODO: Vincular com conversação existente
+      message_id: result.message_id,
+      platform: page.platform,
+      from_id: page.page_id, // Page ID
+      to_id: recipient_id,
+      direction: 'outgoing',
+      message_type: message_type,
+      text_content: message_type === 'text' ? content : null,
+      media_url: message_type !== 'text' ? content : null,
+      media_type: message_type,
+      status: 'sent',
+      sent_at: new Date().toISOString(),
+      unique_key: `${page.platform}_${result.message_id}`,
+    })
+
+    if (msgError) {
+      console.error('[Database] Erro ao salvar mensagem:', msgError)
+    }
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message_id: result.message_id,
+        message: 'Mensagem enviada com sucesso',
+      }),
+      {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
+  } catch (error) {
+    console.error('[Meta Send] Erro:', error)
+
+    return new Response(
+      JSON.stringify({
+        error: 'internal_error',
+        message: error.message,
+      }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
+  }
+})
+EOFFUNCTION
+
+# Passo 3: Verificar criação
+ls -lh /home/deno/functions/meta-send-message/index.ts && echo '✅ meta-send-message criado com sucesso'
+
+[0;32m# ============================================[0m
+
+
+[0;32m# ============================================
+# FUNCTION: meta-sync
+# ============================================\033[0m
+
+[1;33m# Arquivo:      298 linhas[0m
+
+# Passo 1: Criar diretório
+mkdir -p /home/deno/functions/meta-sync
+
+# Passo 2: Criar arquivo index.ts
+cat > /home/deno/functions/meta-sync/index.ts << 'EOFFUNCTION'
+/**
+ * META SYNC - Edge Function
+ *
+ * Sincroniza conversas e mensagens do Facebook/Instagram
+ *
+ * Features:
+ * - Paginação incremental (50 conversas por vez)
+ * - Limita a 500 conversas por execução
+ * - Cursor para continuar de onde parou
+ * - Salva conversas e mensagens no banco
+ * - Auto-criação de leads
+ *
+ * Request Body:
+ * {
+ *   "page_id": "uuid",
+ *   "cursor": "cursor_string" (opcional),
+ *   "limit": 50 (opcional)
+ * }
+ */
+
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+const GRAPH_API_VERSION = 'v19.0'
+const GRAPH_API_URL = `https://graph.facebook.com/${GRAPH_API_VERSION}`
+
+/**
+ * Buscar conversas da página via Graph API
+ */
+async function fetchConversations(
+  pageId: string,
+  pageAccessToken: string,
+  limit: number = 50,
+  after?: string
+): Promise<{
+  data: any[]
+  paging?: { cursors?: { before: string; after: string }; next?: string }
+}> {
+  try {
+    let url = `${GRAPH_API_URL}/${pageId}/conversations?fields=id,participants,messages.limit(10){id,from,to,created_time,message},updated_time&limit=${limit}&access_token=${pageAccessToken}`
+
+    if (after) {
+      url += `&after=${after}`
+    }
+
+    const response = await fetch(url)
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      console.error('[Sync] Erro ao buscar conversas:', errorData)
+      throw new Error(errorData.error?.message || 'Erro ao buscar conversas')
+    }
+
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error('[Sync] Erro:', error)
+    throw error
+  }
+}
+
+/**
+ * Salvar conversa no banco
+ */
+async function saveConversation(
+  supabase: any,
+  tenantId: string,
+  franchiseId: string | null,
+  pageUuid: string,
+  platform: 'facebook' | 'instagram',
+  conversation: any
+) {
+  try {
+    const conversationId = conversation.id
+    const participants = conversation.participants?.data || []
+    const messages = conversation.messages?.data || []
+
+    // Buscar participante (não é a página)
+    const participant = participants.find((p: any) => p.id !== conversation.id.split('_')[0])
+
+    if (!participant) {
+      console.warn('[Sync] Participante não encontrado na conversa:', conversationId)
+      return
+    }
+
+    const participantId = participant.id
+    const participantName = participant.name || participant.username || 'Lead do ' + platform
+
+    // Verificar se conversação já existe
+    const { data: existing } = await supabase
+      .from('mt_meta_conversations')
+      .select('id')
+      .eq('tenant_id', tenantId)
+      .eq('conversation_id', conversationId)
+      .single()
+
+    let convUuid: string
+
+    if (existing) {
+      // Atualizar
+      const lastMessage = messages[0]
+
+      await supabase
+        .from('mt_meta_conversations')
+        .update({
+          last_message_at: lastMessage?.created_time || conversation.updated_time,
+          last_message_preview: lastMessage?.message || null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', existing.id)
+
+      convUuid = existing.id
+    } else {
+      // Criar nova
+      const lastMessage = messages[0]
+
+      const { data: newConv, error: convError } = await supabase
+        .from('mt_meta_conversations')
+        .insert({
+          tenant_id: tenantId,
+          franchise_id: franchiseId,
+          page_id: pageUuid,
+          conversation_id: conversationId,
+          platform: platform,
+          participant_id: participantId,
+          participant_name: participantName,
+          status: 'active',
+          unread_count: 0,
+          last_message_at: lastMessage?.created_time || conversation.updated_time,
+          last_message_preview: lastMessage?.message || null,
+        })
+        .select('id')
+        .single()
+
+      if (convError) {
+        console.error('[Sync] Erro ao criar conversa:', convError)
+        return
+      }
+
+      convUuid = newConv.id
+    }
+
+    // Salvar mensagens
+    for (const message of messages) {
+      const messageId = message.id
+      const uniqueKey = `${platform}_${messageId}`
+
+      // Verificar duplicata
+      const { data: existingMsg } = await supabase
+        .from('mt_meta_messages')
+        .select('id')
+        .eq('unique_key', uniqueKey)
+        .single()
+
+      if (existingMsg) {
+        continue // Pular duplicata
+      }
+
+      // Inserir mensagem
+      await supabase.from('mt_meta_messages').insert({
+        tenant_id: tenantId,
+        franchise_id: franchiseId,
+        page_id: pageUuid,
+        conversation_id: convUuid,
+        message_id: messageId,
+        platform: platform,
+        from_id: message.from?.id || participantId,
+        to_id: message.to?.data?.[0]?.id || conversationId.split('_')[0],
+        direction: message.from?.id === participantId ? 'incoming' : 'outgoing',
+        message_type: 'text',
+        text_content: message.message || null,
+        status: 'sent',
+        sent_at: message.created_time,
+        unique_key: uniqueKey,
+      })
+    }
+
+    console.log('[Sync] Conversa salva:', conversationId, '(', messages.length, 'mensagens)')
+  } catch (error) {
+    console.error('[Sync] Erro ao salvar conversa:', error)
+  }
+}
+
+serve(async (req) => {
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  }
+
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
+  try {
+    const {
+      page_id,
+      cursor,
+      limit = 50,
+    }: {
+      page_id: string
+      cursor?: string
+      limit?: number
+    } = await req.json()
+
+    if (!page_id) {
+      return new Response(
+        JSON.stringify({
+          error: 'missing_parameters',
+          message: 'page_id é obrigatório',
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Inicializar Supabase
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    // Buscar página
+    const { data: page, error: pageError } = await supabase
+      .from('mt_meta_pages')
+      .select('id, tenant_id, franchise_id, page_id, page_access_token, platform')
+      .eq('id', page_id)
+      .eq('is_active', true)
+      .single()
+
+    if (pageError || !page) {
+      return new Response(
+        JSON.stringify({
+          error: 'page_not_found',
+          message: 'Página não encontrada ou inativa',
+        }),
+        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    console.log('[Sync] Iniciando sincronização para página:', page.page_id)
+
+    // Buscar conversas
+    const conversations = await fetchConversations(page.page_id, page.page_access_token, limit, cursor)
+
+    console.log('[Sync] Conversas recebidas:', conversations.data.length)
+
+    // Salvar conversas
+    let savedCount = 0
+    for (const conversation of conversations.data) {
+      await saveConversation(
+        supabase,
+        page.tenant_id,
+        page.franchise_id,
+        page.id,
+        page.platform,
+        conversation
+      )
+      savedCount++
+    }
+
+    // Verificar se há mais conversas
+    const hasMore = !!conversations.paging?.next
+    const nextCursor = conversations.paging?.cursors?.after
+
+    // Atualizar last_sync_at da página
+    await supabase
+      .from('mt_meta_pages')
+      .update({
+        last_sync_at: new Date().toISOString(),
+      })
+      .eq('id', page.id)
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        synced: savedCount,
+        has_more: hasMore,
+        next_cursor: nextCursor,
+        message: `${savedCount} conversas sincronizadas`,
+      }),
+      {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
+  } catch (error) {
+    console.error('[Sync] Erro:', error)
+
+    return new Response(
+      JSON.stringify({
+        error: 'internal_error',
+        message: error.message,
+      }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
+  }
+})
+EOFFUNCTION
+
+# Passo 3: Verificar criação
+ls -lh /home/deno/functions/meta-sync/index.ts && echo '✅ meta-sync criado com sucesso'
+
+[0;32m# ============================================[0m
+
+
+[0;32m# ============================================
+# FUNCTION: meta-token-refresh
+# ============================================\033[0m
+
+[1;33m# Arquivo:      265 linhas[0m
+
+# Passo 1: Criar diretório
+mkdir -p /home/deno/functions/meta-token-refresh
+
+# Passo 2: Criar arquivo index.ts
+cat > /home/deno/functions/meta-token-refresh/index.ts << 'EOFFUNCTION'
+/**
+ * META TOKEN REFRESH - Edge Function
+ *
+ * Background job para renovar tokens do Meta que estão expirando
+ *
+ * Flow:
+ * 1. Busca accounts com tokens expirando em 7 dias
+ * 2. Troca access_token por novo long-lived token
+ * 3. Atualiza no banco
+ * 4. Notifica franquia se falhar
+ *
+ * Deve ser executado diariamente via cron job:
+ * - Supabase pg_cron
+ * - GitHub Actions
+ * - Ou outro scheduler
+ *
+ * Request Body:
+ * {
+ *   "dry_run": false (opcional)
+ * }
+ */
+
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+const GRAPH_API_VERSION = 'v19.0'
+const GRAPH_API_URL = `https://graph.facebook.com/${GRAPH_API_VERSION}`
+const FB_APP_ID = Deno.env.get('META_APP_ID') || ''
+const FB_APP_SECRET = Deno.env.get('META_APP_SECRET') || ''
+
+/**
+ * Trocar access_token por novo long-lived token
+ */
+async function refreshAccessToken(oldToken: string): Promise<{
+  success: boolean
+  access_token?: string
+  expires_in?: number
+  error?: string
+}> {
+  try {
+    const response = await fetch(
+      `${GRAPH_API_URL}/oauth/access_token?` +
+      `grant_type=fb_exchange_token&` +
+      `client_id=${FB_APP_ID}&` +
+      `client_secret=${FB_APP_SECRET}&` +
+      `fb_exchange_token=${oldToken}`
+    )
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      console.error('[Token Refresh] Erro ao renovar:', errorData)
+      return {
+        success: false,
+        error: errorData.error?.message || 'Erro desconhecido',
+      }
+    }
+
+    const data = await response.json()
+
+    return {
+      success: true,
+      access_token: data.access_token,
+      expires_in: data.expires_in || 5184000, // 60 dias padrão
+    }
+  } catch (error) {
+    console.error('[Token Refresh] Erro:', error)
+    return {
+      success: false,
+      error: error.message,
+    }
+  }
+}
+
+/**
+ * Criar notificação para franquia
+ */
+async function notifyTokenExpiration(
+  supabase: any,
+  tenantId: string,
+  franchiseId: string | null,
+  accountId: string,
+  userName: string
+) {
+  try {
+    await supabase.from('mt_notifications').insert({
+      tenant_id: tenantId,
+      franchise_id: franchiseId,
+      type: 'meta_token_expired',
+      title: 'Reconecte sua conta do Meta',
+      message: `A conexão com a conta "${userName}" expirou. Reconecte para continuar recebendo mensagens.`,
+      link: '/meta-messenger/config',
+      severity: 'warning',
+      is_read: false,
+    })
+
+    console.log('[Notification] Notificação criada para account:', accountId)
+  } catch (error) {
+    console.error('[Notification] Erro ao criar notificação:', error)
+  }
+}
+
+serve(async (req) => {
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  }
+
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
+  try {
+    const { dry_run = false }: { dry_run?: boolean } = await req.json().catch(() => ({}))
+
+    // Inicializar Supabase
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    // Buscar accounts com tokens expirando em 7 dias
+    const sevenDaysFromNow = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+
+    const { data: expiringAccounts, error: fetchError } = await supabase
+      .from('mt_meta_accounts')
+      .select('*')
+      .lt('token_expires_at', sevenDaysFromNow.toISOString())
+      .eq('is_active', true)
+      .is('deleted_at', null)
+
+    if (fetchError) {
+      console.error('[Token Refresh] Erro ao buscar accounts:', fetchError)
+      throw fetchError
+    }
+
+    console.log('[Token Refresh] Accounts expirando:', expiringAccounts?.length || 0)
+
+    if (!expiringAccounts || expiringAccounts.length === 0) {
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: 'Nenhuma conta com token expirando',
+          refreshed: 0,
+          failed: 0,
+        }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      )
+    }
+
+    if (dry_run) {
+      // Modo dry-run: apenas lista accounts sem renovar
+      return new Response(
+        JSON.stringify({
+          dry_run: true,
+          accounts: expiringAccounts.map((acc) => ({
+            id: acc.id,
+            user_name: acc.user_name,
+            expires_at: acc.token_expires_at,
+            days_until_expiry: Math.floor(
+              (new Date(acc.token_expires_at).getTime() - Date.now()) / (24 * 60 * 60 * 1000)
+            ),
+          })),
+        }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      )
+    }
+
+    // Renovar tokens
+    let refreshedCount = 0
+    let failedCount = 0
+    const results = []
+
+    for (const account of expiringAccounts) {
+      console.log('[Token Refresh] Renovando token para:', account.user_name)
+
+      const result = await refreshAccessToken(account.access_token)
+
+      if (result.success && result.access_token) {
+        // Atualizar no banco
+        const newExpiresAt = new Date(Date.now() + (result.expires_in! * 1000))
+
+        const { error: updateError } = await supabase
+          .from('mt_meta_accounts')
+          .update({
+            access_token: result.access_token,
+            token_expires_at: newExpiresAt.toISOString(),
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', account.id)
+
+        if (updateError) {
+          console.error('[Token Refresh] Erro ao atualizar account:', updateError)
+          failedCount++
+          results.push({
+            account_id: account.id,
+            user_name: account.user_name,
+            status: 'failed',
+            error: 'Erro ao atualizar no banco',
+          })
+        } else {
+          refreshedCount++
+          results.push({
+            account_id: account.id,
+            user_name: account.user_name,
+            status: 'refreshed',
+            new_expires_at: newExpiresAt.toISOString(),
+          })
+          console.log('[Token Refresh] Token renovado com sucesso para:', account.user_name)
+        }
+      } else {
+        // Falha ao renovar
+        failedCount++
+        results.push({
+          account_id: account.id,
+          user_name: account.user_name,
+          status: 'failed',
+          error: result.error,
+        })
+
+        // Notificar franquia para reconectar
+        await notifyTokenExpiration(
+          supabase,
+          account.tenant_id,
+          account.franchise_id,
+          account.id,
+          account.user_name
+        )
+
+        console.error('[Token Refresh] Falha ao renovar token para:', account.user_name, result.error)
+      }
+    }
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: `${refreshedCount} tokens renovados, ${failedCount} falharam`,
+        refreshed: refreshedCount,
+        failed: failedCount,
+        results: results,
+      }),
+      {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
+  } catch (error) {
+    console.error('[Token Refresh] Erro:', error)
+
+    return new Response(
+      JSON.stringify({
+        error: 'internal_error',
+        message: error.message,
+      }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
+  }
+})
+EOFFUNCTION
+
+# Passo 3: Verificar criação
+ls -lh /home/deno/functions/meta-token-refresh/index.ts && echo '✅ meta-token-refresh criado com sucesso'
+
+[0;32m# ============================================[0m
+
+
+[0;32m========================================
+  ✅ COMANDOS GERADOS
+========================================\033[0m
+
+[1;33mATENÇÃO:[0m
+- Copie CADA bloco completo (incluindo o EOFFUNCTION)
+- Cole no terminal do Coolify
+- Aguarde a confirmação '✅' antes de prosseguir
+
+[1;33mAPÓS DEPLOYMENT:[0m
+- Reinicie o container Edge Functions no Coolify
+- Teste os endpoints:
+  https://supabase.yeslaser.com.br/functions/v1/meta-webhook
+  https://supabase.yeslaser.com.br/functions/v1/meta-oauth-callback
+

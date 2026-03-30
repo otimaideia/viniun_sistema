@@ -1,0 +1,2179 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e6]:
+    - complementary [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e9]:
+          - img "YESlaser" [ref=e10]
+          - button [ref=e11] [cursor=pointer]:
+            - img
+        - navigation [ref=e12]:
+          - link [ref=e13] [cursor=pointer]:
+            - /url: /franquia/yeslaser-praia-grande-ltda
+            - img [ref=e14]
+          - link [ref=e20] [cursor=pointer]:
+            - /url: /
+            - img [ref=e21]
+          - generic [ref=e27]:
+            - link [ref=e28] [cursor=pointer]:
+              - /url: /leads/dashboard
+              - img [ref=e29]
+            - link [ref=e31] [cursor=pointer]:
+              - /url: /leads
+              - img [ref=e32]
+            - link [ref=e37] [cursor=pointer]:
+              - /url: /funil
+              - img [ref=e38]
+            - link [ref=e42] [cursor=pointer]:
+              - /url: /indicacoes
+              - img [ref=e43]
+            - link [ref=e46] [cursor=pointer]:
+              - /url: /metas
+              - img [ref=e47]
+            - link [ref=e50] [cursor=pointer]:
+              - /url: /ranking
+              - img [ref=e51]
+            - button [ref=e57] [cursor=pointer]:
+              - img [ref=e58]
+          - generic [ref=e61]:
+            - link [ref=e62] [cursor=pointer]:
+              - /url: /whatsapp
+              - img [ref=e63]
+            - link [ref=e65] [cursor=pointer]:
+              - /url: /whatsapp/conversas
+              - img [ref=e66]
+            - link [ref=e68] [cursor=pointer]:
+              - /url: /whatsapp/sessoes
+              - img [ref=e69]
+            - link [ref=e71] [cursor=pointer]:
+              - /url: /whatsapp/automacoes
+              - img [ref=e72]
+            - link [ref=e75] [cursor=pointer]:
+              - /url: /whatsapp/filas
+              - img [ref=e76]
+            - link [ref=e81] [cursor=pointer]:
+              - /url: /whatsapp/broadcast
+              - img [ref=e82]
+            - link [ref=e85] [cursor=pointer]:
+              - /url: /whatsapp/listas
+              - img [ref=e86]
+            - link [ref=e87] [cursor=pointer]:
+              - /url: /whatsapp/grupos
+              - img [ref=e88]
+            - link [ref=e92] [cursor=pointer]:
+              - /url: /whatsapp/status
+              - img [ref=e93]
+            - button [ref=e94] [cursor=pointer]:
+              - img [ref=e95]
+            - link [ref=e97] [cursor=pointer]:
+              - /url: /whatsapp/bot-config
+              - img [ref=e98]
+            - link [ref=e101] [cursor=pointer]:
+              - /url: /chatbot
+              - img [ref=e102]
+            - link [ref=e105] [cursor=pointer]:
+              - /url: /meta-messenger/config
+              - img [ref=e106]
+            - link [ref=e108] [cursor=pointer]:
+              - /url: /meta-messenger/conversations
+              - img [ref=e109]
+          - generic [ref=e112]:
+            - link [ref=e113] [cursor=pointer]:
+              - /url: /agendamentos
+              - img [ref=e114]
+            - link [ref=e116] [cursor=pointer]:
+              - /url: /formularios
+              - img [ref=e117]
+            - link [ref=e120] [cursor=pointer]:
+              - /url: /servicos
+              - img [ref=e121]
+            - link [ref=e125] [cursor=pointer]:
+              - /url: /franqueados
+              - img [ref=e126]
+            - button [ref=e130] [cursor=pointer]:
+              - img [ref=e131]
+            - button [ref=e133] [cursor=pointer]:
+              - img [ref=e134]
+          - generic [ref=e140]:
+            - link [ref=e141] [cursor=pointer]:
+              - /url: /marketing
+              - img [ref=e142]
+            - link [ref=e147] [cursor=pointer]:
+              - /url: /marketing/campanhas
+              - img [ref=e148]
+            - button [ref=e152] [cursor=pointer]:
+              - img [ref=e153]
+            - link [ref=e155] [cursor=pointer]:
+              - /url: /parcerias
+              - img [ref=e156]
+            - link [ref=e161] [cursor=pointer]:
+              - /url: /marketing/galeria
+              - img [ref=e162]
+          - generic [ref=e169]:
+            - link [ref=e170] [cursor=pointer]:
+              - /url: /processos/dashboard
+              - img [ref=e171]
+            - link [ref=e176] [cursor=pointer]:
+              - /url: /processos
+              - img [ref=e177]
+            - link [ref=e180] [cursor=pointer]:
+              - /url: /processos/categorias
+              - img [ref=e181]
+            - link [ref=e186] [cursor=pointer]:
+              - /url: /faq
+              - img [ref=e187]
+          - generic [ref=e191]:
+            - link [ref=e192] [cursor=pointer]:
+              - /url: /treinamentos
+              - img [ref=e193]
+            - link [ref=e198] [cursor=pointer]:
+              - /url: /treinamentos/trilhas
+              - img [ref=e199]
+            - link [ref=e202] [cursor=pointer]:
+              - /url: /aprender
+              - img [ref=e203]
+            - link [ref=e205] [cursor=pointer]:
+              - /url: /gamificacao
+              - img [ref=e206]
+            - link [ref=e212] [cursor=pointer]:
+              - /url: /gamificacao/ranking
+              - img [ref=e213]
+            - link [ref=e219] [cursor=pointer]:
+              - /url: /gamificacao/conquistas
+              - img [ref=e220]
+          - link [ref=e225] [cursor=pointer]:
+            - /url: /recrutamento
+            - img [ref=e226]
+          - generic [ref=e230]:
+            - link [ref=e231] [cursor=pointer]:
+              - /url: /relatorios
+              - img [ref=e232]
+            - link [ref=e234] [cursor=pointer]:
+              - /url: /usuarios
+              - img [ref=e235]
+            - link [ref=e237] [cursor=pointer]:
+              - /url: /aprovacoes
+              - img [ref=e238]
+            - button [ref=e241] [cursor=pointer]:
+              - img [ref=e242]
+            - link [ref=e245] [cursor=pointer]:
+              - /url: /precificacao
+              - img [ref=e246]
+            - link [ref=e248] [cursor=pointer]:
+              - /url: /automacoes
+              - img [ref=e249]
+            - button [ref=e251] [cursor=pointer]:
+              - img [ref=e252]
+        - button [ref=e256] [cursor=pointer]:
+          - generic [ref=e257]:
+            - img
+    - main [ref=e258]:
+      - generic [ref=e259]:
+        - generic [ref=e261]:
+          - img [ref=e262]
+          - text: Yeslaser Praia Grande LTDA
+        - button "praiagrande@yeslaserpraiagrande.com.br Unidade" [ref=e265] [cursor=pointer]:
+          - generic [ref=e266]:
+            - img
+          - generic [ref=e268]: praiagrande@yeslaserpraiagrande.com.br
+          - generic [ref=e269]:
+            - img
+            - text: Unidade
+          - img
+      - generic [ref=e276]:
+        - generic [ref=e277]:
+          - generic [ref=e278]:
+            - button [ref=e279] [cursor=pointer]:
+              - img [ref=e280]
+            - button [ref=e282] [cursor=pointer]:
+              - img [ref=e283]
+            - button [ref=e295] [cursor=pointer]:
+              - img [ref=e296]
+          - generic [ref=e302]:
+            - button [ref=e303] [cursor=pointer]:
+              - img [ref=e304]
+            - button [ref=e307] [cursor=pointer]:
+              - img [ref=e308]
+        - generic [ref=e311]:
+          - generic [ref=e312]:
+            - button "Voltar para sessoes" [ref=e313] [cursor=pointer]:
+              - img
+            - generic [ref=e314]:
+              - img "Yeslaser Praia Grande" [ref=e316]
+              - generic "Conectado" [ref=e317]
+            - generic [ref=e318]:
+              - heading "Yeslaser Praia Grande" [level=2] [ref=e319]
+              - generic [ref=e320]:
+                - img [ref=e321]
+                - text: +55 (13) 97826-3924
+                - generic [ref=e323]: · 197 conversas
+            - button "Sincronizar conversas" [ref=e324] [cursor=pointer]:
+              - img
+          - generic [ref=e326]:
+            - img [ref=e327]
+            - textbox "Pesquisar ou comecar uma nova conversa" [ref=e330]
+          - generic [ref=e331]:
+            - button "Tudo" [ref=e332] [cursor=pointer]
+            - button "Minhas 3" [ref=e334] [cursor=pointer]:
+              - text: Minhas
+              - generic [ref=e335]: "3"
+              - img [ref=e336]
+            - button "Não lidas 78" [ref=e338] [cursor=pointer]:
+              - text: Não lidas
+              - generic [ref=e339]: "78"
+            - button "Favoritas" [ref=e340] [cursor=pointer]
+            - button "Grupos 3" [ref=e341] [cursor=pointer]:
+              - text: Grupos
+              - generic [ref=e342]: "3"
+            - button "Filtrar por etiqueta" [ref=e344] [cursor=pointer]:
+              - img [ref=e345]
+              - img [ref=e348]
+          - generic [ref=e350]:
+            - generic [ref=e351] [cursor=pointer]:
+              - generic [ref=e352]:
+                - img "Katia" [ref=e353]
+                - img [ref=e355]
+              - generic [ref=e358]:
+                - generic [ref=e359]:
+                  - generic [ref=e360]: Katia
+                  - generic [ref=e362]: Ontem
+                - generic [ref=e364]: A crio já ficou agendada para dia 17/3 às 11 (não é spa Gold )
+                - generic "Aguardando resposta há 1h 8min" [ref=e366]:
+                  - img [ref=e367]
+                  - text: 1h 8min
+            - generic [ref=e370] [cursor=pointer]:
+              - generic [ref=e371]:
+                - text: F
+                - img [ref=e373]
+              - generic [ref=e376]:
+                - generic [ref=e377]:
+                  - generic [ref=e378]: Felipe
+                  - generic [ref=e380]: Ontem
+                - generic [ref=e382]: Olá! Tenho interesse e queria mais informações, por favor.
+                - generic "Aguardando resposta há 1h 32min" [ref=e384]:
+                  - img [ref=e385]
+                  - text: 1h 32min
+            - generic [ref=e388] [cursor=pointer]:
+              - generic [ref=e389]:
+                - text: FO
+                - img [ref=e391]
+              - generic [ref=e394]:
+                - generic [ref=e395]:
+                  - generic [ref=e396]: Fernanda Oliveira
+                  - generic [ref=e398]: Ontem
+                - generic [ref=e400]: Olá! Tenho interesse e queria mais informações, por favor.
+                - generic "Aguardando resposta há 3h 35min" [ref=e402]:
+                  - img [ref=e403]
+                  - text: 3h 35min
+            - generic [ref=e406] [cursor=pointer]:
+              - generic [ref=e407]:
+                - text: TL
+                - img [ref=e409]
+              - generic [ref=e412]:
+                - generic [ref=e413]:
+                  - generic [ref=e414]: Teacher Lidiane
+                  - generic [ref=e416]: Ontem
+                - generic [ref=e418]: Pode ser sábado?
+                - generic "Aguardando resposta há 3h 52min" [ref=e420]:
+                  - img [ref=e421]
+                  - text: 3h 52min
+            - generic [ref=e424] [cursor=pointer]:
+              - generic [ref=e425]:
+                - img "5513981294528" [ref=e426]
+                - img [ref=e428]
+              - generic [ref=e431]:
+                - generic [ref=e432]:
+                  - generic [ref=e433]: "5513981294528"
+                  - generic [ref=e435]: Ontem
+                - generic [ref=e437]: 📷 Imagem
+                - generic "Aguardando resposta há 4h 9min" [ref=e439]:
+                  - img [ref=e440]
+                  - text: 4h 9min
+            - generic [ref=e443] [cursor=pointer]:
+              - generic [ref=e444]:
+                - text: EM
+                - img [ref=e446]
+              - generic [ref=e449]:
+                - generic [ref=e450]:
+                  - generic [ref=e451]: Evandro Maia
+                  - generic [ref=e453]: Ontem
+                - generic [ref=e454]:
+                  - generic [ref=e455]: E o que seria o spa gold? Esqueci de perguntar rs
+                  - generic [ref=e456]: "36"
+                - generic "Aguardando resposta há 4h 31min" [ref=e458]:
+                  - img [ref=e459]
+                  - text: 4h 31min
+            - generic [ref=e462] [cursor=pointer]:
+              - generic [ref=e463]:
+                - text: FF
+                - img [ref=e465]
+              - generic [ref=e468]:
+                - generic [ref=e469]:
+                  - generic [ref=e470]: Fernanda Ferauche
+                  - generic [ref=e472]: Ontem
+                - generic [ref=e473]:
+                  - generic [ref=e474]: Obrigada
+                  - generic [ref=e475]: "18"
+                - generic "Aguardando resposta há 4h 32min" [ref=e477]:
+                  - img [ref=e478]
+                  - text: 4h 32min
+            - generic [ref=e481] [cursor=pointer]:
+              - generic [ref=e482]:
+                - text: S
+                - img [ref=e484]
+              - generic [ref=e487]:
+                - generic [ref=e488]:
+                  - generic [ref=e489]: sarah
+                  - generic [ref=e491]: Ontem
+                - generic [ref=e492]:
+                  - generic [ref=e493]: mas pode ter certeza q até o final da semana eu fecho
+                  - generic [ref=e494]: "22"
+                - generic "Aguardando resposta há 4h 37min" [ref=e496]:
+                  - img [ref=e497]
+                  - text: 4h 37min
+            - generic [ref=e500] [cursor=pointer]:
+              - generic [ref=e501]:
+                - text: B
+                - img [ref=e503]
+              - generic [ref=e506]:
+                - generic [ref=e507]:
+                  - generic [ref=e508]: barbara
+                  - generic [ref=e510]: Ontem
+                - generic [ref=e511]:
+                  - generic [ref=e512]: 🎵 Áudio
+                  - generic [ref=e513]: "2"
+                - generic "Aguardando resposta há 4h 49min" [ref=e515]:
+                  - img [ref=e516]
+                  - text: 4h 49min
+            - generic [ref=e519] [cursor=pointer]:
+              - generic [ref=e520]:
+                - img "Beauty lips Mayra Oliveira" [ref=e521]
+                - img [ref=e523]
+              - generic [ref=e526]:
+                - generic [ref=e527]:
+                  - generic [ref=e528]: Beauty lips Mayra Oliveira
+                  - generic [ref=e530]: Ontem
+                - generic [ref=e531]:
+                  - generic [ref=e532]: 🏷️ Figurinha
+                  - generic [ref=e533]: "23"
+                - generic "Aguardando resposta há 4h 58min" [ref=e535]:
+                  - img [ref=e536]
+                  - text: 4h 58min
+            - generic [ref=e539] [cursor=pointer]:
+              - generic [ref=e540]:
+                - text: LP
+                - img [ref=e542]
+              - generic [ref=e545]:
+                - generic [ref=e546]:
+                  - generic [ref=e547]: Leticia Peniche
+                  - generic [ref=e549]: Ontem
+                - generic [ref=e550]:
+                  - generic [ref=e551]: 🏷️ Figurinha
+                  - generic [ref=e552]: "5"
+                - generic "Aguardando resposta há 5h 11min" [ref=e554]:
+                  - img [ref=e555]
+                  - text: 5h 11min
+            - generic [ref=e558] [cursor=pointer]:
+              - generic [ref=e559]:
+                - img "5513988777465" [ref=e560]
+                - img [ref=e562]
+              - generic [ref=e565]:
+                - generic [ref=e566]:
+                  - generic [ref=e567]: "5513988777465"
+                  - generic [ref=e569]: Ontem
+                - generic [ref=e570]:
+                  - generic [ref=e571]: Boa noite, pode confirmar
+                  - generic [ref=e572]: "1"
+                - generic "Aguardando resposta há 5h 16min" [ref=e574]:
+                  - img [ref=e575]
+                  - text: 5h 16min
+            - generic [ref=e578] [cursor=pointer]:
+              - generic [ref=e579]:
+                - img "Ludmilla Cucick" [ref=e580]
+                - img [ref=e582]
+              - generic [ref=e585]:
+                - generic [ref=e586]:
+                  - generic [ref=e587]: Ludmilla Cucick
+                  - generic [ref=e589]: Ontem
+                - generic [ref=e590]:
+                  - generic [ref=e591]: Boa noite, confirmado
+                  - generic [ref=e592]: "9"
+                - generic [ref=e593]:
+                  - generic "Aguardando resposta há 5h 20min" [ref=e594]:
+                    - img [ref=e595]
+                    - text: 5h 20min
+                  - 'generic "Responsável: Julia Sousa" [ref=e598]':
+                    - img [ref=e599]
+                    - text: Julia
+                  - generic "Lead" [ref=e602]
+            - generic [ref=e603] [cursor=pointer]:
+              - generic [ref=e604]:
+                - text: "N"
+                - img [ref=e606]
+              - generic [ref=e609]:
+                - generic [ref=e610]:
+                  - generic [ref=e611]: Nalva
+                  - generic [ref=e613]: Ontem
+                - generic [ref=e614]:
+                  - generic [ref=e615]: Ok
+                  - generic [ref=e616]: "14"
+                - generic "Aguardando resposta há 5h 22min" [ref=e618]:
+                  - img [ref=e619]
+                  - text: 5h 22min
+            - generic [ref=e622] [cursor=pointer]:
+              - generic [ref=e623]:
+                - img "Marjorie" [ref=e624]
+                - img [ref=e626]
+              - generic [ref=e629]:
+                - generic [ref=e630]:
+                  - generic [ref=e631]: Marjorie
+                  - generic [ref=e633]: Ontem
+                - generic [ref=e634]:
+                  - generic [ref=e635]: pode ser sim
+                  - generic [ref=e636]: "6"
+                - generic "Aguardando resposta há 5h 22min" [ref=e638]:
+                  - img [ref=e639]
+                  - text: 5h 22min
+            - generic [ref=e642] [cursor=pointer]:
+              - generic [ref=e643]:
+                - text: I3
+                - img [ref=e645]
+              - generic [ref=e648]:
+                - generic [ref=e649]:
+                  - generic [ref=e650]: Império 32
+                  - generic [ref=e652]: Ontem
+                - generic [ref=e654]: 🎵 Áudio
+                - generic "Aguardando resposta há 5h 53min" [ref=e656]:
+                  - img [ref=e657]
+                  - text: 5h 53min
+            - generic [ref=e660] [cursor=pointer]:
+              - generic [ref=e661]:
+                - text: GP
+                - img [ref=e663]
+              - generic [ref=e666]:
+                - generic [ref=e667]:
+                  - generic [ref=e668]: Gabii Pedroso ❤️‍🔥
+                  - generic [ref=e670]: Ontem
+                - generic [ref=e671]:
+                  - generic [ref=e672]: 🎵 Áudio
+                  - generic [ref=e673]: "14"
+                - generic "Aguardando resposta há 6h 21min" [ref=e675]:
+                  - img [ref=e676]
+                  - text: 6h 21min
+            - generic [ref=e679] [cursor=pointer]:
+              - generic [ref=e680]:
+                - text: N🫰
+                - img [ref=e682]
+              - generic [ref=e685]:
+                - generic [ref=e686]:
+                  - generic [ref=e687]: Naty 🫰🏻
+                  - generic [ref=e689]: Ontem
+                - generic [ref=e690]:
+                  - generic [ref=e691]: Obrigada!
+                  - generic [ref=e692]: "1"
+                - generic "Aguardando resposta há 6h 26min" [ref=e694]:
+                  - img [ref=e695]
+                  - text: 6h 26min
+            - generic [ref=e698] [cursor=pointer]:
+              - generic [ref=e699]:
+                - text: C✨
+                - img [ref=e701]
+              - generic [ref=e704]:
+                - generic [ref=e705]:
+                  - generic [ref=e706]: Carolina ✨
+                  - generic [ref=e708]: Ontem
+                - generic [ref=e709]:
+                  - generic [ref=e710]: Olá! Tenho interesse e queria mais informações, por favor.
+                  - generic [ref=e711]: "1"
+                - generic "Aguardando resposta há 6h 32min" [ref=e713]:
+                  - img [ref=e714]
+                  - text: 6h 32min
+            - generic [ref=e717] [cursor=pointer]:
+              - generic [ref=e718]:
+                - img "Fabi" [ref=e719]
+                - img [ref=e721]
+              - generic [ref=e724]:
+                - generic [ref=e725]:
+                  - generic [ref=e726]: Fabi
+                  - generic [ref=e728]: Ontem
+                - generic [ref=e730]: Só dois dias de diferença
+                - generic "Aguardando resposta há 6h 34min" [ref=e732]:
+                  - img [ref=e733]
+                  - text: 6h 34min
+            - generic [ref=e736] [cursor=pointer]:
+              - generic [ref=e737]:
+                - img "Thamires" [ref=e738]
+                - img [ref=e740]
+              - generic [ref=e743]:
+                - generic [ref=e744]:
+                  - generic [ref=e745]: Thamires
+                  - generic [ref=e747]: Ontem
+                - generic [ref=e749]: Tá bom amg, obrigada ☺️
+                - generic "Aguardando resposta há 7h 31min" [ref=e751]:
+                  - img [ref=e752]
+                  - text: 7h 31min
+            - generic [ref=e755] [cursor=pointer]:
+              - generic [ref=e756]:
+                - text: E
+                - img [ref=e758]
+              - generic [ref=e761]:
+                - generic [ref=e762]:
+                  - generic [ref=e763]: Eduarda
+                  - generic [ref=e765]: Ontem
+                - generic [ref=e767]: Eu tentei enviei o meu currículo pelo formulário de vocês, porém está dando erro.. Teria como eu enviar por aqui?
+                - generic "Aguardando resposta há 7h 32min" [ref=e769]:
+                  - img [ref=e770]
+                  - text: 7h 32min
+            - generic [ref=e773] [cursor=pointer]:
+              - generic [ref=e774]:
+                - text: ID
+                - img [ref=e776]
+              - generic [ref=e779]:
+                - generic [ref=e780]:
+                  - generic [ref=e781]: Ivana Dias
+                  - generic [ref=e783]: Ontem
+                - generic [ref=e785]: Boa tarde ainda está contratando ??
+                - generic "Aguardando resposta há 7h 32min" [ref=e787]:
+                  - img [ref=e788]
+                  - text: 7h 32min
+            - generic [ref=e791] [cursor=pointer]:
+              - generic [ref=e792]:
+                - text: ME
+                - img [ref=e794]
+              - generic [ref=e797]:
+                - generic [ref=e798]:
+                  - generic [ref=e799]: Maria Eduarda
+                  - generic [ref=e801]: Ontem
+                - generic [ref=e802]:
+                  - generic [ref=e803]: Sou estudante de nutrição do 5º semestre na parte da manhã, tenho muito interesse na área de estética
+                  - generic [ref=e804]: "3"
+                - generic "Aguardando resposta há 8h" [ref=e806]:
+                  - img [ref=e807]
+                  - text: 8h
+            - generic [ref=e810] [cursor=pointer]:
+              - generic [ref=e811]:
+                - img "YesLaser Praia Grande" [ref=e812]
+                - img [ref=e814]
+              - generic [ref=e817]:
+                - generic [ref=e818]:
+                  - generic [ref=e819]: YesLaser Praia Grande
+                  - generic [ref=e821]: Ontem
+                - generic [ref=e823]: enviar pra nalva contrato
+                - generic [ref=e824]:
+                  - generic "Aguardando resposta há 8h 4min" [ref=e825]:
+                    - img [ref=e826]
+                    - text: 8h 4min
+                  - 'generic "Responsável: Danilo Luiz" [ref=e829]':
+                    - img [ref=e830]
+                    - text: Danilo
+            - generic [ref=e833] [cursor=pointer]:
+              - generic [ref=e834]:
+                - text: L
+                - img [ref=e836]
+              - generic [ref=e839]:
+                - generic [ref=e840]:
+                  - generic [ref=e841]: Lívia
+                  - generic [ref=e843]: Ontem
+                - generic [ref=e844]:
+                  - generic [ref=e845]: 📄 Documento
+                  - generic [ref=e846]: "2"
+                - generic "Aguardando resposta há 8h 28min" [ref=e848]:
+                  - img [ref=e849]
+                  - text: 8h 28min
+            - generic [ref=e852] [cursor=pointer]:
+              - generic [ref=e853]:
+                - text: L
+                - img [ref=e855]
+              - generic [ref=e858]:
+                - generic [ref=e859]:
+                  - generic [ref=e860]: Luany
+                  - generic [ref=e862]: Ontem
+                - generic [ref=e863]:
+                  - generic [ref=e864]: Olá! Tenho interesse e queria mais informações, por favor.
+                  - generic [ref=e865]: "1"
+                - generic "Aguardando resposta há 8h 33min" [ref=e867]:
+                  - img [ref=e868]
+                  - text: 8h 33min
+            - generic [ref=e871] [cursor=pointer]:
+              - generic [ref=e872]:
+                - img "5513982125329" [ref=e873]
+                - img [ref=e875]
+              - generic [ref=e878]:
+                - generic [ref=e879]:
+                  - generic [ref=e880]: "5513982125329"
+                  - generic [ref=e882]: Ontem
+                - generic [ref=e883]:
+                  - generic [ref=e884]: Mais tarde tem?
+                  - generic [ref=e885]: "2"
+                - generic "Aguardando resposta há 8h 54min" [ref=e887]:
+                  - img [ref=e888]
+                  - text: 8h 54min
+            - generic [ref=e891] [cursor=pointer]:
+              - generic [ref=e892]:
+                - text: "N"
+                - img [ref=e894]
+              - generic [ref=e897]:
+                - generic [ref=e898]:
+                  - generic [ref=e899]: Neia
+                  - generic [ref=e901]: Ontem
+                - generic [ref=e902]:
+                  - generic [ref=e903]: O buço
+                  - generic [ref=e904]: "6"
+                - generic "Aguardando resposta há 9h 38min" [ref=e906]:
+                  - img [ref=e907]
+                  - text: 9h 38min
+            - generic [ref=e910] [cursor=pointer]:
+              - generic [ref=e911]:
+                - text: L
+                - img [ref=e913]
+              - generic [ref=e916]:
+                - generic [ref=e917]:
+                  - generic [ref=e918]: LayLay🐆
+                  - generic [ref=e920]: Ontem
+                - generic [ref=e921]:
+                  - generic [ref=e922]: Eu que lhe agradeço, uma ótima semana e tarde!
+                  - generic [ref=e923]: "1"
+                - generic "Aguardando resposta há 9h 58min" [ref=e925]:
+                  - img [ref=e926]
+                  - text: 9h 58min
+            - generic [ref=e929] [cursor=pointer]:
+              - generic [ref=e930]:
+                - text: EX
+                - img [ref=e932]
+              - generic [ref=e935]:
+                - generic [ref=e936]:
+                  - generic [ref=e937]: Emily Ximenes
+                  - generic [ref=e939]: Ontem
+                - generic [ref=e940]:
+                  - generic [ref=e941]: "CNPJ: 63.983.935/0001-55 Matriz Razão social: YESLASER PRAIA GRANDE LTDA Banco Santander Ag. 0551 Conta 130087871 E-mail: praiagrande@franquiayeslaser.com.br"
+                  - generic [ref=e942]: "1"
+                - generic "Aguardando resposta há 10h 3min" [ref=e944]:
+                  - img [ref=e945]
+                  - text: 10h 3min
+            - generic [ref=e948] [cursor=pointer]:
+              - generic [ref=e949]:
+                - img "Nathalia Aline 💔💘" [ref=e950]
+                - img [ref=e952]
+              - generic [ref=e955]:
+                - generic [ref=e956]:
+                  - generic [ref=e957]: Nathalia Aline 💔💘
+                  - generic [ref=e959]: Ontem
+                - generic [ref=e960]:
+                  - generic [ref=e961]: Oi boa tarde ❤️
+                  - generic [ref=e962]: "1"
+                - generic "Aguardando resposta há 10h 26min" [ref=e964]:
+                  - img [ref=e965]
+                  - text: 10h 26min
+            - generic [ref=e968] [cursor=pointer]:
+              - generic [ref=e969]:
+                - text: B
+                - img [ref=e971]
+              - generic [ref=e974]:
+                - generic [ref=e975]:
+                  - generic [ref=e976]: Beatriz
+                  - generic [ref=e978]: Ontem
+                - generic [ref=e979]:
+                  - generic [ref=e980]: Oi boa-tarde
+                  - generic [ref=e981]: "6"
+                - generic "Aguardando resposta há 10h 27min" [ref=e983]:
+                  - img [ref=e984]
+                  - text: 10h 27min
+            - generic [ref=e987] [cursor=pointer]:
+              - generic [ref=e988]:
+                - text: L
+                - img [ref=e990]
+              - generic [ref=e993]:
+                - generic [ref=e994]:
+                  - generic [ref=e995]: Leh
+                  - generic [ref=e997]: Ontem
+                - generic [ref=e998]:
+                  - generic [ref=e999]: Tudo bemm😊 Meu nome é Letícia e trabalho com prospecção e reativação de pacientes para clínicas de estética, emagrecimento, e depilação, ajudando a transformar contatos da base em novos agendamentos. Gostaria de entender melhor como vocês trabalham essa parte hoje. Com qual responsável da clínica eu poderia falar sobre isso?
+                  - generic [ref=e1000]: "3"
+                - generic "Aguardando resposta há 10h 39min" [ref=e1002]:
+                  - img [ref=e1003]
+                  - text: 10h 39min
+            - generic [ref=e1006] [cursor=pointer]:
+              - generic [ref=e1007]:
+                - img "Lia Santos" [ref=e1008]
+                - img [ref=e1010]
+              - generic [ref=e1013]:
+                - generic [ref=e1014]:
+                  - generic [ref=e1015]: Lia Santos
+                  - generic [ref=e1017]: Ontem
+                - generic [ref=e1018]:
+                  - generic [ref=e1019]: Amanhã próximo a esse horário ou até 12h
+                  - generic [ref=e1020]: "4"
+                - generic "Aguardando resposta há 10h 45min" [ref=e1022]:
+                  - img [ref=e1023]
+                  - text: 10h 45min
+            - generic [ref=e1026] [cursor=pointer]:
+              - generic [ref=e1027]:
+                - text: V
+                - img [ref=e1029]
+              - generic [ref=e1032]:
+                - generic [ref=e1033]:
+                  - generic [ref=e1034]: Vitoria
+                  - generic [ref=e1036]: Ontem
+                - generic [ref=e1037]:
+                  - generic [ref=e1038]: Olá! Tenho interesse e queria mais informações, por favor
+                  - generic [ref=e1039]: "2"
+                - generic "Aguardando resposta há 10h 57min" [ref=e1041]:
+                  - img [ref=e1042]
+                  - text: 10h 57min
+            - generic [ref=e1045] [cursor=pointer]:
+              - generic [ref=e1046]:
+                - text: J
+                - img [ref=e1048]
+              - generic [ref=e1051]:
+                - generic [ref=e1052]:
+                  - generic [ref=e1053]: Jacque
+                  - generic [ref=e1055]: Ontem
+                - generic [ref=e1056]:
+                  - generic [ref=e1057]: Qua endereço
+                  - generic [ref=e1058]: "2"
+                - generic "Aguardando resposta há 11h 1min" [ref=e1060]:
+                  - img [ref=e1061]
+                  - text: 11h 1min
+            - generic [ref=e1064] [cursor=pointer]:
+              - generic [ref=e1065]:
+                - text: M
+                - img [ref=e1067]
+              - generic [ref=e1070]:
+                - generic [ref=e1071]:
+                  - generic [ref=e1072]: mel
+                  - generic [ref=e1074]: Ontem
+                - generic [ref=e1075]:
+                  - generic [ref=e1076]: 📷 Imagem - Antes e depois Evandro
+                  - generic [ref=e1077]: "9"
+                - generic "Aguardando resposta há 11h 5min" [ref=e1079]:
+                  - img [ref=e1080]
+                  - text: 11h 5min
+            - generic [ref=e1083] [cursor=pointer]:
+              - generic [ref=e1084]:
+                - text: DS
+                - img [ref=e1086]
+              - generic [ref=e1089]:
+                - generic [ref=e1090]:
+                  - generic [ref=e1091]: Denis Santos
+                  - generic [ref=e1093]: Ontem
+                - generic [ref=e1094]:
+                  - generic [ref=e1095]: A partir das 11h
+                  - generic [ref=e1096]: "5"
+                - generic "Aguardando resposta há 11h 24min" [ref=e1098]:
+                  - img [ref=e1099]
+                  - text: 11h 24min
+            - generic [ref=e1102] [cursor=pointer]:
+              - generic [ref=e1103]:
+                - text: R
+                - img [ref=e1105]
+              - generic [ref=e1108]:
+                - generic [ref=e1109]:
+                  - generic [ref=e1110]: rossannacerqueira
+                  - generic [ref=e1112]: Ontem
+                - generic [ref=e1113]:
+                  - generic [ref=e1114]: Olá! Tenho interesse e queria mais informações, por favor.
+                  - generic [ref=e1115]: "1"
+                - generic "Aguardando resposta há 11h 27min" [ref=e1117]:
+                  - img [ref=e1118]
+                  - text: 11h 27min
+            - generic [ref=e1121] [cursor=pointer]:
+              - generic [ref=e1122]:
+                - text: A
+                - img [ref=e1124]
+              - generic [ref=e1127]:
+                - generic [ref=e1128]:
+                  - generic [ref=e1129]: Arão
+                  - generic [ref=e1131]: Ontem
+                - generic [ref=e1132]:
+                  - generic [ref=e1133]: Ok
+                  - generic [ref=e1134]: "15"
+                - generic "Aguardando resposta há 11h 33min" [ref=e1136]:
+                  - img [ref=e1137]
+                  - text: 11h 33min
+            - generic [ref=e1140] [cursor=pointer]:
+              - generic [ref=e1141]:
+                - img "Priscilla Borges 💞" [ref=e1142]
+                - img [ref=e1144]
+              - generic [ref=e1147]:
+                - generic [ref=e1148]:
+                  - generic [ref=e1149]: Priscilla Borges 💞
+                  - generic [ref=e1151]: Ontem
+                - generic [ref=e1152]:
+                  - generic [ref=e1153]: Não tenho não
+                  - generic [ref=e1154]: "3"
+                - generic "Aguardando resposta há 11h 45min" [ref=e1156]:
+                  - img [ref=e1157]
+                  - text: 11h 45min
+            - generic [ref=e1160] [cursor=pointer]:
+              - generic [ref=e1161]:
+                - text: I
+                - img [ref=e1163]
+              - generic [ref=e1166]:
+                - generic [ref=e1167]:
+                  - generic [ref=e1168]: inefável..
+                  - generic [ref=e1170]: Ontem
+                - generic [ref=e1171]:
+                  - generic [ref=e1172]: 🎵 Áudio
+                  - generic [ref=e1173]: "12"
+                - generic "Aguardando resposta há 11h 46min" [ref=e1175]:
+                  - img [ref=e1176]
+                  - text: 11h 46min
+            - generic [ref=e1179] [cursor=pointer]:
+              - generic [ref=e1180]:
+                - img "Valdirene" [ref=e1181]
+                - img [ref=e1183]
+              - generic [ref=e1186]:
+                - generic [ref=e1187]:
+                  - generic [ref=e1188]: Valdirene
+                  - generic [ref=e1190]: Ontem
+                - generic [ref=e1191]:
+                  - generic [ref=e1192]: Tá otimo
+                  - generic [ref=e1193]: "3"
+                - generic "Aguardando resposta há 11h 57min" [ref=e1195]:
+                  - img [ref=e1196]
+                  - text: 11h 57min
+            - generic [ref=e1199] [cursor=pointer]:
+              - generic [ref=e1200]:
+                - text: KN
+                - img [ref=e1202]
+              - generic [ref=e1205]:
+                - generic [ref=e1206]:
+                  - generic [ref=e1207]: Katia Novoa
+                  - generic [ref=e1209]: Ontem
+                - generic [ref=e1210]:
+                  - generic [ref=e1211]: Onde fica?
+                  - generic [ref=e1212]: "1"
+                - generic "Aguardando resposta há 13h 2min" [ref=e1214]:
+                  - img [ref=e1215]
+                  - text: 13h 2min
+            - generic [ref=e1218] [cursor=pointer]:
+              - generic [ref=e1219]:
+                - text: IL
+                - img [ref=e1221]
+              - generic [ref=e1224]:
+                - generic [ref=e1225]:
+                  - generic [ref=e1226]: Izabel Lourenço
+                  - generic [ref=e1228]: Ontem
+                - generic [ref=e1230]: Nova conversa
+                - generic "Aguardando resposta há 13h 34min" [ref=e1232]:
+                  - img [ref=e1233]
+                  - text: 13h 34min
+            - generic [ref=e1236] [cursor=pointer]:
+              - generic [ref=e1237]:
+                - text: J😘
+                - img [ref=e1239]
+              - generic [ref=e1242]:
+                - generic [ref=e1243]:
+                  - generic [ref=e1244]: Juh 😘
+                  - generic [ref=e1246]: Ontem
+                - generic [ref=e1247]:
+                  - generic [ref=e1248]: Gostaria saber sobre a vaga
+                  - generic [ref=e1249]: "3"
+                - generic "Aguardando resposta há 13h 37min" [ref=e1251]:
+                  - img [ref=e1252]
+                  - text: 13h 37min
+            - generic [ref=e1255] [cursor=pointer]:
+              - generic [ref=e1256]:
+                - text: YP
+                - img [ref=e1258]
+              - generic [ref=e1261]:
+                - generic [ref=e1262]:
+                  - generic [ref=e1263]: Yeslaser Praia Grande Boqueirão
+                  - generic [ref=e1265]: Ontem
+                - generic [ref=e1266]:
+                  - generic [ref=e1267]: "13997878733"
+                  - generic [ref=e1268]: "5"
+                - generic "Aguardando resposta há 13h 38min" [ref=e1270]:
+                  - img [ref=e1271]
+                  - text: 13h 38min
+            - generic [ref=e1274] [cursor=pointer]:
+              - generic [ref=e1275]:
+                - text: MR
+                - img [ref=e1277]
+              - generic [ref=e1280]:
+                - generic [ref=e1281]:
+                  - generic [ref=e1282]: Mari Rodrigues
+                  - generic [ref=e1284]: Ontem
+                - generic [ref=e1285]:
+                  - generic [ref=e1286]: Alguém passou o meu contato?
+                  - generic [ref=e1287]: "2"
+                - generic "Aguardando resposta há 13h 40min" [ref=e1289]:
+                  - img [ref=e1290]
+                  - text: 13h 40min
+            - generic [ref=e1293] [cursor=pointer]:
+              - generic [ref=e1294]:
+                - text: "?"
+                - img [ref=e1296]
+              - generic [ref=e1299]:
+                - generic [ref=e1300]:
+                  - generic [ref=e1301]: "5513992008481"
+                  - generic [ref=e1303]: Ontem
+                - generic [ref=e1304]:
+                  - generic [ref=e1305]: Oii muito obrigada, mas eu já faço
+                  - generic [ref=e1306]: "1"
+                - generic "Aguardando resposta há 13h 42min" [ref=e1308]:
+                  - img [ref=e1309]
+                  - text: 13h 42min
+            - generic [ref=e1312] [cursor=pointer]:
+              - img "Bruu…🥰" [ref=e1314]
+              - generic [ref=e1315]:
+                - generic [ref=e1316]:
+                  - generic [ref=e1317]: Bruu…🥰
+                  - generic [ref=e1319]: Ontem
+                - generic [ref=e1321]: Confirmado
+            - generic [ref=e1322] [cursor=pointer]:
+              - generic [ref=e1323]:
+                - img "Maria Jose" [ref=e1324]
+                - img [ref=e1326]
+              - generic [ref=e1329]:
+                - generic [ref=e1330]:
+                  - generic [ref=e1331]: Maria Jose
+                  - generic [ref=e1333]: Ontem
+                - generic [ref=e1334]:
+                  - generic [ref=e1335]: Obrigada
+                  - generic [ref=e1336]: "1"
+                - generic "Aguardando resposta há 14h 28min" [ref=e1338]:
+                  - img [ref=e1339]
+                  - text: 14h 28min
+            - generic [ref=e1342] [cursor=pointer]:
+              - generic [ref=e1343]:
+                - text: P
+                - img [ref=e1345]
+              - generic [ref=e1348]:
+                - generic [ref=e1349]:
+                  - generic [ref=e1350]: Patricia
+                  - generic [ref=e1352]: Ontem
+                - generic [ref=e1353]:
+                  - generic [ref=e1354]: Bom dia, eu ja fiz a revitalização
+                  - generic [ref=e1355]: "1"
+                - generic "Aguardando resposta há 14h 54min" [ref=e1357]:
+                  - img [ref=e1358]
+                  - text: 14h 54min
+            - generic [ref=e1361] [cursor=pointer]:
+              - generic [ref=e1362]:
+                - text: DL
+                - img [ref=e1364]
+              - generic [ref=e1367]:
+                - generic [ref=e1368]:
+                  - generic [ref=e1369]: Danilo Luiz
+                  - generic [ref=e1371]: Ontem
+                - generic [ref=e1373]: Teste 123
+                - generic [ref=e1374]:
+                  - generic "Aguardando resposta há 16h 1min" [ref=e1375]:
+                    - img [ref=e1376]
+                    - text: 16h 1min
+                  - generic "Pago" [ref=e1379]
+            - generic [ref=e1380] [cursor=pointer]:
+              - generic [ref=e1381]:
+                - img "Priscila" [ref=e1382]
+                - img [ref=e1384]
+              - generic [ref=e1387]:
+                - generic [ref=e1388]:
+                  - generic [ref=e1389]: Priscila
+                  - generic [ref=e1391]: Ontem
+                - generic [ref=e1392]:
+                  - generic [ref=e1393]: Olá! Tenho interesse e queria mais informações, por favor.
+                  - generic [ref=e1394]: "1"
+                - generic "Aguardando resposta há 19h 53min" [ref=e1396]:
+                  - img [ref=e1397]
+                  - text: 19h 53min
+            - generic [ref=e1400] [cursor=pointer]:
+              - generic [ref=e1401]:
+                - text: KP
+                - img [ref=e1403]
+              - generic [ref=e1406]:
+                - generic [ref=e1407]:
+                  - generic [ref=e1408]: Ketlyn Perek
+                  - generic [ref=e1410]: Ontem
+                - generic [ref=e1411]:
+                  - generic [ref=e1412]: Olá! Tenho interesse e queria mais informações, por favor.
+                  - generic [ref=e1413]: "1"
+                - generic "Aguardando resposta há 23h 22min" [ref=e1415]:
+                  - img [ref=e1416]
+                  - text: 23h 22min
+            - generic [ref=e1419] [cursor=pointer]:
+              - generic [ref=e1420]:
+                - img "Andréia" [ref=e1421]
+                - img [ref=e1423]
+              - generic [ref=e1426]:
+                - generic [ref=e1427]:
+                  - generic [ref=e1428]: Andréia
+                  - generic [ref=e1430]: Ontem
+                - generic [ref=e1431]:
+                  - generic [ref=e1432]: Olá! Tenho interesse e queria mais informações, por favor.
+                  - generic [ref=e1433]: "1"
+                - generic "Aguardando resposta há 1d" [ref=e1435]:
+                  - img [ref=e1436]
+                  - text: 1d
+            - generic [ref=e1439] [cursor=pointer]:
+              - generic [ref=e1440]:
+                - img "Bibi" [ref=e1441]
+                - img [ref=e1443]
+              - generic [ref=e1446]:
+                - generic [ref=e1447]:
+                  - generic [ref=e1448]: Bibi
+                  - generic [ref=e1450]: Ontem
+                - generic [ref=e1451]:
+                  - generic [ref=e1452]: Olá! Tenho interesse e queria mais informações, por favor.
+                  - generic [ref=e1453]: "1"
+                - generic "Aguardando resposta há 1d" [ref=e1455]:
+                  - img [ref=e1456]
+                  - text: 1d
+            - generic [ref=e1459] [cursor=pointer]:
+              - generic [ref=e1460]:
+                - text: "?"
+                - img [ref=e1462]
+              - generic [ref=e1465]:
+                - generic [ref=e1466]:
+                  - generic [ref=e1467]: "5513997913032"
+                  - generic [ref=e1469]: Ontem
+                - generic [ref=e1471]: Olá! Tenho interesse e queria mais informações, por favor.
+                - generic "Aguardando resposta há 1d" [ref=e1473]:
+                  - img [ref=e1474]
+                  - text: 1d
+            - generic [ref=e1477] [cursor=pointer]:
+              - generic [ref=e1478]:
+                - text: TP
+                - img [ref=e1480]
+              - generic [ref=e1483]:
+                - generic [ref=e1484]:
+                  - generic [ref=e1485]: Thiago Pereira
+                  - generic [ref=e1487]: 10/03/2026
+                - generic [ref=e1489]: Enviando a imagem da lesão 👍
+                - generic "Aguardando resposta há 1d 5h" [ref=e1491]:
+                  - img [ref=e1492]
+                  - text: 1d 5h
+            - generic [ref=e1495] [cursor=pointer]:
+              - generic [ref=e1496]:
+                - text: L
+                - img [ref=e1498]
+              - generic [ref=e1501]:
+                - generic [ref=e1502]:
+                  - generic [ref=e1503]: Lilian🥰
+                  - generic [ref=e1505]: 10/03/2026
+                - generic [ref=e1507]: Sou de bauru
+                - generic "Aguardando resposta há 1d 5h" [ref=e1509]:
+                  - img [ref=e1510]
+                  - text: 1d 5h
+            - generic [ref=e1513] [cursor=pointer]:
+              - img "5513974150239" [ref=e1515]
+              - generic [ref=e1516]:
+                - generic [ref=e1517]:
+                  - generic [ref=e1518]: "5513974150239"
+                  - generic [ref=e1520]: 10/03/2026
+                - generic [ref=e1522]: Quando você teria disponibilidade para uma avaliação?
+            - generic [ref=e1523] [cursor=pointer]:
+              - img "5513998035052" [ref=e1525]
+              - generic [ref=e1526]:
+                - generic [ref=e1527]:
+                  - generic [ref=e1528]: "5513998035052"
+                  - generic [ref=e1530]: 10/03/2026
+                - generic [ref=e1532]: Olá! Sou a Melissa da YesLaser Praia Grande ?? A YesLaser liberou esse presente de 5 sessões grátis para você ?? É só escolher o tratamento e agendar comigo. Fico á disposição!
+            - generic [ref=e1533] [cursor=pointer]:
+              - generic [ref=e1534]:
+                - text: AB
+                - img [ref=e1536]
+              - generic [ref=e1539]:
+                - generic [ref=e1540]:
+                  - generic [ref=e1541]: Amanda Borges
+                  - generic [ref=e1543]: 10/03/2026
+                - generic [ref=e1544]:
+                  - generic [ref=e1545]: Nova conversa
+                  - generic [ref=e1546]: "1"
+                - generic "Aguardando resposta há 1d 5h" [ref=e1548]:
+                  - img [ref=e1549]
+                  - text: 1d 5h
+            - generic [ref=e1552] [cursor=pointer]:
+              - img "5513997399579" [ref=e1554]
+              - generic [ref=e1555]:
+                - generic [ref=e1556]:
+                  - generic [ref=e1557]: "5513997399579"
+                  - generic [ref=e1559]: 10/03/2026
+                - generic [ref=e1561]: Olá! Sou a Amanda da YesLaser Praia Grande ?? A YesLaser liberou esse presente de 5 sessões grátis para você ?? É só escolher o tratamento e agendar comigo. Fico á disposição!
+            - generic [ref=e1562] [cursor=pointer]:
+              - img "5513991050306" [ref=e1564]
+              - generic [ref=e1565]:
+                - generic [ref=e1566]:
+                  - generic [ref=e1567]: "5513991050306"
+                  - generic [ref=e1569]: 10/03/2026
+                - generic [ref=e1571]: Olá! Sou a Emily da YesLaser Praia Grande ?? A YesLaser liberou esse presente de 5 sessões grátis para você ?? É só escolher o tratamento e agendar comigo. Fico á disposição!
+            - generic [ref=e1572] [cursor=pointer]:
+              - generic [ref=e1573]:
+                - text: "?"
+                - img [ref=e1575]
+              - generic [ref=e1578]:
+                - generic [ref=e1579]:
+                  - generic [ref=e1580]: "5513999999999"
+                  - generic [ref=e1582]: 10/03/2026
+                - generic [ref=e1584]: Teste de validação
+                - generic "Aguardando resposta há 20d 1h" [ref=e1586]:
+                  - img [ref=e1587]
+                  - text: 20d 1h
+            - generic [ref=e1590] [cursor=pointer]:
+              - generic [ref=e1591]:
+                - text: "?"
+                - img [ref=e1593]
+              - generic [ref=e1596]:
+                - generic [ref=e1597]:
+                  - generic [ref=e1598]: "5513978263924"
+                  - generic [ref=e1600]: 10/03/2026
+                - generic [ref=e1601]:
+                  - generic [ref=e1602]: Nova conversa
+                  - generic [ref=e1603]: "1"
+                - generic "Aguardando resposta há 1d 6h" [ref=e1605]:
+                  - img [ref=e1606]
+                  - text: 1d 6h
+            - generic [ref=e1609] [cursor=pointer]:
+              - img "5513991594931" [ref=e1611]
+              - generic [ref=e1612]:
+                - generic [ref=e1613]:
+                  - generic [ref=e1614]: "5513991594931"
+                  - generic [ref=e1616]: 10/03/2026
+                - generic [ref=e1618]: Olá! Sou a Amanda da YesLaser Praia Grande ?? A YesLaser liberou esse presente de 5 sessões grátis para você ?? É só escolher o tratamento e agendar comigo. Fico á disposição!
+            - generic [ref=e1619] [cursor=pointer]:
+              - img "555581132843" [ref=e1621]
+              - generic [ref=e1622]:
+                - generic [ref=e1623]:
+                  - generic [ref=e1624]: "555581132843"
+                  - generic [ref=e1626]: 10/03/2026
+                - generic [ref=e1628]: Nova conversa
+            - generic [ref=e1629] [cursor=pointer]:
+              - img "5513991046899" [ref=e1631]
+              - generic [ref=e1632]:
+                - generic [ref=e1633]:
+                  - generic [ref=e1634]: "5513991046899"
+                  - generic [ref=e1636]: 10/03/2026
+                - generic [ref=e1638]: Oiii, fico aguardando os dados para o agendamento ??
+            - generic [ref=e1639] [cursor=pointer]:
+              - img "5513988757416" [ref=e1641]
+              - generic [ref=e1642]:
+                - generic [ref=e1643]:
+                  - generic [ref=e1644]: "5513988757416"
+                  - generic [ref=e1646]: 10/03/2026
+                - generic [ref=e1648]: Olá! Sou a Emily da YesLaser Praia Grande ?? A YesLaser liberou esse presente de 5 sessões grátis para você ?? É só escolher o tratamento e agendar comigo. Fico á disposição!
+            - generic [ref=e1649] [cursor=pointer]:
+              - generic [ref=e1650]: GI
+              - generic [ref=e1651]:
+                - generic [ref=e1652]:
+                  - generic [ref=e1653]: Gabi Iozzelli
+                  - generic [ref=e1655]: 10/03/2026
+                - generic [ref=e1656]:
+                  - generic [ref=e1657]: Então podemos prosseguir com seu cadastro?
+                  - generic [ref=e1658]: "16"
+            - generic [ref=e1659] [cursor=pointer]:
+              - img "5513981603454" [ref=e1661]
+              - generic [ref=e1662]:
+                - generic [ref=e1663]:
+                  - generic [ref=e1664]: "5513981603454"
+                  - generic [ref=e1666]: 10/03/2026
+                - generic [ref=e1668]: "São *4 procedimentos estéticos*, com 1 sessão de cada, pra agendar aqui com a gente ?? São eles: ✨ *Revitalização Facial* – pra deixar a pele mais hidratada, iluminada e saudável ?? *Depilação a Laser* – redução dos pelos com mais conforto ?? *Detox Corporal* – ajuda a desinchar e cuidar do corpo ?? *Empina Bumbum* – tratamento para firmeza e melhora do contorno"
+            - generic [ref=e1669] [cursor=pointer]:
+              - generic [ref=e1670]:
+                - img "Aninha Colares" [ref=e1671]
+                - img [ref=e1673]
+              - generic [ref=e1676]:
+                - generic [ref=e1677]:
+                  - generic [ref=e1678]: Aninha Colares
+                  - generic [ref=e1680]: 10/03/2026
+                - generic [ref=e1681]:
+                  - generic [ref=e1682]: Olá, , boa tarde! Deu tudo certo sim ??
+                  - generic [ref=e1683]: "16"
+                - generic "Aguardando resposta há 13d 6h" [ref=e1685]:
+                  - img [ref=e1686]
+                  - text: 13d 6h
+            - generic [ref=e1689] [cursor=pointer]:
+              - img "Julia Sousa" [ref=e1691]
+              - generic [ref=e1692]:
+                - generic [ref=e1693]:
+                  - generic [ref=e1694]: Julia Sousa
+                  - generic [ref=e1696]: 10/03/2026
+                - generic [ref=e1697]:
+                  - generic [ref=e1698]: https://docs.google.com/spreadsheets/d/1gZEtjITPb3dD9mZlrqxTrA7rK2DWuMrjLGmKbbrsvpk/edit?usp=sharing
+                  - generic [ref=e1699]: "7"
+                - generic [ref=e1700]:
+                  - generic "Novo cliente" [ref=e1701]
+                  - generic "Novo pedido" [ref=e1702]
+            - generic [ref=e1703] [cursor=pointer]:
+              - img "5513974119648" [ref=e1705]
+              - generic [ref=e1706]:
+                - generic [ref=e1707]:
+                  - generic [ref=e1708]: "5513974119648"
+                  - generic [ref=e1710]: 10/03/2026
+                - generic [ref=e1712]: Nova conversa
+            - generic [ref=e1713] [cursor=pointer]:
+              - img "5513991294104" [ref=e1715]
+              - generic [ref=e1716]:
+                - generic [ref=e1717]:
+                  - generic [ref=e1718]: "5513991294104"
+                  - generic [ref=e1720]: 10/03/2026
+                - generic [ref=e1722]: Você teria disponibilidade?
+            - generic [ref=e1723] [cursor=pointer]:
+              - img "5511973521638" [ref=e1725]
+              - generic [ref=e1726]:
+                - generic [ref=e1727]:
+                  - generic [ref=e1728]: "5511973521638"
+                  - generic [ref=e1730]: 10/03/2026
+                - generic [ref=e1732]: Nova conversa
+            - generic [ref=e1733] [cursor=pointer]:
+              - img "tamara mendes" [ref=e1735]
+              - generic [ref=e1736]:
+                - generic [ref=e1737]:
+                  - generic [ref=e1738]: tamara mendes
+                  - generic [ref=e1740]: 10/03/2026
+                - generic [ref=e1741]:
+                  - generic [ref=e1742]: O que acha? Vamos aproveitar?
+                  - generic [ref=e1743]: "12"
+            - generic [ref=e1744] [cursor=pointer]:
+              - img "5513996110736" [ref=e1746]
+              - generic [ref=e1747]:
+                - generic [ref=e1748]:
+                  - generic [ref=e1749]: "5513996110736"
+                  - generic [ref=e1751]: 10/03/2026
+                - generic [ref=e1753]: Vamos agendar? ??
+            - generic [ref=e1754] [cursor=pointer]:
+              - img "5511984758835" [ref=e1756]
+              - generic [ref=e1757]:
+                - generic [ref=e1758]:
+                  - generic [ref=e1759]: "5511984758835"
+                  - generic [ref=e1761]: 10/03/2026
+                - generic [ref=e1763]: Boa sorte ??
+            - generic [ref=e1764] [cursor=pointer]:
+              - generic [ref=e1765]: SS
+              - generic [ref=e1766]:
+                - generic [ref=e1767]:
+                  - generic [ref=e1768]: Silvana Serafim
+                  - generic [ref=e1770]: 10/03/2026
+                - generic [ref=e1771]:
+                  - generic [ref=e1772]: Trabalhamos com a forma de pagamento recorrente! Você sabe como funciona?
+                  - generic [ref=e1773]: "6"
+            - generic [ref=e1774] [cursor=pointer]:
+              - img "5513992083553" [ref=e1776]
+              - generic [ref=e1777]:
+                - generic [ref=e1778]:
+                  - generic [ref=e1779]: "5513992083553"
+                  - generic [ref=e1781]: 10/03/2026
+                - generic [ref=e1783]: Você teria disponibilidade para uma avaliação? ??
+            - generic [ref=e1784] [cursor=pointer]:
+              - generic [ref=e1785]: MM
+              - generic [ref=e1786]:
+                - generic [ref=e1787]:
+                  - generic [ref=e1788]: Maria Martins
+                  - generic [ref=e1790]: 10/03/2026
+                - generic [ref=e1791]:
+                  - generic [ref=e1792]: Vamos agendar?
+                  - generic [ref=e1793]: "1"
+            - generic [ref=e1794] [cursor=pointer]:
+              - img "5513992008905" [ref=e1796]
+              - generic [ref=e1797]:
+                - generic [ref=e1798]:
+                  - generic [ref=e1799]: "5513992008905"
+                  - generic [ref=e1801]: 10/03/2026
+                - generic [ref=e1803]: Você teria disponibilidade para uma avaliação?
+            - generic [ref=e1804] [cursor=pointer]:
+              - generic [ref=e1805]:
+                - text: G
+                - img [ref=e1807]
+              - generic [ref=e1810]:
+                - generic [ref=e1811]:
+                  - generic [ref=e1812]: Giulia
+                  - generic [ref=e1814]: 10/03/2026
+                - generic [ref=e1815]:
+                  - generic [ref=e1816]: pode deixar, obrigada!
+                  - generic [ref=e1817]: "31"
+                - generic "Aguardando resposta há 8d 9h" [ref=e1819]:
+                  - img [ref=e1820]
+                  - text: 8d 9h
+            - generic [ref=e1823] [cursor=pointer]:
+              - generic [ref=e1824]: BS
+              - generic [ref=e1825]:
+                - generic [ref=e1826]:
+                  - generic [ref=e1827]: Bruna Safer
+                  - generic [ref=e1829]: 10/03/2026
+                - generic [ref=e1830]:
+                  - generic [ref=e1831]: Vamos iniciar seu tratamento e seu presente?
+                  - generic [ref=e1832]: "30"
+            - generic [ref=e1833] [cursor=pointer]:
+              - generic [ref=e1834]: LM
+              - generic [ref=e1835]:
+                - generic [ref=e1836]:
+                  - generic [ref=e1837]: LETICIA MOURA | SOCIAL MEDIA
+                  - generic [ref=e1839]: 10/03/2026
+                - generic [ref=e1840]:
+                  - generic [ref=e1841]: Quando você tem disponibilidade?
+                  - generic [ref=e1842]: "27"
+            - generic [ref=e1843] [cursor=pointer]:
+              - img "5513991717245" [ref=e1845]
+              - generic [ref=e1846]:
+                - generic [ref=e1847]:
+                  - generic [ref=e1848]: "5513991717245"
+                  - generic [ref=e1850]: 10/03/2026
+                - generic [ref=e1852]: Vamos marcar sua avaliação?
+            - generic [ref=e1853] [cursor=pointer]:
+              - img "5513991815988" [ref=e1855]
+              - generic [ref=e1856]:
+                - generic [ref=e1857]:
+                  - generic [ref=e1858]: "5513991815988"
+                  - generic [ref=e1860]: 10/03/2026
+                - generic [ref=e1862]: Você tem disponibilidade para iniciarmos seu tratamento?
+            - generic [ref=e1863] [cursor=pointer]:
+              - img "5513982068828" [ref=e1865]
+              - generic [ref=e1866]:
+                - generic [ref=e1867]:
+                  - generic [ref=e1868]: "5513982068828"
+                  - generic [ref=e1870]: 10/03/2026
+                - generic [ref=e1872]: Estamos à disposição! Temos protocolos faciais também ??
+            - generic [ref=e1873] [cursor=pointer]:
+              - img "Mah" [ref=e1875]
+              - generic [ref=e1876]:
+                - generic [ref=e1877]:
+                  - generic [ref=e1878]: Mah
+                  - generic [ref=e1880]: 10/03/2026
+                - generic [ref=e1881]:
+                  - generic [ref=e1882]: Te aguardamos ??
+                  - generic [ref=e1883]: "4"
+            - generic [ref=e1884] [cursor=pointer]:
+              - img "Amanda Miriã" [ref=e1886]
+              - generic [ref=e1887]:
+                - generic [ref=e1888]:
+                  - generic [ref=e1889]: Amanda Miriã
+                  - generic [ref=e1891]: 10/03/2026
+                - generic [ref=e1893]: Olhem oq acontece quando não realizam follow up!!!
+            - generic [ref=e1894] [cursor=pointer]:
+              - img "Beatriz Rossi" [ref=e1896]
+              - generic [ref=e1897]:
+                - generic [ref=e1898]:
+                  - generic [ref=e1899]: Beatriz Rossi
+                  - generic [ref=e1901]: 10/03/2026
+                - generic [ref=e1903]: Vou verificar a disponibilidade pra você ??
+            - generic [ref=e1904] [cursor=pointer]:
+              - generic [ref=e1905]: "N"
+              - generic [ref=e1906]:
+                - generic [ref=e1907]:
+                  - generic [ref=e1908]: nick
+                  - generic [ref=e1910]: 10/03/2026
+                - generic [ref=e1911]:
+                  - generic [ref=e1912]: Vamos agendar?
+                  - generic [ref=e1913]: "27"
+            - generic [ref=e1914] [cursor=pointer]:
+              - generic [ref=e1915]: D
+              - generic [ref=e1916]:
+                - generic [ref=e1917]:
+                  - generic [ref=e1918]: Damares
+                  - generic [ref=e1920]: 10/03/2026
+                - generic [ref=e1921]:
+                  - generic [ref=e1922]: Vamos agendar?
+                  - generic [ref=e1923]: "5"
+            - generic [ref=e1924] [cursor=pointer]:
+              - img "5513991374650" [ref=e1926]
+              - generic [ref=e1927]:
+                - generic [ref=e1928]:
+                  - generic [ref=e1929]: "5513991374650"
+                  - generic [ref=e1931]: 10/03/2026
+                - generic [ref=e1933]: https://yeslaseroffice.com.br/AssinaturaDigital?t=+O34O6u5158fIXbB0HD8+g==
+            - generic [ref=e1934] [cursor=pointer]:
+              - img "5511966034028" [ref=e1936]
+              - generic [ref=e1937]:
+                - generic [ref=e1938]:
+                  - generic [ref=e1939]: "5511966034028"
+                  - generic [ref=e1941]: 10/03/2026
+                - generic [ref=e1943]: Oi vcs tem interesse em parceria e divulgação
+            - generic [ref=e1944] [cursor=pointer]:
+              - img "5513981589468" [ref=e1946]
+              - generic [ref=e1947]:
+                - generic [ref=e1948]:
+                  - generic [ref=e1949]: "5513981589468"
+                  - generic [ref=e1951]: 10/03/2026
+                - generic [ref=e1953]: O que acha de vir hoje para uma avaliação gratuita? ??
+            - generic [ref=e1954] [cursor=pointer]:
+              - img "Amanda Pedroso" [ref=e1956]
+              - generic [ref=e1957]:
+                - generic [ref=e1958]:
+                  - generic [ref=e1959]: Amanda Pedroso
+                  - generic [ref=e1961]: 10/03/2026
+                - generic [ref=e1962]:
+                  - generic [ref=e1963]: Seria melhor?
+                  - generic [ref=e1964]: "9"
+            - generic [ref=e1965] [cursor=pointer]:
+              - img "5513991728588" [ref=e1967]
+              - generic [ref=e1968]:
+                - generic [ref=e1969]:
+                  - generic [ref=e1970]: "5513991728588"
+                  - generic [ref=e1972]: 10/03/2026
+                - generic [ref=e1974]: Boa tarde
+            - generic [ref=e1975] [cursor=pointer]:
+              - img "5513997590301" [ref=e1977]
+              - generic [ref=e1978]:
+                - generic [ref=e1979]:
+                  - generic [ref=e1980]: "5513997590301"
+                  - generic [ref=e1982]: 10/03/2026
+                - generic [ref=e1984]: Vamos agendar?
+            - generic [ref=e1985] [cursor=pointer]:
+              - img "5511984056115" [ref=e1987]
+              - generic [ref=e1988]:
+                - generic [ref=e1989]:
+                  - generic [ref=e1990]: "5511984056115"
+                  - generic [ref=e1992]: 10/03/2026
+                - generic [ref=e1994]: Prazer Ana! Me conta, o que está te incomodando hoje? Como podemos te ajudar?
+            - generic [ref=e1995] [cursor=pointer]:
+              - img "." [ref=e1997]
+              - generic [ref=e1998]:
+                - generic [ref=e1999]:
+                  - generic [ref=e2000]: .
+                  - generic [ref=e2002]: 10/03/2026
+                - generic [ref=e2003]:
+                  - generic [ref=e2004]: Assim já conseguimos agendar sua sessão de Spa Gold e você pode escolher qual procedimento quer realizar totalmente gratuita ??
+                  - generic [ref=e2005]: "31"
+            - generic [ref=e2006] [cursor=pointer]:
+              - generic [ref=e2007]: PB
+              - generic [ref=e2008]:
+                - generic [ref=e2009]:
+                  - generic [ref=e2010]: pâmella britto.
+                  - generic [ref=e2012]: 10/03/2026
+                - generic [ref=e2013]:
+                  - generic [ref=e2014]: O que acha de aproveitar? ??
+                  - generic [ref=e2015]: "1"
+            - generic [ref=e2016] [cursor=pointer]:
+              - img "Dario Rogério" [ref=e2018]
+              - generic [ref=e2019]:
+                - generic [ref=e2020]:
+                  - generic [ref=e2021]: Dario Rogério
+                  - generic [ref=e2023]: 10/03/2026
+                - generic [ref=e2025]: Nova conversa
+            - generic [ref=e2026] [cursor=pointer]:
+              - generic [ref=e2027]: B♥
+              - generic [ref=e2028]:
+                - generic [ref=e2029]:
+                  - generic [ref=e2030]: Bruninha ♥️
+                  - generic [ref=e2032]: 10/03/2026
+                - generic [ref=e2033]:
+                  - generic [ref=e2034]: Vamos agendar seu presente para você nos conhecer e se cuidar também?
+                  - generic [ref=e2035]: "5"
+            - generic [ref=e2036] [cursor=pointer]:
+              - img "5511947016791" [ref=e2038]
+              - generic [ref=e2039]:
+                - generic [ref=e2040]:
+                  - generic [ref=e2041]: "5511947016791"
+                  - generic [ref=e2043]: 10/03/2026
+                - generic [ref=e2045]: Oiii, fico feliz que você tenha interesse no Botox! Você já realizou esse procedimento ou seria a primeira vez?
+            - generic [ref=e2046] [cursor=pointer]:
+              - img "5513996275875" [ref=e2048]
+              - generic [ref=e2049]:
+                - generic [ref=e2050]:
+                  - generic [ref=e2051]: "5513996275875"
+                  - generic [ref=e2053]: 10/03/2026
+                - generic [ref=e2055]: Boa sorte ??
+            - generic [ref=e2056] [cursor=pointer]:
+              - img "5513996903066" [ref=e2058]
+              - generic [ref=e2059]:
+                - generic [ref=e2060]:
+                  - generic [ref=e2061]: "5513996903066"
+                  - generic [ref=e2063]: 10/03/2026
+                - generic [ref=e2065]: Boa sorte! ??
+            - generic [ref=e2066] [cursor=pointer]:
+              - img "5513991171212" [ref=e2068]
+              - generic [ref=e2069]:
+                - generic [ref=e2070]:
+                  - generic [ref=e2071]: "5513991171212"
+                  - generic [ref=e2073]: 10/03/2026
+                - generic [ref=e2075]: Pode enviar seu currículo que eu mandamos para o setor responsável ??
+            - generic [ref=e2076] [cursor=pointer]:
+              - img "Keithy Moreira" [ref=e2078]
+              - generic [ref=e2079]:
+                - generic [ref=e2080]:
+                  - generic [ref=e2081]: Keithy Moreira
+                  - generic [ref=e2083]: 10/03/2026
+                - generic [ref=e2084]:
+                  - generic [ref=e2085]: Qual horário você consegue?
+                  - generic [ref=e2086]: "6"
+            - generic [ref=e2087] [cursor=pointer]:
+              - generic [ref=e2088]: J
+              - generic [ref=e2089]:
+                - generic [ref=e2090]:
+                  - generic [ref=e2091]: Joyce
+                  - generic [ref=e2093]: 10/03/2026
+                - generic [ref=e2094]:
+                  - generic [ref=e2095]: Confirmado ??
+                  - generic [ref=e2096]: "6"
+            - generic [ref=e2097] [cursor=pointer]:
+              - img "5513974056310" [ref=e2099]
+              - generic [ref=e2100]:
+                - generic [ref=e2101]:
+                  - generic [ref=e2102]: "5513974056310"
+                  - generic [ref=e2104]: 10/03/2026
+                - generic [ref=e2106]: Você tem disponibilidade para iniciarmos seu tratamento?
+            - generic [ref=e2107] [cursor=pointer]:
+              - img "5513991912224" [ref=e2109]
+              - generic [ref=e2110]:
+                - generic [ref=e2111]:
+                  - generic [ref=e2112]: "5513991912224"
+                  - generic [ref=e2114]: 10/03/2026
+                - generic [ref=e2116]: Tenho um super presente pra você! ??
+            - generic [ref=e2117] [cursor=pointer]:
+              - generic [ref=e2118]:
+                - img "5513996390919" [ref=e2119]
+                - img [ref=e2121]
+              - generic [ref=e2124]:
+                - generic [ref=e2125]:
+                  - generic [ref=e2126]: "5513996390919"
+                  - generic [ref=e2128]: 10/03/2026
+                - generic [ref=e2130]: Nova conversa
+                - generic "Aguardando resposta há 18d 6h" [ref=e2132]:
+                  - img [ref=e2133]
+                  - text: 18d 6h
+            - generic [ref=e2136] [cursor=pointer]:
+              - img "5513996699428" [ref=e2138]
+              - generic [ref=e2139]:
+                - generic [ref=e2140]:
+                  - generic [ref=e2141]: "5513996699428"
+                  - generic [ref=e2143]: 10/03/2026
+                - generic [ref=e2145]: Nova conversa
+            - generic [ref=e2146] [cursor=pointer]:
+              - img "5511922320803" [ref=e2148]
+              - generic [ref=e2149]:
+                - generic [ref=e2150]:
+                  - generic [ref=e2151]: "5511922320803"
+                  - generic [ref=e2153]: 10/03/2026
+                - generic [ref=e2155]: Boa tarde Amanda !
+            - generic [ref=e2156] [cursor=pointer]:
+              - img "5513996390285" [ref=e2158]
+              - generic [ref=e2159]:
+                - generic [ref=e2160]:
+                  - generic [ref=e2161]: "5513996390285"
+                  - generic [ref=e2163]: 10/03/2026
+                - generic [ref=e2165]: Gratidão ????
+            - generic [ref=e2166] [cursor=pointer]:
+              - generic [ref=e2167]: KG
+              - generic [ref=e2168]:
+                - generic [ref=e2169]:
+                  - generic [ref=e2170]: Karla Guimarães
+                  - generic [ref=e2172]: 10/03/2026
+                - generic [ref=e2173]:
+                  - generic [ref=e2174]: Qual horário você prefere vir, tarde ou manhã?
+                  - generic [ref=e2175]: "9"
+            - generic [ref=e2176] [cursor=pointer]:
+              - img "5513992019348" [ref=e2178]
+              - generic [ref=e2179]:
+                - generic [ref=e2180]:
+                  - generic [ref=e2181]: "5513992019348"
+                  - generic [ref=e2183]: 10/03/2026
+                - generic [ref=e2185]: Consultor de vendas
+            - generic [ref=e2186] [cursor=pointer]:
+              - img "5513997645911" [ref=e2188]
+              - generic [ref=e2189]:
+                - generic [ref=e2190]:
+                  - generic [ref=e2191]: "5513997645911"
+                  - generic [ref=e2193]: 10/03/2026
+                - generic [ref=e2195]: Como posso te ajudar?
+            - generic [ref=e2196] [cursor=pointer]:
+              - img "5513991851903" [ref=e2198]
+              - generic [ref=e2199]:
+                - generic [ref=e2200]:
+                  - generic [ref=e2201]: "5513991851903"
+                  - generic [ref=e2203]: 10/03/2026
+                - generic [ref=e2205]: Oiii boa tarde!! Vocês estão aceitando currículo?
+            - generic [ref=e2206] [cursor=pointer]:
+              - img "5511977311421" [ref=e2208]
+              - generic [ref=e2209]:
+                - generic [ref=e2210]:
+                  - generic [ref=e2211]: "5511977311421"
+                  - generic [ref=e2213]: 10/03/2026
+                - generic [ref=e2215]: Olá! Tenho interesse e queria mais informações, por favor.
+            - generic [ref=e2216] [cursor=pointer]:
+              - img "5513996092045" [ref=e2218]
+              - generic [ref=e2219]:
+                - generic [ref=e2220]:
+                  - generic [ref=e2221]: "5513996092045"
+                  - generic [ref=e2223]: 10/03/2026
+                - generic [ref=e2225]: Muito obrigada
+            - generic [ref=e2226] [cursor=pointer]:
+              - img "5513988571847" [ref=e2228]
+              - generic [ref=e2229]:
+                - generic [ref=e2230]:
+                  - generic [ref=e2231]: "5513988571847"
+                  - generic [ref=e2233]: 10/03/2026
+                - generic [ref=e2235]: Tenho interesse na vaga e estou encaminhando meu currículo para avaliação. Fico à disposição para qualquer informação adicional.
+            - generic [ref=e2236] [cursor=pointer]:
+              - img "5511952883260" [ref=e2238]
+              - generic [ref=e2239]:
+                - generic [ref=e2240]:
+                  - generic [ref=e2241]: "5511952883260"
+                  - generic [ref=e2243]: 10/03/2026
+                - generic [ref=e2245]: Ficou alguma dúvida sobre o procedimento?
+            - generic [ref=e2246] [cursor=pointer]:
+              - img "5513998086717" [ref=e2248]
+              - generic [ref=e2249]:
+                - generic [ref=e2250]:
+                  - generic [ref=e2251]: "5513998086717"
+                  - generic [ref=e2253]: 10/03/2026
+                - generic [ref=e2255]: Você tem previsão de vir?
+            - generic [ref=e2256] [cursor=pointer]:
+              - img "5513991649845" [ref=e2258]
+              - generic [ref=e2259]:
+                - generic [ref=e2260]:
+                  - generic [ref=e2261]: "5513991649845"
+                  - generic [ref=e2263]: 10/03/2026
+                - generic [ref=e2265]: Olá! Tenho interesse na vaga e envio meu currículo para análise. Fico à disposição. Obrigada!
+            - generic [ref=e2266] [cursor=pointer]:
+              - img "5513981816263" [ref=e2268]
+              - generic [ref=e2269]:
+                - generic [ref=e2270]:
+                  - generic [ref=e2271]: "5513981816263"
+                  - generic [ref=e2273]: 10/03/2026
+                - generic [ref=e2275]: Tenho muito interesse em trabalhar na área de estética, pois atualmente estou cursando Estética e Cosmética. Ainda estou no primeiro semestre do curso, então neste momento não posso atuar diretamente nos procedimentos, mas tenho muita vontade de aprender e ganhar experiência na área. Tenho total interesse em começar auxiliando no que for necessário, como atendimento ao cliente, recepção, organização da clínica ou apoio às profissionais, para adquirir mais conhecimento e crescer dentro da área.
+            - generic [ref=e2276] [cursor=pointer]:
+              - img "5513996093680" [ref=e2278]
+              - generic [ref=e2279]:
+                - generic [ref=e2280]:
+                  - generic [ref=e2281]: "5513996093680"
+                  - generic [ref=e2283]: 10/03/2026
+                - generic [ref=e2285]: Obrigada
+            - generic [ref=e2286] [cursor=pointer]:
+              - img "5511986829501" [ref=e2288]
+              - generic [ref=e2289]:
+                - generic [ref=e2290]:
+                  - generic [ref=e2291]: "5511986829501"
+                  - generic [ref=e2293]: 10/03/2026
+                - generic [ref=e2295]: Olá! Tenho interesse e queria mais informações, por favor.
+            - generic [ref=e2296] [cursor=pointer]:
+              - img "5513974175374" [ref=e2298]
+              - generic [ref=e2299]:
+                - generic [ref=e2300]:
+                  - generic [ref=e2301]: "5513974175374"
+                  - generic [ref=e2303]: 10/03/2026
+                - generic [ref=e2305]: Segue, muito obrigada!
+            - generic [ref=e2306] [cursor=pointer]:
+              - img "5513981029089" [ref=e2308]
+              - generic [ref=e2309]:
+                - generic [ref=e2310]:
+                  - generic [ref=e2311]: "5513981029089"
+                  - generic [ref=e2313]: 10/03/2026
+                - generic [ref=e2315]: Bom dia tudo bem hoje com essa chuvinha ?? não obrigada
+            - generic [ref=e2316] [cursor=pointer]:
+              - img "5513991886646" [ref=e2318]
+              - generic [ref=e2319]:
+                - generic [ref=e2320]:
+                  - generic [ref=e2321]: "5513991886646"
+                  - generic [ref=e2323]: 10/03/2026
+                - generic [ref=e2325]: Olá! Tenho interesse e queria mais informações, por favor.
+            - generic [ref=e2326] [cursor=pointer]:
+              - img "5513982088827" [ref=e2328]
+              - generic [ref=e2329]:
+                - generic [ref=e2330]:
+                  - generic [ref=e2331]: "5513982088827"
+                  - generic [ref=e2333]: 10/03/2026
+                - generic [ref=e2335]: Como e seu nome?
+            - generic [ref=e2336] [cursor=pointer]:
+              - img "Fran" [ref=e2338]
+              - generic [ref=e2339]:
+                - generic [ref=e2340]:
+                  - generic [ref=e2341]: Fran
+                  - generic [ref=e2343]: 10/03/2026
+                - generic [ref=e2344]:
+                  - generic [ref=e2345]: Te aguardamos. Qualquer dúvida estamos a disposição ✨
+                  - generic [ref=e2346]: "9"
+            - generic [ref=e2347] [cursor=pointer]:
+              - img "5513991256424" [ref=e2349]
+              - generic [ref=e2350]:
+                - generic [ref=e2351]:
+                  - generic [ref=e2352]: "5513991256424"
+                  - generic [ref=e2354]: 10/03/2026
+                - generic [ref=e2356]: Para o Detox o último horário seria as 18h
+            - generic [ref=e2357] [cursor=pointer]:
+              - img "5513978069797" [ref=e2359]
+              - generic [ref=e2360]:
+                - generic [ref=e2361]:
+                  - generic [ref=e2362]: "5513978069797"
+                  - generic [ref=e2364]: 10/03/2026
+                - generic [ref=e2366]: Bom dia!
+            - generic [ref=e2367] [cursor=pointer]:
+              - img "5513992094424" [ref=e2369]
+              - generic [ref=e2370]:
+                - generic [ref=e2371]:
+                  - generic [ref=e2372]: "5513992094424"
+                  - generic [ref=e2374]: 10/03/2026
+                - generic [ref=e2376]: Olá, Sou a Érica dá claro e gostaria de apresentar nossa solução de banda larga com móvel para empresas, ideal para manter sua operação conectada com segurança, velocidade e mobilidade. Caso tenha interesse, posso encaminhar mais informações ou uma proposta personalizada.
+            - generic [ref=e2377] [cursor=pointer]:
+              - img "5513988657180" [ref=e2379]
+              - generic [ref=e2380]:
+                - generic [ref=e2381]:
+                  - generic [ref=e2382]: "5513988657180"
+                  - generic [ref=e2384]: 10/03/2026
+                - generic [ref=e2386]: Olá , tudo bem ??
+            - generic [ref=e2387] [cursor=pointer]:
+              - img "5513974202791" [ref=e2389]
+              - generic [ref=e2390]:
+                - generic [ref=e2391]:
+                  - generic [ref=e2392]: "5513974202791"
+                  - generic [ref=e2394]: 10/03/2026
+                - generic [ref=e2396]: Posso mandar o currículo?
+            - generic [ref=e2397] [cursor=pointer]:
+              - generic [ref=e2398]:
+                - img "Victoria Pita" [ref=e2399]
+                - img [ref=e2401]
+              - generic [ref=e2404]:
+                - generic [ref=e2405]:
+                  - generic [ref=e2406]: Victoria Pita
+                  - generic [ref=e2408]: 10/03/2026
+                - generic [ref=e2409]:
+                  - generic [ref=e2410]: Obrigada
+                  - generic [ref=e2411]: "9"
+                - generic "Aguardando resposta há 9d 12h" [ref=e2413]:
+                  - img [ref=e2414]
+                  - text: 9d 12h
+            - generic [ref=e2417] [cursor=pointer]:
+              - img "5513997152867" [ref=e2419]
+              - generic [ref=e2420]:
+                - generic [ref=e2421]:
+                  - generic [ref=e2422]: "5513997152867"
+                  - generic [ref=e2424]: 10/03/2026
+                - generic [ref=e2426]: Poderia me informar por favor?
+            - generic [ref=e2427] [cursor=pointer]:
+              - generic [ref=e2428]:
+                - img "5513996951404" [ref=e2429]
+                - img [ref=e2431]
+              - generic [ref=e2434]:
+                - generic [ref=e2435]:
+                  - generic [ref=e2436]: "5513996951404"
+                  - generic [ref=e2438]: 10/03/2026
+                - generic [ref=e2440]: Olá! Tenho interesse e queria mais informações, por favor.
+                - generic "Aguardando resposta há 15d 12h" [ref=e2442]:
+                  - img [ref=e2443]
+                  - text: 15d 12h
+            - generic [ref=e2446] [cursor=pointer]:
+              - img "5514997013589" [ref=e2448]
+              - generic [ref=e2449]:
+                - generic [ref=e2450]:
+                  - generic [ref=e2451]: "5514997013589"
+                  - generic [ref=e2453]: 10/03/2026
+                - generic [ref=e2455]: Qual seu nome por favor?
+            - generic [ref=e2456] [cursor=pointer]:
+              - img "5513996664731" [ref=e2458]
+              - generic [ref=e2459]:
+                - generic [ref=e2460]:
+                  - generic [ref=e2461]: "5513996664731"
+                  - generic [ref=e2463]: 10/03/2026
+                - generic [ref=e2465]: Me conta, você já realizou algum procedimento estético ou seria primeira vez?
+            - generic [ref=e2466] [cursor=pointer]:
+              - img "5513981170765" [ref=e2468]
+              - generic [ref=e2469]:
+                - generic [ref=e2470]:
+                  - generic [ref=e2471]: "5513981170765"
+                  - generic [ref=e2473]: 10/03/2026
+                - generic [ref=e2475]: "Nossas sessões presente são na área P: buço, queixo, nariz, orelha, mãos ou pés."
+            - generic [ref=e2476] [cursor=pointer]:
+              - img "5513996787555" [ref=e2478]
+              - generic [ref=e2479]:
+                - generic [ref=e2480]:
+                  - generic [ref=e2481]: "5513996787555"
+                  - generic [ref=e2483]: 10/03/2026
+                - generic [ref=e2485]: Como faço para mandar meu currículo para conseguir trabalhar pela YESLlaser?
+            - generic [ref=e2486] [cursor=pointer]:
+              - img "5513997485519" [ref=e2488]
+              - generic [ref=e2489]:
+                - generic [ref=e2490]:
+                  - generic [ref=e2491]: "5513997485519"
+                  - generic [ref=e2493]: 10/03/2026
+                - generic [ref=e2495]: "?"
+            - generic [ref=e2496] [cursor=pointer]:
+              - generic [ref=e2497]: VA
+              - generic [ref=e2498]:
+                - generic [ref=e2499]:
+                  - generic [ref=e2500]: Vitorya Alves 🦋
+                  - generic [ref=e2502]: 10/03/2026
+                - generic [ref=e2503]:
+                  - generic [ref=e2504]: Qual melhor período pra você?
+                  - generic [ref=e2505]: "10"
+            - generic [ref=e2506] [cursor=pointer]:
+              - generic [ref=e2507]:
+                - img "Camilla Rios" [ref=e2508]
+                - img [ref=e2510]
+              - generic [ref=e2513]:
+                - generic [ref=e2514]:
+                  - generic [ref=e2515]: Camilla Rios
+                  - generic [ref=e2517]: 10/03/2026
+                - generic [ref=e2518]:
+                  - generic [ref=e2519]: Bom dia. Confirmado meu horário hoje às 10h?
+                  - generic [ref=e2520]: "5"
+                - generic "Aguardando resposta há 12d 12h" [ref=e2522]:
+                  - img [ref=e2523]
+                  - text: 12d 12h
+            - generic [ref=e2526] [cursor=pointer]:
+              - img "5513996002386" [ref=e2528]
+              - generic [ref=e2529]:
+                - generic [ref=e2530]:
+                  - generic [ref=e2531]: "5513996002386"
+                  - generic [ref=e2533]: 10/03/2026
+                - generic [ref=e2535]: Bom dia! Tudo bem? ?? Me chamo Monica Masteguim, tenho experiência em vendas automotivas e mais de 12 anos na área comercial, atuando com atendimento, negociação e fechamento de vendas orientados por metas. Vi a vaga de Consultora de Vendas e tenho grande interesse em fazer parte da equipe. Acredito que minha experiência e perfil comercial podem contribuir diretamente para os resultados da loja. Segue meu currículo para avaliação e fico à disposição para uma conversa!
+            - generic [ref=e2536] [cursor=pointer]:
+              - img "5513997363523" [ref=e2538]
+              - generic [ref=e2539]:
+                - generic [ref=e2540]:
+                  - generic [ref=e2541]: "5513997363523"
+                  - generic [ref=e2543]: 10/03/2026
+                - generic [ref=e2545]: Nova conversa
+            - generic [ref=e2546] [cursor=pointer]:
+              - generic [ref=e2547]:
+                - text: M
+                - img [ref=e2549]
+              - generic [ref=e2552]:
+                - generic [ref=e2553]:
+                  - generic [ref=e2554]: Murillo
+                  - generic [ref=e2556]: 09/03/2026
+                - generic [ref=e2557]:
+                  - generic [ref=e2558]: Segue comprovante Pix
+                  - generic [ref=e2559]: "59"
+                - generic "Aguardando resposta há 13d 8h" [ref=e2561]:
+                  - img [ref=e2562]
+                  - text: 13d 8h
+            - generic [ref=e2565] [cursor=pointer]:
+              - img "5513974111646" [ref=e2567]
+              - generic [ref=e2568]:
+                - generic [ref=e2569]:
+                  - generic [ref=e2570]: "5513974111646"
+                  - generic [ref=e2572]: 09/03/2026
+                - generic [ref=e2574]: tudo certo para a sessão de hoje?
+            - generic [ref=e2575] [cursor=pointer]:
+              - generic [ref=e2576]: DG
+              - generic [ref=e2577]:
+                - generic [ref=e2578]:
+                  - generic [ref=e2579]: Dra.Alessandra Galli - Advocacia Especializada
+                  - generic [ref=e2581]: 09/03/2026
+                - generic [ref=e2582]:
+                  - generic [ref=e2583]: Podemos prosseguir com a finalização?
+                  - generic [ref=e2584]: "8"
+            - generic [ref=e2585] [cursor=pointer]:
+              - img "Luana Mauricio" [ref=e2587]
+              - generic [ref=e2588]:
+                - generic [ref=e2589]:
+                  - generic [ref=e2590]: Luana Mauricio
+                  - generic [ref=e2592]: 09/03/2026
+                - generic [ref=e2594]: Luana, boa tarde ??
+            - generic [ref=e2595] [cursor=pointer]:
+              - img "Matheus Maurício" [ref=e2597]
+              - generic [ref=e2598]:
+                - generic [ref=e2599]:
+                  - generic [ref=e2600]: Matheus Maurício
+                  - generic [ref=e2602]: 09/03/2026
+                - generic [ref=e2604]: "*PRESENTE LIBERADO* ?? 4 sessões de estética pra você realizar - vagas limitadas. Vamos agendar? ??"
+            - generic [ref=e2605] [cursor=pointer]:
+              - img "Karollyna" [ref=e2607]
+              - generic [ref=e2608]:
+                - generic [ref=e2609]:
+                  - generic [ref=e2610]: Karollyna
+                  - generic [ref=e2612]: 09/03/2026
+                - generic [ref=e2614]: "*PRESENTE LIBERADO* ?? 4 sessões de estética pra você realizar - vagas limitadas. Vamos agendar? ??"
+            - generic [ref=e2615] [cursor=pointer]:
+              - img "Rafaela Marcelo" [ref=e2617]
+              - generic [ref=e2618]:
+                - generic [ref=e2619]:
+                  - generic [ref=e2620]: Rafaela Marcelo
+                  - generic [ref=e2622]: 09/03/2026
+                - generic [ref=e2624]: "*PRESENTE LIBERADO* ?? 4 sessões de estética pra você realizar - vagas limitadas. Vamos agendar? ??"
+            - generic [ref=e2625] [cursor=pointer]:
+              - img "Talita" [ref=e2627]
+              - generic [ref=e2628]:
+                - generic [ref=e2629]:
+                  - generic [ref=e2630]: Talita
+                  - generic [ref=e2632]: 09/03/2026
+                - generic [ref=e2634]: "*PRESENTE LIBERADO* ?? 4 sessões de estética pra você realizar - vagas limitadas. Vamos agendar? ??"
+            - generic [ref=e2635] [cursor=pointer]:
+              - img "Elizabeth" [ref=e2637]
+              - generic [ref=e2638]:
+                - generic [ref=e2639]:
+                  - generic [ref=e2640]: Elizabeth
+                  - generic [ref=e2642]: 09/03/2026
+                - generic [ref=e2644]: "*PRESENTE LIBERADO* ?? 4 sessões de estética pra você realizar - vagas limitadas. Vamos agendar? ??"
+            - generic [ref=e2645] [cursor=pointer]:
+              - img "Ivani Rocha" [ref=e2647]
+              - generic [ref=e2648]:
+                - generic [ref=e2649]:
+                  - generic [ref=e2650]: Ivani Rocha
+                  - generic [ref=e2652]: 09/03/2026
+                - generic [ref=e2654]: "*PRESENTE LIBERADO* ?? 4 sessões de estética pra você realizar - vagas limitadas. Vamos agendar? ??"
+            - generic [ref=e2655] [cursor=pointer]:
+              - img "Contato" [ref=e2657]
+              - generic [ref=e2658]:
+                - generic [ref=e2659]:
+                  - generic [ref=e2660]: "5513997366360"
+                  - generic [ref=e2662]: 09/03/2026
+                - generic [ref=e2664]: "*PRESENTE LIBERADO* ?? 4 sessões de estética pra você realizar - vagas limitadas. Vamos agendar? ??"
+            - generic [ref=e2665] [cursor=pointer]:
+              - img "Silva" [ref=e2667]
+              - generic [ref=e2668]:
+                - generic [ref=e2669]:
+                  - generic [ref=e2670]: Silva
+                  - generic [ref=e2672]: 09/03/2026
+                - generic [ref=e2674]: "*PRESENTE LIBERADO* ?? 4 sessões de estética pra você realizar - vagas limitadas. Vamos agendar? ??"
+            - generic [ref=e2675] [cursor=pointer]:
+              - img "Katya" [ref=e2677]
+              - generic [ref=e2678]:
+                - generic [ref=e2679]:
+                  - generic [ref=e2680]: Katya
+                  - generic [ref=e2682]: 09/03/2026
+                - generic [ref=e2684]: "*PRESENTE LIBERADO* ?? 4 sessões de estética pra você realizar - vagas limitadas. Vamos agendar? ??"
+            - generic [ref=e2685] [cursor=pointer]:
+              - img "claudia souza rizzo" [ref=e2687]
+              - generic [ref=e2688]:
+                - generic [ref=e2689]:
+                  - generic [ref=e2690]: claudia souza rizzo
+                  - generic [ref=e2692]: 09/03/2026
+                - generic [ref=e2694]: "*PRESENTE LIBERADO* ?? 4 sessões de estética pra você realizar - vagas limitadas. Vamos agendar? ??"
+            - generic [ref=e2695] [cursor=pointer]:
+              - generic [ref=e2696]:
+                - img "Rosangela Manoel" [ref=e2697]
+                - img [ref=e2699]
+              - generic [ref=e2702]:
+                - generic [ref=e2703]:
+                  - generic [ref=e2704]: Rosangela Manoel
+                  - generic [ref=e2706]: 09/03/2026
+                - generic [ref=e2707]:
+                  - generic [ref=e2708]: Oi. Estou a caminho. Demorou pra conseguir um Uber. Acho que por causa da chuva.
+                  - generic [ref=e2709]: "3"
+                - generic "Aguardando resposta há 16d 8h" [ref=e2711]:
+                  - img [ref=e2712]
+                  - text: 16d 8h
+            - generic [ref=e2715] [cursor=pointer]:
+              - img "5513996212056" [ref=e2717]
+              - generic [ref=e2718]:
+                - generic [ref=e2719]:
+                  - generic [ref=e2720]: "5513996212056"
+                  - generic [ref=e2722]: 09/03/2026
+                - generic [ref=e2724]: Nova conversa
+            - generic [ref=e2725] [cursor=pointer]:
+              - img "5513982099691" [ref=e2727]
+              - generic [ref=e2728]:
+                - generic [ref=e2729]:
+                  - generic [ref=e2730]: "5513982099691"
+                  - generic [ref=e2732]: 09/03/2026
+                - generic [ref=e2734]: Nova conversa
+            - generic [ref=e2735] [cursor=pointer]:
+              - img "5513997097964" [ref=e2737]
+              - generic [ref=e2738]:
+                - generic [ref=e2739]:
+                  - generic [ref=e2740]: "5513997097964"
+                  - generic [ref=e2742]: 09/03/2026
+                - generic [ref=e2744]: Nova conversa
+            - generic [ref=e2745] [cursor=pointer]:
+              - img "5513997548773" [ref=e2747]
+              - generic [ref=e2748]:
+                - generic [ref=e2749]:
+                  - generic [ref=e2750]: "5513997548773"
+                  - generic [ref=e2752]: 09/03/2026
+                - generic [ref=e2754]: Nova conversa
+            - generic [ref=e2755] [cursor=pointer]:
+              - img "5513997364418" [ref=e2757]
+              - generic [ref=e2758]:
+                - generic [ref=e2759]:
+                  - generic [ref=e2760]: "5513997364418"
+                  - generic [ref=e2762]: 09/03/2026
+                - generic [ref=e2764]: Nova conversa
+            - generic [ref=e2765] [cursor=pointer]:
+              - img "Maira" [ref=e2767]
+              - generic [ref=e2768]:
+                - generic [ref=e2769]:
+                  - generic [ref=e2770]: Maira
+                  - generic [ref=e2772]: 09/03/2026
+                - generic [ref=e2774]: Qual a sua disponibilidade de horário?
+            - generic [ref=e2775] [cursor=pointer]:
+              - img "5513992048920" [ref=e2777]
+              - generic [ref=e2778]:
+                - generic [ref=e2779]:
+                  - generic [ref=e2780]: "5513992048920"
+                  - generic [ref=e2782]: 09/03/2026
+                - generic [ref=e2784]: Qual o seu nome por favor?
+            - generic [ref=e2785] [cursor=pointer]:
+              - img "5521986088300" [ref=e2787]
+              - generic [ref=e2788]:
+                - generic [ref=e2789]:
+                  - generic [ref=e2790]: "5521986088300"
+                  - generic [ref=e2792]: 09/03/2026
+                - generic [ref=e2794]: Nova conversa
+            - generic [ref=e2795] [cursor=pointer]:
+              - generic [ref=e2796]:
+                - text: LM
+                - img [ref=e2798]
+              - generic [ref=e2801]:
+                - generic [ref=e2802]:
+                  - generic [ref=e2803]: Leticia Moura
+                  - generic [ref=e2805]: 08/03/2026
+                - generic [ref=e2806]:
+                  - generic [ref=e2807]: Oi meninas estou com uma condição super especial , principalmente para vocês da área da beleza … filmagem completa , até 5 vídeos editados por apenas R$ 200 reais !! Vou até o estabelecimento, filmagem móbile de pontos estratégicos, que engajam e VENDEM nas redes sociais , entrego 5 vídeos PRONTOS E EDITADOS , para vocês divulgarem o serviços de vocês ??
+                  - generic [ref=e2808]: "1"
+                - generic "Aguardando resposta há 14d 23h" [ref=e2810]:
+                  - img [ref=e2811]
+                  - text: 14d 23h
+            - generic [ref=e2814] [cursor=pointer]:
+              - img "5511998804116" [ref=e2816]
+              - generic [ref=e2817]:
+                - generic [ref=e2818]:
+                  - generic [ref=e2819]: "5511998804116"
+                  - generic [ref=e2821]: 08/03/2026
+                - generic [ref=e2823]: Nova conversa
+            - generic [ref=e2824] [cursor=pointer]:
+              - generic [ref=e2825]:
+                - img "🌸 Ana Claudia 🌸" [ref=e2826]
+                - img [ref=e2828]
+              - generic [ref=e2831]:
+                - generic [ref=e2832]:
+                  - generic [ref=e2833]: 🌸 Ana Claudia 🌸
+                  - generic [ref=e2835]: 07/03/2026
+                - generic [ref=e2836]:
+                  - generic [ref=e2837]: Nova conversa
+                  - generic [ref=e2838]: "17"
+                - generic "Aguardando resposta há 16d 8h" [ref=e2840]:
+                  - img [ref=e2841]
+                  - text: 16d 8h
+            - generic [ref=e2844] [cursor=pointer]:
+              - img "Jessica" [ref=e2846]
+              - generic [ref=e2847]:
+                - generic [ref=e2848]:
+                  - generic [ref=e2849]: Jessica
+                  - generic [ref=e2851]: 07/03/2026
+                - generic [ref=e2853]: Certo obrigada
+            - generic [ref=e2854] [cursor=pointer]:
+              - generic [ref=e2855]:
+                - text: G
+                - img [ref=e2857]
+              - generic [ref=e2860]:
+                - generic [ref=e2861]:
+                  - generic [ref=e2862]: Gaby
+                  - generic [ref=e2864]: 07/03/2026
+                - generic [ref=e2865]:
+                  - generic [ref=e2866]: Nova conversa
+                  - generic [ref=e2867]: "7"
+                - generic "Aguardando resposta há 8d 9h" [ref=e2869]:
+                  - img [ref=e2870]
+                  - text: 8d 9h
+            - generic [ref=e2873] [cursor=pointer]:
+              - img "🍓🐈✨" [ref=e2875]
+              - generic [ref=e2876]:
+                - generic [ref=e2877]:
+                  - generic [ref=e2878]: 🍓🐈✨
+                  - generic [ref=e2880]: 07/03/2026
+                - generic [ref=e2881]:
+                  - generic [ref=e2882]: COMBO INAUGURAÇÃO válido até 30/03 Axila + virilha por apenas 39,90 mensais
+                  - generic [ref=e2883]: "8"
+            - generic [ref=e2884] [cursor=pointer]:
+              - img "Lidy" [ref=e2886]
+              - generic [ref=e2887]:
+                - generic [ref=e2888]:
+                  - generic [ref=e2889]: Lidy
+                  - generic [ref=e2891]: 07/03/2026
+                - generic [ref=e2892]:
+                  - generic [ref=e2893]: Obrigada Lídia! ??
+                  - generic [ref=e2894]: "6"
+            - generic [ref=e2895] [cursor=pointer]:
+              - generic [ref=e2896]:
+                - img "Pam" [ref=e2897]
+                - img [ref=e2899]
+              - generic [ref=e2902]:
+                - generic [ref=e2903]:
+                  - generic [ref=e2904]: Pam
+                  - generic [ref=e2906]: 07/03/2026
+                - generic [ref=e2908]: Ok muito obrigada
+                - generic "Aguardando resposta há 20d 9h" [ref=e2910]:
+                  - img [ref=e2911]
+                  - text: 20d 9h
+            - generic [ref=e2914] [cursor=pointer]:
+              - img "5511939502538" [ref=e2916]
+              - generic [ref=e2917]:
+                - generic [ref=e2918]:
+                  - generic [ref=e2919]: "5511939502538"
+                  - generic [ref=e2921]: 07/03/2026
+                - generic [ref=e2923]: Olá! Tenho interesse e queria mais informações, por favor.
+            - generic [ref=e2924] [cursor=pointer]:
+              - generic [ref=e2925]:
+                - text: LD
+                - img [ref=e2927]
+              - generic [ref=e2930]:
+                - generic [ref=e2931]:
+                  - generic [ref=e2932]: Luana Dias 🌻
+                  - generic [ref=e2934]: 07/03/2026
+                - generic [ref=e2935]:
+                  - generic [ref=e2936]: De nada
+                  - generic [ref=e2937]: "9"
+                - generic "Aguardando resposta há 16d 7h" [ref=e2939]:
+                  - img [ref=e2940]
+                  - text: 16d 7h
+            - generic [ref=e2943] [cursor=pointer]:
+              - img "5513996520613" [ref=e2945]
+              - generic [ref=e2946]:
+                - generic [ref=e2947]:
+                  - generic [ref=e2948]: "5513996520613"
+                  - generic [ref=e2950]: 07/03/2026
+                - generic [ref=e2952]: Bom dia, vocês estão contratando?
+            - generic [ref=e2953] [cursor=pointer]:
+              - img "5513991776188" [ref=e2955]
+              - generic [ref=e2956]:
+                - generic [ref=e2957]:
+                  - generic [ref=e2958]: "5513991776188"
+                  - generic [ref=e2960]: 07/03/2026
+                - generic [ref=e2962]: Nova conversa
+            - generic [ref=e2963] [cursor=pointer]:
+              - img "5513996332576" [ref=e2965]
+              - generic [ref=e2966]:
+                - generic [ref=e2967]:
+                  - generic [ref=e2968]: "5513996332576"
+                  - generic [ref=e2970]: 07/03/2026
+                - generic [ref=e2972]: Lyberulla
+            - generic [ref=e2973] [cursor=pointer]:
+              - generic [ref=e2974]:
+                - text: MF
+                - img [ref=e2976]
+              - generic [ref=e2979]:
+                - generic [ref=e2980]:
+                  - generic [ref=e2981]: Marcela Ferreira
+                  - generic [ref=e2983]: 07/03/2026
+                - generic [ref=e2985]: Olá! Tenho interesse e queria mais informações, por favor.
+                - generic [ref=e2986]:
+                  - generic "Aguardando resposta há 8d 10h" [ref=e2987]:
+                    - img [ref=e2988]
+                    - text: 8d 10h
+                  - 'generic "Responsável: Julia Sousa" [ref=e2991]':
+                    - img [ref=e2992]
+                    - text: Julia
+            - generic [ref=e2995] [cursor=pointer]:
+              - img "5513991957227" [ref=e2997]
+              - generic [ref=e2998]:
+                - generic [ref=e2999]:
+                  - generic [ref=e3000]: "5513991957227"
+                  - generic [ref=e3002]: 07/03/2026
+                - generic [ref=e3004]: Nova conversa
+            - generic [ref=e3005] [cursor=pointer]:
+              - img "5513988310291" [ref=e3007]
+              - generic [ref=e3008]:
+                - generic [ref=e3009]:
+                  - generic [ref=e3010]: "5513988310291"
+                  - generic [ref=e3012]: 07/03/2026
+                - generic [ref=e3014]: O que acha de vir hoje para uma avaliação gratuita?
+            - generic [ref=e3015] [cursor=pointer]:
+              - img "5511983005510" [ref=e3017]
+              - generic [ref=e3018]:
+                - generic [ref=e3019]:
+                  - generic [ref=e3020]: "5511983005510"
+                  - generic [ref=e3022]: 07/03/2026
+                - generic [ref=e3024]: "13978069797"
+            - generic [ref=e3025] [cursor=pointer]:
+              - img "Branca Campos" [ref=e3027]
+              - generic [ref=e3028]:
+                - generic [ref=e3029]:
+                  - generic [ref=e3030]: Branca Campos
+                  - generic [ref=e3032]: 07/03/2026
+                - generic [ref=e3034]: E como foram suas últimas experiências com o Botox? Pode me contar um pouquinho ☺️
+            - generic [ref=e3035] [cursor=pointer]:
+              - img "5513998047258" [ref=e3037]
+              - generic [ref=e3038]:
+                - generic [ref=e3039]:
+                  - generic [ref=e3040]: "5513998047258"
+                  - generic [ref=e3042]: 07/03/2026
+                - generic [ref=e3044]: Posso saber qual o seu nome, por favor?
+        - generic [ref=e3046]:
+          - generic [ref=e3047]:
+            - img [ref=e3049]
+            - heading "WhatsApp Business" [level=2] [ref=e3051]
+            - paragraph [ref=e3052]: Selecione uma conversa para começar
+          - generic [ref=e3054]:
+            - img [ref=e3055]
+            - generic [ref=e3058]: Suas mensagens são protegidas com criptografia de ponta a ponta.

@@ -1,0 +1,129 @@
+# Weekly Social Media Sync
+# Sincroniza dados de redes sociais das influenciadoras automaticamente
+# Executado todo domingo às 3h AM UTC (0h de Brasília)
+
+name: Weekly Social Media Sync
+
+on:
+  schedule:
+    # Domingo às 3h AM UTC (0h de Brasília)
+    - cron: '0 3 * * 0'
+
+  # Permite execução manual via GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Apenas simular (não salvar no banco)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+env:
+  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+jobs:
+  sync:
+    name: Sync Social Media Data
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Required Secrets
+        run: |
+          if [ -z "$SUPABASE_URL" ]; then
+            echo "::error::SUPABASE_URL secret is not set"
+            exit 1
+          fi
+          if [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "::error::SUPABASE_SERVICE_ROLE_KEY secret is not set"
+            exit 1
+          fi
+          echo "All required secrets are configured"
+
+      - name: Trigger Social Media Sync
+        id: sync
+        run: |
+          echo "Starting social media sync..."
+          echo "Supabase URL: ${SUPABASE_URL:0:30}..."
+
+          RESPONSE=$(curl -s -X POST \
+            "${SUPABASE_URL}/functions/v1/social-media-proxy/sync-all" \
+            -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+            -H "Content-Type: application/json" \
+            -w "\n%{http_code}")
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "HTTP Status: $HTTP_CODE"
+          echo "Response Body: $BODY"
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::error::Sync failed with status $HTTP_CODE"
+            echo "Response: $BODY"
+            exit 1
+          fi
+
+          # Parse response
+          TOTAL=$(echo "$BODY" | jq -r '.total // 0')
+          SUCCESS=$(echo "$BODY" | jq -r '.success // 0')
+          ERRORS=$(echo "$BODY" | jq -r '.errors // 0')
+
+          echo "total=$TOTAL" >> $GITHUB_OUTPUT
+          echo "success=$SUCCESS" >> $GITHUB_OUTPUT
+          echo "errors=$ERRORS" >> $GITHUB_OUTPUT
+
+          echo ""
+          echo "=== Sync Summary ==="
+          echo "Total profiles: $TOTAL"
+          echo "Successful: $SUCCESS"
+          echo "Errors: $ERRORS"
+          echo "==================="
+
+      - name: Create Job Summary
+        run: |
+          echo "## Social Media Sync Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Total Profiles | ${{ steps.sync.outputs.total }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Successful | ${{ steps.sync.outputs.success }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Errors | ${{ steps.sync.outputs.errors }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Executed at:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+
+      - name: Check for Errors
+        if: steps.sync.outputs.errors > 0
+        run: |
+          echo "::warning::Sync completed with ${{ steps.sync.outputs.errors }} errors"
+
+# ============================================
+# CONFIGURAÇÃO NECESSÁRIA
+# ============================================
+#
+# Para este workflow funcionar, você precisa configurar os seguintes
+# secrets no repositório GitHub:
+#
+# 1. Vá em: Settings > Secrets and variables > Actions
+# 2. Clique em "New repository secret"
+# 3. Adicione:
+#    - SUPABASE_URL: URL do seu projeto Supabase (ex: https://xxx.supabase.co)
+#    - SUPABASE_SERVICE_ROLE_KEY: Service Role Key do Supabase (encontrada em Settings > API)
+#
+# IMPORTANTE: A Service Role Key tem permissões administrativas.
+# NUNCA exponha essa chave em código ou logs.
+#
+# ============================================
+# EXECUÇÃO MANUAL
+# ============================================
+#
+# Você pode executar este workflow manualmente:
+# 1. Vá na aba "Actions" do repositório
+# 2. Clique em "Weekly Social Media Sync"
+# 3. Clique em "Run workflow"
+# 4. Selecione a branch e clique em "Run workflow"
+#
+# ============================================

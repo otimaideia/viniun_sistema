@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "WebFetch",
+      "WebSearch",
+      "mcp__browsermcp__*",
+      "mcp__playwright__*",
+      "mcp__magic__*",
+      "mcp__context7__*",
+      "mcp__sequential-thinking__*"
+    ],
+    "deny": []
+  }
+}

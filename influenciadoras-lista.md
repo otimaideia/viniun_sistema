@@ -1,0 +1,1092 @@
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - region "Notifications alt+T"
+  - generic [ref=e560]:
+    - complementary [ref=e561]:
+      - generic [ref=e562]:
+        - generic [ref=e563]:
+          - img "YESlaser" [ref=e564]
+          - button [ref=e565] [cursor=pointer]:
+            - img
+        - navigation [ref=e566]:
+          - link "Minha Franquia" [ref=e567] [cursor=pointer]:
+            - /url: /franquia/yeslaser-praia-grande-ltda
+            - img [ref=e568]
+            - text: Minha Franquia
+          - generic [ref=e572]:
+            - generic [ref=e573]: PRINCIPAL
+            - link "Dashboard" [ref=e575] [cursor=pointer]:
+              - /url: /
+              - img [ref=e576]
+              - text: Dashboard
+          - generic [ref=e581]:
+            - generic [ref=e582]: LEADS & VENDAS
+            - generic [ref=e583]:
+              - link "Dashboard Leads" [ref=e584] [cursor=pointer]:
+                - /url: /leads/dashboard
+                - img [ref=e585]
+                - text: Dashboard Leads
+              - link "Leads" [ref=e587] [cursor=pointer]:
+                - /url: /leads
+                - img [ref=e588]
+                - text: Leads
+              - link "Funil de Vendas" [ref=e593] [cursor=pointer]:
+                - /url: /funil
+                - img [ref=e594]
+                - text: Funil de Vendas
+              - link "Indicações" [ref=e598] [cursor=pointer]:
+                - /url: /indicacoes
+                - img [ref=e599]
+                - text: Indicações
+              - link "Metas" [ref=e602] [cursor=pointer]:
+                - /url: /metas
+                - img [ref=e603]
+                - text: Metas
+              - link "Ranking" [ref=e606] [cursor=pointer]:
+                - /url: /ranking
+                - img [ref=e607]
+                - text: Ranking
+              - button "Vendas" [ref=e614] [cursor=pointer]:
+                - img [ref=e615]
+                - generic [ref=e617]: Vendas
+                - img [ref=e618]
+          - generic [ref=e620]:
+            - generic [ref=e621]: COMUNICAÇÃO
+            - generic [ref=e622]:
+              - link "WhatsApp Dashboard" [ref=e623] [cursor=pointer]:
+                - /url: /whatsapp
+                - img [ref=e624]
+                - text: WhatsApp Dashboard
+              - link "Conversas" [ref=e626] [cursor=pointer]:
+                - /url: /whatsapp/conversas
+                - img [ref=e627]
+                - text: Conversas
+              - link "Sessões" [ref=e629] [cursor=pointer]:
+                - /url: /whatsapp/sessoes
+                - img [ref=e630]
+                - text: Sessões
+              - link "Automações WA" [ref=e632] [cursor=pointer]:
+                - /url: /whatsapp/automacoes
+                - img [ref=e633]
+                - text: Automações WA
+              - link "Filas de Atendimento" [ref=e636] [cursor=pointer]:
+                - /url: /whatsapp/filas
+                - img [ref=e637]
+                - text: Filas de Atendimento
+              - link "Disparo em Massa" [ref=e642] [cursor=pointer]:
+                - /url: /whatsapp/broadcast
+                - img [ref=e643]
+                - text: Disparo em Massa
+              - link "Listas Destinatários" [ref=e646] [cursor=pointer]:
+                - /url: /whatsapp/listas
+                - img [ref=e647]
+                - text: Listas Destinatários
+              - link "Grupos WhatsApp" [ref=e648] [cursor=pointer]:
+                - /url: /whatsapp/grupos
+                - img [ref=e649]
+                - text: Grupos WhatsApp
+              - link "Status WA" [ref=e653] [cursor=pointer]:
+                - /url: /whatsapp/status
+                - img [ref=e654]
+                - text: Status WA
+              - button "Integração Híbrida" [ref=e656] [cursor=pointer]:
+                - img [ref=e657]
+                - generic [ref=e659]: Integração Híbrida
+                - img [ref=e660]
+              - link "Config Chatbot" [ref=e662] [cursor=pointer]:
+                - /url: /whatsapp/bot-config
+                - img [ref=e663]
+                - text: Config Chatbot
+              - link "Chatbot IA" [ref=e666] [cursor=pointer]:
+                - /url: /chatbot
+                - img [ref=e667]
+                - text: Chatbot IA
+              - link "Meta Messenger" [ref=e670] [cursor=pointer]:
+                - /url: /meta-messenger/config
+                - img [ref=e671]
+                - text: Meta Messenger
+              - link "Conversas Meta" [ref=e673] [cursor=pointer]:
+                - /url: /meta-messenger/conversations
+                - img [ref=e674]
+                - text: Conversas Meta
+          - generic [ref=e676]:
+            - generic [ref=e677]: OPERAÇÃO
+            - generic [ref=e678]:
+              - link "Agendamentos" [ref=e679] [cursor=pointer]:
+                - /url: /agendamentos
+                - img [ref=e680]
+                - text: Agendamentos
+              - link "Formulários" [ref=e682] [cursor=pointer]:
+                - /url: /formularios
+                - img [ref=e683]
+                - text: Formulários
+              - link "Serviços" [ref=e686] [cursor=pointer]:
+                - /url: /servicos
+                - img [ref=e687]
+                - text: Serviços
+              - link "Franqueados" [ref=e691] [cursor=pointer]:
+                - /url: /franqueados
+                - img [ref=e692]
+                - text: Franqueados
+              - button "Produtividade" [ref=e697] [cursor=pointer]:
+                - img [ref=e698]
+                - generic [ref=e700]: Produtividade
+                - img [ref=e701]
+              - button "Checklist" [ref=e704] [cursor=pointer]:
+                - img [ref=e705]
+                - generic [ref=e709]: Checklist
+                - img [ref=e710]
+              - button "Tarefas" [ref=e713] [cursor=pointer]:
+                - img [ref=e714]
+                - generic [ref=e717]: Tarefas
+                - img [ref=e718]
+              - button "Estoque" [ref=e721] [cursor=pointer]:
+                - img [ref=e722]
+                - generic [ref=e727]: Estoque
+                - img [ref=e728]
+          - generic [ref=e730]:
+            - generic [ref=e731]: MARKETING & PARCERIAS
+            - generic [ref=e732]:
+              - link "Dashboard" [ref=e733] [cursor=pointer]:
+                - /url: /marketing
+                - img [ref=e734]
+                - text: Dashboard
+              - link "Campanhas" [ref=e739] [cursor=pointer]:
+                - /url: /marketing/campanhas
+                - img [ref=e740]
+                - text: Campanhas
+              - generic [ref=e744]:
+                - button "Influenciadoras" [ref=e745] [cursor=pointer]:
+                  - img [ref=e746]
+                  - generic [ref=e748]: Influenciadoras
+                  - img [ref=e749]
+                - generic [ref=e751]:
+                  - link "Dashboard" [ref=e752] [cursor=pointer]:
+                    - /url: /influenciadoras/dashboard
+                    - img [ref=e753]
+                    - text: Dashboard
+                  - link "Listagem" [ref=e758] [cursor=pointer]:
+                    - /url: /influenciadoras/lista
+                    - img [ref=e759]
+                    - text: Listagem
+                  - link "Indicações" [ref=e760] [cursor=pointer]:
+                    - /url: /influenciadoras/indicacoes
+                    - img [ref=e761]
+                    - text: Indicações
+              - link "Parcerias" [ref=e767] [cursor=pointer]:
+                - /url: /parcerias
+                - img [ref=e768]
+                - text: Parcerias
+              - link "Galeria de Artes" [ref=e773] [cursor=pointer]:
+                - /url: /marketing/galeria
+                - img [ref=e774]
+                - text: Galeria de Artes
+          - generic [ref=e780]:
+            - generic [ref=e781]: PROCESSOS
+            - generic [ref=e782]:
+              - link "Dashboard POPs" [ref=e783] [cursor=pointer]:
+                - /url: /processos/dashboard
+                - img [ref=e784]
+                - text: Dashboard POPs
+              - link "Procedimentos" [ref=e789] [cursor=pointer]:
+                - /url: /processos
+                - img [ref=e790]
+                - text: Procedimentos
+              - link "Categorias" [ref=e793] [cursor=pointer]:
+                - /url: /processos/categorias
+                - img [ref=e794]
+                - text: Categorias
+              - link "Perguntas Frequentes" [ref=e799] [cursor=pointer]:
+                - /url: /faq
+                - img [ref=e800]
+                - text: Perguntas Frequentes
+          - generic [ref=e803]:
+            - generic [ref=e804]: TREINAMENTOS
+            - generic [ref=e805]:
+              - link "Dashboard" [ref=e806] [cursor=pointer]:
+                - /url: /treinamentos
+                - img [ref=e807]
+                - text: Dashboard
+              - link "Trilhas" [ref=e812] [cursor=pointer]:
+                - /url: /treinamentos/trilhas
+                - img [ref=e813]
+                - text: Trilhas
+              - link "Meu Aprendizado" [ref=e816] [cursor=pointer]:
+                - /url: /aprender
+                - img [ref=e817]
+                - text: Meu Aprendizado
+              - link "Gamificação" [ref=e819] [cursor=pointer]:
+                - /url: /gamificacao
+                - img [ref=e820]
+                - text: Gamificação
+              - link "Ranking" [ref=e826] [cursor=pointer]:
+                - /url: /gamificacao/ranking
+                - img [ref=e827]
+                - text: Ranking
+              - link "Conquistas" [ref=e833] [cursor=pointer]:
+                - /url: /gamificacao/conquistas
+                - img [ref=e834]
+                - text: Conquistas
+          - generic [ref=e837]:
+            - generic [ref=e838]: RH
+            - link "Recrutamento" [ref=e840] [cursor=pointer]:
+              - /url: /recrutamento
+              - img [ref=e841]
+              - text: Recrutamento
+          - generic [ref=e844]:
+            - generic [ref=e845]: ADMINISTRAÇÃO
+            - generic [ref=e846]:
+              - link "Documentos" [ref=e847] [cursor=pointer]:
+                - /url: /documentos
+                - img [ref=e848]
+                - text: Documentos
+              - link "Relatórios" [ref=e850] [cursor=pointer]:
+                - /url: /relatorios
+                - img [ref=e851]
+                - text: Relatórios
+              - link "Usuários" [ref=e853] [cursor=pointer]:
+                - /url: /usuarios
+                - img [ref=e854]
+                - text: Usuários
+              - link "Aprovações" [ref=e856] [cursor=pointer]:
+                - /url: /aprovacoes
+                - img [ref=e857]
+                - text: Aprovações
+              - button "Financeiro" [ref=e861] [cursor=pointer]:
+                - img [ref=e862]
+                - generic [ref=e865]: Financeiro
+                - img [ref=e866]
+              - button "Patrimônio" [ref=e869] [cursor=pointer]:
+                - img [ref=e870]
+                - generic [ref=e872]: Patrimônio
+                - img [ref=e873]
+              - link "Precificação" [ref=e875] [cursor=pointer]:
+                - /url: /precificacao
+                - img [ref=e876]
+                - text: Precificação
+              - link "Automações" [ref=e878] [cursor=pointer]:
+                - /url: /automacoes
+                - img [ref=e879]
+                - text: Automações
+              - button "Configurações" [ref=e882] [cursor=pointer]:
+                - img [ref=e883]
+                - generic [ref=e886]: Configurações
+                - img [ref=e887]
+        - button "praiagrande@yeslaserpraiagrande.com.br Unidade" [ref=e890] [cursor=pointer]:
+          - generic [ref=e891]:
+            - img
+          - generic [ref=e892]:
+            - paragraph [ref=e893]: praiagrande@yeslaserpraiagrande.com.br
+            - generic [ref=e895]:
+              - img
+              - text: Unidade
+          - img
+    - main [ref=e896]:
+      - generic [ref=e897]:
+        - generic [ref=e899]:
+          - img [ref=e900]
+          - text: Yeslaser Praia Grande LTDA
+        - button "praiagrande@yeslaserpraiagrande.com.br Unidade" [ref=e903] [cursor=pointer]:
+          - generic [ref=e904]:
+            - img
+          - generic [ref=e906]: praiagrande@yeslaserpraiagrande.com.br
+          - generic [ref=e907]:
+            - img
+            - text: Unidade
+          - img
+      - generic [ref=e909]:
+        - generic [ref=e910]:
+          - generic [ref=e911]:
+            - heading "Lista de Influenciadoras" [level=1] [ref=e912]
+            - paragraph [ref=e913]: "Total: 26 influenciadoras"
+          - link "Nova Influenciadora" [ref=e914] [cursor=pointer]:
+            - /url: /influenciadoras/novo
+            - img
+            - text: Nova Influenciadora
+        - generic [ref=e915]:
+          - generic [ref=e916]:
+            - img [ref=e917]
+            - textbox "Buscar influenciadoras..." [ref=e920]
+          - generic [ref=e921]:
+            - combobox [ref=e922] [cursor=pointer]:
+              - generic: Todos
+              - img [ref=e923]
+            - combobox [ref=e925] [cursor=pointer]:
+              - generic: Todas
+              - img [ref=e926]
+            - button [ref=e928] [cursor=pointer]:
+              - img
+            - button [ref=e929] [cursor=pointer]:
+              - img
+        - table [ref=e933]:
+          - rowgroup [ref=e934]:
+            - row "Influenciadora Código Tipo Indicações Responsável Status Onboarding Ações" [ref=e935]:
+              - columnheader "Influenciadora" [ref=e936]
+              - columnheader "Código" [ref=e937]
+              - columnheader "Tipo" [ref=e938]
+              - columnheader "Indicações" [ref=e939]
+              - columnheader "Responsável" [ref=e940]
+              - columnheader "Status" [ref=e941]
+              - columnheader "Onboarding" [ref=e942]
+              - columnheader "Ações" [ref=e943]
+          - rowgroup [ref=e944]:
+            - row "SB @steborgesx 13996390919 STEBORGES1058 Influenciador + UGC(Nano (1k-10k)) 0 — Aprovado Termos aceitos Reenviar" [ref=e945]:
+              - cell "SB @steborgesx 13996390919" [ref=e946]:
+                - generic [ref=e947]:
+                  - generic [ref=e949]: SB
+                  - generic [ref=e950]:
+                    - paragraph [ref=e951]: "@steborgesx"
+                    - paragraph [ref=e952]: "13996390919"
+              - cell "STEBORGES1058" [ref=e953]:
+                - generic [ref=e954]:
+                  - code [ref=e955]: STEBORGES1058
+                  - button [ref=e956] [cursor=pointer]:
+                    - img
+              - cell "Influenciador + UGC(Nano (1k-10k))" [ref=e957]:
+                - text: Influenciador + UGC
+                - generic [ref=e958]: (Nano (1k-10k))
+              - cell "0" [ref=e959]
+              - cell "—" [ref=e960]
+              - cell "Aprovado" [ref=e961]:
+                - generic [ref=e962]: Aprovado
+              - cell "Termos aceitos" [ref=e963]:
+                - generic [ref=e964]:
+                  - img [ref=e965]
+                  - text: Termos aceitos
+              - cell "Reenviar" [ref=e969]:
+                - generic [ref=e970]:
+                  - button "Reenviar" [ref=e971] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e972] [cursor=pointer]:
+                    - img
+            - row "LS lariselleri 11951389268 LARISSA Influenciador(a)(Médio (50k-500k)) 0 — Aprovado Termos aceitos Reenviar" [ref=e973]:
+              - cell "LS lariselleri 11951389268" [ref=e974]:
+                - generic [ref=e975]:
+                  - generic [ref=e977]: LS
+                  - generic [ref=e978]:
+                    - paragraph [ref=e979]: lariselleri
+                    - paragraph [ref=e980]: "11951389268"
+              - cell "LARISSA" [ref=e981]:
+                - generic [ref=e982]:
+                  - code [ref=e983]: LARISSA
+                  - button [ref=e984] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)(Médio (50k-500k))" [ref=e985]:
+                - text: Influenciador(a)
+                - generic [ref=e986]: (Médio (50k-500k))
+              - cell "0" [ref=e987]
+              - cell "—" [ref=e988]
+              - cell "Aprovado" [ref=e989]:
+                - generic [ref=e990]: Aprovado
+              - cell "Termos aceitos" [ref=e991]:
+                - generic [ref=e992]:
+                  - img [ref=e993]
+                  - text: Termos aceitos
+              - cell "Reenviar" [ref=e997]:
+                - generic [ref=e998]:
+                  - button "Reenviar" [ref=e999] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1000] [cursor=pointer]:
+                    - img
+            - row "BK b.moorais 13991157946 BRUNAM Influenciador + UGC(Nano (1k-10k)) 0 — Aprovado Termos aceitos Reenviar" [ref=e1001]:
+              - cell "BK b.moorais 13991157946" [ref=e1002]:
+                - generic [ref=e1003]:
+                  - generic [ref=e1005]: BK
+                  - generic [ref=e1006]:
+                    - paragraph [ref=e1007]: b.moorais
+                    - paragraph [ref=e1008]: "13991157946"
+              - cell "BRUNAM" [ref=e1009]:
+                - generic [ref=e1010]:
+                  - code [ref=e1011]: BRUNAM
+                  - button [ref=e1012] [cursor=pointer]:
+                    - img
+              - cell "Influenciador + UGC(Nano (1k-10k))" [ref=e1013]:
+                - text: Influenciador + UGC
+                - generic [ref=e1014]: (Nano (1k-10k))
+              - cell "0" [ref=e1015]
+              - cell "—" [ref=e1016]
+              - cell "Aprovado" [ref=e1017]:
+                - generic [ref=e1018]: Aprovado
+              - cell "Termos aceitos" [ref=e1019]:
+                - generic [ref=e1020]:
+                  - img [ref=e1021]
+                  - text: Termos aceitos
+              - cell "Reenviar" [ref=e1025]:
+                - generic [ref=e1026]:
+                  - button "Reenviar" [ref=e1027] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1028] [cursor=pointer]:
+                    - img
+            - row "ME Duda Scartezini 61995504729 MARIA681 Influenciador(a)(Nano (1k-10k)) 0 — Aprovado Termos aceitos Reenviar" [ref=e1029]:
+              - cell "ME Duda Scartezini 61995504729" [ref=e1030]:
+                - generic [ref=e1031]:
+                  - generic [ref=e1033]: ME
+                  - generic [ref=e1034]:
+                    - paragraph [ref=e1035]: Duda Scartezini
+                    - paragraph [ref=e1036]: "61995504729"
+              - cell "MARIA681" [ref=e1037]:
+                - generic [ref=e1038]:
+                  - code [ref=e1039]: MARIA681
+                  - button [ref=e1040] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)(Nano (1k-10k))" [ref=e1041]:
+                - text: Influenciador(a)
+                - generic [ref=e1042]: (Nano (1k-10k))
+              - cell "0" [ref=e1043]
+              - cell "—" [ref=e1044]
+              - cell "Aprovado" [ref=e1045]:
+                - generic [ref=e1046]: Aprovado
+              - cell "Termos aceitos" [ref=e1047]:
+                - generic [ref=e1048]:
+                  - img [ref=e1049]
+                  - text: Termos aceitos
+              - cell "Reenviar" [ref=e1053]:
+                - generic [ref=e1054]:
+                  - button "Reenviar" [ref=e1055] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1056] [cursor=pointer]:
+                    - img
+            - row "TK @euthiccy 13982028428 THICCYANE471 Influenciador(a)(Nano (1k-10k)) 0 — Aprovado Concluído Reenviar" [ref=e1057]:
+              - cell "TK @euthiccy 13982028428" [ref=e1058]:
+                - generic [ref=e1059]:
+                  - generic [ref=e1061]: TK
+                  - generic [ref=e1062]:
+                    - paragraph [ref=e1063]: "@euthiccy"
+                    - paragraph [ref=e1064]: "13982028428"
+              - cell "THICCYANE471" [ref=e1065]:
+                - generic [ref=e1066]:
+                  - code [ref=e1067]: THICCYANE471
+                  - button [ref=e1068] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)(Nano (1k-10k))" [ref=e1069]:
+                - text: Influenciador(a)
+                - generic [ref=e1070]: (Nano (1k-10k))
+              - cell "0" [ref=e1071]
+              - cell "—" [ref=e1072]
+              - cell "Aprovado" [ref=e1073]:
+                - generic [ref=e1074]: Aprovado
+              - cell "Concluído" [ref=e1075]:
+                - generic [ref=e1076]:
+                  - img [ref=e1077]
+                  - text: Concluído
+              - cell "Reenviar" [ref=e1081]:
+                - generic [ref=e1082]:
+                  - button "Reenviar" [ref=e1083] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1084] [cursor=pointer]:
+                    - img
+            - row "BY @beatriz_titoo 13978083203 SEJASOU Influenciador(a) 0 — Aprovado Termos aceitos Reenviar" [ref=e1085]:
+              - cell "BY @beatriz_titoo 13978083203" [ref=e1086]:
+                - generic [ref=e1087]:
+                  - generic [ref=e1089]: BY
+                  - generic [ref=e1090]:
+                    - paragraph [ref=e1091]: "@beatriz_titoo"
+                    - paragraph [ref=e1092]: "13978083203"
+              - cell "SEJASOU" [ref=e1093]:
+                - generic [ref=e1094]:
+                  - code [ref=e1095]: SEJASOU
+                  - button [ref=e1096] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)" [ref=e1097]
+              - cell "0" [ref=e1098]
+              - cell "—" [ref=e1099]
+              - cell "Aprovado" [ref=e1100]:
+                - generic [ref=e1101]: Aprovado
+              - cell "Termos aceitos" [ref=e1102]:
+                - generic [ref=e1103]:
+                  - img [ref=e1104]
+                  - text: Termos aceitos
+              - cell "Reenviar" [ref=e1108]:
+                - generic [ref=e1109]:
+                  - button "Reenviar" [ref=e1110] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1111] [cursor=pointer]:
+                    - img
+            - row "JD @seja.sou 13997845230 SEJASOU10 Influenciador + UGC(Nano (1k-10k)) 0 — Aprovado Termos aceitos Reenviar" [ref=e1112]:
+              - cell "JD @seja.sou 13997845230" [ref=e1113]:
+                - generic [ref=e1114]:
+                  - generic [ref=e1116]: JD
+                  - generic [ref=e1117]:
+                    - paragraph [ref=e1118]: "@seja.sou"
+                    - paragraph [ref=e1119]: "13997845230"
+              - cell "SEJASOU10" [ref=e1120]:
+                - generic [ref=e1121]:
+                  - code [ref=e1122]: SEJASOU10
+                  - button [ref=e1123] [cursor=pointer]:
+                    - img
+              - cell "Influenciador + UGC(Nano (1k-10k))" [ref=e1124]:
+                - text: Influenciador + UGC
+                - generic [ref=e1125]: (Nano (1k-10k))
+              - cell "0" [ref=e1126]
+              - cell "—" [ref=e1127]
+              - cell "Aprovado" [ref=e1128]:
+                - generic [ref=e1129]: Aprovado
+              - cell "Termos aceitos" [ref=e1130]:
+                - generic [ref=e1131]:
+                  - img [ref=e1132]
+                  - text: Termos aceitos
+              - cell "Reenviar" [ref=e1136]:
+                - generic [ref=e1137]:
+                  - button "Reenviar" [ref=e1138] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1139] [cursor=pointer]:
+                    - img
+            - row "DA profdanilo 13974079532 DANILO10 Influenciador(a)(Nano (1k-10k)) 1 — Aprovado Concluído Reenviar" [ref=e1140]:
+              - cell "DA profdanilo 13974079532" [ref=e1141]:
+                - generic [ref=e1142]:
+                  - generic [ref=e1144]: DA
+                  - generic [ref=e1145]:
+                    - paragraph [ref=e1146]: profdanilo
+                    - paragraph [ref=e1147]: "13974079532"
+              - cell "DANILO10" [ref=e1148]:
+                - generic [ref=e1149]:
+                  - code [ref=e1150]: DANILO10
+                  - button [ref=e1151] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)(Nano (1k-10k))" [ref=e1152]:
+                - text: Influenciador(a)
+                - generic [ref=e1153]: (Nano (1k-10k))
+              - cell "1" [ref=e1154]
+              - cell "—" [ref=e1155]
+              - cell "Aprovado" [ref=e1156]:
+                - generic [ref=e1157]: Aprovado
+              - cell "Concluído" [ref=e1158]:
+                - generic [ref=e1159]:
+                  - img [ref=e1160]
+                  - text: Concluído
+              - cell "Reenviar" [ref=e1164]:
+                - generic [ref=e1165]:
+                  - button "Reenviar" [ref=e1166] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1167] [cursor=pointer]:
+                    - img
+            - row "JL @jacqueleoni 13991116664 LEONI10 Influenciador(a) 0 — Aprovado Termos aceitos Reenviar" [ref=e1168]:
+              - cell "JL @jacqueleoni 13991116664" [ref=e1169]:
+                - generic [ref=e1170]:
+                  - generic [ref=e1172]: JL
+                  - generic [ref=e1173]:
+                    - paragraph [ref=e1174]: "@jacqueleoni"
+                    - paragraph [ref=e1175]: "13991116664"
+              - cell "LEONI10" [ref=e1176]:
+                - generic [ref=e1177]:
+                  - code [ref=e1178]: LEONI10
+                  - button [ref=e1179] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)" [ref=e1180]
+              - cell "0" [ref=e1181]
+              - cell "—" [ref=e1182]
+              - cell "Aprovado" [ref=e1183]:
+                - generic [ref=e1184]: Aprovado
+              - cell "Termos aceitos" [ref=e1185]:
+                - generic [ref=e1186]:
+                  - img [ref=e1187]
+                  - text: Termos aceitos
+              - cell "Reenviar" [ref=e1191]:
+                - generic [ref=e1192]:
+                  - button "Reenviar" [ref=e1193] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1194] [cursor=pointer]:
+                    - img
+            - row "LS lariselleri 11951389268 LARI Influenciador(a)(Médio (50k-500k)) 0 — Aprovado Concluído Reenviar" [ref=e1195]:
+              - cell "LS lariselleri 11951389268" [ref=e1196]:
+                - generic [ref=e1197]:
+                  - generic [ref=e1199]: LS
+                  - generic [ref=e1200]:
+                    - paragraph [ref=e1201]: lariselleri
+                    - paragraph [ref=e1202]: "11951389268"
+              - cell "LARI" [ref=e1203]:
+                - generic [ref=e1204]:
+                  - code [ref=e1205]: LARI
+                  - button [ref=e1206] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)(Médio (50k-500k))" [ref=e1207]:
+                - text: Influenciador(a)
+                - generic [ref=e1208]: (Médio (50k-500k))
+              - cell "0" [ref=e1209]
+              - cell "—" [ref=e1210]
+              - cell "Aprovado" [ref=e1211]:
+                - generic [ref=e1212]: Aprovado
+              - cell "Concluído" [ref=e1213]:
+                - generic [ref=e1214]:
+                  - img [ref=e1215]
+                  - text: Concluído
+              - cell "Reenviar" [ref=e1219]:
+                - generic [ref=e1220]:
+                  - button "Reenviar" [ref=e1221] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1222] [cursor=pointer]:
+                    - img
+            - row "GG GiBeletti 13981700333 GIBELETTI10 Influenciador(a)(Nano (1k-10k)) 28 — Aprovado Concluído Reenviar" [ref=e1223]:
+              - cell "GG GiBeletti 13981700333" [ref=e1224]:
+                - generic [ref=e1225]:
+                  - generic [ref=e1227]: GG
+                  - generic [ref=e1228]:
+                    - paragraph [ref=e1229]: GiBeletti
+                    - paragraph [ref=e1230]: "13981700333"
+              - cell "GIBELETTI10" [ref=e1231]:
+                - generic [ref=e1232]:
+                  - code [ref=e1233]: GIBELETTI10
+                  - button [ref=e1234] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)(Nano (1k-10k))" [ref=e1235]:
+                - text: Influenciador(a)
+                - generic [ref=e1236]: (Nano (1k-10k))
+              - cell "28" [ref=e1237]
+              - cell "—" [ref=e1238]
+              - cell "Aprovado" [ref=e1239]:
+                - generic [ref=e1240]: Aprovado
+              - cell "Concluído" [ref=e1241]:
+                - generic [ref=e1242]:
+                  - img [ref=e1243]
+                  - text: Concluído
+              - cell "Reenviar" [ref=e1247]:
+                - generic [ref=e1248]:
+                  - button "Reenviar" [ref=e1249] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1250] [cursor=pointer]:
+                    - img
+            - row "CB MILA KRAMER 13981060677 MILAKRAMER Influenciador(a) 0 — Aprovado Termos aceitos Reenviar" [ref=e1251]:
+              - cell "CB MILA KRAMER 13981060677" [ref=e1252]:
+                - generic [ref=e1253]:
+                  - generic [ref=e1255]: CB
+                  - generic [ref=e1256]:
+                    - paragraph [ref=e1257]: MILA KRAMER
+                    - paragraph [ref=e1258]: "13981060677"
+              - cell "MILAKRAMER" [ref=e1259]:
+                - generic [ref=e1260]:
+                  - code [ref=e1261]: MILAKRAMER
+                  - button [ref=e1262] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)" [ref=e1263]
+              - cell "0" [ref=e1264]
+              - cell "—" [ref=e1265]
+              - cell "Aprovado" [ref=e1266]:
+                - generic [ref=e1267]: Aprovado
+              - cell "Termos aceitos" [ref=e1268]:
+                - generic [ref=e1269]:
+                  - img [ref=e1270]
+                  - text: Termos aceitos
+              - cell "Reenviar" [ref=e1274]:
+                - generic [ref=e1275]:
+                  - button "Reenviar" [ref=e1276] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1277] [cursor=pointer]:
+                    - img
+            - row "SB Stephannye Borges Affonso e Silva 13996390919 STEBORGES10 Influenciador + UGC(Nano (1k-10k)) 1 — Aprovado Concluído Reenviar" [ref=e1278]:
+              - cell "SB Stephannye Borges Affonso e Silva 13996390919" [ref=e1279]:
+                - generic [ref=e1280]:
+                  - generic [ref=e1282]: SB
+                  - generic [ref=e1283]:
+                    - paragraph [ref=e1284]: Stephannye Borges Affonso e Silva
+                    - paragraph [ref=e1285]: "13996390919"
+              - cell "STEBORGES10" [ref=e1286]:
+                - generic [ref=e1287]:
+                  - code [ref=e1288]: STEBORGES10
+                  - button [ref=e1289] [cursor=pointer]:
+                    - img
+              - cell "Influenciador + UGC(Nano (1k-10k))" [ref=e1290]:
+                - text: Influenciador + UGC
+                - generic [ref=e1291]: (Nano (1k-10k))
+              - cell "1" [ref=e1292]
+              - cell "—" [ref=e1293]
+              - cell "Aprovado" [ref=e1294]:
+                - generic [ref=e1295]: Aprovado
+              - cell "Concluído" [ref=e1296]:
+                - generic [ref=e1297]:
+                  - img [ref=e1298]
+                  - text: Concluído
+              - cell "Reenviar" [ref=e1302]:
+                - generic [ref=e1303]:
+                  - button "Reenviar" [ref=e1304] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1305] [cursor=pointer]:
+                    - img
+            - row "MN @mel.nicoly 13988773072 MELNICOLY Influenciador(a) 0 — Aprovado Termos aceitos Reenviar" [ref=e1306]:
+              - cell "MN @mel.nicoly 13988773072" [ref=e1307]:
+                - generic [ref=e1308]:
+                  - generic [ref=e1310]: MN
+                  - generic [ref=e1311]:
+                    - paragraph [ref=e1312]: "@mel.nicoly"
+                    - paragraph [ref=e1313]: "13988773072"
+              - cell "MELNICOLY" [ref=e1314]:
+                - generic [ref=e1315]:
+                  - code [ref=e1316]: MELNICOLY
+                  - button [ref=e1317] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)" [ref=e1318]
+              - cell "0" [ref=e1319]
+              - cell "—" [ref=e1320]
+              - cell "Aprovado" [ref=e1321]:
+                - generic [ref=e1322]: Aprovado
+              - cell "Termos aceitos" [ref=e1323]:
+                - generic [ref=e1324]:
+                  - img [ref=e1325]
+                  - text: Termos aceitos
+              - cell "Reenviar" [ref=e1329]:
+                - generic [ref=e1330]:
+                  - button "Reenviar" [ref=e1331] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1332] [cursor=pointer]:
+                    - img
+            - row "AM @acmiria 13996641188 ACMIRIA Influenciador(a) 0 Amanda Consultora de Vendas Aprovado Termos aceitos Reenviar" [ref=e1333]:
+              - cell "AM @acmiria 13996641188" [ref=e1334]:
+                - generic [ref=e1335]:
+                  - generic [ref=e1337]: AM
+                  - generic [ref=e1338]:
+                    - paragraph [ref=e1339]: "@acmiria"
+                    - paragraph [ref=e1340]: "13996641188"
+              - cell "ACMIRIA" [ref=e1341]:
+                - generic [ref=e1342]:
+                  - code [ref=e1343]: ACMIRIA
+                  - button [ref=e1344] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)" [ref=e1345]
+              - cell "0" [ref=e1346]
+              - cell "Amanda Consultora de Vendas" [ref=e1347]:
+                - generic [ref=e1348]:
+                  - paragraph [ref=e1349]: Amanda
+                  - paragraph [ref=e1350]: Consultora de Vendas
+              - cell "Aprovado" [ref=e1351]:
+                - generic [ref=e1352]: Aprovado
+              - cell "Termos aceitos" [ref=e1353]:
+                - generic [ref=e1354]:
+                  - img [ref=e1355]
+                  - text: Termos aceitos
+              - cell "Reenviar" [ref=e1359]:
+                - generic [ref=e1360]:
+                  - button "Reenviar" [ref=e1361] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1362] [cursor=pointer]:
+                    - img
+            - row "JS juliasousx_ 13996537958 JULIA Influenciador(a)(Nano (1k-10k)) 0 — Aprovado Concluído Reenviar" [ref=e1363]:
+              - cell "JS juliasousx_ 13996537958" [ref=e1364]:
+                - generic [ref=e1365]:
+                  - generic [ref=e1367]: JS
+                  - generic [ref=e1368]:
+                    - paragraph [ref=e1369]: juliasousx_
+                    - paragraph [ref=e1370]: "13996537958"
+              - cell "JULIA" [ref=e1371]:
+                - generic [ref=e1372]:
+                  - code [ref=e1373]: JULIA
+                  - button [ref=e1374] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)(Nano (1k-10k))" [ref=e1375]:
+                - text: Influenciador(a)
+                - generic [ref=e1376]: (Nano (1k-10k))
+              - cell "0" [ref=e1377]
+              - cell "—" [ref=e1378]
+              - cell "Aprovado" [ref=e1379]:
+                - generic [ref=e1380]: Aprovado
+              - cell "Concluído" [ref=e1381]:
+                - generic [ref=e1382]:
+                  - img [ref=e1383]
+                  - text: Concluído
+              - cell "Reenviar" [ref=e1387]:
+                - generic [ref=e1388]:
+                  - button "Reenviar" [ref=e1389] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1390] [cursor=pointer]:
+                    - img
+            - row "AC Carol Pettra 13981090494 PETTRA Influenciador(a) 0 — Aprovado Termos aceitos Reenviar" [ref=e1391]:
+              - cell "AC Carol Pettra 13981090494" [ref=e1392]:
+                - generic [ref=e1393]:
+                  - generic [ref=e1395]: AC
+                  - generic [ref=e1396]:
+                    - paragraph [ref=e1397]: Carol Pettra
+                    - paragraph [ref=e1398]: "13981090494"
+              - cell "PETTRA" [ref=e1399]:
+                - generic [ref=e1400]:
+                  - code [ref=e1401]: PETTRA
+                  - button [ref=e1402] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)" [ref=e1403]
+              - cell "0" [ref=e1404]
+              - cell "—" [ref=e1405]
+              - cell "Aprovado" [ref=e1406]:
+                - generic [ref=e1407]: Aprovado
+              - cell "Termos aceitos" [ref=e1408]:
+                - generic [ref=e1409]:
+                  - img [ref=e1410]
+                  - text: Termos aceitos
+              - cell "Reenviar" [ref=e1414]:
+                - generic [ref=e1415]:
+                  - button "Reenviar" [ref=e1416] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1417] [cursor=pointer]:
+                    - img
+            - row "DO @danilootima 13974079532 DANILO Influenciador(a)(Nano (1k-10k)) 0 — Aprovado Termos aceitos Reenviar" [ref=e1418]:
+              - cell "DO @danilootima 13974079532" [ref=e1419]:
+                - generic [ref=e1420]:
+                  - generic [ref=e1422]: DO
+                  - generic [ref=e1423]:
+                    - paragraph [ref=e1424]: "@danilootima"
+                    - paragraph [ref=e1425]: "13974079532"
+              - cell "DANILO" [ref=e1426]:
+                - generic [ref=e1427]:
+                  - code [ref=e1428]: DANILO
+                  - button [ref=e1429] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)(Nano (1k-10k))" [ref=e1430]:
+                - text: Influenciador(a)
+                - generic [ref=e1431]: (Nano (1k-10k))
+              - cell "0" [ref=e1432]
+              - cell "—" [ref=e1433]
+              - cell "Aprovado" [ref=e1434]:
+                - generic [ref=e1435]: Aprovado
+              - cell "Termos aceitos" [ref=e1436]:
+                - generic [ref=e1437]:
+                  - img [ref=e1438]
+                  - text: Termos aceitos
+              - cell "Reenviar" [ref=e1442]:
+                - generic [ref=e1443]:
+                  - button "Reenviar" [ref=e1444] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1445] [cursor=pointer]:
+                    - img
+            - row "DL @daniloluiz 13974079532 DANILOTEST123 Influenciador(a) 0 — Aprovado Concluído Reenviar" [ref=e1446]:
+              - cell "DL @daniloluiz 13974079532" [ref=e1447]:
+                - generic [ref=e1448]:
+                  - generic [ref=e1450]: DL
+                  - generic [ref=e1451]:
+                    - paragraph [ref=e1452]: "@daniloluiz"
+                    - paragraph [ref=e1453]: "13974079532"
+              - cell "DANILOTEST123" [ref=e1454]:
+                - generic [ref=e1455]:
+                  - code [ref=e1456]: DANILOTEST123
+                  - button [ref=e1457] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)" [ref=e1458]
+              - cell "0" [ref=e1459]
+              - cell "—" [ref=e1460]
+              - cell "Aprovado" [ref=e1461]:
+                - generic [ref=e1462]: Aprovado
+              - cell "Concluído" [ref=e1463]:
+                - generic [ref=e1464]:
+                  - img [ref=e1465]
+                  - text: Concluído
+              - cell "Reenviar" [ref=e1469]:
+                - generic [ref=e1470]:
+                  - button "Reenviar" [ref=e1471] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1472] [cursor=pointer]:
+                    - img
+            - row "MS @mariasilva 13999991234 Influenciador(a)(Nano (1k-10k)) 0 — Aprovado Termos aceitos Reenviar" [ref=e1473]:
+              - cell "MS @mariasilva 13999991234" [ref=e1474]:
+                - generic [ref=e1475]:
+                  - generic [ref=e1477]: MS
+                  - generic [ref=e1478]:
+                    - paragraph [ref=e1479]: "@mariasilva"
+                    - paragraph [ref=e1480]: "13999991234"
+              - cell [ref=e1481]:
+                - generic [ref=e1482]:
+                  - code [ref=e1483]
+                  - button [ref=e1484] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)(Nano (1k-10k))" [ref=e1485]:
+                - text: Influenciador(a)
+                - generic [ref=e1486]: (Nano (1k-10k))
+              - cell "0" [ref=e1487]
+              - cell "—" [ref=e1488]
+              - cell "Aprovado" [ref=e1489]:
+                - generic [ref=e1490]: Aprovado
+              - cell "Termos aceitos" [ref=e1491]:
+                - generic [ref=e1492]:
+                  - img [ref=e1493]
+                  - text: Termos aceitos
+              - cell "Reenviar" [ref=e1497]:
+                - generic [ref=e1498]:
+                  - button "Reenviar" [ref=e1499] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1500] [cursor=pointer]:
+                    - img
+            - row "TP @testeplaywright 55999998888 TESTEP Influenciador(a) 0 — Pendente Pendente Aprovar" [ref=e1501]:
+              - cell "TP @testeplaywright 55999998888" [ref=e1502]:
+                - generic [ref=e1503]:
+                  - generic [ref=e1505]: TP
+                  - generic [ref=e1506]:
+                    - paragraph [ref=e1507]: "@testeplaywright"
+                    - paragraph [ref=e1508]: "55999998888"
+              - cell "TESTEP" [ref=e1509]:
+                - generic [ref=e1510]:
+                  - code [ref=e1511]: TESTEP
+                  - button [ref=e1512] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)" [ref=e1513]
+              - cell "0" [ref=e1514]
+              - cell "—" [ref=e1515]
+              - cell "Pendente" [ref=e1516]:
+                - generic [ref=e1517]: Pendente
+              - cell "Pendente" [ref=e1518]:
+                - generic [ref=e1519]:
+                  - img [ref=e1520]
+                  - text: Pendente
+              - cell "Aprovar" [ref=e1525]:
+                - generic [ref=e1526]:
+                  - button "Aprovar" [ref=e1527] [cursor=pointer]:
+                    - img
+                    - text: Aprovar
+                  - button [ref=e1528] [cursor=pointer]:
+                    - img
+            - row "JS @julia.estilo 13987654321 JULIAE05 Influenciador(a) 0 — Pendente Pendente Aprovar" [ref=e1529]:
+              - cell "JS @julia.estilo 13987654321" [ref=e1530]:
+                - generic [ref=e1531]:
+                  - generic [ref=e1533]: JS
+                  - generic [ref=e1534]:
+                    - paragraph [ref=e1535]: "@julia.estilo"
+                    - paragraph [ref=e1536]: "13987654321"
+              - cell "JULIAE05" [ref=e1537]:
+                - generic [ref=e1538]:
+                  - code [ref=e1539]: JULIAE05
+                  - button [ref=e1540] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)" [ref=e1541]
+              - cell "0" [ref=e1542]
+              - cell "—" [ref=e1543]
+              - cell "Pendente" [ref=e1544]:
+                - generic [ref=e1545]: Pendente
+              - cell "Pendente" [ref=e1546]:
+                - generic [ref=e1547]:
+                  - img [ref=e1548]
+                  - text: Pendente
+              - cell "Aprovar" [ref=e1553]:
+                - generic [ref=e1554]:
+                  - button "Aprovar" [ref=e1555] [cursor=pointer]:
+                    - img
+                    - text: Aprovar
+                  - button [ref=e1556] [cursor=pointer]:
+                    - img
+            - row "JC @julianabeauty 5591987654321 JULIAN04 Influenciador(a) 2 — Aprovado Pendente Reenviar" [ref=e1557]:
+              - cell "JC @julianabeauty 5591987654321" [ref=e1558]:
+                - generic [ref=e1559]:
+                  - generic [ref=e1561]: JC
+                  - generic [ref=e1562]:
+                    - paragraph [ref=e1563]: "@julianabeauty"
+                    - paragraph [ref=e1564]: "5591987654321"
+              - cell "JULIAN04" [ref=e1565]:
+                - generic [ref=e1566]:
+                  - code [ref=e1567]: JULIAN04
+                  - button [ref=e1568] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)" [ref=e1569]
+              - cell "2" [ref=e1570]
+              - cell "—" [ref=e1571]
+              - cell "Aprovado" [ref=e1572]:
+                - generic [ref=e1573]: Aprovado
+              - cell "Pendente" [ref=e1574]:
+                - generic [ref=e1575]:
+                  - img [ref=e1576]
+                  - text: Pendente
+              - cell "Reenviar" [ref=e1581]:
+                - generic [ref=e1582]:
+                  - button "Reenviar" [ref=e1583] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1584] [cursor=pointer]:
+                    - img
+            - row "MT @marinatestes 11987654321 MARINA03 Influenciador(a) 0 — Aprovado Pendente Reenviar" [ref=e1585]:
+              - cell "MT @marinatestes 11987654321" [ref=e1586]:
+                - generic [ref=e1587]:
+                  - generic [ref=e1589]: MT
+                  - generic [ref=e1590]:
+                    - paragraph [ref=e1591]: "@marinatestes"
+                    - paragraph [ref=e1592]: "11987654321"
+              - cell "MARINA03" [ref=e1593]:
+                - generic [ref=e1594]:
+                  - code [ref=e1595]: MARINA03
+                  - button [ref=e1596] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)" [ref=e1597]
+              - cell "0" [ref=e1598]
+              - cell "—" [ref=e1599]
+              - cell "Aprovado" [ref=e1600]:
+                - generic [ref=e1601]: Aprovado
+              - cell "Pendente" [ref=e1602]:
+                - generic [ref=e1603]:
+                  - img [ref=e1604]
+                  - text: Pendente
+              - cell "Reenviar" [ref=e1609]:
+                - generic [ref=e1610]:
+                  - button "Reenviar" [ref=e1611] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1612] [cursor=pointer]:
+                    - img
+            - row "CB Carla Beauty Creator 85997775544 CARLA02 Influenciador(a) 0 — Aprovado Pendente Reenviar" [ref=e1613]:
+              - cell "CB Carla Beauty Creator 85997775544" [ref=e1614]:
+                - generic [ref=e1615]:
+                  - generic [ref=e1617]: CB
+                  - generic [ref=e1618]:
+                    - paragraph [ref=e1619]: Carla Beauty Creator
+                    - paragraph [ref=e1620]: "85997775544"
+              - cell "CARLA02" [ref=e1621]:
+                - generic [ref=e1622]:
+                  - code [ref=e1623]: CARLA02
+                  - button [ref=e1624] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)" [ref=e1625]
+              - cell "0" [ref=e1626]
+              - cell "—" [ref=e1627]
+              - cell "Aprovado" [ref=e1628]:
+                - generic [ref=e1629]: Aprovado
+              - cell "Pendente" [ref=e1630]:
+                - generic [ref=e1631]:
+                  - img [ref=e1632]
+                  - text: Pendente
+              - cell "Reenviar" [ref=e1637]:
+                - generic [ref=e1638]:
+                  - button "Reenviar" [ref=e1639] [cursor=pointer]:
+                    - img
+                    - text: Reenviar
+                  - button [ref=e1640] [cursor=pointer]:
+                    - img
+            - row "TA Teste API Direta 11999999999 TESTE01 Influenciador(a) 0 — Pendente Pendente Aprovar" [ref=e1641]:
+              - cell "TA Teste API Direta 11999999999" [ref=e1642]:
+                - generic [ref=e1643]:
+                  - generic [ref=e1645]: TA
+                  - generic [ref=e1646]:
+                    - paragraph [ref=e1647]: Teste API Direta
+                    - paragraph [ref=e1648]: "11999999999"
+              - cell "TESTE01" [ref=e1649]:
+                - generic [ref=e1650]:
+                  - code [ref=e1651]: TESTE01
+                  - button [ref=e1652] [cursor=pointer]:
+                    - img
+              - cell "Influenciador(a)" [ref=e1653]
+              - cell "0" [ref=e1654]
+              - cell "—" [ref=e1655]
+              - cell "Pendente" [ref=e1656]:
+                - generic [ref=e1657]: Pendente
+              - cell "Pendente" [ref=e1658]:
+                - generic [ref=e1659]:
+                  - img [ref=e1660]
+                  - text: Pendente
+              - cell "Aprovar" [ref=e1665]:
+                - generic [ref=e1666]:
+                  - button "Aprovar" [ref=e1667] [cursor=pointer]:
+                    - img
+                    - text: Aprovar
+                  - button [ref=e1668] [cursor=pointer]:
+                    - img
+    - button [ref=e1670] [cursor=pointer]:
+      - img
