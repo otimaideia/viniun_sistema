@@ -6,7 +6,7 @@ import { extractLocationHint, matchFranchiseByLocation } from "@/utils/franchise
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 // ============================================================================
-// Identidade visual padrão YESlaser (fallback quando sem branding do tenant)
+// Identidade visual padrão Viniun (fallback quando sem branding do tenant)
 // ============================================================================
 const COLORS = {
   purple: "#753DA4",
@@ -134,7 +134,7 @@ export default function PublicPageLayout({
   const whatsappNumber = franchise?.whatsapp || franchise?.telefone || null;
 
   // Atualiza título da aba e meta tags OG dinamicamente
-  // Exemplo: "YESlaser Praia Grande | Influenciadores"
+  // Exemplo: "Viniun Centro | Imóveis"
   const pageTitle = franchiseDisplayName
     ? `${franchiseDisplayName} | ${subtitle}`
     : `${displayName} | ${subtitle}`;

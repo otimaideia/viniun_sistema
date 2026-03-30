@@ -257,7 +257,7 @@ export default function Chatbot() {
                     id="nome"
                     value={formData.nome}
                     onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                    placeholder="Ex: Assistente YESlaser"
+                    placeholder="Ex: Assistente Virtual"
                     disabled={!isAdmin}
                   />
                 </div>
@@ -327,7 +327,7 @@ export default function Chatbot() {
                   id="system_prompt"
                   value={formData.system_prompt}
                   onChange={(e) => setFormData({ ...formData, system_prompt: e.target.value })}
-                  placeholder="Você é um assistente virtual da YESlaser, especializado em depilação a laser..."
+                  placeholder="Você é um assistente virtual especializado em atendimento imobiliário..."
                   rows={5}
                   disabled={!isAdmin}
                 />
@@ -344,7 +344,7 @@ export default function Chatbot() {
                     id="welcome_message"
                     value={formData.welcome_message}
                     onChange={(e) => setFormData({ ...formData, welcome_message: e.target.value })}
-                    placeholder="Olá! Sou a assistente virtual da YESlaser. Como posso ajudar?"
+                    placeholder="Olá! Sou a assistente virtual. Como posso ajudar?"
                     rows={3}
                     disabled={!isAdmin}
                   />

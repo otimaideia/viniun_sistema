@@ -1,8 +1,8 @@
-# YESlaser Painel - Documentação Técnica
+# Viniun - Sistema de Gestão Imobiliária Multi-Tenant
 
 ## Visão Geral
 
-**Sistema de gestão multi-tenant para franquias** - Painel administrativo para gerenciamento de múltiplas empresas (YESlaser, PopDents, NovaLaser, etc.) com leads, franqueados, agendamentos, recrutamento, WhatsApp Business e chatbot IA.
+**Sistema de gestão multi-tenant para o mercado imobiliário** - Painel administrativo para gerenciamento de múltiplas empresas (imobiliárias, incorporadoras, construtoras, corretoras) com leads, agendamentos, WhatsApp Business, CRM e chatbot IA.
 
 | Métrica | Valor |
 |---------|-------|
@@ -34,9 +34,8 @@
 ### Backend & Banco de Dados
 - **Backend-as-a-Service**: Supabase (PostgreSQL)
 - **Autenticação**: Supabase Auth
-- **URL**: https://supabase-app.yeslaserpraiagrande.com.br
+- **URL**: https://supabase.viniun.com.br
 - **Integração WhatsApp**: WAHA (WhatsApp HTTP API)
-- **Integração ERP**: Yeslaser Office API
 - **Extensão pgvector**: Habilitada para embeddings de chatbot IA
 
 ---
@@ -56,7 +55,7 @@ O sistema suporta **9 empresas (tenants)** com isolamento completo de dados via 
     ┌─────────────────────┼─────────────────────┐
     ▼                     ▼                     ▼
 ┌─────────┐         ┌─────────┐           ┌─────────┐
-│YESlaser │         │PopDents │           │  ...    │
+│ Viniun  │         │ImobPrime│           │  ...    │
 │ TENANT  │         │ TENANT  │           │ TENANT  │
 └────┬────┘         └────┬────┘           └────┬────┘
      │                   │                     │
@@ -65,7 +64,7 @@ O sistema suporta **9 empresas (tenants)** com isolamento completo de dados via 
 ┌───┐ ┌───┐         ┌───┐ ┌───┐           ┌───┐ ┌───┐
 │F1 │ │F2 │         │F1 │ │F2 │           │F1 │ │F2 │
 └───┘ └───┘         └───┘ └───┘           └───┘ └───┘
-Franquias           Franquias             Franquias
+Filiais             Filiais               Filiais
 ```
 
 ### Hierarquia de 4 Níveis
@@ -81,15 +80,15 @@ Franquias           Franquias             Franquias
 
 | Slug | Nome | Segmento | Cor Primária |
 |------|------|----------|--------------|
-| `yeslaser` | YESlaser | Estética | #E91E63 |
-| `popdents` | PopDents | Odontologia | #2196F3 |
-| `novalaser` | NovaLaser | Estética | #9C27B0 |
-| `intimacenter` | IntimaCenter | Saúde Íntima | #FF5722 |
-| `oralrecife` | OralRecife | Odontologia | #00BCD4 |
-| `m1company` | M1 Company | Holding | #607D8B |
-| `amorimplantes` | Amor Implantes | Odontologia | #F44336 |
-| `confiacredito` | Confia Crédito | Financeiro | #4CAF50 |
-| `franqueadora` | Franqueadora | Gestão | #FF9800 |
+| `viniun` | Viniun | Imobiliário | #1E3A5F |
+| `imobprime` | ImobPrime | Imobiliário | #2196F3 |
+| `construtop` | ConstruTop | Construção | #FF9800 |
+| `realtybr` | RealtyBR | Corretagem | #4CAF50 |
+| `habitaplus` | HabitaPlus | Construção | #9C27B0 |
+| `urbantech` | UrbanTech | Tecnologia | #607D8B |
+| `casanova` | Casa Nova | Imobiliário | #F44336 |
+| `creditoimob` | Crédito Imob | Financeiro | #00BCD4 |
+| `adminviniun` | Viniun Admin | Gestão | #FF5722 |
 
 ### 26 Módulos do Sistema
 

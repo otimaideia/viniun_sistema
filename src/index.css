@@ -22,11 +22,11 @@
     --popover: 0 0% 100%;
     --popover-foreground: 275 30% 15%;
 
-    /* Primary - YESlaser Purple #662E8E */
+    /* Primary - Viniun Navy #1E3A5F */
     --primary: 275 51% 37%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - YESlaser Blue #5AC9EF */
+    /* Secondary - Viniun Blue #5AC9EF */
     --secondary: 194 82% 65%;
     --secondary-foreground: 275 30% 15%;
 
@@ -83,11 +83,11 @@
     --popover: 275 30% 9%;
     --popover-foreground: 210 40% 98%;
 
-    /* YESlaser Purple - lighter for dark mode */
+    /* Viniun Primary - lighter for dark mode */
     --primary: 275 60% 60%;
     --primary-foreground: 275 30% 6%;
 
-    /* YESlaser Blue */
+    /* Viniun Secondary */
     --secondary: 194 82% 55%;
     --secondary-foreground: 275 30% 6%;
 

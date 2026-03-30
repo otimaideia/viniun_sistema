@@ -64,7 +64,7 @@ export function ClienteLoginForm({ onCodeSent }: ClienteLoginFormProps) {
       <CardHeader className="text-center pb-2">
         <img
           src={logoYeslaser}
-          alt="YESlaser"
+          alt="Viniun"
           className="h-14 mx-auto mb-4"
         />
         <CardTitle className="text-2xl text-gray-800">Área do Cliente</CardTitle>

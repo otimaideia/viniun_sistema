@@ -574,7 +574,7 @@ export function DashboardLayout({ children, defaultCollapsed = false }: Dashboar
         userEmail={user?.email}
         role={role}
         currentLogo={currentLogo}
-        tenantName={tenant?.nome_fantasia || "YESlaser"}
+        tenantName={tenant?.nome_fantasia || "Viniun"}
         sidebarOpen={sidebarOpen}
         onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         onLogout={handleLogout}
@@ -601,9 +601,9 @@ export function DashboardLayout({ children, defaultCollapsed = false }: Dashboar
           {/* Sidebar Header */}
           <div className="flex items-center justify-center h-16 border-b border-border px-2 relative">
             {sidebarCollapsed ? (
-              <img src={currentFavicon} alt={tenant?.nome_fantasia || "YESlaser"} className="h-8 w-8 object-contain" />
+              <img src={currentFavicon} alt={tenant?.nome_fantasia || "Viniun"} className="h-8 w-8 object-contain" />
             ) : (
-              <img src={currentLogo} alt={tenant?.nome_fantasia || "YESlaser"} className="h-10 object-contain" />
+              <img src={currentLogo} alt={tenant?.nome_fantasia || "Viniun"} className="h-10 object-contain" />
             )}
 
             {/* Collapse Button - Desktop only */}

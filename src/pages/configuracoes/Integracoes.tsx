@@ -183,7 +183,7 @@ export function Integracoes() {
     user: '',
     pass: '',
     fromEmail: '',
-    fromName: 'YESlaser',
+    fromName: 'Viniun',
   });
   const [showSmtpPass, setShowSmtpPass] = useState(false);
   const [isSavingSmtp, setIsSavingSmtp] = useState(false);
@@ -1206,7 +1206,7 @@ export function Integracoes() {
         user: map.smtp_user || '',
         pass: map.smtp_pass || '',
         fromEmail: map.smtp_from_email || '',
-        fromName: map.smtp_from_name || 'YESlaser',
+        fromName: map.smtp_from_name || 'Viniun',
       });
 
       if (map.smtp_host && map.smtp_user) {
@@ -1239,7 +1239,7 @@ export function Integracoes() {
         { chave: 'smtp_user', valor: smtpConfig.user.trim() },
         { chave: 'smtp_pass', valor: smtpConfig.pass },
         { chave: 'smtp_from_email', valor: smtpConfig.fromEmail.trim() || smtpConfig.user.trim() },
-        { chave: 'smtp_from_name', valor: smtpConfig.fromName.trim() || 'YESlaser' },
+        { chave: 'smtp_from_name', valor: smtpConfig.fromName.trim() || 'Viniun' },
       ];
 
       for (const s of settings) {
@@ -2525,7 +2525,7 @@ export function Integracoes() {
                   <Label htmlFor="smtp-from-name">Nome do Remetente</Label>
                   <Input
                     id="smtp-from-name"
-                    placeholder="YESlaser"
+                    placeholder="Viniun"
                     value={smtpConfig.fromName}
                     onChange={(e) => setSmtpConfig((p) => ({ ...p, fromName: e.target.value }))}
                   />

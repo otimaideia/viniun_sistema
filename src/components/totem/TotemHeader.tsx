@@ -17,7 +17,7 @@ export function TotemHeader({ nomeUnidade, cidade, estado }: TotemHeaderProps) {
         <div className="bg-white rounded-lg px-4 py-2 inline-block shadow-md">
           <img
             src={logoYeslaser}
-            alt="YESlaser"
+            alt="Viniun"
             className="h-8 md:h-10 mx-auto"
           />
         </div>

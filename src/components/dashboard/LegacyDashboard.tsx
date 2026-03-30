@@ -546,7 +546,7 @@ export function LegacyDashboard() {
 
     return Object.entries(unidadeCounts)
       .map(([name, value]) => ({
-        name: name.replace("YESlaser ", "").substring(0, 18),
+        name: name.replace("Viniun ", "").substring(0, 18),
         fullName: name,
         value
       }))
@@ -620,7 +620,7 @@ export function LegacyDashboard() {
 
     return Object.entries(unidadeStats)
       .map(([name, stats]) => ({
-        name: name.replace("YESlaser ", ""),
+        name: name.replace("Viniun ", ""),
         fullName: name,
         total: stats.total,
         convertidos: stats.convertidos,

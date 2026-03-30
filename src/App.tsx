@@ -432,12 +432,8 @@ const queryClient = new QueryClient();
 
 // Domínios que devem exibir a landing page na raiz "/"
 const LANDING_DOMAINS = [
-  'www.yeslaserpraiagrande.com.br',
-  'www.depilacaoalaserpraiagrande.com.br',
-  'www.depilacaoalaserempraiagrande.com.br',
-  'yeslaserpraiagrande.com.br',
-  'depilacaoalaserpraiagrande.com.br',
-  'depilacaoalaserempraiagrande.com.br',
+  'www.viniun.com.br',
+  'viniun.com.br',
 ];
 
 /** Redireciona /parceiro/:codigo para /parceiro/login?codigo=:codigo */
@@ -1057,7 +1053,7 @@ const App = () => (
             <Route path="/trabalhe-conosco" element={<VagasPublicas />} />
             <Route path="/vagas" element={<VagasPublicas />} />
 
-            {/* Landing Pages YESlaser (Sem autenticação) */}
+            {/* Landing Pages (Sem autenticação) */}
             <Route path="/lp/praia-grande" element={<Suspense fallback={null}><LandingPreInauguracao /></Suspense>} />
             <Route path="/lp/indicacoes" element={<Suspense fallback={null}><LandingIndicacoes /></Suspense>} />
             <Route path="/lp/grupo-vip" element={<Suspense fallback={null}><LandingGrupoVIP /></Suspense>} />

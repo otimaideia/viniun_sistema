@@ -138,7 +138,7 @@ export function useTenantDetection(): TenantDetectionResult {
           method = 'custom_domain';
         }
 
-        // Se não, verificar domínio pai (ex: app.yeslaser.com → yeslaser.com)
+        // Se não, verificar domínio pai (ex: app.viniun.com → viniun.com)
         if (!tenantSlug) {
           const parts = fullHostname.split('.');
           if (parts.length >= 3) {

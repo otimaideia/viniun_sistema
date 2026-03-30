@@ -45,7 +45,7 @@ const Login = () => {
 
   // Logo e textos dinâmicos baseados no branding do tenant detectado
   const currentLogo = detectedBranding?.logo_url;
-  const title = detectedBranding?.texto_login_titulo || "Painel de Gestão";
+  const title = detectedBranding?.texto_login_titulo || "Sistema Imobiliário";
   const subtitle = detectedBranding?.texto_login_subtitulo || "Acesse sua conta";
   const tenantName = detectedTenant?.nome_fantasia || "Sistema";
 

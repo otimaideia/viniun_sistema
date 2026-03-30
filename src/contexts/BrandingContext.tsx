@@ -147,7 +147,7 @@ function applyShadcnVariables(branding: Branding | null) {
   const root = document.documentElement;
 
   if (!branding) {
-    // Restaurar valores padrão YESlaser
+    // Restaurar valores padrão Viniun
     root.style.setProperty('--primary', '275 51% 37%'); // #662E8E
     root.style.setProperty('--secondary', '194 82% 65%'); // #5AC9EF
     root.style.setProperty('--accent', '275 40% 95%');

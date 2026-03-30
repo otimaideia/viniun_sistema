@@ -27,7 +27,7 @@ import { CepInput } from "@/components/recrutamento/CepInput";
 import type { CepAddressData } from "@/components/recrutamento/CepInput";
 
 // =============================================================================
-// Cores padrão YESlaser (mesmo do PublicPageLayout)
+// Cores padrão Viniun (mesmo do PublicPageLayout)
 // =============================================================================
 const COLORS = {
   purple: "#753DA4",
