@@ -175,7 +175,6 @@ export function useGroupOperationsMT(filters?: GroupOperationFilters) {
           filter: tenant ? `tenant_id=eq.${tenant.id}` : undefined,
         },
         (payload) => {
-          console.log('[GroupOps] Operacao atualizada:', payload);
           queryClient.invalidateQueries({ queryKey: ['mt-group-operations'] });
           // Tambem invalidar a operacao individual se estiver sendo observada
           if (payload.new && typeof payload.new === 'object' && 'id' in payload.new) {
@@ -184,7 +183,6 @@ export function useGroupOperationsMT(filters?: GroupOperationFilters) {
         }
       )
       .subscribe((status, err) => {
-        console.log('[RT] mt-group-operations-changes status:', status);
         if (err) console.error('[RT] mt-group-operations-changes error:', err);
       });
 
@@ -291,7 +289,7 @@ export function useGroupOperationsMT(filters?: GroupOperationFilters) {
       if (updateError) throw updateError;
 
       // 2. Invocar edge function via fetch direto (evita CORS issues do supabase.functions.invoke)
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://supabase-app.yeslaserpraiagrande.com.br';
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://supabase.viniun.com.br';
       const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
       const response = await fetch(`${supabaseUrl}/functions/v1/group-bulk-add`, {
@@ -365,7 +363,7 @@ export function useGroupOperationsMT(filters?: GroupOperationFilters) {
       if (updateError) throw updateError;
 
       // Re-invocar edge function via fetch direto
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://supabase-app.yeslaserpraiagrande.com.br';
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://supabase.viniun.com.br';
       const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
       const response = await fetch(`${supabaseUrl}/functions/v1/group-bulk-add`, {
@@ -545,7 +543,6 @@ export function useGroupOperationMT(operationId: string | undefined) {
           filter: `id=eq.${operationId}`,
         },
         (payload) => {
-          console.log('[GroupOp] Operacao atualizada:', payload);
           queryClient.invalidateQueries({ queryKey: ['mt-group-operation', operationId] });
           queryClient.invalidateQueries({ queryKey: ['mt-group-operations'] });
         }

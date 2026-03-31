@@ -153,7 +153,7 @@ export default function Parcerias() {
   };
 
   const handleCopyRegistrationLink = () => {
-    const slug = tenant?.slug || "yeslaser";
+    const slug = tenant?.slug || "viniun";
     const path = "/parceiro/cadastro";
     // Em produção gera URL limpa (sem ?tenant=); em dev usa ?tenant=slug
     const link = getTenantUrl(slug, path).startsWith("http")

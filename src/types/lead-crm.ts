@@ -1,6 +1,6 @@
 // ============================================================
 // TIPOS PARA CRM DE LEADS (atividades, timeline, etc)
-// Baseado no PopDents com adaptações para YESlaser
+// Viniun Sistema com adaptações para Viniun
 // ============================================================
 
 // Tipos de atividade suportados (expandido de 4 para 8)

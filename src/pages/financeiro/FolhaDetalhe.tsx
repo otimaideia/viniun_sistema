@@ -136,8 +136,8 @@ export default function FolhaDetalhe() {
                       <TableCell className="w-8">
                         {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
                       </TableCell>
-                      <TableCell className="font-medium">{(item.employee as any)?.nome || '—'}</TableCell>
-                      <TableCell>{(item.employee as any)?.cargo || '—'}</TableCell>
+                      <TableCell className="font-medium">{(item.employee as Record<string, unknown> | undefined)?.nome as string || '—'}</TableCell>
+                      <TableCell>{(item.employee as Record<string, unknown> | undefined)?.cargo as string || '—'}</TableCell>
                       <TableCell className="text-right">R$ {item.salario_base.toFixed(2)}</TableCell>
                       <TableCell className="text-right text-green-600">{fmt(itemBeneficios)}</TableCell>
                       <TableCell className="text-right text-amber-600">{fmt(itemProvisoes)}</TableCell>

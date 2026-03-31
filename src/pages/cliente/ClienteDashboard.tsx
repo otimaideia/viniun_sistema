@@ -100,7 +100,7 @@ export default function ClienteDashboard() {
             Olá, {firstName}!
           </h1>
           <p className="text-gray-500">
-            Bem-vindo(a) ao seu portal YESlaser
+            Bem-vindo(a) ao seu portal Viniun
           </p>
         </div>
 
@@ -271,7 +271,7 @@ export default function ClienteDashboard() {
                         Nenhum agendamento próximo
                       </h3>
                       <p className="text-gray-500 mb-6 max-w-sm mx-auto">
-                        Entre em contato com a unidade YESlaser mais próxima para agendar sua sessão
+                        Entre em contato com a unidade Viniun mais próxima para agendar sua sessão
                       </p>
                       <Button
                         variant="outline"
@@ -467,7 +467,7 @@ export default function ClienteDashboard() {
                   <CardContent className="p-6">
                     <h4 className="font-semibold text-blue-900 mb-2">Precisa de ajuda?</h4>
                     <p className="text-sm text-blue-700 mb-4">
-                      Entre em contato com a unidade YESlaser mais próxima para agendar ou remarcar suas sessões.
+                      Entre em contato com a unidade Viniun mais próxima para agendar ou remarcar suas sessões.
                     </p>
                     <Button
                       variant="outline"

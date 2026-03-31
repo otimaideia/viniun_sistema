@@ -25,7 +25,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useAIAgentsAdminMT } from '@/hooks/multitenant/useAIAgentsMT';
 
 function getIcon(iconName: string) {
-  const Icon = (LucideIcons as any)[iconName];
+  const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName];
   return Icon || BrainCircuit;
 }
 

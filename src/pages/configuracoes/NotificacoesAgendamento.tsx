@@ -119,7 +119,7 @@ const NotificacoesAgendamento = () => {
             const icon = ICON_MAP[config.icon] || <Bell className="h-5 w-5" />;
             const isToggling =
               toggleConfig.isPending &&
-              (toggleConfig.variables as any)?.notificationType === config.type;
+              (toggleConfig.variables as Record<string, string> | undefined)?.notificationType === config.type;
 
             return (
               <Card

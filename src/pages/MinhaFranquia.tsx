@@ -48,7 +48,7 @@ export default function MinhaFranquia() {
     const nomeFantasia = minhaFranquia.nome_fantasia.toLowerCase();
     return leads.filter(lead => 
       lead.unidade?.toLowerCase().includes(nomeFantasia) ||
-      lead.unidade?.toLowerCase().replace("yes ", "yeslaser ").includes(nomeFantasia)
+      lead.unidade?.toLowerCase().includes(nomeFantasia)
     );
   }, [leads, minhaFranquia]);
 
@@ -58,7 +58,7 @@ export default function MinhaFranquia() {
     const nomeFantasia = minhaFranquia.nome_fantasia.toLowerCase();
     return indicacoes.filter(ind => 
       ind.cadastro?.unidade?.toLowerCase().includes(nomeFantasia) ||
-      ind.cadastro?.unidade?.toLowerCase().replace("yes ", "yeslaser ").includes(nomeFantasia)
+      ind.cadastro?.unidade?.toLowerCase().includes(nomeFantasia)
     );
   }, [indicacoes, minhaFranquia]);
 

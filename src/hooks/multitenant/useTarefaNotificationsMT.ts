@@ -182,7 +182,6 @@ A tarefa *"${task.titulo}"* está atrasada!
           .limit(1);
 
         if (defaultFranchise && defaultFranchise.length > 0) {
-          console.log('[TarefaNotif] Usando sessão padrão da franquia:', defaultFranchise[0].session_name);
           return defaultFranchise[0].session_name;
         }
       }
@@ -198,7 +197,6 @@ A tarefa *"${task.titulo}"* está atrasada!
           .limit(1);
 
         if (defaultTenant && defaultTenant.length > 0) {
-          console.log('[TarefaNotif] Usando sessão padrão do tenant:', defaultTenant[0].session_name);
           return defaultTenant[0].session_name;
         }
       }
@@ -218,7 +216,6 @@ A tarefa *"${task.titulo}"* está atrasada!
             (s: { session_name: string }) => s.session_name.toLowerCase().includes('campanha')
           );
           const chosen = campanhaSession || franchiseSessions[0];
-          console.log('[TarefaNotif] Usando sessão da franquia:', chosen.session_name);
           return chosen.session_name;
         }
       }
@@ -237,7 +234,6 @@ A tarefa *"${task.titulo}"* está atrasada!
             (s: { session_name: string }) => s.session_name.toLowerCase().includes('campanha')
           );
           const chosen = campanhaSession || tenantSessions[0];
-          console.log('[TarefaNotif] Usando sessão do tenant:', chosen.session_name);
           return chosen.session_name;
         }
       }
@@ -282,7 +278,6 @@ A tarefa *"${task.titulo}"* está atrasada!
 
     // Check if this event should trigger notification
     if (!shouldNotify(event)) {
-      console.log(`[TarefaNotif] Notificação ${event} desabilitada na config`);
       return;
     }
 
@@ -324,8 +319,6 @@ A tarefa *"${task.titulo}"* está atrasada!
         return;
       }
 
-      console.log(`[TarefaNotif] Enviando ${event} para ${uniqueRecipients.length} destinatário(s)`);
-
       // Send to each recipient
       const results = await Promise.allSettled(
         uniqueRecipients.map(async (recipient) => {
@@ -337,7 +330,6 @@ A tarefa *"${task.titulo}"* está atrasada!
           if (!result.success) {
             console.error(`[TarefaNotif] Falha ao enviar para ${recipient.phone}:`, result.error);
           } else {
-            console.log(`[TarefaNotif] ✅ Enviado para ${recipient.nome} (${recipient.phone})`);
           }
 
           return result;
@@ -345,7 +337,6 @@ A tarefa *"${task.titulo}"* está atrasada!
       );
 
       const successCount = results.filter(r => r.status === 'fulfilled' && (r.value as any)?.success).length;
-      console.log(`[TarefaNotif] ${successCount}/${uniqueRecipients.length} mensagens enviadas`);
     } catch (err) {
       console.error('[TarefaNotif] Erro geral:', err);
     } finally {

@@ -6,19 +6,19 @@ const AllServicesSection = () => {
     feminino: [
       { name: "Buço", image: "/images/landing/services/buco.jpg", description: "Remoção suave dos pelos acima do lábio superior" },
       { name: "Queixo", image: "/images/landing/services/queixo.jpg", description: "Tratamento preciso para região do queixo" },
-      { name: "Rosto completo", image: "/images/landing/services/rosto-completo.jpg", description: "Depilação completa de toda a face feminina" },
+      { name: "Rosto completo", image: "/images/landing/services/rosto-completo.jpg", description: "Serviço completo para toda a face feminina" },
       { name: "Axilas", image: "/images/landing/services/axilas.jpg", description: "Axilas livres de pelos com pele macia" },
       { name: "Seios / Aréola", image: "/images/landing/services/seios.jpg", description: "Tratamento delicado para região dos seios" },
       { name: "Barriga", image: "/images/landing/services/barriga.jpg", description: "Pele lisa e sem pelos na região abdominal" },
       { name: "Braços", image: "/images/landing/services/bracos.jpg", description: "Braços completamente livres de pelos" },
       { name: "Antebraço", image: "/images/landing/services/antebraco.jpg", description: "Tratamento específico para o antebraço" },
-      { name: "Virilha clássica", image: "/images/landing/services/virilha-classica.jpg", description: "Depilação da linha do biquíni tradicional" },
+      { name: "Virilha clássica", image: "/images/landing/services/virilha-classica.jpg", description: "Serviço para linha do biquíni tradicional" },
       { name: "Virilha cavada", image: "/images/landing/services/virilha-cavada.jpg", description: "Contorno mais definido para biquínis" },
-      { name: "Virilha completa", image: "/images/landing/services/virilha-completa.jpg", description: "Depilação total da região íntima" },
+      { name: "Virilha completa", image: "/images/landing/services/virilha-completa.jpg", description: "Serviço completo da região íntima" },
       { name: "Nádegas", image: "/images/landing/services/nadegas.jpg", description: "Tratamento para região dos glúteos" },
       { name: "Linha alba", image: "/images/landing/services/linha-alba.jpg", description: "Remoção dos pelos da linha central" },
       { name: "Coxas", image: "/images/landing/services/coxas.jpg", description: "Coxas lisas e livres de pelos" },
-      { name: "Meia perna", image: "/images/landing/services/meia-perna.jpg", description: "Depilação da canela até o joelho" },
+      { name: "Meia perna", image: "/images/landing/services/meia-perna.jpg", description: "Serviço da canela até o joelho" },
       { name: "Pernas completas", image: "/images/landing/services/pernas-completas.jpg", description: "Pernas inteiras livres de pelos" },
     ],
     masculino: [
@@ -33,7 +33,7 @@ const AllServicesSection = () => {
       { name: "Ombros", image: "/images/landing/services/ombros.jpg", description: "Ombros livres de pelos indesejados" },
       { name: "Glúteos", image: "/images/landing/services/gluteos.jpg", description: "Tratamento discreto e eficaz" },
       { name: "Perna completa", image: "/images/landing/services/perna-completa-masc.jpg", description: "Pernas masculinas completamente lisas" },
-      { name: "Meia perna", image: "/images/landing/services/meia-perna-masc.jpg", description: "Depilação da canela até o joelho" },
+      { name: "Meia perna", image: "/images/landing/services/meia-perna-masc.jpg", description: "Serviço da canela até o joelho" },
       { name: "Região íntima", image: "/images/landing/services/regiao-intima.jpg", description: "Tratamento completo região íntima" },
     ],
     tratamentos: [
@@ -60,22 +60,22 @@ const AllServicesSection = () => {
             NOSSOS SERVIÇOS EM PRAIA GRANDE
           </div>
           <h2 className="text-3xl md:text-5xl font-bold text-primary mb-4">
-            Procedimentos Disponíveis
+            Serviços Disponíveis
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Depilação a laser de alta tecnologia para todas as áreas do corpo,
-            com tratamentos complementares para sua pele perfeita
+            Soluções completas e personalizadas para atender
+            todas as suas necessidades com excelência
           </p>
         </div>
 
-        {/* Depilação Feminina */}
+        {/* Serviços Femininos */}
         <div className="mb-16">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
               <Heart className="w-6 h-6 text-primary" />
             </div>
             <h3 className="text-2xl md:text-3xl font-bold text-foreground">
-              Depilação a Laser Feminina
+              Serviços Femininos
             </h3>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -87,7 +87,7 @@ const AllServicesSection = () => {
                 <div className="aspect-square bg-gradient-to-br from-primary/10 to-secondary/10 relative overflow-hidden">
                   <img
                     src={service.image}
-                    alt={`Depilação a laser ${service.name} em Praia Grande`}
+                    alt={`${service.name} - Viniun Praia Grande`}
                     loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -116,14 +116,14 @@ const AllServicesSection = () => {
           </div>
         </div>
 
-        {/* Depilação Masculina */}
+        {/* Serviços Masculinos */}
         <div className="mb-16">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
               <Users className="w-6 h-6 text-secondary" />
             </div>
             <h3 className="text-2xl md:text-3xl font-bold text-foreground">
-              Depilação a Laser Masculina
+              Serviços Masculinos
             </h3>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -135,7 +135,7 @@ const AllServicesSection = () => {
                 <div className="aspect-square bg-gradient-to-br from-secondary/10 to-primary/10 relative overflow-hidden">
                   <img
                     src={service.image}
-                    alt={`Depilação a laser ${service.name} em Praia Grande`}
+                    alt={`${service.name} - Viniun Praia Grande`}
                     loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -210,7 +210,7 @@ const AllServicesSection = () => {
             <span className="bg-white px-4 py-2 rounded-full shadow-sm">✅ Avaliação personalizada</span>
             <span className="bg-white px-4 py-2 rounded-full shadow-sm">✅ Sessão teste</span>
             <span className="bg-white px-4 py-2 rounded-full shadow-sm">✅ Sessões de manutenção</span>
-            <span className="bg-white px-4 py-2 rounded-full shadow-sm">✅ Protocolos pós-laser</span>
+            <span className="bg-white px-4 py-2 rounded-full shadow-sm">✅ Protocolos de qualidade</span>
             <span className="bg-white px-4 py-2 rounded-full shadow-sm">✅ Acompanhamento WhatsApp</span>
           </div>
         </div>

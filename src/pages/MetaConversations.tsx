@@ -202,7 +202,7 @@ export function MetaConversations() {
                 </div>
 
                 {/* Status Filter */}
-                <Select value={statusFilter} onValueChange={(v: any) => setStatusFilter(v)}>
+                <Select value={statusFilter} onValueChange={(v: string) => setStatusFilter(v)}>
                   <SelectTrigger className="w-[150px]">
                     <SelectValue />
                   </SelectTrigger>

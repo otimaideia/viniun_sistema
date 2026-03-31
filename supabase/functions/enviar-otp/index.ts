@@ -89,7 +89,7 @@ async function enviarWhatsApp(
 
     // 4. Montar mensagem conforme tipo
     const portalNome = tipo === "influenciadora" ? "Portal da Influenciadora" : "Portal do Parceiro";
-    const mensagem = `🔐 *YESlaser - ${portalNome}*
+    const mensagem = `🔐 *Viniun - ${portalNome}*
 
 Olá${nome ? `, ${nome}` : ""}!
 
@@ -101,7 +101,7 @@ Este código é válido por 10 minutos.
 
 ⚠️ Se você não solicitou este código, ignore esta mensagem.
 
-_Equipe YESlaser_`;
+_Equipe Viniun_`;
 
     // 5. Enviar
     const sendResp = await fetch(`${wahaConfig.api_url}/api/sendText`, {
@@ -183,7 +183,7 @@ async function enviarEmail(
           user: settingsMap.smtp_user,
           pass: settingsMap.smtp_pass,
           from_email: settingsMap.smtp_from_email || settingsMap.smtp_user,
-          from_name: settingsMap.smtp_from_name || "YESlaser",
+          from_name: settingsMap.smtp_from_name || "Viniun",
         };
       }
     }
@@ -202,7 +202,7 @@ async function enviarEmail(
           user: smtpUser,
           pass: smtpPass,
           from_email: Deno.env.get("SMTP_FROM_EMAIL") || smtpUser,
-          from_name: Deno.env.get("SMTP_FROM_NAME") || "YESlaser",
+          from_name: Deno.env.get("SMTP_FROM_NAME") || "Viniun",
         };
       }
     }
@@ -223,7 +223,7 @@ async function enviarEmail(
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Código de Verificação - YESlaser</title>
+  <title>Código de Verificação - Viniun</title>
 </head>
 <body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;padding:40px 0">
@@ -232,7 +232,7 @@ async function enviarEmail(
         <table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1)">
           <tr>
             <td style="background:#E91E63;padding:32px;text-align:center">
-              <h1 style="color:#fff;margin:0;font-size:24px">YESlaser</h1>
+              <h1 style="color:#fff;margin:0;font-size:24px">Viniun</h1>
               <p style="color:rgba(255,255,255,0.85);margin:8px 0 0;font-size:14px">${portalNome}</p>
             </td>
           </tr>
@@ -255,7 +255,7 @@ async function enviarEmail(
           <tr>
             <td style="background:#f8f8f8;padding:20px;text-align:center;border-top:1px solid #eee">
               <p style="color:#aaa;margin:0;font-size:12px">
-                © ${new Date().getFullYear()} YESlaser. Todos os direitos reservados.
+                © ${new Date().getFullYear()} Viniun. Todos os direitos reservados.
               </p>
             </td>
           </tr>
@@ -287,9 +287,9 @@ async function enviarEmail(
     await transporter.sendMail({
       from: `"${smtpConfig.from_name}" <${smtpConfig.from_email}>`,
       to: email,
-      subject: `${codigo} - Código de verificação YESlaser`,
+      subject: `${codigo} - Código de verificação Viniun`,
       html: htmlBody,
-      text: `Olá${nome ? `, ${nome}` : ""}!\n\nSeu código de verificação YESlaser é: ${codigo}\n\nEste código expira em 10 minutos.\n\nEquipe YESlaser`,
+      text: `Olá${nome ? `, ${nome}` : ""}!\n\nSeu código de verificação Viniun é: ${codigo}\n\nEste código expira em 10 minutos.\n\nEquipe Viniun`,
     });
 
     console.log(`[EMAIL] OTP enviado para ${email}`);

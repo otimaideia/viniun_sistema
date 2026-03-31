@@ -310,9 +310,9 @@ export default function InfluenciadoraReferralNotifConfig() {
 
 A *[Nome da Influenciadora]* te indicou e você ganhou um presente especial! 🎁
 
-✨ *10 sessões de depilação a laser GRATUITAS* em área P!
+✨ *Benefícios exclusivos GRATUITOS*!
 
-Para garantir suas sessões, é só agendar uma *avaliação gratuita* aqui na *YESlaser Praia Grande*. A avaliação é rápida, sem compromisso, e nossa especialista vai analisar sua pele e tirar todas as suas dúvidas.
+Para garantir seus benefícios, é só agendar um *atendimento gratuito* aqui na *Viniun*. O atendimento é rápido, sem compromisso, e nosso especialista vai tirar todas as suas dúvidas.
 
 📅 Quer agendar? Me conta qual o melhor dia e horário para você!
 

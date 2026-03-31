@@ -43,7 +43,7 @@ export default function WhatsAppGrupoOperacoes() {
   const [runningId, setRunningId] = useState<string | null>(null);
 
   const { operations, isLoading, refetch, isFetching, startOperation } = useGroupOperationsMT(
-    statusFilter !== 'all' ? { status: statusFilter as any } : undefined
+    statusFilter !== 'all' ? { status: statusFilter as string } : undefined
   );
 
   const now = new Date();

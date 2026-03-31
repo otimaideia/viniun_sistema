@@ -125,8 +125,8 @@ export default function EstoqueFornecedores() {
         await createSupplier(form);
       }
       setDialogOpen(false);
-    } catch (err: any) {
-      toast.error(err.message || "Erro ao salvar fornecedor");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Erro ao salvar fornecedor");
     } finally {
       setSaving(false);
     }

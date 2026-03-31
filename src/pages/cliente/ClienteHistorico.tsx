@@ -10,7 +10,7 @@ import {
   AlertTriangle, ArrowRight, Clock, MapPin
 } from 'lucide-react';
 
-const statusDisplay: Record<string, { label: string; color: string; icon: any }> = {
+const statusDisplay: Record<string, { label: string; color: string; icon: React.ComponentType<{ className?: string }> }> = {
   concluido: { label: 'Realizado', color: 'bg-green-100 text-green-700 border-green-200', icon: CheckCircle2 },
   realizado: { label: 'Realizado', color: 'bg-green-100 text-green-700 border-green-200', icon: CheckCircle2 },
   confirmado: { label: 'Confirmado', color: 'bg-blue-100 text-blue-700 border-blue-200', icon: CheckCircle2 },
@@ -131,7 +131,7 @@ export default function ClienteHistorico() {
 }
 
 function AppointmentList({ appointments, emptyMessage = 'Nenhum agendamento encontrado' }: {
-  appointments: any[];
+  appointments: Record<string, unknown>[];
   emptyMessage?: string;
 }) {
   if (appointments.length === 0) {

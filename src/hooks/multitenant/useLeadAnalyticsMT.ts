@@ -30,9 +30,9 @@ const BODY_AREA_KEYWORDS = [
 ];
 
 const PROCEDURE_KEYWORDS = [
-  "botox", "preenchimento", "limpeza de pele", "drenagem",
-  "criolipólise", "crio", "massagem", "revitalização",
-  "radiofrequência", "microagulhamento", "clareamento",
+  "consultoria", "assessoria", "avaliação", "atendimento",
+  "visita", "vistoria", "análise", "serviço",
+  "financiamento", "documentação", "contrato",
 ];
 
 const FAQ_KEYWORDS = [
@@ -270,16 +270,16 @@ export function useLeadAnalyticsMT(period: AnalyticsPeriod = "90d") {
 
       // Top procedures
       const procedureGroups: Record<string, string[]> = {
-        "Botox": ["botox"],
-        "Limpeza de pele": ["limpeza de pele"],
-        "Revitalização": ["revitalização"],
-        "Preenchimento": ["preenchimento"],
-        "Drenagem": ["drenagem"],
-        "Criolipólise": ["criolipólise", "crio"],
-        "Massagem": ["massagem"],
-        "Radiofrequência": ["radiofrequência"],
-        "Microagulhamento": ["microagulhamento"],
-        "Clareamento": ["clareamento"],
+        "Consultoria": ["consultoria"],
+        "Assessoria": ["assessoria"],
+        "Avaliação": ["avaliação"],
+        "Atendimento": ["atendimento"],
+        "Visita": ["visita"],
+        "Vistoria": ["vistoria"],
+        "Análise": ["análise"],
+        "Financiamento": ["financiamento"],
+        "Documentação": ["documentação"],
+        "Contrato": ["contrato"],
       };
 
       const topProcedures: KeywordMention[] = Object.entries(procedureGroups)

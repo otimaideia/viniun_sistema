@@ -39,11 +39,55 @@ import {
   GripVertical,
 } from "lucide-react";
 import * as LucideIcons from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { toast } from "sonner";
+
+// Local interfaces for dashboard tables not in generated types
+interface DashboardProfile {
+  id: string;
+  nome: string;
+  codigo: string;
+  descricao?: string | null;
+  icone?: string;
+  cor?: string | null;
+  ordem?: number;
+  is_active?: boolean;
+  is_default?: boolean;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string | null;
+  [key: string]: unknown;
+}
+
+interface DashboardBoard {
+  id: string;
+  profile_id: string;
+  nome: string;
+  codigo: string;
+  descricao?: string | null;
+  icone?: string;
+  ordem?: number;
+  is_active?: boolean;
+  created_at?: string;
+  updated_at?: string;
+  [key: string]: unknown;
+}
+
+interface DashboardBoardWidget {
+  id: string;
+  board_id: string;
+  titulo: string;
+  tipo: string;
+  ordem?: number;
+  config?: Record<string, unknown>;
+  created_at?: string;
+  updated_at?: string;
+  [key: string]: unknown;
+}
 
 function DynamicIcon({ iconName, className, style }: { iconName?: string; className?: string; style?: React.CSSProperties }) {
   if (!iconName) return <LayoutDashboard className={className} style={style} />;
-  const Icon = (LucideIcons as any)[iconName] || LayoutDashboard;
+  const Icon = ((LucideIcons as Record<string, LucideIcon>)[iconName]) || LayoutDashboard;
   return <Icon className={className} style={style} />;
 }
 
@@ -75,13 +119,13 @@ export default function DashboardProfileDetail() {
     queryKey: ["mt-dashboard-profile", id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("mt_dashboard_profiles" as any)
+        .from("mt_dashboard_profiles")
         .select("*")
         .eq("id", id!)
         .is("deleted_at", null)
         .single();
       if (error) throw error;
-      return data as any;
+      return data as DashboardProfile;
     },
     enabled: !!id,
   });
@@ -91,39 +135,39 @@ export default function DashboardProfileDetail() {
     queryKey: ["mt-dashboard-boards", id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("mt_dashboard_boards" as any)
+        .from("mt_dashboard_boards")
         .select("*")
         .eq("profile_id", id!)
         .order("ordem", { ascending: true });
       if (error) throw error;
-      return (data || []) as any[];
+      return (data || []) as DashboardBoard[];
     },
     enabled: !!id,
   });
 
   // Load widgets for all boards
-  const boardIds = boards.map((b: any) => b.id);
+  const boardIds = boards.map(b => b.id);
   const { data: widgets = [] } = useQuery({
     queryKey: ["mt-dashboard-board-widgets", boardIds],
     queryFn: async () => {
       if (boardIds.length === 0) return [];
       const { data, error } = await supabase
-        .from("mt_dashboard_board_widgets" as any)
+        .from("mt_dashboard_board_widgets")
         .select("*")
         .in("board_id", boardIds)
         .order("ordem", { ascending: true });
       if (error) throw error;
-      return (data || []) as any[];
+      return (data || []) as DashboardBoardWidget[];
     },
     enabled: boardIds.length > 0,
   });
 
   // Duplicate board
   const duplicateBoard = useMutation({
-    mutationFn: async (board: any) => {
+    mutationFn: async (board: DashboardBoard) => {
       const { id: _id, created_at, updated_at, ...rest } = board;
       const { data, error } = await supabase
-        .from("mt_dashboard_boards" as any)
+        .from("mt_dashboard_boards")
         .insert({
           ...rest,
           nome: `${board.nome} (cópia)`,
@@ -135,13 +179,13 @@ export default function DashboardProfileDetail() {
       if (error) throw error;
 
       // Duplicate widgets for this board
-      const boardWidgets = widgets.filter((w: any) => w.board_id === board.id);
+      const boardWidgets = widgets.filter(w => w.board_id === board.id);
       if (boardWidgets.length > 0) {
-        const newWidgets = boardWidgets.map((w: any) => {
+        const newWidgets = boardWidgets.map(w => {
           const { id: _wid, created_at: _ca, updated_at: _ua, ...wRest } = w;
-          return { ...wRest, board_id: (data as any).id };
+          return { ...wRest, board_id: (data as DashboardBoard).id };
         });
-        await supabase.from("mt_dashboard_board_widgets" as any).insert(newWidgets);
+        await supabase.from("mt_dashboard_board_widgets").insert(newWidgets);
       }
 
       return data;
@@ -151,7 +195,7 @@ export default function DashboardProfileDetail() {
       queryClient.invalidateQueries({ queryKey: ["mt-dashboard-board-widgets"] });
       toast.success("Board duplicado com sucesso");
     },
-    onError: (err: any) => toast.error(`Erro ao duplicar: ${err.message}`),
+    onError: (err: Error) => toast.error(`Erro ao duplicar: ${err.message}`),
   });
 
   // Delete board
@@ -159,11 +203,11 @@ export default function DashboardProfileDetail() {
     mutationFn: async (boardId: string) => {
       // Delete widgets first
       await supabase
-        .from("mt_dashboard_board_widgets" as any)
+        .from("mt_dashboard_board_widgets")
         .delete()
         .eq("board_id", boardId);
       const { error } = await supabase
-        .from("mt_dashboard_boards" as any)
+        .from("mt_dashboard_boards")
         .delete()
         .eq("id", boardId);
       if (error) throw error;
@@ -173,11 +217,11 @@ export default function DashboardProfileDetail() {
       queryClient.invalidateQueries({ queryKey: ["mt-dashboard-board-widgets"] });
       toast.success("Board excluído com sucesso");
     },
-    onError: (err: any) => toast.error(`Erro ao excluir: ${err.message}`),
+    onError: (err: Error) => toast.error(`Erro ao excluir: ${err.message}`),
   });
 
   // Group widgets by board
-  const widgetsByBoard = widgets.reduce((acc: Record<string, any[]>, w: any) => {
+  const widgetsByBoard = widgets.reduce((acc: Record<string, DashboardBoardWidget[]>, w: DashboardBoardWidget) => {
     if (!acc[w.board_id]) acc[w.board_id] = [];
     acc[w.board_id].push(w);
     return acc;
@@ -374,7 +418,7 @@ export default function DashboardProfileDetail() {
           </Card>
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
-            {boards.map((board: any) => {
+            {boards.map((board: DashboardBoard) => {
               const boardWidgets = widgetsByBoard[board.id] || [];
               return (
                 <Card key={board.id} className="relative">
@@ -414,7 +458,7 @@ export default function DashboardProfileDetail() {
                     {/* Widget mini-preview */}
                     {boardWidgets.length > 0 ? (
                       <div className="space-y-1.5">
-                        {boardWidgets.slice(0, 5).map((w: any) => (
+                        {boardWidgets.slice(0, 5).map(w => (
                           <div
                             key={w.id}
                             className="flex items-center justify-between px-2 py-1.5 rounded bg-muted/50 text-sm"

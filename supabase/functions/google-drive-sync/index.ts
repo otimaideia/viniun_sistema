@@ -13,9 +13,8 @@ const DRIVE_API_BASE = "https://www.googleapis.com/drive/v3";
 const FOLDER_TO_CATEGORY: Record<string, string> = {
   "destaques": "destaques",
   "destaque": "destaques",
-  "material yes laser": "material_yeslaser",
-  "material yeslaser": "material_yeslaser",
-  "yeslaser": "material_yeslaser",
+  "material viniun": "material_viniun",
+  "viniun": "material_viniun",
   "material a-edgel": "material_aedgel",
   "material aedgel": "material_aedgel",
   "a-edgel": "material_aedgel",

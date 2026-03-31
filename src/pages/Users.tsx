@@ -154,7 +154,7 @@ const Users = () => {
                 className="pl-9"
               />
             </div>
-            <Select value={filterApproval} onValueChange={(v) => setFilterApproval(v as any)}>
+            <Select value={filterApproval} onValueChange={(v) => setFilterApproval(v as string)}>
               <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>

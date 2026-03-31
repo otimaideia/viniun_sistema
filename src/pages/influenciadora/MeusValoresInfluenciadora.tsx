@@ -72,7 +72,7 @@ export default function MeusValoresInfluenciadora() {
                 </p>
                 <p className="text-sm text-blue-700 mt-1">
                   Os valores abaixo são seus preços por tipo de conteúdo.
-                  Para alterar seus valores, entre em contato com a equipe de marketing da YESlaser.
+                  Para alterar seus valores, entre em contato com a equipe de marketing da Viniun.
                 </p>
               </div>
             </div>
@@ -93,7 +93,7 @@ export default function MeusValoresInfluenciadora() {
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#662E8E] to-[#F2B705] flex items-center justify-center text-white text-xs font-bold">
                       {plataforma.slice(0, 2).toUpperCase()}
                     </div>
-                    {getPlataformaIcon(plataforma as any)}
+                    {getPlataformaIcon(plataforma as string)}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>

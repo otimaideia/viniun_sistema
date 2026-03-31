@@ -340,7 +340,7 @@ export default function ParceriaEdit() {
             ...data,
             logo_url: logoUrl,
             logo_path: logoPath,
-          } as any,
+          } as Record<string, unknown>,
         });
       }
 

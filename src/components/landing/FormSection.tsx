@@ -5,10 +5,10 @@ const FormSection = () => {
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.data?.type === 'yeslaser-form-height' && iframeRef.current) {
+      if (event.data?.type === 'viniun-form-height' && iframeRef.current) {
         iframeRef.current.style.height = event.data.height + 'px';
       }
-      if (event.data?.type === 'yeslaser-form-submit') {
+      if (event.data?.type === 'viniun-form-submit') {
         // Lead criado no sistema MT - disparar tracking
         if (typeof window !== "undefined" && (window as any).dataLayer) {
           (window as any).dataLayer.push({
@@ -28,7 +28,7 @@ const FormSection = () => {
   const utmParams = typeof window !== 'undefined'
     ? new URLSearchParams(window.location.search).toString()
     : '';
-  const iframeSrc = `/form/loja-contato?embed_url=yeslaserpraiagrande.com.br${utmParams ? '&' + utmParams : ''}`;
+  const iframeSrc = `/form/loja-contato?embed_url=viniun.com.br${utmParams ? '&' + utmParams : ''}`;
 
   return (
     <section id="formulario" className="py-16 bg-gradient-to-b from-muted to-background">
@@ -38,7 +38,7 @@ const FormSection = () => {
             Quero Saber Mais
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Preencha o formulário abaixo para receber mais informações sobre nossos tratamentos de depilação a laser!
+            Preencha o formulário abaixo para receber mais informações sobre nossos serviços!
           </p>
         </div>
         <div className="max-w-2xl mx-auto">
@@ -47,7 +47,7 @@ const FormSection = () => {
             src={iframeSrc}
             style={{ width: '100%', border: 'none', minHeight: '600px' }}
             allow="geolocation"
-            title="Formulário YESlaser"
+            title="Formulário Viniun"
           />
         </div>
       </div>

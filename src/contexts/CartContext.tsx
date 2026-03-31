@@ -54,7 +54,7 @@ interface CartContextType {
 
 // ─── Constants ────────────────────────────────────────────────
 
-const STORAGE_KEY = 'yeslaser_cart';
+const STORAGE_KEY = 'viniun_cart';
 
 const INITIAL_STATE: CartState = {
   items: [],

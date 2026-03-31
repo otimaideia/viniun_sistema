@@ -204,11 +204,11 @@ export default function FranquiaEdit() {
       });
 
       navigate(`/configuracoes/franquias/${id}`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao salvar franquia:', error);
       toast({
         title: 'Erro ao salvar',
-        description: error.message || 'Não foi possível salvar a franquia.',
+        description: error instanceof Error ? error.message : 'Não foi possível salvar a franquia.',
         variant: 'destructive',
       });
     } finally {

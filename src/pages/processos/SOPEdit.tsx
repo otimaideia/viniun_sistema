@@ -94,7 +94,7 @@ export default function SOPEdit() {
   }, [sop, isEditing, form]);
 
   const onSubmit = async (values: SOPFormValues) => {
-    const payload: any = {
+    const payload: Record<string, unknown> = {
       codigo: values.codigo,
       titulo: values.titulo,
       descricao: values.descricao || null,
@@ -288,7 +288,7 @@ export default function SOPEdit() {
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="none">Nenhum</SelectItem>
-                          {departments?.map((dep: any) => (
+                          {departments?.map((dep: { id: string; nome: string }) => (
                             <SelectItem key={dep.id} value={dep.id}>
                               {dep.nome}
                             </SelectItem>

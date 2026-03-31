@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
 import useTenantDetection from '@/hooks/multitenant/useTenantDetection';
+import { useLojaPublicSubmission } from '@/hooks/public/useLojaPublicSubmission';
 import { extractLocationHint, matchFranchiseByLocation } from '@/utils/franchiseLocation';
 import { useStoreTracking } from '@/hooks/useStoreTracking';
 import { Badge } from '@/components/ui/badge';
@@ -103,7 +103,7 @@ interface TenantBranding {
 }
 
 // =============================================================================
-// CONSTANTS - YESlaser Visual Identity
+// CONSTANTS - Viniun Visual Identity
 // =============================================================================
 
 const COLORS = {
@@ -175,7 +175,7 @@ function formatHorario(horario: Record<string, { abre: string; fecha: string } |
 }
 
 const FORM_SLUG_LOJA = 'loja-contato';
-const LOGO_URL = '/images/landing/depilacao-a-laser-em-praia-grande-yeslaser.png';
+const LOGO_URL = '/images/landing/viniun-logo.png';
 
 // =============================================================================
 // COMPONENTE PRINCIPAL
@@ -214,6 +214,11 @@ export default function LojaPublica() {
 
   const { trackEvent, getWhatsAppUrl, getFormUrl, createInfluencerReferral, influencerCode } =
     useStoreTracking(tenant?.id || null);
+
+  const { upsertLead, registerLeadActivity, submitFormData } = useLojaPublicSubmission({
+    tenant_id: tenant?.id || '',
+    franchise_id: franchise?.id || null,
+  });
 
   const whatsappNumber = franchise?.whatsapp || franchise?.telefone || sessionPhone || tenant?.whatsapp || tenant?.telefone || null;
 
@@ -359,126 +364,33 @@ export default function LojaPublica() {
       const whatsClean = formWhatsapp.replace(/\D/g, '');
       const cepClean = formCep.replace(/\D/g, '');
 
-      const orConditions: string[] = [];
-      if (formEmail) orConditions.push(`email.eq.${formEmail}`);
-      if (whatsClean) orConditions.push(`whatsapp.eq.${whatsClean}`);
+      // Upsert lead via hook
+      const { leadId, isNew } = await upsertLead({
+        nome: formNome,
+        whatsapp: whatsClean,
+        email: formEmail,
+        genero: formGenero,
+        cep: cepClean,
+        endereco: formLogradouro,
+        bairro: formBairro,
+        cidade: formCidade,
+        estado: formUf,
+        servico_interesse: formInteresse,
+        influenciador_codigo: influencerCode || null,
+      });
 
-      let leadId: string | undefined;
-      let existing: { id: string } | null = null;
-
-      if (orConditions.length > 0) {
-        const { data: existingData } = await supabase
-          .from('mt_leads')
-          .select('id')
-          .eq('tenant_id', tenant.id)
-          .or(orConditions.join(','))
-          .maybeSingle();
-        existing = existingData;
-
-        if (existing) {
-          await supabase.from('mt_leads').update({
-            nome: formNome.trim(),
-            genero: formGenero || null,
-            cep: cepClean || null,
-            endereco: formLogradouro || null,
-            bairro: formBairro || null,
-            cidade: formCidade || null,
-            estado: formUf || null,
-            servico_interesse: formInteresse || null,
-            ultimo_contato: new Date().toISOString(),
-            landing_page: window.location.href,
-          }).eq('id', existing.id);
-          leadId = existing.id;
-        }
-      }
-
-      if (!leadId) {
-        const leadData: Record<string, unknown> = {
-          tenant_id: tenant.id,
-          franchise_id: franchise?.id || null,
-          nome: formNome.trim(),
-          whatsapp: whatsClean || null,
-          telefone: whatsClean || null,
-          email: formEmail || null,
-          genero: formGenero || null,
-          cep: cepClean || null,
-          endereco: formLogradouro || null,
-          bairro: formBairro || null,
-          cidade: formCidade || null,
-          estado: formUf || null,
-          servico_interesse: formInteresse || null,
-          origem: 'loja',
-          utm_source: 'loja',
-          utm_medium: 'formulario',
-          landing_page: window.location.href,
-          referrer_url: document.referrer || null,
-          influenciador_codigo: influencerCode || null,
-          status: 'novo',
-          temperatura: 'morno',
-          tags: ['loja-online'],
-          dados_extras: {
-            interesse: formInteresse,
-            genero: formGenero,
-            cep: cepClean,
-            endereco: formLogradouro,
-            bairro: formBairro,
-            cidade: formCidade,
-            estado: formUf,
-            consent: formConsent,
-            source: 'loja-publica',
-          },
-        };
-
-        const { data: newLead } = await supabase
-          .from('mt_leads')
-          .insert(leadData)
-          .select('id')
-          .single();
-        leadId = newLead?.id;
-      }
-
-      // Registrar atividade no lead (SEMPRE)
+      // Register activity on lead
       if (leadId && tenant?.id) {
-        try {
-          const isNew = !existing;
-          await supabase.from('mt_lead_activities').insert({
-            lead_id: leadId,
-            tenant_id: tenant.id,
-            franchise_id: franchise?.id || null,
-            tipo: isNew ? 'cadastro' : 'formulario',
-            titulo: isNew ? 'Lead cadastrado via Loja Online' : 'Nova submissão via Loja Online',
-            descricao: isNew
-              ? `Cadastro realizado pela loja online${formInteresse ? ` - Interesse: ${formInteresse}` : ''}${influencerCode ? ` - Cód. influenciadora: ${influencerCode}` : ''}`
-              : `Lead se cadastrou novamente pela loja online${formInteresse ? ` - Interesse: ${formInteresse}` : ''}${influencerCode ? ` - Cód. influenciadora: ${influencerCode}` : ''}`,
-            dados: {
-              origem: 'loja',
-              canal_entrada: 'loja-online',
-              landing_page: window.location.href,
-              referrer_url: document.referrer || null,
-              interesse: formInteresse,
-              influencer_code: influencerCode || null,
-              is_resubmissao: !isNew,
-              dados_submetidos: {
-                nome: formNome.trim(),
-                whatsapp: whatsClean,
-                email: formEmail,
-                genero: formGenero,
-                cep: cepClean,
-                interesse: formInteresse,
-              },
-            },
-            user_nome: 'Sistema (Loja Pública)',
-          });
-        } catch (actErr) {
-          console.error('[LojaPublica] Erro ao registrar atividade:', actErr);
-        }
+        await registerLeadActivity(leadId, isNew, {
+          interesse: formInteresse,
+          influencerCode: influencerCode || null,
+        });
       }
 
+      // Submit form data
       if (formId) {
-        await supabase.from('mt_form_submissions').insert({
-          tenant_id: tenant.id,
+        await submitFormData(leadId, {
           form_id: formId,
-          lead_id: leadId || null,
           dados: {
             nome_completo: formNome.trim(),
             whatsapp: whatsClean,
@@ -492,11 +404,6 @@ export default function LojaPublica() {
             interesse: formInteresse,
             consent: formConsent,
           },
-          ip_address: null,
-          user_agent: navigator.userAgent,
-          referrer: document.referrer || null,
-          utm_source: 'loja',
-          utm_medium: 'formulario',
         });
       }
 
@@ -1187,9 +1094,9 @@ export default function LojaPublica() {
                               <SelectValue placeholder="Selecione seu interesse..." />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="Depilação a Laser">Depilacao a Laser</SelectItem>
-                              <SelectItem value="Estética Facial">Estetica Facial</SelectItem>
-                              <SelectItem value="Estética Corporal">Estetica Corporal</SelectItem>
+                              <SelectItem value="Consultoria">Consultoria</SelectItem>
+                              <SelectItem value="Assessoria">Assessoria</SelectItem>
+                              <SelectItem value="Serviços Especializados">Serviços Especializados</SelectItem>
                               <SelectItem value="Pacote Promocional">Pacote Promocional</SelectItem>
                               <SelectItem value="Outro">Outro</SelectItem>
                             </SelectContent>
@@ -1376,7 +1283,7 @@ export default function LojaPublica() {
               </Button>
               <div className="flex items-center gap-3 pt-2">
                 <a
-                  href={`https://instagram.com/${tenant?.slug || 'yeslaser'}`}
+                  href={`https://instagram.com/${tenant?.slug || 'viniun'}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-500 hover:text-white transition-colors"

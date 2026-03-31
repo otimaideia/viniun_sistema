@@ -10,8 +10,8 @@ import { Gift, Sparkles, CreditCard, Loader2, ChevronLeft, ChevronRight, User, U
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-// YESlaser Praia Grande - IDs fixos para landing page pública
-const YESLASER_TENANT_ID = "ebf87fe2-093a-4fba-bb56-c6835cbc1465";
+// Viniun - IDs fixos para landing page pública
+const VINIUN_TENANT_ID = "ebf87fe2-093a-4fba-bb56-c6835cbc1465";
 const PRAIA_GRANDE_FRANCHISE_ID = "529bac26-008c-473b-ad30-305e17e95e53";
 
 interface Friend {
@@ -107,7 +107,7 @@ const PreInaugFormSection = () => {
       const { data: leadData, error: dbError } = await supabase
         .from('mt_leads')
         .insert([{
-          tenant_id: YESLASER_TENANT_ID,
+          tenant_id: VINIUN_TENANT_ID,
           franchise_id: PRAIA_GRANDE_FRANCHISE_ID,
           nome: nomeCompleto,
           telefone: whatsappClean,
@@ -189,7 +189,7 @@ const PreInaugFormSection = () => {
       if (completeFriends.length > 0) {
         const nomeCompleto = `${nome.trim()} ${sobrenome.trim()}`;
         const referralsData = completeFriends.map(friend => ({
-          tenant_id: YESLASER_TENANT_ID,
+          tenant_id: VINIUN_TENANT_ID,
           franchise_id: PRAIA_GRANDE_FRANCHISE_ID,
           nome: friend.name.trim(),
           telefone: friend.whatsapp.replace(/\D/g, ''),
@@ -231,7 +231,7 @@ const PreInaugFormSection = () => {
 
       // WhatsApp message
       const nomeCompleto = `${nome.trim()} ${sobrenome.trim()}`;
-      const message = `✅ *Novo Cadastro Yeslaser Praia Grande*
+      const message = `✅ *Novo Cadastro Viniun*
 
 👤 Nome: ${nomeCompleto}
 📱 Telefone: ${whatsapp}
@@ -286,10 +286,10 @@ ${completeFriends.map((f, i) => `  ${i + 1}. ${f.name} - ${f.whatsapp}`).join('\
     return (
       <section id="formulario-preinauguracao" className="py-12 md:py-16 bg-background">
         <div className="container mx-auto px-4">
-          <Card className="w-full max-w-4xl mx-auto border-2 border-yeslaser-purple shadow-xl">
+          <Card className="w-full max-w-4xl mx-auto border-2 border-viniun-navy shadow-xl">
             <CardContent className="pt-12 pb-8 text-center">
               <CheckCircle className="w-20 h-20 mx-auto mb-6 text-green-500" />
-              <h3 className="text-2xl sm:text-3xl font-bold mb-4 text-yeslaser-purple">
+              <h3 className="text-2xl sm:text-3xl font-bold mb-4 text-viniun-navy">
                 Cadastro Realizado com Sucesso!
               </h3>
               <p className="text-lg text-gray-600 mb-6">
@@ -323,7 +323,7 @@ ${completeFriends.map((f, i) => `  ${i + 1}. ${f.name} - ${f.whatsapp}`).join('\
 
               <Button
                 onClick={() => window.location.reload()}
-                className="bg-yeslaser-purple hover:opacity-90 text-white px-8 py-3 text-lg"
+                className="bg-viniun-navy hover:opacity-90 text-white px-8 py-3 text-lg"
               >
                 Fazer Novo Cadastro
               </Button>
@@ -337,14 +337,14 @@ ${completeFriends.map((f, i) => `  ${i + 1}. ${f.name} - ${f.whatsapp}`).join('\
   return (
     <section id="formulario-preinauguracao" className="py-12 md:py-16 bg-background">
       <div className="container mx-auto px-4">
-        <Card className="w-full max-w-4xl mx-auto border-2 border-yeslaser-purple shadow-xl">
-          <CardHeader className="bg-gradient-to-r from-yeslaser-purple to-yeslaser-lightBlue text-white p-5 sm:p-6 md:p-8">
+        <Card className="w-full max-w-4xl mx-auto border-2 border-viniun-navy shadow-xl">
+          <CardHeader className="bg-gradient-to-r from-viniun-navy to-viniun-lightBlue text-white p-5 sm:p-6 md:p-8">
             <div className="flex items-center justify-center gap-3 mb-3">
               <Gift className="w-7 h-7 sm:w-8 sm:h-8" />
               <Sparkles className="w-6 h-6 sm:w-7 sm:h-7" />
             </div>
             <CardTitle className="text-xl sm:text-2xl md:text-3xl text-center leading-tight px-2">
-              Ganhe 10 Sessões Grátis de Depilação a Laser!
+              Ganhe Benefícios Exclusivos!
             </CardTitle>
             <CardDescription className="text-white/90 text-center text-sm sm:text-base md:text-lg mt-3 px-2">
               Cadastre-se e indique 5 amigos para garantir seu benefício exclusivo
@@ -472,11 +472,11 @@ ${completeFriends.map((f, i) => `  ${i + 1}. ${f.name} - ${f.whatsapp}`).join('\
                         className="mt-1"
                       />
                       <Label htmlFor="pf-consent" className="text-sm text-gray-800 cursor-pointer leading-relaxed font-medium">
-                        <strong className="text-blue-700">Autorizo o contato</strong> da Yeslaser comigo via WhatsApp, e-mail ou telefone para agendar minhas sessões, enviar lembretes e informar sobre promoções exclusivas. *
+                        <strong className="text-blue-700">Autorizo o contato</strong> da Viniun comigo via WhatsApp, e-mail ou telefone para agendar minhas sessões, enviar lembretes e informar sobre promoções exclusivas. *
                       </Label>
                     </div>
                     <p className="text-xs text-gray-600 ml-8 leading-relaxed">
-                      Seus dados serão utilizados apenas para comunicação relacionada aos serviços da Yeslaser e você pode cancelar o recebimento de mensagens a qualquer momento.
+                      Seus dados serão utilizados apenas para comunicação relacionada aos serviços da Viniun e você pode cancelar o recebimento de mensagens a qualquer momento.
                     </p>
                   </div>
 
@@ -484,7 +484,7 @@ ${completeFriends.map((f, i) => `  ${i + 1}. ${f.name} - ${f.whatsapp}`).join('\
                     <p className="text-sm text-yellow-800 flex items-start">
                       <AlertCircle className="mr-2 mt-0.5 flex-shrink-0 w-4 h-4" />
                       <span>
-                        No próximo passo, você poderá indicar até <strong>5 amigos</strong>. Ao indicar 5 amigos, você ganha <strong>10 sessões grátis</strong> de depilação a laser!
+                        No próximo passo, você poderá indicar até <strong>5 amigos</strong>. Ao indicar 5 amigos, você ganha <strong>benefícios exclusivos</strong>!
                       </span>
                     </p>
                   </div>
@@ -497,7 +497,7 @@ ${completeFriends.map((f, i) => `  ${i + 1}. ${f.name} - ${f.whatsapp}`).join('\
                     type="button"
                     onClick={handleNextStep}
                     disabled={isSubmitting}
-                    className="w-full bg-gradient-to-r from-yeslaser-purple to-yeslaser-lightBlue hover:opacity-90 text-white font-bold text-base h-12 sm:h-14 shadow-lg hover:scale-[1.02] transition-all"
+                    className="w-full bg-gradient-to-r from-viniun-navy to-viniun-lightBlue hover:opacity-90 text-white font-bold text-base h-12 sm:h-14 shadow-lg hover:scale-[1.02] transition-all"
                   >
                     {isSubmitting ? (
                       <>
@@ -570,7 +570,7 @@ ${completeFriends.map((f, i) => `  ${i + 1}. ${f.name} - ${f.whatsapp}`).join('\
                         <>
                           <CheckCircle className="mr-2 mt-0.5 flex-shrink-0 w-4 h-4" />
                           <span>
-                            <strong>Parabéns!</strong> Você indicou 5 amigos e vai ganhar 10 sessões grátis de depilação a laser!
+                            <strong>Parabéns!</strong> Você indicou 5 amigos e vai ganhar benefícios exclusivos!
                           </span>
                         </>
                       ) : (
@@ -604,7 +604,7 @@ ${completeFriends.map((f, i) => `  ${i + 1}. ${f.name} - ${f.whatsapp}`).join('\
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="flex-[2] bg-gradient-to-r from-yeslaser-purple to-yeslaser-lightBlue hover:opacity-90 text-white font-bold text-base h-12 sm:h-14 shadow-lg hover:scale-[1.02] transition-all"
+                      className="flex-[2] bg-gradient-to-r from-viniun-navy to-viniun-lightBlue hover:opacity-90 text-white font-bold text-base h-12 sm:h-14 shadow-lg hover:scale-[1.02] transition-all"
                     >
                       {isSubmitting ? (
                         <>
@@ -634,7 +634,7 @@ ${completeFriends.map((f, i) => `  ${i + 1}. ${f.name} - ${f.whatsapp}`).join('\
               <Button
                 type="button"
                 onClick={handleBuyClick}
-                className="w-full bg-gradient-to-r from-yeslaser-purple to-yeslaser-lightBlue hover:opacity-90 text-white font-bold text-sm sm:text-base md:text-lg h-12 sm:h-14 shadow-lg hover:scale-[1.02] transition-all px-4"
+                className="w-full bg-gradient-to-r from-viniun-navy to-viniun-lightBlue hover:opacity-90 text-white font-bold text-sm sm:text-base md:text-lg h-12 sm:h-14 shadow-lg hover:scale-[1.02] transition-all px-4"
               >
                 <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" />
                 <span className="truncate">COMPRAR AGORA - R$ 79,90</span>

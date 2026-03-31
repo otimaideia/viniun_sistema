@@ -92,7 +92,10 @@ const CadastroInfluenciadora = () => {
   const { tenant: detectedTenant, isLoading: isTenantLoading, error: tenantDetectionError } = useTenantDetection();
 
   // Se o usuário está logado e o tenant detectado é o fallback (franqueadora),
-  // tenta buscar o tenant real do usuário autenticado
+  // tenta buscar o tenant real do usuário autenticado.
+  // NOTE: Uses direct supabase.auth.getUser() because this is a PUBLIC page that may be
+  // accessed without authentication (outside AuthProvider). The auth call is a best-effort
+  // fallback to resolve the correct tenant for users who happen to be logged in.
   const [authTenant, setAuthTenant] = useState<typeof detectedTenant>(null);
   useEffect(() => {
     if (isTenantLoading) return;
@@ -104,7 +107,7 @@ const CadastroInfluenciadora = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user || !mounted) return;
 
-      const { data: mtUser } = await (supabase.from('mt_users') as any)
+      const { data: mtUser } = await supabase.from('mt_users' as never)
         .select('tenant_id')
         .eq('auth_user_id', user.id)
         .maybeSingle();
@@ -127,7 +130,7 @@ const CadastroInfluenciadora = () => {
 
   // Detecta franchise pelo query param ?franchise= (slug da franquia)
   // Fallback automático: quando não há ?franchise=, detecta pelo domínio atual
-  // (ex: app.yeslaserpraiagrande.com.br → cidade "Praia Grande" → YESlaser Praia Grande)
+  // (ex: app.viniun.com.br → cidade "Praia Grande" → Viniun)
   const franchiseSlugParam = new URLSearchParams(window.location.search).get("franchise");
   const [franchiseId, setFranchiseId] = useState<string | null>(null);
   useEffect(() => {
@@ -157,8 +160,8 @@ const CadastroInfluenciadora = () => {
       const normalize = (s: string) => (s || '').toLowerCase().replace(/\s/g, '').replace(/[^a-z0-9]/g, '');
 
       // 1. Tenta extrair cidade do hostname
-      // Ex: "www.yeslaserpraiagrande.com.br" → "praiagrande"
-      // Ex: "www.depilacaoalaserpraiagrande.com.br" → "depilacaoalaserpraiagrande" (contém "praiagrande")
+      // Ex: "www.viniun.com.br" → "praiagrande"
+      // Ex: "www.viniun.com.br" → extrai cidade do domínio
       const hostname = window.location.hostname;
       const tenantSlug = normalize(tenant.slug || '');
       const hostParts = hostname.split('.');
@@ -178,7 +181,7 @@ const CadastroInfluenciadora = () => {
       }
 
       // 3. Se não encontrou pela cidade extraída, tenta match no domínio completo
-      // (ex: "depilacaoalaserpraiagrande" contém "praiagrande")
+      // (ex: domínio contém nome da cidade)
       if (!match && baseNorm.length >= 3) {
         match = franchises.find(f => {
           const cidadeNorm = normalize(f.cidade || '');
@@ -192,25 +195,22 @@ const CadastroInfluenciadora = () => {
         const reais = franchises.filter(f => f.nome_fantasia && f.nome_fantasia.trim().length > 0);
         if (reais.length === 1) {
           match = reais[0];
-          console.log(`[Cadastro] Franquia única do tenant: ${match.nome_fantasia}`);
         }
       }
 
       if (match?.id) {
-        console.log(`[Cadastro] Franquia detectada pelo domínio: ${match.nome_fantasia} (${match.cidade})`);
         setFranchiseId(match.id);
       } else {
         // 5. Fallback: se usuário está logado, usa a franquia vinculada
-        console.warn('[Cadastro] Nenhuma franquia detectada pelo domínio:', hostname);
+        // NOTE: Direct supabase.auth call — public page, see tenant detection comment above.
         try {
           const { data: { user } } = await supabase.auth.getUser();
           if (user && mounted) {
-            const { data: mtUser } = await (supabase.from('mt_users') as any)
+            const { data: mtUser } = await supabase.from('mt_users' as never)
               .select('franchise_id')
               .eq('auth_user_id', user.id)
               .maybeSingle();
             if (mtUser?.franchise_id && mounted) {
-              console.log('[Cadastro] Franquia do usuário logado:', mtUser.franchise_id);
               setFranchiseId(mtUser.franchise_id);
               return;
             }
@@ -749,7 +749,7 @@ const CadastroInfluenciadora = () => {
     >
       {/* Landing Page */}
       <LandingPageInfluenciadora
-        tenantName={tenant?.nome_fantasia || "YESlaser"}
+        tenantName={tenant?.nome_fantasia || "Viniun"}
         accentColor="#db2777"
         onScrollToForm={scrollToForm}
         franchiseName={franchiseData?.nome_fantasia || undefined}
@@ -1265,10 +1265,10 @@ const CadastroInfluenciadora = () => {
               <>
                 <div className="p-4 rounded-lg bg-gray-50 border space-y-4 max-h-60 overflow-y-auto">
                   <h4 className="font-semibold">
-                    Termos de Uso do Programa de Influenciadoras YESlaser
+                    Termos de Uso do Programa de Influenciadoras Viniun
                   </h4>
                   <p className="text-sm text-gray-600">
-                    Ao participar do Programa de Influenciadoras YESlaser, você
+                    Ao participar do Programa de Influenciadoras Viniun, você
                     concorda com os seguintes termos:
                   </p>
                   <ul className="text-sm text-gray-600 list-disc pl-4 space-y-2">
@@ -1281,7 +1281,7 @@ const CadastroInfluenciadora = () => {
                       atualizadas.
                     </li>
                     <li>
-                      Você concorda em receber comunicações da YESlaser via
+                      Você concorda em receber comunicações da Viniun via
                       WhatsApp para promoções e atualizações do programa.
                     </li>
                     <li>
@@ -1289,7 +1289,7 @@ const CadastroInfluenciadora = () => {
                       ser utilizado de forma ética.
                     </li>
                     <li>
-                      A YESlaser se reserva o direito de aprovar ou rejeitar
+                      A Viniun se reserva o direito de aprovar ou rejeitar
                       cadastros sem necessidade de justificativa.
                     </li>
                     <li>

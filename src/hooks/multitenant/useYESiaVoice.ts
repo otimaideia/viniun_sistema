@@ -158,7 +158,6 @@ export function useYESiaVoice() {
     switch (event.type) {
       case 'session.created':
       case 'session.updated':
-        console.log('[YESiaVoice] Session:', event.type);
         break;
 
       case 'input_audio_buffer.speech_started':

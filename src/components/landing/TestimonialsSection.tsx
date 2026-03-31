@@ -8,7 +8,7 @@ const TestimonialsSection = () => {
   const { ref, isVisible } = useScrollAnimation();
   const testimonials = [
     {
-      text: "Finalmente me livrei da lâmina! Já fiz 6 sessões e os resultados são impressionantes.",
+      text: "Excelente atendimento! Os resultados são impressionantes.",
       author: "Carla M.",
       location: "Santos",
     },
@@ -18,17 +18,17 @@ const TestimonialsSection = () => {
       location: "Praia Grande",
     },
     {
-      text: "Eu tinha medo de doer, mas não senti nada! A equipe é muito atenciosa.",
+      text: "Superou minhas expectativas! A equipe é muito atenciosa.",
       author: "Amanda S.",
       location: "São Vicente",
     },
     {
-      text: "Melhor investimento que já fiz! Não perco mais tempo me depilando todo dia.",
+      text: "Melhor investimento que já fiz! Serviço de primeira qualidade.",
       author: "Fernanda L.",
       location: "Guarujá",
     },
     {
-      text: "A clínica é linda e os equipamentos são de primeira. Recomendo muito!",
+      text: "A unidade é linda e os equipamentos são de primeira. Recomendo muito!",
       author: "Patricia C.",
       location: "Santos",
     },

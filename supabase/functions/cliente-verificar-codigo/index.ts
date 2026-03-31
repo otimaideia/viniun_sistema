@@ -132,7 +132,7 @@ Deno.serve(async (req) => {
     }
 
     // Gerar JWT
-    const jwtSecret = Deno.env.get("JWT_SECRET") || Deno.env.get("SUPABASE_JWT_SECRET") || "yeslaser-cliente-secret-key";
+    const jwtSecret = Deno.env.get("JWT_SECRET") || Deno.env.get("SUPABASE_JWT_SECRET") || "viniun-cliente-secret-key";
     const token = await gerarJWT(
       {
         id: lead.id,

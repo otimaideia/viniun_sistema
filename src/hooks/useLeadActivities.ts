@@ -29,7 +29,7 @@ function getActivityErrorMessage(error: any): string {
 
 /**
  * Hook para gerenciar atividades de um lead (notas, ligacoes, tarefas, agendamentos, etc)
- * Expandido para 8 tipos de atividade baseado no PopDents
+ * Expandido para 8 tipos de atividade Viniun Sistema
  * Inclui informações do usuário que criou cada atividade
  * @deprecated Use useLeadActivitiesAdapter instead for proper multi-tenant isolation.
  */

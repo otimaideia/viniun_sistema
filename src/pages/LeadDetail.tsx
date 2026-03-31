@@ -369,7 +369,7 @@ export default function LeadDetail() {
         if (submissao) {
           // Colunas reais: user_agent, ip_address, referrer, dados (jsonb)
           // Campos de dispositivo podem estar no jsonb 'dados'
-          const dadosJson = (submissao as any).dados || {};
+          const dadosJson = ((submissao as Record<string, unknown>).dados as Record<string, unknown>) || {};
           setSubmissaoData({
             user_agent: submissao.user_agent,
             ip_address: submissao.ip_address,
@@ -424,7 +424,7 @@ export default function LeadDetail() {
     if (franquiaMatch) {
       const franquiaId = franquiaMatch[1];
       const franquia = franqueados.find(f => f.id === franquiaId);
-      const franchiseJoin = (lead?.franchise as any);
+      const franchiseJoin = lead?.franchise;
       const nomeFranquia = franquia?.nome_fantasia || franchiseJoin?.nome || franquiaId;
       return origem.replace(franquiaMatch[0], `(${nomeFranquia})`);
     }
@@ -537,7 +537,7 @@ export default function LeadDetail() {
     const codigoPais = lead.whatsapp_codigo_pais || lead.telefone_codigo_pais || '55';
     const primeiroNome = lead.nome.split(" ")[0];
     const mensagem = encodeURIComponent(
-      `Ola ${primeiroNome}! Tudo bem? Aqui e da YESlaser!`
+      `Ola ${primeiroNome}! Tudo bem? Aqui e da Viniun!`
     );
     window.open(`https://wa.me/${codigoPais}${cleanPhone}?text=${mensagem}`, "_blank");
   };
@@ -591,7 +591,7 @@ export default function LeadDetail() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        {/* Breadcrumb - Estilo PopDents */}
+        {/* Breadcrumb - Viniun */}
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -616,7 +616,7 @@ export default function LeadDetail() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        {/* Header Principal - Estilo PopDents */}
+        {/* Header Principal - Viniun */}
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-2">
             {/* Nome Grande */}
@@ -843,7 +843,7 @@ export default function LeadDetail() {
                 </div>
               )}
 
-              {((lead as any).servicos_interesse?.length > 0 || lead.servico) && (
+              {(lead.servicos_interesse?.length > 0 || lead.servico) && (
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
                     <Target className="h-5 w-5 text-purple-600" />
@@ -851,8 +851,8 @@ export default function LeadDetail() {
                   <div className="min-w-0">
                     <p className="text-xs text-muted-foreground">Interesse</p>
                     <p className="text-sm font-medium truncate">
-                      {(lead as any).servicos_interesse?.length > 0
-                        ? (lead as any).servicos_interesse.join(', ')
+                      {lead.servicos_interesse?.length > 0
+                        ? lead.servicos_interesse.join(', ')
                         : lead.servico}
                     </p>
                   </div>
@@ -917,7 +917,7 @@ export default function LeadDetail() {
           </CardContent>
         </Card>
 
-        {/* Tabs - Estilo PopDents */}
+        {/* Tabs - Viniun */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="atividades" className="gap-1">
@@ -1004,7 +1004,7 @@ export default function LeadDetail() {
                   <InfoItem icon={Briefcase} label="Profissao" value={lead.profissao} />
                   <InfoItem icon={Target} label="Como Conheceu" value={
                     lead.como_conheceu === 'outro'
-                      ? (lead as any).como_conheceu_outro || 'Outro'
+                      ? lead.como_conheceu_outro || 'Outro'
                       : COMO_CONHECEU_OPTIONS.find(o => o.value === lead.como_conheceu)?.label || lead.como_conheceu
                   } />
                 </div>
@@ -1019,8 +1019,8 @@ export default function LeadDetail() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <InfoItem icon={Target} label="Servico de Interesse" value={
-                    (lead as any).servicos_interesse?.length > 0
-                      ? (lead as any).servicos_interesse.join(', ')
+                    lead.servicos_interesse?.length > 0
+                      ? lead.servicos_interesse.join(', ')
                       : lead.servico
                   } />
                   <InfoItem icon={Building2} label="Franqueado" value={franquiaData?.nome_fantasia || lead.unidade} />

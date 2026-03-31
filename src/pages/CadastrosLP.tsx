@@ -73,7 +73,7 @@ export default function CadastrosLP() {
     const formattedPhone = cleanPhone.startsWith("55") ? cleanPhone : `55${cleanPhone}`;
     const primeiroNome = cadastro.nome.split(" ")[0];
     const mensagem = encodeURIComponent(
-      `Oi ${primeiroNome}! 🌟 Aqui é da YESlaser! Vi que você se cadastrou na nossa promoção especial. Que demais! Vou te contar tudo sobre como aproveitar esse benefício, ok?`
+      `Oi ${primeiroNome}! 🌟 Aqui é da Viniun! Vi que você se cadastrou na nossa promoção especial. Que demais! Vou te contar tudo sobre como aproveitar esse benefício, ok?`
     );
     window.open(`https://wa.me/${formattedPhone}?text=${mensagem}`, "_blank");
   };

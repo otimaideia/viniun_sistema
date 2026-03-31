@@ -1,4 +1,4 @@
-// Tipos para o Sistema de Indicações YESlaser
+// Tipos para o Sistema de Indicações Viniun
 // Modelo Wise Up - Indicações em cadeia
 
 import type { Lead } from './lead';
@@ -140,7 +140,7 @@ export const FORMULARIO_INDICACAO_SLUG = 'boas-vindas';
 /**
  * URL base para formulários (produção)
  */
-export const FORMULARIO_BASE_URL = 'https://www.yeslaserpraiagrande.com.br';
+export const FORMULARIO_BASE_URL = 'https://www.viniun.com.br';
 
 export const INDICACAO_STATUS_LABELS: Record<IndicacaoStatus, string> = {
   pendente: 'Pendente',
@@ -172,7 +172,7 @@ export function gerarMensagemWhatsApp(
   linkFormulario?: string
 ): string {
   const link = linkFormulario || gerarLinkIndicacao(codigoIndicacao);
-  return `Oi! Eu sou ${nomeIndicador} e quero te indicar para a YESlaser!
+  return `Oi! Eu sou ${nomeIndicador} e quero te indicar para a Viniun!
 
 Use meu código de indicação: *${codigoIndicacao}*
 

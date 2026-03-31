@@ -68,6 +68,93 @@ interface LeadVenda {
   items: string[];
 }
 
+interface TreatmentSession {
+  id: string;
+  treatment_plan_id: string;
+  numero_sessao: number;
+  status: string;
+  data_prevista: string | null;
+  profissional_nome: string | null;
+  total_sessoes: number;
+  sessoes_concluidas: number;
+}
+
+interface SaleRow {
+  id: string;
+  numero_venda: string;
+  valor_total: number;
+  status: string;
+  created_at: string;
+}
+
+interface SaleItemRow {
+  descricao: string;
+}
+
+interface TreatmentPlanRow {
+  id: string;
+  service_id: string | null;
+  total_sessoes: number;
+  sessoes_concluidas: number;
+  status: string;
+}
+
+interface TreatmentSessionRow {
+  id: string;
+  treatment_plan_id: string;
+  numero_sessao: number;
+  status: string;
+  data_prevista: string | null;
+  profissional_nome: string | null;
+}
+
+// Tipo para o franqueado retornado pelo adapter
+interface FranqueadoOption {
+  id: string;
+  nome_fantasia: string;
+  franchise_id?: string;
+}
+
+// Tipo para serviço
+interface ServicoOption {
+  id: string;
+  nome: string;
+  ativo?: boolean;
+}
+
+// Tipo para vinculo franqueado-serviço
+interface FranqueadoServicoVinculo {
+  franqueado_id: string;
+  servico_id: string;
+}
+
+// Tipo para dados do agendamento expandido
+interface AgendamentoExpanded extends Agendamento {
+  nome_lead?: string | null;
+  telefone_lead?: string | null;
+  email_lead?: string | null;
+  profissional_id?: string | null;
+  profissional_nome?: string | null;
+  consultora_id?: string | null;
+  consultora_nome?: string | null;
+  venda_id?: string | null;
+  treatment_session_id?: string | null;
+  cortesia_motivo?: string | null;
+  sessao_numero?: number | null;
+  total_sessoes?: number | null;
+}
+
+// Tipo para lead retornado pela busca
+interface LeadSearchResult {
+  id: string;
+  nome: string;
+  name?: string;
+  telefone?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  temperatura?: string | null;
+}
+
 interface FormState {
   tipo: AppointmentType;
   lead_id: string | null;
@@ -131,7 +218,7 @@ export default function AgendamentoEdit() {
   const [isLoadingVendas, setIsLoadingVendas] = useState(false);
 
   // Treatment sessions da venda selecionada
-  const [treatmentSessions, setTreatmentSessions] = useState<any[]>([]);
+  const [treatmentSessions, setTreatmentSessions] = useState<TreatmentSession[]>([]);
   const [isLoadingSessions, setIsLoadingSessions] = useState(false);
 
   // Buscar leads para o combobox
@@ -142,14 +229,14 @@ export default function AgendamentoEdit() {
   // Encontrar o usuário logado na lista (precisa estar antes dos useEffects)
   const currentUser = useMemo(() => {
     if (!users || !user) return null;
-    return users.find((u: any) => u.email === user.email);
+    return users.find((u) => u.email === user.email);
   }, [users, user]);
 
   // Determinar unidade padrão
   const defaultUnidadeId = useMemo(() => {
     if (accessLevel === 'franchise' && franchise?.id) {
       // Encontrar o franqueado correspondente à franchise do contexto
-      const match = franqueados.find((f: any) =>
+      const match = franqueados.find(f =>
         f.id === franchise.id || f.franchise_id === franchise.id
       );
       return match?.id || franchise.id;
@@ -205,7 +292,7 @@ export default function AgendamentoEdit() {
     }
   }, [currentUser, isEditing, form.consultora_id]);
 
-  const agendamento = agendamentos.find((a: any) => a.id === id);
+  const agendamento = agendamentos.find(a => a.id === id);
 
   // Buscar vendas do lead quando selecionado (para procedimento_fechado)
   useEffect(() => {
@@ -218,7 +305,7 @@ export default function AgendamentoEdit() {
       setIsLoadingVendas(true);
       try {
         const { data: vendas, error } = await supabase
-          .from('mt_sales' as any)
+          .from('mt_sales')
           .select('id, numero_venda, valor_total, status, created_at')
           .eq('lead_id', selectedLead.id)
           .is('deleted_at', null)
@@ -228,15 +315,15 @@ export default function AgendamentoEdit() {
 
         // Buscar itens de cada venda
         const vendasWithItems: LeadVenda[] = [];
-        for (const venda of (vendas || [])) {
+        for (const venda of ((vendas || []) as SaleRow[])) {
           const { data: items } = await supabase
-            .from('mt_sale_items' as any)
+            .from('mt_sale_items')
             .select('descricao')
-            .eq('sale_id', (venda as any).id);
+            .eq('sale_id', venda.id);
 
           vendasWithItems.push({
-            ...venda as any,
-            items: (items || []).map((i: any) => i.descricao).filter(Boolean),
+            ...venda,
+            items: ((items || []) as SaleItemRow[]).map(i => i.descricao).filter(Boolean),
           });
         }
 
@@ -263,7 +350,7 @@ export default function AgendamentoEdit() {
       try {
         // Buscar treatment plans da venda
         const { data: plans } = await supabase
-          .from('mt_treatment_plans' as any)
+          .from('mt_treatment_plans')
           .select('id, service_id, total_sessoes, sessoes_concluidas, status')
           .eq('sale_id', form.venda_id)
           .is('deleted_at', null);
@@ -274,17 +361,19 @@ export default function AgendamentoEdit() {
         }
 
         // Buscar sessions pendentes de todos os plans
-        const planIds = (plans as any[]).map((p: any) => p.id);
+        const typedPlans = plans as unknown as TreatmentPlanRow[];
+        const planIds = typedPlans.map(p => p.id);
         const { data: sessions } = await supabase
-          .from('mt_treatment_sessions' as any)
+          .from('mt_treatment_sessions')
           .select('id, treatment_plan_id, numero_sessao, status, data_prevista, profissional_nome')
           .in('treatment_plan_id', planIds)
           .in('status', ['pendente', 'agendado'])
           .order('numero_sessao', { ascending: true });
 
         // Enriquecer com info do plano
-        const enriched = (sessions || []).map((s: any) => {
-          const plan = (plans as any[]).find((p: any) => p.id === s.treatment_plan_id);
+        const typedSessions = (sessions || []) as unknown as TreatmentSessionRow[];
+        const enriched: TreatmentSession[] = typedSessions.map(s => {
+          const plan = typedPlans.find(p => p.id === s.treatment_plan_id);
           return {
             ...s,
             total_sessoes: plan?.total_sessoes || 0,
@@ -304,7 +393,7 @@ export default function AgendamentoEdit() {
   }, [form.venda_id, form.tipo]);
 
   // Selecionar lead
-  const handleSelectLead = (lead: any) => {
+  const handleSelectLead = (lead: LeadSearchResult) => {
     setSelectedLead({
       id: lead.id,
       nome: lead.nome || lead.name || "",
@@ -343,16 +432,16 @@ export default function AgendamentoEdit() {
     if (!servicos) return [];
     if (!form.unidade_id) return servicos;
     if (!franqueadoServicos) return servicos;
-    const vinculos = franqueadoServicos.filter((fs: any) => fs.franqueado_id === form.unidade_id);
+    const vinculos = franqueadoServicos.filter((fs) => (fs as FranqueadoServicoVinculo).franqueado_id === form.unidade_id);
     if (vinculos.length === 0) return servicos;
-    return servicos.filter((s: any) => vinculos.some((v: any) => v.servico_id === s.id));
+    return servicos.filter(s => vinculos.some(v => v.servico_id === s.id));
   }, [form.unidade_id, servicos, franqueadoServicos]);
 
   // Usuários filtrados pela unidade (para profissionais)
   const profissionais = useMemo(() => {
     if (!users) return [];
     if (!form.unidade_id) return users;
-    return users.filter((u: any) => !u.franchise_id || u.franchise_id === form.unidade_id);
+    return users.filter(u => !u.franchise_id || u.franchise_id === form.unidade_id);
   }, [users, form.unidade_id]);
 
   // Consultoras (filtradas por cargo)
@@ -376,7 +465,7 @@ export default function AgendamentoEdit() {
         ? agendamento.servico.split(",").map((s: string) => s.trim()).filter(Boolean)
         : [];
 
-      const agData = agendamento as any;
+      const agData = agendamento as AgendamentoExpanded;
 
       // Set selected lead from existing appointment
       if (agData.lead_id) {
@@ -462,10 +551,10 @@ export default function AgendamentoEdit() {
     const servicosString = form.servicos.length > 0 ? form.servicos.join(", ") : null;
 
     // Encontrar nomes do profissional e consultora
-    const profissional = users?.find((u: any) => u.id === form.profissional_id);
-    const consultora = users?.find((u: any) => u.id === form.consultora_id);
+    const profissional = users?.find(u => u.id === form.profissional_id);
+    const consultora = users?.find(u => u.id === form.consultora_id);
 
-    const payload: any = {
+    const payload: Record<string, unknown> = {
       lead_id: selectedLead.id,
       selected_lead_id: selectedLead.id,
       nome_lead: form.nome_lead,
@@ -506,7 +595,7 @@ export default function AgendamentoEdit() {
     if (isEditing && agendamento) {
       updateAgendamento({ id: agendamento.id, ...payload });
     } else {
-      createAgendamento(payload as any);
+      createAgendamento(payload as Record<string, unknown>);
     }
 
     navigate("/agendamentos");
@@ -701,7 +790,7 @@ export default function AgendamentoEdit() {
                             <span className="text-sm text-muted-foreground">Buscando...</span>
                           </div>
                         ) : allLeads && allLeads.length > 0 ? (
-                          allLeads.slice(0, 20).map((lead: any) => (
+                          allLeads.slice(0, 20).map((lead: LeadSearchResult) => (
                             <button
                               key={lead.id}
                               type="button"
@@ -807,7 +896,7 @@ export default function AgendamentoEdit() {
                 <div className="space-y-3">
                   <Label className="font-medium">Sessão do Tratamento</Label>
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                    {treatmentSessions.map((session: any) => {
+                    {treatmentSessions.map((session: TreatmentSession) => {
                       const isSelected = form.treatment_session_id === session.id;
                       return (
                         <button
@@ -898,7 +987,7 @@ export default function AgendamentoEdit() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none">Nenhuma</SelectItem>
-                        {franqueados.map((f: any) => (
+                        {franqueados.map(f => (
                           <SelectItem key={f.id} value={f.id}>
                             {f.nome_fantasia}
                           </SelectItem>
@@ -921,7 +1010,7 @@ export default function AgendamentoEdit() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none">Nenhum</SelectItem>
-                        {profissionais.map((u: any) => (
+                        {profissionais.map(u => (
                           <SelectItem key={u.id} value={u.id}>
                             {u.nome_curto || u.nome} {u.cargo ? `(${u.cargo})` : ''}
                           </SelectItem>
@@ -941,7 +1030,7 @@ export default function AgendamentoEdit() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none">Nenhuma</SelectItem>
-                        {consultoras.map((u: any) => (
+                        {consultoras.map(u => (
                           <SelectItem key={u.id} value={u.id}>
                             {u.nome_curto || u.nome} {u.cargo ? `(${u.cargo})` : ''}
                           </SelectItem>
@@ -962,7 +1051,7 @@ export default function AgendamentoEdit() {
                   {servicosDisponiveis.length === 0 ? (
                     <p className="text-sm text-muted-foreground">Nenhum serviço disponível</p>
                   ) : (
-                    servicosDisponiveis.map((servico: any) => (
+                    servicosDisponiveis.map((servico: ServicoOption) => (
                       <div key={servico.id} className="flex items-center space-x-2">
                         <Checkbox
                           id={`edit-servico-${servico.id}`}

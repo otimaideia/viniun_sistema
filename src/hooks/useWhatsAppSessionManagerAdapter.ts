@@ -101,7 +101,6 @@ export function useWhatsAppSessionManagerAdapter(): UseWhatsAppSessionManagerRet
 
     const currentAttempts = reconnectAttemptsRef.current.get(sessionName) || 0;
     if (currentAttempts >= MAX_RECONNECT_ATTEMPTS) {
-      console.log(`[MT] Máximo de tentativas de reconexão atingido para ${sessionName}`);
       return false;
     }
 
@@ -109,7 +108,6 @@ export function useWhatsAppSessionManagerAdapter(): UseWhatsAppSessionManagerRet
     reconnectAttemptsRef.current.set(sessionName, currentAttempts + 1);
 
     try {
-      console.log(`[MT] Auto-reconectando sessão ${sessionName} (tentativa ${currentAttempts + 1}/${MAX_RECONNECT_ATTEMPTS})`);
 
       await wahaApi.startSession(sessionName);
       await new Promise(resolve => setTimeout(resolve, 3000));
@@ -209,7 +207,6 @@ export function useWhatsAppSessionManagerAdapter(): UseWhatsAppSessionManagerRet
 
         // Auto-reconnect if disconnected
         if (!status.isConnected && previousStatus?.isConnected && autoReconnectEnabled) {
-          console.log(`[MT] Sessão ${sessionName} desconectou, tentando auto-reconnect`);
           tryAutoReconnect(sessionName);
         }
 
@@ -275,7 +272,6 @@ export function useWhatsAppSessionManagerAdapter(): UseWhatsAppSessionManagerRet
         }
 
         if (!sessions || sessions.length === 0) {
-          console.log('[MT] Nenhuma sessão encontrada');
           return;
         }
 

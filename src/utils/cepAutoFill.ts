@@ -1,6 +1,6 @@
 /**
  * Utilitário de busca de CEP com preenchimento automático
- * Baseado no sistema PopDents + melhorias (latitude/longitude)
+ * Viniun Sistema (latitude/longitude)
  *
  * APIs utilizadas:
  * - ViaCEP: Busca de endereço por CEP (gratuito, sem auth)
@@ -160,7 +160,7 @@ export async function fetchCoordinates(
       `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1&countrycodes=br`,
       {
         headers: {
-          'User-Agent': 'YESlaser-Painel/1.0',
+          'User-Agent': 'Viniun/1.0',
         },
       }
     );
@@ -179,7 +179,7 @@ export async function fetchCoordinates(
         `https://nominatim.openstreetmap.org/search?q=${simpleQuery}&format=json&limit=1&countrycodes=br`,
         {
           headers: {
-            'User-Agent': 'YESlaser-Painel/1.0',
+            'User-Agent': 'Viniun/1.0',
           },
         }
       );

@@ -129,7 +129,6 @@ async function withRetry(
 
     // Esperar antes de retry (delay progressivo)
     await new Promise((r) => setTimeout(r, delayMs * (attempt + 1)));
-    console.log(`[WorkflowEngine] Retry ${attempt + 1}/${maxRetries}: ${lastResult.message}`);
   }
 
   return lastResult!;
@@ -310,8 +309,8 @@ registerStepExecutor('webhook', async (ctx) => {
         response.ok ? `Webhook enviado (${response.status})` : `Webhook falhou (${response.status})`,
         { statusCode: response.status, url: config.webhook_url }
       );
-    } catch (err: any) {
-      return makeResult(ctx, 'erro', err.message);
+    } catch (err: unknown) {
+      return makeResult(ctx, 'erro', err instanceof Error ? err.message : 'Erro desconhecido');
     }
   });
 });
@@ -573,12 +572,6 @@ export async function executeWorkflows(
     }
 
     results.push(result);
-
-    console.log(
-      `[WorkflowEngine] ${workflow.nome} (${workflow.action_type}): ${result.status}` +
-      (result.message ? ` - ${result.message}` : '') +
-      ` (${result.durationMs}ms)`
-    );
   }
 
   return results;

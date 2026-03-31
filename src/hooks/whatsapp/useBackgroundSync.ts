@@ -90,7 +90,6 @@ export function useBackgroundSync(
     const connectedSessions = filteredSessions.filter(s => s.status === 'connected');
 
     if (connectedSessions.length === 0) {
-      console.log('[useBackgroundSync] Nenhuma sessão conectada para sync');
       return;
     }
 
@@ -110,7 +109,6 @@ export function useBackgroundSync(
   // Iniciar sync automático
   const startSync = useCallback(() => {
     if (filteredSessions.length > 0 && !isActive) {
-      console.log('[useBackgroundSync] Iniciando sync automático');
       setIsActive(true);
 
       // Sync imediato
@@ -125,7 +123,6 @@ export function useBackgroundSync(
 
   // Parar sync automático
   const stopSync = useCallback(() => {
-    console.log('[useBackgroundSync] Parando sync automático');
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = undefined;

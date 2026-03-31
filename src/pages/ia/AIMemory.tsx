@@ -53,8 +53,8 @@ export default function AIMemory() {
   const { data: memories = [], isLoading, refetch } = useQuery({
     queryKey: ['mt-ai-memory', tenant?.id, typeFilter],
     queryFn: async () => {
-      let query = (supabase as any)
-        .from('mt_ai_memory')
+      let query = supabase
+        .from('mt_ai_memory' as never)
         .select('*')
         .is('deleted_at', null)
         .order('created_at', { ascending: false });
@@ -75,8 +75,8 @@ export default function AIMemory() {
 
   const softDelete = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase as any)
-        .from('mt_ai_memory')
+      const { error } = await supabase
+        .from('mt_ai_memory' as never)
         .update({ deleted_at: new Date().toISOString() })
         .eq('id', id);
       if (error) throw error;
@@ -85,7 +85,7 @@ export default function AIMemory() {
       queryClient.invalidateQueries({ queryKey: ['mt-ai-memory'] });
       toast.success('Memoria removida');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(`Erro ao remover: ${error.message}`);
     },
   });
@@ -185,7 +185,7 @@ export default function AIMemory() {
                   </TableCell>
                 </TableRow>
               ) : (
-                memories.map((memory: any) => {
+                memories.map((memory: Record<string, unknown>) => {
                   const badge = MEMORY_TYPE_BADGES[memory.memory_type] || {
                     label: memory.memory_type,
                     color: 'bg-gray-100 text-gray-700',

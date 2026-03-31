@@ -154,7 +154,7 @@ export default function ServicoEdit() {
       return;
     }
 
-    const data: any = {
+    const data: Record<string, unknown> = {
       nome: formData.nome.trim(),
       descricao: formData.descricao.trim() || null,
       categoria: formData.categoria || null,
@@ -305,7 +305,7 @@ export default function ServicoEdit() {
                     id="nome"
                     value={formData.nome}
                     onChange={(e) => handleChange('nome', e.target.value)}
-                    placeholder={isProduto ? 'Ex: Kit Clareamento Dental' : 'Ex: Depilação a Laser'}
+                    placeholder={isProduto ? 'Ex: Kit Premium' : 'Ex: Consultoria Especializada'}
                     required
                   />
                 </div>

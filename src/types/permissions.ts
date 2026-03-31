@@ -35,7 +35,7 @@ export interface PermissionUpdate {
   value: boolean;
 }
 
-// Papéis disponíveis no sistema YESlaser
+// Papéis disponíveis no sistema Viniun
 export type AppRole =
   | 'super_admin'
   | 'admin'

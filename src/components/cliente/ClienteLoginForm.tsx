@@ -9,7 +9,7 @@ import { VerificationMethod } from '@/hooks/useClienteAuthAdapter';
 import { applyCPFMask, cleanCPF, validateCPF } from '@/utils/cpf';
 import { applyPhoneMask, cleanPhone, validatePhone, detectInputType } from '@/utils/phone';
 import { MessageSquare, Mail, Loader2 } from 'lucide-react';
-import logoYeslaser from '@/assets/logo-yeslaser.png';
+import logoViniun from '@/assets/logo-viniun.png';
 
 interface ClienteLoginFormProps {
   onCodeSent: () => void;
@@ -63,7 +63,7 @@ export function ClienteLoginForm({ onCodeSent }: ClienteLoginFormProps) {
     <Card className="w-full max-w-md mx-auto shadow-lg">
       <CardHeader className="text-center pb-2">
         <img
-          src={logoYeslaser}
+          src={logoViniun}
           alt="Viniun"
           className="h-14 mx-auto mb-4"
         />

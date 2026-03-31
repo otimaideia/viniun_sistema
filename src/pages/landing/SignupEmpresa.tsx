@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/integrations/supabase/client';
+import { useSignupEmpresa } from '@/hooks/public/useSignupEmpresa';
 import { toast } from 'sonner';
 import {
   Building2,
@@ -146,17 +146,6 @@ function formatPhone(value: string): string {
   return digits.replace(/^(\d{2})(\d{5})(\d)/, '($1) $2-$3');
 }
 
-function generateSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
-}
-
 function formatCurrency(value: number): string {
   return value.toLocaleString('pt-BR', {
     style: 'currency',
@@ -175,7 +164,7 @@ export default function SignupEmpresa() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>(INITIAL_DATA);
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { signup, isSubmitting } = useSignupEmpresa();
   const [cepLoading, setCepLoading] = useState(false);
 
   // Pre-select plan from URL
@@ -290,145 +279,14 @@ export default function SignupEmpresa() {
   /* ------ Submit ------ */
   const handleSubmit = async () => {
     if (!validateStep()) return;
-    setIsSubmitting(true);
 
-    try {
-      // 1. Create auth user
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.senha,
-        options: {
-          data: {
-            nome: formData.nome,
-            telefone: formData.telefone_admin,
-          },
-        },
-      });
+    const result = await signup(formData);
 
-      if (authError) throw authError;
-      if (!authData.user) throw new Error('Erro ao criar usuário');
-
-      const userId = authData.user.id;
-      const slug = generateSlug(formData.nome_fantasia);
-
-      // 2. Insert tenant
-      const { data: tenantData, error: tenantError } = await supabase
-        .from('mt_tenants')
-        .insert({
-          slug,
-          nome_fantasia: formData.nome_fantasia,
-          cnpj: formData.cnpj.replace(/\D/g, '') || null,
-          tipo_empresa: formData.tipo_empresa,
-          email: formData.email_empresa,
-          telefone: formData.telefone,
-          endereco: formData.endereco,
-          numero: formData.numero,
-          complemento: formData.complemento,
-          bairro: formData.bairro,
-          cidade: formData.cidade,
-          estado: formData.estado,
-          cep: formData.cep.replace(/\D/g, '') || null,
-          plano: formData.plano,
-          billing_cycle: formData.billing,
-          is_active: true,
-        })
-        .select('id')
-        .single();
-
-      if (tenantError) throw tenantError;
-      const tenantId = tenantData.id;
-
-      // 3. Insert branding with default Viniun navy colors
-      await supabase.from('mt_tenant_branding').insert({
-        tenant_id: tenantId,
-        cor_primaria: '#1E3A5F',
-        cor_primaria_hover: '#0F2035',
-        cor_secundaria: '#2E86C1',
-        cor_secundaria_hover: '#1a6da0',
-        cor_sucesso: '#22c55e',
-        cor_erro: '#ef4444',
-        cor_aviso: '#f59e0b',
-        cor_info: '#5AC9EF',
-        cor_fundo: '#F0F4F8',
-        cor_fundo_card: '#FFFFFF',
-        cor_borda: '#e2e8f0',
-        cor_texto: '#0F2035',
-        cor_texto_secundario: '#64748b',
-        cor_texto_invertido: '#FFFFFF',
-        texto_login_titulo: `Bem-vindo ao ${formData.nome_fantasia}`,
-        texto_login_subtitulo: 'Acesse sua conta para continuar',
-        fonte_primaria: 'Inter',
-        fonte_secundaria: 'Inter',
-        border_radius: '0.5rem',
-      });
-
-      // 4. Insert user
-      await supabase.from('mt_users').insert({
-        auth_user_id: userId,
-        tenant_id: tenantId,
-        nome: formData.nome,
-        email: formData.email,
-        telefone: formData.telefone_admin,
-        access_level: 'tenant',
-        is_active: true,
-      });
-
-      // 5. Insert default franchise (Matriz)
-      await supabase.from('mt_franchises').insert({
-        tenant_id: tenantId,
-        nome_franquia: 'Matriz',
-        is_matriz: true,
-        cidade: formData.cidade,
-        estado: formData.estado,
-        endereco: formData.endereco,
-        numero: formData.numero,
-        bairro: formData.bairro,
-        cep: formData.cep.replace(/\D/g, '') || null,
-        telefone: formData.telefone,
-        email: formData.email_empresa,
-        is_active: true,
-      });
-
-      // 6. Enable modules based on plan
-      const coreModules = ['dashboard', 'leads', 'agendamentos', 'configuracoes', 'usuarios', 'relatorios'];
-      const proModules = [...coreModules, 'whatsapp', 'funil', 'franqueados', 'servicos', 'metas'];
-      const enterpriseModules = [...proModules, 'chatbot', 'api_webhooks', 'automacoes', 'campanhas'];
-
-      let moduleCodes: string[];
-      switch (formData.plano) {
-        case 'starter':
-          moduleCodes = coreModules;
-          break;
-        case 'professional':
-          moduleCodes = proModules;
-          break;
-        case 'enterprise':
-          moduleCodes = enterpriseModules;
-          break;
-      }
-
-      // Fetch module IDs
-      const { data: modules } = await supabase
-        .from('mt_modules')
-        .select('id, codigo')
-        .in('codigo', moduleCodes);
-
-      if (modules && modules.length > 0) {
-        const tenantModules = modules.map((m) => ({
-          tenant_id: tenantId,
-          module_id: m.id,
-          is_active: true,
-        }));
-        await supabase.from('mt_tenant_modules').insert(tenantModules);
-      }
-
+    if (result.success) {
       toast.success('Conta criada com sucesso!');
       navigate('/cadastro/sucesso');
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Erro ao criar conta';
-      toast.error(message);
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      toast.error(result.error || 'Erro ao criar conta');
     }
   };
 

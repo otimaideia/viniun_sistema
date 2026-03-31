@@ -147,6 +147,51 @@ const emptyPayment = (): PaymentEntry => ({
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
 
+// Pure helper functions for discount calculations (no component state deps)
+const round2 = (n: number) => Math.round(n * 100) / 100;
+
+const getMaxDiscountPercent = (item: ItemRow): number => {
+  if (item.preco_minimo <= 0 || item.preco_unitario <= 0) return 100;
+  if (item.preco_minimo >= item.preco_unitario) return 0;
+  const maxDiscount = ((item.preco_unitario - item.preco_minimo) / item.preco_unitario) * 100;
+  return Math.max(0, Math.floor(maxDiscount * 100) / 100);
+};
+
+const getMaxDiscountFixed = (item: ItemRow): number => {
+  if (item.preco_minimo <= 0 || item.preco_unitario <= 0) return round2(item.preco_unitario * item.quantidade);
+  if (item.preco_minimo >= item.preco_unitario) return 0;
+  return round2((item.preco_unitario - item.preco_minimo) * item.quantidade);
+};
+
+const getItemDiscountValue = (item: ItemRow): number => {
+  const subtotal = item.quantidade * item.preco_unitario;
+  if (item.desconto_tipo === 'fixed') {
+    const maxFixed = item.preco_minimo > 0 ? getMaxDiscountFixed(item) : subtotal;
+    return Math.min(item.desconto, maxFixed);
+  } else {
+    const maxPct = getMaxDiscountPercent(item);
+    const clampedPct = item.preco_minimo > 0 ? Math.min(item.desconto, maxPct) : item.desconto;
+    return subtotal * (clampedPct / 100);
+  }
+};
+
+const updateItemTotal = (item: ItemRow): ItemRow => {
+  const subtotal = item.quantidade * item.preco_unitario;
+  let clampedDesconto = item.desconto;
+
+  if (item.desconto_tipo === 'fixed') {
+    const maxFixed = item.preco_minimo > 0 ? getMaxDiscountFixed(item) : subtotal;
+    clampedDesconto = round2(Math.min(item.desconto, maxFixed));
+    const valorTotal = subtotal - clampedDesconto;
+    return { ...item, desconto: clampedDesconto, valor_total: round2(Math.max(0, valorTotal)) };
+  } else {
+    const maxPct = getMaxDiscountPercent(item);
+    clampedDesconto = round2(item.preco_minimo > 0 ? Math.min(item.desconto, maxPct) : item.desconto);
+    const descontoValor = subtotal * (clampedDesconto / 100);
+    return { ...item, desconto: clampedDesconto, valor_total: round2(Math.max(0, subtotal - descontoValor)) };
+  }
+};
+
 export default function VendaEdit() {
   const { id } = useParams<{ id: string }>();
   const isEditing = !!id;
@@ -329,7 +374,7 @@ export default function VendaEdit() {
           }
         });
     }
-  }, [isEditing]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isEditing, leadId]);
 
   useEffect(() => {
     if (isEditing && existingItems && existingItems.length > 0) {
@@ -367,54 +412,9 @@ export default function VendaEdit() {
         return { ...item, preco_minimo: svc.preco_tabela_menor };
       })
     );
-  }, [isEditing, services, items.length]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isEditing, services, items]);
 
-  // Recalculate item totals
-  const round2 = (n: number) => Math.round(n * 100) / 100;
-
-  const getMaxDiscountPercent = (item: ItemRow): number => {
-    if (item.preco_minimo <= 0 || item.preco_unitario <= 0) return 100;
-    if (item.preco_minimo >= item.preco_unitario) return 0;
-    const maxDiscount = ((item.preco_unitario - item.preco_minimo) / item.preco_unitario) * 100;
-    return Math.max(0, Math.floor(maxDiscount * 100) / 100);
-  };
-
-  // Max fixed discount (R$) = (preco_unitario - preco_minimo) * quantidade
-  const getMaxDiscountFixed = (item: ItemRow): number => {
-    if (item.preco_minimo <= 0 || item.preco_unitario <= 0) return round2(item.preco_unitario * item.quantidade);
-    if (item.preco_minimo >= item.preco_unitario) return 0;
-    return round2((item.preco_unitario - item.preco_minimo) * item.quantidade);
-  };
-
-  // Get the actual discount value in R$ for an item (handles both types)
-  const getItemDiscountValue = (item: ItemRow): number => {
-    const subtotal = item.quantidade * item.preco_unitario;
-    if (item.desconto_tipo === 'fixed') {
-      const maxFixed = item.preco_minimo > 0 ? getMaxDiscountFixed(item) : subtotal;
-      return Math.min(item.desconto, maxFixed);
-    } else {
-      const maxPct = getMaxDiscountPercent(item);
-      const clampedPct = item.preco_minimo > 0 ? Math.min(item.desconto, maxPct) : item.desconto;
-      return subtotal * (clampedPct / 100);
-    }
-  };
-
-  const updateItemTotal = (item: ItemRow): ItemRow => {
-    const subtotal = item.quantidade * item.preco_unitario;
-    let clampedDesconto = item.desconto;
-
-    if (item.desconto_tipo === 'fixed') {
-      const maxFixed = item.preco_minimo > 0 ? getMaxDiscountFixed(item) : subtotal;
-      clampedDesconto = round2(Math.min(item.desconto, maxFixed));
-      const valorTotal = subtotal - clampedDesconto;
-      return { ...item, desconto: clampedDesconto, valor_total: round2(Math.max(0, valorTotal)) };
-    } else {
-      const maxPct = getMaxDiscountPercent(item);
-      clampedDesconto = round2(item.preco_minimo > 0 ? Math.min(item.desconto, maxPct) : item.desconto);
-      const descontoValor = subtotal * (clampedDesconto / 100);
-      return { ...item, desconto: clampedDesconto, valor_total: round2(Math.max(0, subtotal - descontoValor)) };
-    }
-  };
+  // Recalculate item totals (helpers defined outside component as pure functions)
 
   const handleItemChange = (key: string, field: keyof ItemRow, value: string | number) => {
     setItems((prev) =>
@@ -562,7 +562,7 @@ export default function VendaEdit() {
       const itemDisc = getItemDiscountValue(i);
       return sum + Math.max(0, maxTotal - itemDisc);
     }, 0);
-  }, [items]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [items]);
 
   const totals = useMemo(() => {
     const valorBruto = items.reduce((sum, i) => sum + i.quantidade * i.preco_unitario, 0);
@@ -572,7 +572,7 @@ export default function VendaEdit() {
     const valorDesconto = valorDescontoItens + clampedGlobal;
     const valorTotal = Math.max(0, valorBruto - valorDesconto);
     return { valorBruto, valorDesconto, valorDescontoItens, descontoGlobalAplicado: clampedGlobal, valorTotal, custoTotal };
-  }, [items, descontoGlobal, maxDescontoGlobal]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [items, descontoGlobal, maxDescontoGlobal]);
 
   const totalPagamentos = useMemo(() => {
     return payments.reduce((sum, p) => sum + (p.valor || 0), 0);
@@ -697,8 +697,8 @@ export default function VendaEdit() {
         });
         navigate(`/vendas/${created.id}`);
       }
-    } catch (err: any) {
-      toast.error(err.message || 'Erro ao salvar venda');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Erro ao salvar venda');
     } finally {
       setIsSaving(false);
     }

@@ -59,13 +59,13 @@ const PreInaugHeroSection = () => {
         <div className="text-center mb-6">
           <span className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold animate-pulse">
             <Zap className="w-4 h-4" />
-            LANÇAMENTO YESLASER PRAIA GRANDE
+            LANÇAMENTO VINIUN
           </span>
         </div>
 
         {/* H1 Principal - SEO Otimizado */}
         <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white text-center mb-6 leading-tight">
-          DEPILAÇÃO A LASER EM<br />
+          VINIUN CHEGOU EM<br />
           <span className="text-secondary">PRAIA GRANDE</span>
         </h1>
 
@@ -85,7 +85,7 @@ const PreInaugHeroSection = () => {
               <p className="relative text-white font-extrabold text-lg sm:text-xl md:text-2xl bg-red-600 rounded-xl px-4 sm:px-6 py-3 border-2 border-red-400 shadow-xl">
                 <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></span>
                 <span className="relative z-10">
-                  ✨ Total: 20 sessões de depilação a laser premium ✨
+                  ✨ Total: 20 sessões de serviços premium ✨
                 </span>
               </p>
             </div>
@@ -175,7 +175,7 @@ const PreInaugHeroSection = () => {
             <p className="text-center text-white/80 text-sm mb-3 font-medium">👩 RESULTADO FEMININO</p>
             <img
               src="/images/landing/antes-depois-mulher.jpg"
-              alt="Resultado antes e depois depilação a laser axilas feminino"
+              alt="Resultado antes e depois feminino"
               className="w-full rounded-lg shadow-lg"
               loading="lazy"
             />
@@ -184,7 +184,7 @@ const PreInaugHeroSection = () => {
             <p className="text-center text-white/80 text-sm mb-3 font-medium">👨 RESULTADO MASCULINO</p>
             <img
               src="/images/landing/antes-depois-homem.jpg"
-              alt="Resultado antes e depois depilação a laser barba masculino"
+              alt="Resultado antes e depois masculino"
               className="w-full rounded-lg shadow-lg"
               loading="lazy"
             />
@@ -197,7 +197,7 @@ const PreInaugHeroSection = () => {
             <p className="text-center text-white/80 text-xs mb-2 font-medium">👩 RESULTADO FEMININO</p>
             <img
               src="/images/landing/antes-depois-mulher.jpg"
-              alt="Resultado antes e depois depilação a laser axilas feminino"
+              alt="Resultado antes e depois feminino"
               className="w-full rounded-lg shadow-lg"
               loading="lazy"
             />
@@ -206,7 +206,7 @@ const PreInaugHeroSection = () => {
             <p className="text-center text-white/80 text-xs mb-2 font-medium">👨 RESULTADO MASCULINO</p>
             <img
               src="/images/landing/antes-depois-homem.jpg"
-              alt="Resultado antes e depois depilação a laser barba masculino"
+              alt="Resultado antes e depois masculino"
               className="w-full rounded-lg shadow-lg"
               loading="lazy"
             />

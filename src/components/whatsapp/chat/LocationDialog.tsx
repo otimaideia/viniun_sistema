@@ -215,7 +215,7 @@ export function LocationDialog({
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Ex: YESlaser Unidade Centro"
+              placeholder="Ex: Viniun Filial Centro"
               maxLength={100}
             />
           </div>

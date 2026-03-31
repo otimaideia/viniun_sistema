@@ -67,7 +67,6 @@ export function useStatus({ sessionName, onSuccess }: UseStatusOptions) {
   // Enviar status de texto
   const sendTextStatus = useMutation({
     mutationFn: async ({ text, backgroundColor, font, contacts }: SendTextStatusParams) => {
-      console.log('[useStatus] Enviando status de texto...');
       const result = await wahaClient.sendStatusText(sessionName, text, {
         backgroundColor,
         font,
@@ -93,7 +92,6 @@ export function useStatus({ sessionName, onSuccess }: UseStatusOptions) {
   // Enviar status de imagem
   const sendImageStatus = useMutation({
     mutationFn: async ({ file, caption, contacts }: SendMediaStatusParams) => {
-      console.log('[useStatus] Enviando status de imagem...');
       const result = await wahaClient.sendStatusImage(sessionName, file, {
         caption,
         contacts,
@@ -118,7 +116,6 @@ export function useStatus({ sessionName, onSuccess }: UseStatusOptions) {
   // Enviar status de vídeo
   const sendVideoStatus = useMutation({
     mutationFn: async ({ file, caption, contacts }: SendMediaStatusParams) => {
-      console.log('[useStatus] Enviando status de vídeo...');
       const result = await wahaClient.sendStatusVideo(sessionName, file, {
         caption,
         contacts,
@@ -143,7 +140,6 @@ export function useStatus({ sessionName, onSuccess }: UseStatusOptions) {
   // Enviar status de voz
   const sendVoiceStatus = useMutation({
     mutationFn: async ({ file, contacts }: SendVoiceStatusParams) => {
-      console.log('[useStatus] Enviando status de voz...');
       const result = await wahaClient.sendStatusVoice(sessionName, file, {
         contacts,
       });
@@ -167,7 +163,6 @@ export function useStatus({ sessionName, onSuccess }: UseStatusOptions) {
   // Deletar status
   const deleteStatus = useMutation({
     mutationFn: async (messageId: string) => {
-      console.log('[useStatus] Deletando status...');
       const result = await wahaClient.deleteStatus(sessionName, messageId);
 
       if (!result.success) {

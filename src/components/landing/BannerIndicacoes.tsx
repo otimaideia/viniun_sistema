@@ -13,12 +13,12 @@ const BannerIndicacoes = () => {
           </div>
 
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Prefere <span className="text-yellow-200">GANHAR</span> suas sessões?
+            Prefere <span className="text-yellow-200">GANHAR</span> benefícios exclusivos?
           </h2>
 
           <p className="text-white/90 text-lg mb-6 max-w-xl mx-auto">
             Cadastre-se e indique 5 amigos para ganhar{" "}
-            <strong className="text-white">10 sessões de depilação a laser GRÁTIS!</strong>
+            <strong className="text-white">benefícios exclusivos GRÁTIS!</strong>
           </p>
 
           <Link to="/lp/indicacoes">

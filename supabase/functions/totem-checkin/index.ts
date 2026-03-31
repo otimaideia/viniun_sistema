@@ -286,7 +286,7 @@ Deno.serve(async (req) => {
               return data?.is_active ?? false;
             };
 
-            const wahaUrl = Deno.env.get("WAHA_URL") || "https://waha.yeslaserpraiagrande.com.br";
+            const wahaUrl = Deno.env.get("WAHA_URL") || "https://waha.otimaideia.com.br";
             const wahaApiKey = Deno.env.get("WAHA_API_KEY") || "sitema-crm@2025";
 
             const sendWhatsApp = async (phone: string, text: string) => {

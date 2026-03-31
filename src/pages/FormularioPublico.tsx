@@ -3,7 +3,8 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { supabase } from '@/integrations/supabase/client';
+import { useFormSubmissionPublic } from '@/hooks/public/useFormSubmissionPublic';
+import type { IndicadorInfo } from '@/hooks/public/useFormSubmissionPublic';
 import {
   PhoneInputInternational,
   validatePhoneByCountry,
@@ -17,6 +18,24 @@ import type {
   WizardEtapa,
   CampoIndicadoConfig,
 } from '@/types/formulario';
+
+// Campos extras do formulário que existem no banco mas ainda não no tipo base
+interface FormularioExtras {
+  tenant_id: string;
+  franchise_id?: string | null;
+  round_robin_enabled?: boolean;
+  round_robin_mode?: string;
+  team_id?: string | null;
+  department_id?: string | null;
+  responsible_user_id?: string | null;
+  campos?: FormularioCampo[];
+  fields?: Record<string, unknown>[];
+  total_visualizacoes?: number;
+}
+
+// Formulário com todos os campos necessários nesta página
+type FormularioPublicoData = FormularioWithRelations & FormularioExtras;
+
 import { CampoIndicados } from '@/components/formularios/CampoIndicados';
 import FormularioLandingPageTemplate from '@/components/formularios/FormularioLandingPageTemplate';
 import { Servico } from '@/types/servico';
@@ -221,8 +240,9 @@ const DynamicField = ({ campo, control, errors, onCepChange, disabled, setValue 
                 </SelectTrigger>
                 <SelectContent>
                   {campo.opcoes?.map((opcao) => {
-                    const val = typeof opcao === 'object' && opcao !== null ? (opcao as any).value : opcao;
-                    const label = typeof opcao === 'object' && opcao !== null ? (opcao as any).label : opcao;
+                    const opcaoObj = opcao as string | { value: string; label: string };
+                    const val = typeof opcaoObj === 'object' && opcaoObj !== null ? opcaoObj.value : opcaoObj;
+                    const label = typeof opcaoObj === 'object' && opcaoObj !== null ? opcaoObj.label : opcaoObj;
                     return (
                       <SelectItem key={val} value={val}>
                         {label}
@@ -249,8 +269,9 @@ const DynamicField = ({ campo, control, errors, onCepChange, disabled, setValue 
                 className="flex flex-col space-y-2"
               >
                 {campo.opcoes?.map((opcao) => {
-                  const val = typeof opcao === 'object' && opcao !== null ? (opcao as any).value : opcao;
-                  const label = typeof opcao === 'object' && opcao !== null ? (opcao as any).label : opcao;
+                  const opcaoObj = opcao as string | { value: string; label: string };
+                  const val = typeof opcaoObj === 'object' && opcaoObj !== null ? opcaoObj.value : opcaoObj;
+                  const label = typeof opcaoObj === 'object' && opcaoObj !== null ? opcaoObj.label : opcaoObj;
                   return (
                     <div key={val} className="flex items-center space-x-2">
                       <RadioGroupItem value={val} id={`${campo.nome}-${val}`} />
@@ -428,7 +449,7 @@ export default function FormularioPublico() {
   const { slug } = useParams<{ slug: string }>();
   const [searchParams] = useSearchParams();
 
-  const [formulario, setFormulario] = useState<FormularioWithRelations | null>(null);
+  const [formulario, setFormulario] = useState<FormularioPublicoData | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -441,15 +462,11 @@ export default function FormularioPublico() {
   const [servicos, setServicos] = useState<Servico[]>([]);
   const pixelsInitialized = useRef(false);
 
+  // Hook para todas as operações Supabase (página pública, sem auth)
+  const formApi = useFormSubmissionPublic();
+
   // Estado para armazenar informações do indicador (incluindo franqueado para herdar unidade)
-  const [indicadorInfo, setIndicadorInfo] = useState<{
-    tipo: 'influenciadora' | 'lead' | 'parceiro' | null;
-    nome: string;
-    nome_real?: string;  // Nome real (para mensagens WhatsApp)
-    codigo: string;
-    franchise_id?: string | null;
-    indicador_id?: string | null;
-  } | null>(null);
+  const [indicadorInfo, setIndicadorInfo] = useState<IndicadorInfo | null>(null);
 
   // Codigo de indicacao da URL (leads normais)
   const codigoIndicacao = searchParams.get('ref') || searchParams.get('codigo');
@@ -489,48 +506,21 @@ export default function FormularioPublico() {
 
   // Carregar formulario
   useEffect(() => {
-    const loadFormulario = async () => {
+    const doLoadFormulario = async () => {
       if (!slug) return;
 
       setLoading(true);
       setError(null);
 
       try {
-        const { data, error: fetchError } = await supabase
-          .from('mt_forms')
-          .select(`
-            *,
-            franchise:mt_franchises(id, nome_fantasia),
-            fields:mt_form_fields(*)
-          `)
-          .eq('slug', slug)
-          .eq('is_active', true)
-          .maybeSingle();
+        const data = await formApi.loadFormulario(slug);
 
-        if (fetchError) throw fetchError;
-        if (!data) throw new Error('Formulario nao encontrado');
-
-        // Mapear fields → campos e ordenar
-        // IMPORTANTE: DB usa 'mapear_para_lead' mas o tipo FormularioCampo usa 'campo_lead'
-        if (data.fields) {
-          data.campos = data.fields
-            .map((f: any) => ({
-              ...f,
-              campo_lead: f.mapear_para_lead || f.campo_lead || null,
-            }))
-            .sort((a: FormularioCampo, b: FormularioCampo) => a.ordem - b.ordem);
-        }
-
-        setFormulario(data as FormularioWithRelations);
+        setFormulario(data as FormularioPublicoData);
 
         // Carregar servicos se o formulario tiver campo de servico ou for landing page
         const hasServicoField = data.campos?.some((c: FormularioCampo) => c.tipo === 'servico');
         if (hasServicoField || data.layout_template === 'landing_page') {
-          const { data: servicosData } = await supabase
-            .from('mt_services')
-            .select('*')
-            .eq('is_active', true)
-            .order('nome');
+          const servicosData = await formApi.loadServicos();
           if (servicosData) {
             setServicos(servicosData);
           }
@@ -554,14 +544,7 @@ export default function FormularioPublico() {
         }
 
         // Registrar visualizacao (incrementar contador)
-        try {
-          await supabase
-            .from('mt_forms')
-            .update({ total_visualizacoes: (data.total_visualizacoes || 0) + 1 })
-            .eq('id', data.id);
-        } catch {
-          // Ignora erro de analytics - não deve bloquear o formulário
-        }
+        await formApi.incrementFormView(data.id, data.total_visualizacoes || 0);
       } catch (err) {
         console.error('Erro ao carregar formulario:', err);
         setError('Nao foi possivel carregar o formulario.');
@@ -570,113 +553,26 @@ export default function FormularioPublico() {
       }
     };
 
-    loadFormulario();
-  }, [slug, sessionId, utmParams]);
+    doLoadFormulario();
+  }, [slug, sessionId, utmParams, formApi]);
 
   // Buscar informações do indicador (influenciadora, lead ou parceiro)
   useEffect(() => {
-    const loadIndicadorInfo = async () => {
-      // Prioridade: influenciadores > parceria > ref/codigo
-      const codigo = codigoInfluenciadora || codigoParceria || codigoIndicacao;
-      if (!codigo) return;
-
+    const doLoadIndicadorInfo = async () => {
       try {
-        // 1. Se parâmetro é 'influenciadores', buscar APENAS em influenciadoras
-        if (codigoInfluenciadora) {
-          const { data: influenciadora } = await supabase
-            .from('mt_influencers')
-            .select('nome, nome_artistico, franchise_id')
-            .eq('codigo', codigoInfluenciadora.toUpperCase())
-            .maybeSingle();
-
-          if (influenciadora) {
-            setIndicadorInfo({
-              tipo: 'influenciadora',
-              nome: influenciadora.nome_artistico || influenciadora.nome,
-              nome_real: influenciadora.nome || influenciadora.nome_artistico,
-              codigo: codigoInfluenciadora.toUpperCase(),
-              franchise_id: influenciadora.franchise_id || undefined,
-            });
-            return;
-          }
-        }
-
-        // 2. Se parâmetro é 'parceria', buscar em parcerias empresariais
-        if (codigoParceria) {
-          const { data: parceria } = await supabase
-            .from('mt_partnerships')
-            .select('nome_fantasia, nome_empresa')
-            .eq('codigo', codigoParceria.toUpperCase())
-            .maybeSingle();
-
-          if (parceria) {
-            setIndicadorInfo({
-              tipo: 'parceiro',
-              nome: parceria.nome_fantasia || parceria.nome_empresa,
-              codigo: codigoParceria.toUpperCase(),
-            });
-            return;
-          }
-
-          // Se não encontrou parceria, mostra o código
-          setIndicadorInfo({
-            tipo: 'parceiro',
-            nome: codigoParceria.toUpperCase(),
-            codigo: codigoParceria.toUpperCase(),
-          });
-          return;
-        }
-
-        // 3. Se parâmetro é 'ref' ou 'codigo', buscar primeiro em influenciadoras, depois em leads
-        if (codigoIndicacao) {
-          // Buscar em influenciadoras primeiro
-          const { data: influenciadora } = await supabase
-            .from('mt_influencers')
-            .select('nome, nome_artistico')
-            .eq('codigo', codigoIndicacao.toUpperCase())
-            .maybeSingle();
-
-          if (influenciadora) {
-            setIndicadorInfo({
-              tipo: 'influenciadora',
-              nome: influenciadora.nome_artistico || influenciadora.nome,
-              codigo: codigoIndicacao.toUpperCase(),
-            });
-            return;
-          }
-
-          // Se não encontrou em influenciadoras, buscar em leads (incluindo franqueado_id para herdar unidade)
-          const { data: lead } = await supabase
-            .from('mt_leads')
-            .select('id, nome, franchise_id')
-            .eq('codigo_indicacao', codigoIndicacao.toUpperCase())
-            .maybeSingle();
-
-          if (lead) {
-            setIndicadorInfo({
-              tipo: 'lead',
-              nome: lead.nome,
-              codigo: codigoIndicacao.toUpperCase(),
-              franchise_id: lead.franchise_id,
-              indicador_id: lead.id,
-            });
-            return;
-          }
-
-          // Se não encontrou em nenhum lugar, mostra só o código
-          setIndicadorInfo({
-            tipo: null,
-            nome: codigoIndicacao.toUpperCase(),
-            codigo: codigoIndicacao.toUpperCase(),
-          });
-        }
+        const info = await formApi.loadIndicadorInfo({
+          codigoInfluenciadora,
+          codigoParceria,
+          codigoIndicacao,
+        });
+        if (info) setIndicadorInfo(info);
       } catch (err) {
         console.error('Erro ao buscar indicador:', err);
       }
     };
 
-    loadIndicadorInfo();
-  }, [codigoIndicacao, codigoInfluenciadora, codigoParceria]);
+    doLoadIndicadorInfo();
+  }, [codigoIndicacao, codigoInfluenciadora, codigoParceria, formApi]);
 
   // PostMessage para comunicar com iframe pai (altura e eventos)
   useEffect(() => {
@@ -685,7 +581,7 @@ export default function FormularioPublico() {
     // Enviar altura inicial e a cada mudança
     const sendHeight = () => {
       const height = document.body.scrollHeight;
-      window.parent.postMessage({ type: 'yeslaser-form-height', height }, '*');
+      window.parent.postMessage({ type: 'viniun-form-height', height }, '*');
     };
 
     // Enviar altura inicial
@@ -712,7 +608,7 @@ export default function FormularioPublico() {
 
   // Resolver dinâmico: wrapper que sempre usa o schema mais recente
   const dynamicResolver = useCallback(
-    async (values: any, context: any, options: any) => {
+    async (values: Record<string, unknown>, context: unknown, options: { criteriaMode?: string; fields?: Record<string, unknown>; shouldUseNativeValidation?: boolean }) => {
       const resolver = zodResolver(validationSchema);
       return resolver(values, context, options);
     },
@@ -824,7 +720,6 @@ export default function FormularioPublico() {
       }
     });
 
-    console.log('[CEP] Endereço encontrado:', address);
   }, [setValue, formulario?.campos]);
 
   // Avancar etapa
@@ -1022,457 +917,146 @@ export default function FormularioPublico() {
         }
       });
 
-      // Log para debug
-      console.log('Lead data construído:', leadData);
-      console.log('Dados do formulário:', data);
-
       // Criar ou atualizar lead
       let leadId: string | undefined;
       if (leadData.email || leadData.whatsapp || leadData.telefone) {
-        // Construir query de verificação de duplicatas de forma segura
-        const orConditions: string[] = [];
-        if (leadData.email) orConditions.push(`email.eq.${leadData.email}`);
-        if (leadData.whatsapp) orConditions.push(`whatsapp.eq.${leadData.whatsapp}`);
-        // Buscar também por telefone (pode ter formato diferente)
-        if (leadData.telefone) {
-          const cleanedPhone = String(leadData.telefone).replace(/\D/g, '');
-          orConditions.push(`telefone.eq.${leadData.telefone}`);
-          if (cleanedPhone !== String(leadData.telefone)) {
-            orConditions.push(`telefone.eq.${cleanedPhone}`);
-          }
-        }
-
-        const { data: existingLead, error: selectError } = await supabase
-          .from('mt_leads')
-          .select('id')
-          .or(orConditions.join(','))
-          .maybeSingle();
-
-        if (selectError) {
-          console.error('Erro ao buscar lead existente:', selectError);
-        }
+        const existingLead = await formApi.findExistingLead(leadData);
 
         if (existingLead) {
-          // Lead já existe: atualizar APENAS dados pessoais (não sobrescrever origem/campanha/tracking)
-          // Os dados de origem/campanha/tracking ficam no histórico de atividades
-          const personalFields = [
-            'nome', 'sobrenome', 'nome_social', 'email', 'telefone', 'whatsapp',
-            'cpf', 'data_nascimento', 'genero', 'profissao', 'empresa', 'cargo',
-            'cep', 'endereco', 'numero', 'complemento', 'bairro', 'cidade', 'estado',
-            'latitude', 'longitude', 'servico_interesse',
-          ];
-          const updateData: Record<string, unknown> = { updated_at: new Date().toISOString() };
-          for (const field of personalFields) {
-            if (leadData[field] !== undefined && leadData[field] !== null && leadData[field] !== '') {
-              updateData[field] = leadData[field];
-            }
-          }
-          // Sempre atualizar franchise_id se veio do formulário (pode ter mudado de unidade)
-          if (leadData.franchise_id) updateData.franchise_id = leadData.franchise_id;
-
-          const { error: updateError } = await supabase
-            .from('mt_leads')
-            .update(updateData)
-            .eq('id', existingLead.id);
-          if (updateError) {
-            console.error('Erro ao atualizar lead:', updateError);
-          }
-          leadId = existingLead.id;
+          // Lead já existe: atualizar APENAS dados pessoais
+          leadId = await formApi.updateExistingLead(existingLead.id, leadData);
         } else {
           // Round Robin: determinar responsável automaticamente
-          if (formulario && (formulario as any).round_robin_enabled) {
+          if (formulario && formulario.round_robin_enabled) {
             try {
               const rrConfig: RoundRobinConfig = {
-                session_id: formulario.id, // Usa form ID como session_id para o state
-                tenant_id: (formulario as any).tenant_id,
+                session_id: formulario.id,
+                tenant_id: formulario.tenant_id,
                 round_robin_enabled: true,
-                round_robin_mode: (formulario as any).round_robin_mode || 'team',
-                team_id: (formulario as any).team_id || null,
-                department_id: (formulario as any).department_id || null,
-                responsible_user_id: (formulario as any).responsible_user_id || null,
+                round_robin_mode: formulario.round_robin_mode || 'team',
+                team_id: formulario.team_id || null,
+                department_id: formulario.department_id || null,
+                responsible_user_id: formulario.responsible_user_id || null,
               };
               const rrResult = await getNextResponsible(rrConfig);
               if (rrResult.user_id) {
                 leadData.responsible_user_id = rrResult.user_id;
                 leadData.atribuido_para = rrResult.user_id;
                 leadData.atribuido_em = new Date().toISOString();
-                console.log(`[RoundRobin Form] Atribuído a ${rrResult.user_name || rrResult.user_id} via ${rrResult.method}`);
               }
             } catch (rrErr) {
               console.error('[RoundRobin Form] Erro:', rrErr);
-              // Fallback: usar responsável fixo se definido
-              if ((formulario as any).responsible_user_id) {
-                leadData.responsible_user_id = (formulario as any).responsible_user_id;
-                leadData.atribuido_para = (formulario as any).responsible_user_id;
+              if (formulario.responsible_user_id) {
+                leadData.responsible_user_id = formulario.responsible_user_id;
+                leadData.atribuido_para = formulario.responsible_user_id;
                 leadData.atribuido_em = new Date().toISOString();
               }
             }
-          } else if (formulario && (formulario as any).responsible_user_id) {
-            // Sem round robin, usar responsável fixo do formulário
-            leadData.responsible_user_id = (formulario as any).responsible_user_id;
-            leadData.atribuido_para = (formulario as any).responsible_user_id;
+          } else if (formulario && formulario.responsible_user_id) {
+            leadData.responsible_user_id = formulario.responsible_user_id;
+            leadData.atribuido_para = formulario.responsible_user_id;
             leadData.atribuido_em = new Date().toISOString();
           }
 
-          const { data: newLead, error: insertError } = await supabase
-            .from('mt_leads')
-            .insert(leadData)
-            .select()
-            .single();
-          if (insertError) {
-            console.error('Erro ao criar lead:', insertError);
-            console.error('Dados enviados:', leadData);
-            // Fallback: se duplicate key, tentar buscar e atualizar
-            if (insertError.code === '23505') {
-              const cleanedPhone = leadData.telefone ? String(leadData.telefone).replace(/\D/g, '') : '';
-              const fallbackOr: string[] = [];
-              if (leadData.email) fallbackOr.push(`email.eq.${leadData.email}`);
-              if (cleanedPhone) fallbackOr.push(`telefone.eq.${cleanedPhone}`);
-              if (leadData.whatsapp) fallbackOr.push(`whatsapp.eq.${leadData.whatsapp}`);
-              if (fallbackOr.length > 0) {
-                const { data: fallbackLead } = await supabase
-                  .from('mt_leads')
-                  .select('id')
-                  .or(fallbackOr.join(','))
-                  .maybeSingle();
-                if (fallbackLead) {
-                  await supabase.from('mt_leads').update(leadData).eq('id', fallbackLead.id);
-                  leadId = fallbackLead.id;
-                  console.log('Lead atualizado via fallback:', fallbackLead.id);
-                }
-              }
-            }
-          }
-          leadId = leadId || newLead?.id;
+          leadId = await formApi.createLead(leadData);
         }
 
         // Registrar atividade no lead (SEMPRE - novo ou atualizado)
         if (leadId) {
-          try {
-            const isNew = !existingLead;
-            const activityBase = {
-              lead_id: leadId,
-              tenant_id: formulario.tenant_id,
-              franchise_id: franchiseIdFinal || null,
-            };
+          const isNew = !existingLead;
+          const activityBase = {
+            lead_id: leadId,
+            tenant_id: formulario.tenant_id,
+            franchise_id: franchiseIdFinal || null,
+          };
 
-            // Atividade principal: Lead criado ou atualizado via formulário
-            // SEMPRE registra com detalhes completos (origem, campanha, canal, UTMs, etc.)
-            // Isso garante histórico completo mesmo quando lead se cadastra em múltiplos canais
-            await supabase.from('mt_lead_activities').insert({
+          // Atividade principal
+          await formApi.logLeadActivity({
+            ...activityBase,
+            tipo: isNew ? 'cadastro' : 'formulario',
+            titulo: isNew
+              ? 'Lead cadastrado via formulário'
+              : `Nova submissão: ${formulario.nome}`,
+            descricao: isNew
+              ? `Cadastro realizado pelo formulário "${formulario.nome}" (${formulario.slug})${indicadorInfo ? ` - Indicado por: ${indicadorInfo.nome} (${indicadorInfo.codigo})` : ''}`
+              : `Lead se cadastrou novamente pelo formulário "${formulario.nome}" (${formulario.slug}). Canal: ${origem || 'site'}. Campanha: ${campanhaFinal || 'N/A'}${indicadorInfo ? `. Indicado por: ${indicadorInfo.nome} (${indicadorInfo.codigo})` : ''}`,
+            dados: {
+              formulario_id: formulario.id,
+              formulario_nome: formulario.nome,
+              formulario_slug: formulario.slug,
+              origem,
+              campanha: campanhaFinal,
+              canal_entrada: leadData.canal_entrada || 'site',
+              landing_page: formulario.slug,
+              utm_source: utmSourceFinal || null,
+              utm_medium: utmMediumFinal || null,
+              utm_campaign: campanhaFinal || null,
+              utm_content: utmContentFinal || null,
+              utm_term: utmParams.utm_term || null,
+              gclid: trackingParams.gclid || null,
+              fbclid: trackingParams.fbclid || null,
+              referrer_url: trackingParams.referrer_url || null,
+              codigo_indicacao: indicadorInfo?.codigo || null,
+              tipo_indicacao: indicadorInfo?.tipo || null,
+              indicador_nome: indicadorInfo?.nome || null,
+              dados_submetidos: Object.keys(data).reduce((acc, key) => {
+                const val = data[key];
+                if (val !== undefined && val !== null && val !== '') acc[key] = val;
+                return acc;
+              }, {} as Record<string, unknown>),
+              tempo_preenchimento_segundos: tempoPreenchimento,
+              is_resubmissao: !isNew,
+            },
+          });
+
+          // Atividade de indicação (se aplicável)
+          if (indicadorInfo) {
+            await formApi.logLeadActivity({
               ...activityBase,
-              tipo: isNew ? 'cadastro' : 'formulario',
-              titulo: isNew
-                ? 'Lead cadastrado via formulário'
-                : `Nova submissão: ${formulario.nome}`,
-              descricao: isNew
-                ? `Cadastro realizado pelo formulário "${formulario.nome}" (${formulario.slug})${indicadorInfo ? ` - Indicado por: ${indicadorInfo.nome} (${indicadorInfo.codigo})` : ''}`
-                : `Lead se cadastrou novamente pelo formulário "${formulario.nome}" (${formulario.slug}). Canal: ${origem || 'site'}. Campanha: ${campanhaFinal || 'N/A'}${indicadorInfo ? `. Indicado por: ${indicadorInfo.nome} (${indicadorInfo.codigo})` : ''}`,
+              tipo: 'indicacao',
+              titulo: indicadorInfo.tipo === 'influenciadora'
+                ? `Indicado por influenciadora: ${indicadorInfo.nome}`
+                : indicadorInfo.tipo === 'parceiro'
+                  ? `Indicado por parceiro: ${indicadorInfo.nome}`
+                  : `Indicado por lead: ${indicadorInfo.nome}`,
+              descricao: `Código utilizado: ${indicadorInfo.codigo}`,
               dados: {
-                formulario_id: formulario.id,
-                formulario_nome: formulario.nome,
-                formulario_slug: formulario.slug,
-                origem,
-                campanha: campanhaFinal,
-                canal_entrada: leadData.canal_entrada || 'site',
-                landing_page: formulario.slug,
-                // UTM completos para cada submissão
-                utm_source: utmSourceFinal || null,
-                utm_medium: utmMediumFinal || null,
-                utm_campaign: campanhaFinal || null,
-                utm_content: utmContentFinal || null,
-                utm_term: utmParams.utm_term || null,
-                // Ads tracking
-                gclid: trackingParams.gclid || null,
-                fbclid: trackingParams.fbclid || null,
-                referrer_url: trackingParams.referrer_url || null,
-                // Indicação
-                codigo_indicacao: indicadorInfo?.codigo || null,
-                tipo_indicacao: indicadorInfo?.tipo || null,
-                indicador_nome: indicadorInfo?.nome || null,
-                // Dados submetidos (resumo)
-                dados_submetidos: Object.keys(data).reduce((acc, key) => {
-                  const val = data[key];
-                  if (val !== undefined && val !== null && val !== '') acc[key] = val;
-                  return acc;
-                }, {} as Record<string, unknown>),
-                // Meta
-                tempo_preenchimento_segundos: tempoPreenchimento,
-                is_resubmissao: !isNew,
+                tipo_indicacao: indicadorInfo.tipo,
+                indicador_nome: indicadorInfo.nome,
+                indicador_codigo: indicadorInfo.codigo,
+                indicador_id: indicadorInfo.indicador_id || null,
               },
             });
-
-            // Atividade de indicação (se aplicável)
-            if (indicadorInfo) {
-              await supabase.from('mt_lead_activities').insert({
-                ...activityBase,
-                tipo: 'indicacao',
-                titulo: indicadorInfo.tipo === 'influenciadora'
-                  ? `Indicado por influenciadora: ${indicadorInfo.nome}`
-                  : indicadorInfo.tipo === 'parceiro'
-                    ? `Indicado por parceiro: ${indicadorInfo.nome}`
-                    : `Indicado por lead: ${indicadorInfo.nome}`,
-                descricao: `Código utilizado: ${indicadorInfo.codigo}`,
-                dados: {
-                  tipo_indicacao: indicadorInfo.tipo,
-                  indicador_nome: indicadorInfo.nome,
-                  indicador_codigo: indicadorInfo.codigo,
-                  indicador_id: indicadorInfo.indicador_id || null,
-                },
-              });
-            }
-          } catch (actErr) {
-            console.error('Erro ao registrar atividade:', actErr);
-            // Não bloqueia o fluxo - atividade é complementar
           }
         }
 
         // Se tiver codigo de promoção, vincular ao lead e registrar uso
         if (codigoPromocao && leadId) {
-          try {
-            const { data: promocao } = await supabase
-              .from('mt_promotions')
-              .select('id, tenant_id')
-              .eq('codigo', codigoPromocao.toUpperCase())
-              .eq('status', 'ativa')
-              .maybeSingle();
-
-            if (promocao) {
-              // Vincular promoção ao lead
-              await supabase
-                .from('mt_leads')
-                .update({ promotion_id: promocao.id })
-                .eq('id', leadId);
-
-              // Registrar uso da promoção
-              await supabase.from('mt_promotion_uses').insert({
-                promotion_id: promocao.id,
-                tenant_id: promocao.tenant_id,
-                lead_id: leadId,
-                source: 'formulario',
-              });
-
-              // Incrementar contador de usos
-              await supabase.rpc('increment_field', {
-                table_name: 'mt_promotions',
-                field_name: 'usos_count',
-                row_id: promocao.id,
-              }).catch(() => {
-                // Fallback: update direto se RPC não existir
-                supabase
-                  .from('mt_promotions')
-                  .update({ usos_count: (promocao as any).usos_count ? (promocao as any).usos_count + 1 : 1 })
-                  .eq('id', promocao.id);
-              });
-            }
-          } catch (promoErr) {
-            console.error('Erro ao registrar promoção:', promoErr);
-          }
+          await formApi.trackPromotion({ codigoPromocao, leadId });
         }
 
         // Se tiver codigo de influenciadora, registrar indicacao
         if (codigoInfluenciadora && leadId) {
-          const { data: influenciadora } = await supabase
-            .from('mt_influencers')
-            .select('id, tenant_id')
-            .eq('codigo', codigoInfluenciadora.toUpperCase())
-            .maybeSingle();
-
-          if (influenciadora) {
-            await supabase.from('mt_influencer_referrals').insert({
-              tenant_id: influenciadora.tenant_id,
-              influencer_id: influenciadora.id,
-              lead_id: leadId,
-              codigo_usado: codigoInfluenciadora.toUpperCase(),
-              status: 'pendente',
-            });
-
-            // Envio automático de WhatsApp para o lead indicado (fire-and-forget)
-            try {
-              const leadPhone = String(leadData.whatsapp || leadData.telefone || '').replace(/\D/g, '');
-              const leadNome = String(leadData.nome || '');
-              const influencerNome = indicadorInfo?.nome_real || indicadorInfo?.nome || '';
-
-              if (leadPhone && leadNome) {
-                // Verificar se auto-send está habilitado via RPC
-                const { data: notifConfig } = await supabase.rpc('get_referral_notif_config', {
-                  p_tenant_id: influenciadora.tenant_id,
-                  p_franchise_id: franchiseIdFinal || null,
-                });
-
-                const autoSendEnabled = notifConfig?.auto_send_whatsapp_enabled !== false;
-                const onIndicacaoCriada = notifConfig?.auto_send_on_indicacao_criada !== false;
-
-                if (autoSendEnabled && onIndicacaoCriada) {
-                  const firstName = leadNome.split(' ')[0];
-                  const phoneWithCountry = leadPhone.startsWith('55') ? leadPhone : `55${leadPhone}`;
-
-                  // Usar nomes já disponíveis no contexto (sem queries adicionais)
-                  // franchiseNome é buscado mais abaixo, mas aqui usamos o que já temos
-                  let unidadeNome = 'nossa unidade';
-                  // Tentar buscar nome da franquia se tiver ID (com timeout para não travar)
-                  if (franchiseIdFinal) {
-                    try {
-                      const franchisePromise = supabase
-                        .from('mt_franchises')
-                        .select('nome_fantasia, nome, cidade')
-                        .eq('id', franchiseIdFinal)
-                        .single();
-                      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject('timeout'), 3000));
-                      const { data: refFranchise } = await Promise.race([franchisePromise, timeoutPromise]) as any;
-                      if (refFranchise) {
-                        const fName = refFranchise.nome_fantasia || refFranchise.nome || '';
-                        unidadeNome = refFranchise.cidade ? `${fName} - ${refFranchise.cidade}` : fName;
-                      }
-                    } catch {
-                      // Timeout ou erro - usar fallback
-                    }
-                  }
-
-                  const mensagem =
-                    `Olá, ${firstName}! Tudo bem? 😊\n\n` +
-                    (influencerNome
-                      ? `*${influencerNome}* te indicou e você ganhou um presente especial! 🎁\n\n`
-                      : `Você ganhou um presente especial! 🎁\n\n`) +
-                    `✨ *10 sessões de depilação a laser GRATUITAS em área P*!\n\n` +
-                    `Para garantir suas sessões, é só agendar uma *avaliação gratuita* aqui na *${unidadeNome}*. ` +
-                    `A avaliação é rápida, sem compromisso, e nossa especialista vai analisar sua pele e tirar todas as suas dúvidas.\n\n` +
-                    `📅 Quer agendar? Me conta qual o melhor dia e horário para você!\n\n` +
-                    `Te esperamos! 💜`;
-
-                  // Enviar via edge function whatsapp-send
-                  supabase.functions.invoke('whatsapp-send', {
-                    body: {
-                      phone: phoneWithCountry,
-                      message: mensagem,
-                      tenant_id: influenciadora.tenant_id,
-                    },
-                  }).catch(err => console.warn('[Auto-Send Indicação] Erro (não crítico):', err));
-                }
-              }
-            } catch (autoSendErr) {
-              console.warn('[Auto-Send Indicação] Erro (não crítico):', autoSendErr);
-            }
-
-            // Se também tiver promoção, atualizar stats da subscription
-            if (codigoPromocao) {
-              try {
-                const { data: promocao } = await supabase
-                  .from('mt_promotions')
-                  .select('id')
-                  .eq('codigo', codigoPromocao.toUpperCase())
-                  .eq('status', 'ativa')
-                  .maybeSingle();
-
-                if (promocao) {
-                  // Incrementar total_leads na subscription
-                  const { data: sub } = await supabase
-                    .from('mt_promotion_subscriptions')
-                    .select('id, total_leads')
-                    .eq('promotion_id', promocao.id)
-                    .eq('influencer_id', influenciadora.id)
-                    .maybeSingle();
-
-                  if (sub) {
-                    await supabase
-                      .from('mt_promotion_subscriptions')
-                      .update({ total_leads: (sub.total_leads || 0) + 1 })
-                      .eq('id', sub.id);
-
-                    // Registrar uso com influencer_id e subscription_id
-                    await supabase.from('mt_promotion_uses').insert({
-                      promotion_id: promocao.id,
-                      tenant_id: influenciadora.tenant_id,
-                      lead_id: leadId,
-                      influencer_id: influenciadora.id,
-                      subscription_id: sub.id,
-                      source: 'formulario',
-                    });
-                  }
-                }
-              } catch (subErr) {
-                console.error('Erro ao atualizar subscription:', subErr);
-              }
-            }
-          }
+          await formApi.trackInfluencerReferral({
+            codigoInfluenciadora,
+            leadId,
+            franchiseIdFinal,
+            leadData,
+            indicadorInfo,
+            codigoPromocao,
+          });
         }
 
         // Se tiver codigo de parceria, registrar indicacao e vincular ao lead
         if (codigoParceria && leadId) {
-          const { data: parceria } = await supabase
-            .from('mt_partnerships')
-            .select('id, tenant_id, nome_fantasia, nome_empresa')
-            .eq('codigo', codigoParceria.toUpperCase())
-            .eq('status', 'ativo')
-            .maybeSingle();
-
-          if (parceria) {
-            // Atualizar lead com parceria_id
-            await supabase
-              .from('mt_leads')
-              .update({ parceria_id: parceria.id })
-              .eq('id', leadId);
-
-            // Registrar indicação da parceria (trigger auto-incrementa total_indicacoes em mt_partnerships)
-            await supabase.from('mt_partnership_referrals').insert({
-              tenant_id: formulario.tenant_id,
-              franchise_id: formulario.franchise_id || null,
-              partnership_id: parceria.id,
-              parceria_id: parceria.id,
-              lead_id: leadId,
-              codigo_usado: codigoParceria.toUpperCase(),
-              code_used: codigoParceria.toUpperCase(),
-              referral_code: codigoParceria.toUpperCase(),
-              data_indicacao: new Date().toISOString(),
-              status: 'pendente',
-            });
-
-            // Envio automático de WhatsApp para o lead indicado (fire-and-forget)
-            try {
-              const leadPhone = String(leadData.whatsapp || leadData.telefone || '').replace(/\D/g, '');
-              const leadNome = String(leadData.nome || '');
-              const parceriaNome = parceria.nome_fantasia || parceria.nome_empresa || indicadorInfo?.nome || '';
-
-              if (leadPhone && leadNome && parceriaNome) {
-                const firstName = leadNome.split(' ')[0];
-                const phoneWithCountry = leadPhone.startsWith('55') ? leadPhone : `55${leadPhone}`;
-
-                let unidadeNome = 'nossa unidade';
-                if (franchiseIdFinal) {
-                  try {
-                    const { data: refFranchise } = await supabase
-                      .from('mt_franchises')
-                      .select('nome_fantasia, nome, cidade')
-                      .eq('id', franchiseIdFinal)
-                      .single();
-                    if (refFranchise) {
-                      const fName = refFranchise.nome_fantasia || refFranchise.nome || '';
-                      unidadeNome = refFranchise.cidade ? `${fName} - ${refFranchise.cidade}` : fName;
-                    }
-                  } catch { /* usa fallback */ }
-                }
-
-                const mensagem =
-                  `Olá, ${firstName}! Tudo bem? 😊\n\n` +
-                  `*${parceriaNome}* tem uma parceria especial com a YESlaser para você! 🎁\n\n` +
-                  `✨ *10 sessões de depilação a laser GRATUITAS em área P*!\n\n` +
-                  `Para garantir suas sessões, é só agendar uma *avaliação gratuita* aqui na *${unidadeNome}*. ` +
-                  `A avaliação é rápida, sem compromisso, e nossa especialista vai analisar sua pele e tirar todas as suas dúvidas.\n\n` +
-                  `📅 Quer agendar? Me conta qual o melhor dia e horário para você!\n\n` +
-                  `Te esperamos! 💜`;
-
-                supabase.functions.invoke('whatsapp-send', {
-                  body: {
-                    phone: phoneWithCountry,
-                    message: mensagem,
-                    tenant_id: parceria.tenant_id || formulario.tenant_id,
-                  },
-                }).catch(err => console.warn('[Auto-Send Parceria] Erro (não crítico):', err));
-              }
-            } catch (autoSendErr) {
-              console.warn('[Auto-Send Parceria] Erro (não crítico):', autoSendErr);
-            }
-          }
+          await formApi.trackPartnershipReferral({
+            codigoParceria,
+            leadId,
+            tenantId: formulario.tenant_id,
+            franchiseId: formulario.franchise_id || null,
+            leadData,
+            indicadorInfo,
+          });
         }
       }
 
@@ -1497,7 +1081,7 @@ export default function FormularioPublico() {
         status: 'novo',
       };
 
-      await supabase.from('mt_form_submissions').insert(submissaoData);
+      await formApi.createFormSubmission(submissaoData);
 
       // Processar campo de indicados (criar leads para amigos indicados)
       const indicadosCampo = formulario.campos?.find(c => c.tipo === 'indicados');
@@ -1510,42 +1094,16 @@ export default function FormularioPublico() {
           const emailAmigo = indicado.email_amigo || indicado.email;
 
           if (nomeAmigo && whatsappAmigo) {
-            // Criar lead para o amigo indicado
-            const indicadoLeadData = {
+            await formApi.createIndicadoLead({
               nome: nomeAmigo,
               whatsapp: whatsappAmigo,
-              telefone: whatsappAmigo,
               email: emailAmigo || null,
-              tenant_id: formulario.tenant_id,
-              franchise_id: formulario.franchise_id,
-              canal_entrada: 'site',
-              origem: 'indicacao',
-              status: 'Lead Recebido',
-              landing_page: formulario.slug,
-              indicado_por_id: leadId, // Quem indicou
+              tenantId: formulario.tenant_id,
+              franchiseId: formulario.franchise_id,
+              indicadoPorId: leadId,
+              formSlug: formulario.slug,
               campanha: utmParams.utm_campaign || `Indicacao - ${formulario.nome}`,
-            };
-
-            // Verificar se o lead indicado já existe
-            const { data: existingIndicado, error: checkError } = await supabase
-              .from('mt_leads')
-              .select('id')
-              .eq('whatsapp', whatsappAmigo)
-              .maybeSingle();
-
-            if (checkError) {
-              console.error('Erro ao verificar lead indicado:', checkError);
-            }
-
-            if (!existingIndicado) {
-              const { error: insertIndicadoError } = await supabase
-                .from('mt_leads')
-                .insert(indicadoLeadData);
-              if (insertIndicadoError) {
-                console.error('Erro ao criar lead indicado:', insertIndicadoError);
-                console.error('Dados do indicado:', indicadoLeadData);
-              }
-            }
+            });
           }
         }
       }
@@ -1573,104 +1131,40 @@ export default function FormularioPublico() {
 
       // ===== NOTIFICAÇÃO WHATSAPP PARA FRANQUIA (NOVO LEAD) =====
       if (leadId) {
-        try {
-          const leadNome = String(leadData.nome || data.nome_completo || data.nome || 'Não informado');
-          const leadPhone = String(leadData.whatsapp || leadData.telefone || data.whatsapp || data.telefone || '').replace(/\D/g, '');
-          const leadEmail = String(leadData.email || data.email || 'Não informado');
-          const origemTexto = indicadorInfo
-            ? `Indicação de ${indicadorInfo.nome} (${indicadorInfo.codigo})`
-            : campanhaFinal || 'Formulário do site';
+        const leadNome = String(leadData.nome || data.nome_completo || data.nome || 'Nao informado');
+        const leadPhone = String(leadData.whatsapp || leadData.telefone || data.whatsapp || data.telefone || '').replace(/\D/g, '');
+        const leadEmail = String(leadData.email || data.email || 'Nao informado');
+        const origemTexto = indicadorInfo
+          ? `Indicação de ${indicadorInfo.nome} (${indicadorInfo.codigo})`
+          : campanhaFinal || 'Formulário do site';
 
-          // Buscar WhatsApp da franquia vinculada ao formulário ou franquia padrão
-          let franchiseWhatsApp: string | null = null;
-          let franchiseNome = '';
-          const targetFranchiseId = franchiseIdFinal || (formulario as any).franchise_id;
-
-          if (targetFranchiseId) {
-            const { data: franchise } = await supabase
-              .from('mt_franchises')
-              .select('whatsapp, nome_fantasia, nome')
-              .eq('id', targetFranchiseId)
-              .maybeSingle();
-            if (franchise) {
-              franchiseWhatsApp = franchise.whatsapp;
-              franchiseNome = franchise.nome_fantasia || franchise.nome || '';
-            }
-          }
-
-          // Fallback: buscar a primeira franquia ativa do tenant com WhatsApp
-          if (!franchiseWhatsApp) {
-            const { data: defaultFranchise } = await supabase
-              .from('mt_franchises')
-              .select('whatsapp, nome_fantasia, nome')
-              .eq('tenant_id', formulario.tenant_id)
-              .eq('is_active', true)
-              .not('whatsapp', 'is', null)
-              .limit(1)
-              .maybeSingle();
-            if (defaultFranchise) {
-              franchiseWhatsApp = defaultFranchise.whatsapp;
-              franchiseNome = defaultFranchise.nome_fantasia || defaultFranchise.nome || '';
-            }
-          }
-
-          if (franchiseWhatsApp) {
-            const franchiseMsg = `🆕 *Novo lead cadastrado!*\n\n` +
-              `*Nome:* ${leadNome}\n` +
-              `*WhatsApp:* ${leadPhone ? `(${leadPhone.slice(2, 4)}) ${leadPhone.slice(4, 9)}-${leadPhone.slice(9)}` : 'Não informado'}\n` +
-              `*Email:* ${leadEmail}\n` +
-              `*Origem:* ${origemTexto}\n` +
-              `*Formulário:* ${formulario.nome}\n` +
-              (franchiseNome ? `*Unidade:* ${franchiseNome}\n` : '') +
-              `\n_Cadastrado em ${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}_`;
-
-            supabase.functions.invoke('whatsapp-send', {
-              body: {
-                phone: String(franchiseWhatsApp).replace(/\D/g, ''),
-                message: franchiseMsg,
-                tenant_id: formulario.tenant_id,
-              },
-            }).catch(err => console.warn('Erro ao notificar franquia (novo lead):', err));
-          }
-        } catch (notifErr) {
-          console.warn('Erro ao notificar franquia:', notifErr);
-        }
+        await formApi.notifyFranchiseNewLead({
+          leadId,
+          tenantId: formulario.tenant_id,
+          franchiseIdFinal: franchiseIdFinal || formulario.franchise_id,
+          leadNome,
+          leadPhone,
+          leadEmail,
+          origemTexto,
+          formularioNome: formulario.nome,
+        });
       }
 
       // ===== MAGIC TOKEN + WHATSAPP COM LINK DO PORTAL =====
       if (leadId) {
-        try {
-          const magicToken = crypto.randomUUID().replace(/-/g, '');
-          await supabase.from('mt_cliente_magic_tokens' as any).insert({
-            tenant_id: formulario.tenant_id,
-            lead_id: leadId,
-            token: magicToken,
-            expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-          });
+        const magicToken = await formApi.createMagicToken({
+          tenantId: formulario.tenant_id,
+          leadId,
+          formData: data,
+          leadData,
+          franchiseIdFinal,
+        });
 
-          // Enviar WhatsApp com link do portal para agendar
-          const clientPhone = data.whatsapp || data.telefone;
-          if (clientPhone) {
-            const portalUrl = `${window.location.origin}/cliente/agendar?token=${magicToken}`;
-            const firstName = ((data.nome as string) || 'Cliente').split(' ')[0];
-            const portalMsg = `Olá, ${firstName}! 😊\n\n` +
-              `Seu cadastro foi realizado com sucesso!\n\n` +
-              `Acesse seu painel para agendar sua sessão gratuita:\n${portalUrl}\n\n` +
-              `É só clicar e escolher o melhor horário para você! 📅`;
-
-            supabase.functions.invoke('whatsapp-send', {
-              body: {
-                phone: String(clientPhone).replace(/\D/g, ''),
-                message: portalMsg,
-                tenant_id: formulario.tenant_id,
-              },
-            }).catch(err => console.warn('Erro ao enviar WhatsApp portal:', err));
-          }
-
+        if (magicToken) {
           // Salvar token para redirect pós-envio
-          (window as any).__magicToken = magicToken;
-          (window as any).__leadId = leadId;
-          (window as any).__leadData = {
+          ((window as unknown) as Record<string, unknown>).__magicToken = magicToken;
+          ((window as unknown) as Record<string, unknown>).__leadId = leadId;
+          ((window as unknown) as Record<string, unknown>).__leadData = {
             id: leadId,
             nome: data.nome_completo || data.nome || leadData.nome || 'Cliente',
             email: data.email || leadData.email,
@@ -1679,8 +1173,6 @@ export default function FormularioPublico() {
             tenant_id: formulario.tenant_id,
             franchise_id: franchiseIdFinal,
           };
-        } catch (magicErr) {
-          console.warn('Erro ao gerar magic token:', magicErr);
         }
       }
 
@@ -1710,14 +1202,7 @@ export default function FormularioPublico() {
 
           // Atualizar status do webhook na submissão
           if (webhookResult.success) {
-            await supabase
-              .from('mt_form_submissions')
-              .update({
-                webhook_enviado: true,
-                webhook_response_code: webhookResult.statusCode,
-              })
-              .eq('session_id', sessionId)
-              .eq('formulario_id', formulario.id);
+            await formApi.updateWebhookStatus(sessionId, formulario.id, webhookResult.statusCode);
           }
         } catch (webhookError) {
           console.error('Erro ao enviar webhook:', webhookError);
@@ -1744,24 +1229,19 @@ export default function FormularioPublico() {
       localStorage.setItem('mt_cliente_data', JSON.stringify(leadDataForRedirect));
 
       // Limpar refs do magic token
-      const savedMagicToken = (window as any).__magicToken;
+      const savedMagicToken = ((window as unknown) as Record<string, unknown>).__magicToken;
       if (savedMagicToken) {
-        delete (window as any).__magicToken;
-        delete (window as any).__leadData;
-        delete (window as any).__leadId;
+        delete ((window as unknown) as Record<string, unknown>).__magicToken;
+        delete ((window as unknown) as Record<string, unknown>).__leadData;
+        delete ((window as unknown) as Record<string, unknown>).__leadId;
       }
 
-      // Redirecionar: /cliente/agendar/yeslaser-praia-grande (só slug, sem dados pessoais)
+      // Redirecionar: /cliente/agendar/viniun (só slug, sem dados pessoais)
       if (codigoInfluenciadora || codigoParceria || savedMagicToken) {
         // Buscar slug da franquia para URL amigável
         let franchiseSlug = '';
         if (franchiseIdFinal) {
-          try {
-            const slugPromise = supabase.from('mt_franchises').select('slug').eq('id', franchiseIdFinal).single();
-            const timeoutP = new Promise((_, reject) => setTimeout(() => reject('timeout'), 2000));
-            const { data: slugData } = await Promise.race([slugPromise, timeoutP]) as any;
-            franchiseSlug = slugData?.slug || '';
-          } catch { /* timeout - redireciona sem slug */ }
+          franchiseSlug = await formApi.getFranchiseSlug(franchiseIdFinal);
         }
 
         window.location.href = franchiseSlug
@@ -1789,7 +1269,7 @@ export default function FormularioPublico() {
       // Notificar iframe pai sobre o envio bem sucedido
       if (isEmbedded) {
         window.parent.postMessage({
-          type: 'yeslaser-form-submit',
+          type: 'viniun-form-submit',
           success: true,
           formSlug: formulario.slug,
           formName: formulario.nome,

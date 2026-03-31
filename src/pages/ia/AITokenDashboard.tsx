@@ -61,14 +61,18 @@ export default function AITokenDashboard() {
     weekAgo.setDate(weekAgo.getDate() - 7);
     const weekAgoStr = weekAgo.toISOString().split('T')[0];
 
-    return monthUsage.byDay
-      .filter((d: any) => d.date >= weekAgoStr)
-      .reduce((sum: number, d: any) => sum + d.cost_brl, 0);
+    interface DayUsage { date: string; cost_brl: number; requests: number; tokens: number }
+  interface ProviderUsage { provider: string; requests: number; cost_brl: number }
+
+  return monthUsage.byDay
+      .filter((d: DayUsage) => d.date >= weekAgoStr)
+      .reduce((sum: number, d: DayUsage) => sum + d.cost_brl, 0);
   }, [monthUsage.byDay]);
 
   // Chart data
   const chartData = useMemo(() => {
-    return monthUsage.byDay.map((d: any) => ({
+    type DayUsage = { date: string; cost_brl: number; requests: number; tokens: number };
+    return monthUsage.byDay.map((d: DayUsage) => ({
       date: new Date(d.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
       custo: Number(d.cost_brl.toFixed(2)),
       requisicoes: d.requests,
@@ -77,7 +81,8 @@ export default function AITokenDashboard() {
 
   // Cost by provider
   const providerData = useMemo(() => {
-    return monthUsage.byProvider.map((p: any) => ({
+    type ProviderRow = { provider: string; requests: number; cost_brl: number };
+    return monthUsage.byProvider.map((p: ProviderRow) => ({
       provider: p.provider,
       requests: p.requests,
       tokens: p.tokens,
@@ -281,7 +286,7 @@ export default function AITokenDashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {providerData.map((p: any) => (
+                {providerData.map((p: { provider: string; requests: number; custo: string }) => (
                   <TableRow key={p.provider}>
                     <TableCell>
                       <Badge variant="secondary" className="capitalize">

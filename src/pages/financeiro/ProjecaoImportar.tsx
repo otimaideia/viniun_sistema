@@ -60,9 +60,9 @@ export default function ProjecaoImportar() {
       }
 
       setStep(2);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro ao parsear planilha:', err);
-      setParseError(err.message || 'Erro ao processar arquivo');
+      setParseError(err instanceof Error ? err.message : 'Erro ao processar arquivo');
     } finally {
       setIsParsing(false);
     }
@@ -113,9 +113,9 @@ export default function ProjecaoImportar() {
 
       toast.success('Plano de negócio importado com sucesso!');
       navigate(`/financeiro/projecao/${proj.id}`);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro ao importar:', err);
-      toast.error(`Erro ao importar: ${err.message}`);
+      toast.error(`Erro ao importar: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setIsImporting(false);
     }
@@ -220,7 +220,7 @@ export default function ProjecaoImportar() {
             </div>
             {franchise && (
               <div className="text-sm text-muted-foreground">
-                Franquia: <strong>{(franchise as any).nome_fantasia || (franchise as any).nome || franchise.id}</strong> (vinculada automaticamente)
+                Franquia: <strong>{(franchise as Record<string, unknown>).nome_fantasia as string || (franchise as Record<string, unknown>).nome as string || franchise.id}</strong> (vinculada automaticamente)
               </div>
             )}
           </CardContent>

@@ -99,7 +99,7 @@ export default function AttributionReport() {
 
       {/* Summary Cards */}
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-6">
-        {summary.map((item: any) => (
+        {summary.map((item: Record<string, unknown>) => (
           <Card key={item.method}>
             <CardContent className="pt-6">
               <Badge className={METHOD_BADGE_COLORS[item.method] || 'bg-gray-100 text-gray-700'}>

@@ -19,7 +19,7 @@ const COLORS = {
 };
 
 const LOGO_DEFAULT =
-  "/images/landing/depilacao-a-laser-em-praia-grande-yeslaser.png";
+  "/images/landing/viniun-logo.png";
 
 interface FranchiseInfo {
   id: string;

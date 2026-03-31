@@ -55,7 +55,7 @@ import type { MTDashboardProfile } from "@/types/dashboard";
 import * as LucideIcons from "lucide-react";
 
 function ProfileIcon({ iconName, className }: { iconName?: string; className?: string }) {
-  const Icon = iconName ? (LucideIcons as any)[iconName] || LayoutDashboard : LayoutDashboard;
+  const Icon = iconName ? (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName] || LayoutDashboard : LayoutDashboard;
   return <Icon className={className} />;
 }
 
@@ -116,8 +116,8 @@ export default function DashboardProfiles() {
       queryClient.invalidateQueries({ queryKey: ['mt-dashboard-profiles-admin'] });
       toast.success("Perfil duplicado com sucesso");
     },
-    onError: (err: any) => {
-      toast.error(`Erro ao duplicar: ${err.message}`);
+    onError: (err: Error) => {
+      toast.error(`Erro ao duplicar: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     },
   });
 
@@ -139,7 +139,7 @@ export default function DashboardProfiles() {
 
       queryClient.invalidateQueries({ queryKey: ['mt-dashboard-profiles-admin'] });
       toast.success("Perfil removido com sucesso");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       toast.error("Erro ao remover perfil");
     } finally {
@@ -264,7 +264,7 @@ export default function DashboardProfiles() {
                           <ProfileIcon
                             iconName={profile.icone}
                             className="h-4 w-4"
-                            style={{ color: profile.cor || '#6366f1' } as any}
+                            style={{ color: profile.cor || '#6366f1' }}
                           />
                         </div>
                         <div>

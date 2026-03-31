@@ -45,9 +45,9 @@ import {
 import { toast } from "sonner";
 
 const ROOM_TYPE_LABELS: Record<RoomType, string> = {
-  laser: "Laser",
-  injetaveis: "Injetáveis",
-  estetica: "Estética",
+  laser: "Principal",
+  injetaveis: "Especializada",
+  estetica: "Serviços",
   avaliacao: "Avaliação",
   multiuso: "Multiuso",
 };

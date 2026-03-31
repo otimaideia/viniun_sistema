@@ -92,7 +92,7 @@ export function InfluenciadoraLayout({ children }: InfluenciadoraLayoutProps) {
                 <Sparkles className="h-5 w-5 text-white" />
               </div>
               <div className="hidden sm:block">
-                <p className="font-bold text-[#662E8E]">YESlaser</p>
+                <p className="font-bold text-[#662E8E]">Viniun</p>
                 <p className="text-xs text-gray-500">{getPortalLabel(influenciadora?.genero)}</p>
               </div>
             </Link>

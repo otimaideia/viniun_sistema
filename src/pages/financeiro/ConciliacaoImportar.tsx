@@ -8,8 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
 import { useTenantContext } from '@/contexts/TenantContext';
+import { useStorageBucketUpload } from '@/hooks/useStorageBucketUpload';
 import { useFinancialAccountsMT } from '@/hooks/multitenant/useFinanceiroMT';
 import { useBankStatementsMT } from '@/hooks/multitenant/useBankStatementsMT';
 import { useBankStatementParser } from '@/hooks/useBankStatementParser';
@@ -38,6 +38,10 @@ export default function ConciliacaoImportar() {
   const [isImporting, setIsImporting] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { upload: uploadExtrato } = useStorageBucketUpload({
+    bucket: 'extratos-bancarios',
+    pathPrefix: `${tenant?.id || 'unknown'}/`,
+  });
 
   const bankAccounts = accounts.filter(a => a.tipo === 'banco');
   const selectedAccount = bankAccounts.find(a => a.id === selectedAccountId);
@@ -81,24 +85,16 @@ export default function ConciliacaoImportar() {
       // Upload file to storage (use stored file since input ref may be unmounted)
       let fileUrl: string | undefined;
       if (selectedFile) {
-        const ext = selectedFile.name.split('.').pop()?.toLowerCase() || 'ofx';
-        const fileName = `${tenant.id}/${Date.now()}_${crypto.randomUUID().slice(0, 8)}.${ext}`;
-        const { error: uploadErr } = await supabase.storage
-          .from('extratos-bancarios')
-          .upload(fileName, selectedFile);
-
-        if (!uploadErr) {
-          const { data: urlData } = supabase.storage
-            .from('extratos-bancarios')
-            .getPublicUrl(fileName);
-          fileUrl = urlData.publicUrl;
+        const uploadResult = await uploadExtrato(selectedFile);
+        if (uploadResult) {
+          fileUrl = uploadResult.publicUrl;
         } else {
-          console.warn('Upload do arquivo falhou (continuando sem arquivo):', uploadErr.message);
+          console.warn('Upload do arquivo falhou (continuando sem arquivo)');
         }
       }
 
       // Create statement record
-      const stmtData: any = {
+      const stmtData: Record<string, unknown> = {
         account_id: selectedAccountId,
         file_name: result.fileName,
         file_format: result.format,
@@ -132,8 +128,8 @@ export default function ConciliacaoImportar() {
       const chunkSize = 100;
       for (let i = 0; i < entries.length; i += chunkSize) {
         const chunk = entries.slice(i, i + chunkSize);
-        const { error } = await (supabase as any)
-          .from('mt_bank_statement_entries')
+        const { error } = await supabase
+          .from('mt_bank_statement_entries' as never)
           .insert(chunk.map(e => ({ ...e, tenant_id: tenant.id })));
 
         if (error) {
@@ -143,16 +139,16 @@ export default function ConciliacaoImportar() {
       }
 
       // Update statement counts
-      await (supabase as any)
-        .from('mt_bank_statements')
+      await supabase
+        .from('mt_bank_statements' as never)
         .update({ entries_unmatched: entries.length })
         .eq('id', stmt.id);
 
       toast.success(`${entries.length} lançamentos importados com sucesso!`);
       navigate(`/financeiro/conciliacao/${stmt.id}`);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro ao importar:', err);
-      const msg = err?.message || err?.details || 'Erro desconhecido';
+      const msg = err instanceof Error ? err.message : 'Erro desconhecido';
       toast.error(`Erro ao importar: ${msg}`);
     } finally {
       setIsImporting(false);

@@ -37,8 +37,8 @@ export default function AIKnowledgeBase() {
   const { data: items = [], isLoading } = useQuery({
     queryKey: ['mt-chatbot-knowledge', tenant?.id],
     queryFn: async () => {
-      let query = (supabase as any)
-        .from('mt_chatbot_knowledge')
+      let query = supabase
+        .from('mt_chatbot_knowledge' as never)
         .select('id, titulo, categoria, content, created_at')
         .is('deleted_at', null)
         .order('created_at', { ascending: false });
@@ -62,7 +62,8 @@ export default function AIKnowledgeBase() {
     );
   }
 
-  const filteredItems = items.filter((item: any) =>
+  type KnowledgeItem = { id: string; titulo?: string; categoria?: string; content?: string; created_at?: string };
+  const filteredItems = items.filter((item: KnowledgeItem) =>
     item.titulo?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -112,7 +113,7 @@ export default function AIKnowledgeBase() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {new Set(items.map((i: any) => i.categoria).filter(Boolean)).size}
+              {new Set(items.map((i: KnowledgeItem) => i.categoria).filter(Boolean)).size}
             </div>
           </CardContent>
         </Card>
@@ -161,7 +162,7 @@ export default function AIKnowledgeBase() {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredItems.map((item: any) => (
+                filteredItems.map((item: KnowledgeItem) => (
                   <TableRow key={item.id}>
                     <TableCell>
                       <div className="font-medium">{item.titulo || 'Sem titulo'}</div>

@@ -15,14 +15,14 @@ const Footer = () => {
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
             <img
-              src="/images/landing/depilacao-a-laser-em-praia-grande-yeslaser.png"
-              alt="Yeslaser - Depilação a Laser e Estética"
+              src="/images/landing/viniun-logo.png"
+              alt="Viniun"
               className="h-16 mb-4 cursor-pointer transition-transform hover:scale-105"
               onClick={handleLogoClick}
             />
             <p className="text-muted-foreground text-sm">
-              A maior rede de depilação a laser, estética e botox
-              do Norte e Nordeste, agora em Praia Grande.
+              Plataforma completa de gestão imobiliária
+              multi-tenant para o mercado brasileiro.
             </p>
           </div>
 
@@ -67,7 +67,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-border pt-8 text-center text-sm text-muted-foreground">
-          <p>© 2025 Yeslaser Praia Grande. Todos os direitos reservados.</p>
+          <p>© 2025 Viniun. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>

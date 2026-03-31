@@ -61,8 +61,7 @@ export function SessionProfileDialog({
     if (open) {
       fetchCurrentProfile();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, sessionName]);
 
   const fetchCurrentProfile = async () => {
     setIsFetchingProfile(true);
@@ -185,7 +184,7 @@ export function SessionProfileDialog({
                 id="displayName"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                placeholder="Ex: YESlaser Vendas"
+                placeholder="Ex: Viniun Vendas"
                 maxLength={25}
               />
               <p className="text-xs text-muted-foreground">

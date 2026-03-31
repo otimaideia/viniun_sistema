@@ -10,22 +10,22 @@ import { Gift, ArrowRight } from "lucide-react";
 const FAQSection = () => {
   const faqs = [
     {
-      question: "A depilação a laser dói?",
+      question: "Quais serviços vocês oferecem?",
       answer:
-        "Não! Nossa tecnologia possui sistema de resfriamento que torna o procedimento praticamente indolor. A maioria dos clientes descreve apenas uma leve sensação de calor.",
+        "Oferecemos uma gama completa de serviços adaptados às necessidades de cada cliente. Entre em contato para conhecer todas as opções disponíveis.",
     },
     {
-      question: "Quantas sessões são necessárias para resultado definitivo?",
+      question: "Como funciona o atendimento?",
       answer:
-        "Em média, 8 a 12 sessões são suficientes para eliminação de 90-95% dos pelos, dependendo do tipo de pele e região tratada.",
+        "Nosso atendimento é personalizado. Após o cadastro, nossa equipe entrará em contato para agendar uma consulta e apresentar as melhores opções para você.",
     },
     {
-      question: "Quais áreas estão incluídas nas 10 sessões grátis?",
+      question: "Quais benefícios estão incluídos na promoção?",
       answer:
-        "Você pode escolher entre axilas, virilha básica ou buço. O pacote é válido para novos clientes na unidade Praia Grande.",
+        "A promoção é válida para novos clientes. Cadastre-se e indique amigos para desbloquear benefícios exclusivos.",
     },
     {
-      question: "Onde fica a clínica de Praia Grande?",
+      question: "Onde fica a unidade de Praia Grande?",
       answer:
         "Estamos na Rua Jaú, 1275 - Boqueirão, Praia Grande/SP. Próximo ao centro, com fácil acesso e estacionamento na região.",
     },
@@ -94,7 +94,7 @@ const FAQSection = () => {
             className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-sm sm:text-base md:text-lg px-4 sm:px-8 py-4 sm:py-6 shadow-xl hover:scale-105 transition-transform w-full sm:w-auto max-w-md"
           >
             <Gift className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" />
-            <span className="truncate">QUERO GARANTIR MINHAS SESSÕES</span>
+            <span className="truncate">QUERO GARANTIR MEU BENEFÍCIO</span>
             <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2 flex-shrink-0" />
           </Button>
         </div>

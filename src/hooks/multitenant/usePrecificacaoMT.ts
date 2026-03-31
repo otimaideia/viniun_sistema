@@ -128,8 +128,7 @@ export function usePrecificacaoDetailMT(serviceId?: string) {
       if (error) throw error;
       setService(data);
 
-      // TODO: Buscar comissões quando tabela mt_service_commissions for criada
-      // Por enquanto, comissões ficam vazias
+      // Commission data requires mt_service_commissions table (not yet created)
     } catch (err) {
       console.error('Erro ao carregar serviço:', err);
     } finally {

@@ -266,7 +266,6 @@ export function useRealtimeConversations(
   useEffect(() => {
     // Só criar canal se franqueadoId for válido
     if (!isValidUUID) {
-      console.log('[useRealtimeConversations] franqueadoId inválido, pulando realtime');
       return;
     }
 
@@ -281,7 +280,6 @@ export function useRealtimeConversations(
           filter: `franqueado_id=eq.${franqueadoId}`,
         },
         (payload) => {
-          console.log('Conversation change:', payload);
 
           // Invalidar queries para atualizar a lista
           queryClient.invalidateQueries({ queryKey: [CONVERSATIONS_KEY] });

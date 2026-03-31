@@ -41,14 +41,13 @@ import { useWhatsAppCostsMT } from "@/hooks/multitenant/useWhatsAppCostsMT";
 import { useWhatsAppRoutingLogsMT } from "@/hooks/multitenant/useWhatsAppRoutingLogsMT";
 import { useWhatsAppHybridConfigMT } from "@/hooks/multitenant/useWhatsAppHybridConfigMT";
 import { CostSummaryCards } from "@/components/whatsapp/hybrid/CostSummaryCards";
-import { supabase } from "@/integrations/supabase/client";
-import { useQuery } from "@tanstack/react-query";
+import { useWhatsAppWindowsStatsMT } from "@/hooks/multitenant/useWhatsAppWindowsMT";
 import { formatCostBRL } from "@/types/whatsapp-hybrid";
 import { cn } from "@/lib/utils";
 
 export default function WhatsAppHybridStats() {
   const navigate = useNavigate();
-  const { tenant, franchise, accessLevel, isLoading: isTenantLoading } = useTenantContext();
+  const { isLoading: isTenantLoading } = useTenantContext();
   const [daysRange] = useState(7);
 
   // Hooks de dados
@@ -60,65 +59,7 @@ export default function WhatsAppHybridStats() {
   const { isHybridEnabled, integrationStatus, statusLabel } = useWhatsAppHybridConfigMT();
 
   // Janelas ativas: contar conversas com janela aberta vs fechada
-  const windowsQuery = useQuery({
-    queryKey: ["mt-wa-windows-stats", tenant?.id, franchise?.id],
-    queryFn: async () => {
-      const now = new Date().toISOString();
-
-      // Janelas que ainda não expiraram
-      let qOpen = (supabase.from("mt_whatsapp_windows") as any)
-        .select("id, window_type, window_expires_at, messages_sent_in_window", { count: "exact" })
-        .gt("window_expires_at", now);
-
-      // Total de janelas
-      let qAll = (supabase.from("mt_whatsapp_windows") as any)
-        .select("id, window_type, window_expires_at, messages_sent_in_window, last_customer_message_at", { count: "exact" });
-
-      if (accessLevel === "tenant" && tenant) {
-        qOpen = qOpen.eq("tenant_id", tenant.id);
-        qAll = qAll.eq("tenant_id", tenant.id);
-      }
-      if (franchise?.id) {
-        qOpen = qOpen.eq("franchise_id", franchise.id);
-        qAll = qAll.eq("franchise_id", franchise.id);
-      }
-
-      const [openRes, allRes] = await Promise.all([qOpen, qAll]);
-
-      const openWindows = openRes.data || [];
-      const allWindows = allRes.data || [];
-      const closedCount = allWindows.length - openWindows.length;
-
-      // Calcular janelas por tipo
-      const open24h = openWindows.filter((w: any) => w.window_type === "24h").length;
-      const open72h = openWindows.filter((w: any) => w.window_type === "72h").length;
-
-      // Msgs enviadas dentro de janelas
-      const totalMsgsInWindow = allWindows.reduce(
-        (sum: number, w: any) => sum + (w.messages_sent_in_window || 0),
-        0
-      );
-
-      // Conversas aguardando resposta (janela aberta + nenhuma msg enviada na janela)
-      const awaitingResponse = openWindows.filter(
-        (w: any) => (w.messages_sent_in_window || 0) === 0
-      ).length;
-
-      return {
-        totalWindows: allWindows.length,
-        openCount: openWindows.length,
-        closedCount,
-        open24h,
-        open72h,
-        totalMsgsInWindow,
-        awaitingResponse,
-      };
-    },
-    enabled: !isTenantLoading && (!!tenant || accessLevel === "platform"),
-    refetchInterval: 60_000,
-  });
-
-  const windowStats = windowsQuery.data;
+  const { stats: windowStats, refetch: refetchWindows } = useWhatsAppWindowsStatsMT();
   const isLoading = isCostLoading || isLogsLoading || isTenantLoading;
 
   // Log recentes formatados
@@ -132,7 +73,7 @@ export default function WhatsAppHybridStats() {
       cost: Number(log.actual_cost || log.estimated_cost || 0),
       fallback: log.fallback_used,
       responseTime: log.response_time_ms,
-      ruleName: (log as any).rule?.nome || null,
+      ruleName: (log as Record<string, unknown>).rule ? ((log as Record<string, unknown>).rule as Record<string, string>)?.nome : null,
     }));
   }, [logs]);
 
@@ -192,7 +133,7 @@ export default function WhatsAppHybridStats() {
             size="sm"
             onClick={() => {
               refetchLogs();
-              windowsQuery.refetch();
+              refetchWindows();
             }}
           >
             <RefreshCw className="h-4 w-4 mr-1" />

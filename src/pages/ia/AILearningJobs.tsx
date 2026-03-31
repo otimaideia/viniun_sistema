@@ -41,8 +41,8 @@ export default function AILearningJobs() {
   const { data: jobs = [], isLoading, refetch } = useQuery({
     queryKey: ['mt-ai-learning-jobs', tenant?.id],
     queryFn: async () => {
-      let query = (supabase as any)
-        .from('mt_ai_learning_jobs')
+      let query = supabase
+        .from('mt_ai_learning_jobs' as never)
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -67,7 +67,7 @@ export default function AILearningJobs() {
 
   const totalProcessed = jobs.reduce((sum, j) => sum + (j.items_processed || 0), 0);
   const totalTokens = jobs.reduce((sum, j) => {
-    const meta = (j as any).total_tokens;
+    const meta = (j as Record<string, unknown>).total_tokens as number | undefined;
     return sum + (meta || 0);
   }, 0);
 
@@ -164,7 +164,7 @@ export default function AILearningJobs() {
                     label: job.status,
                     color: 'bg-gray-100 text-gray-700',
                   };
-                  const costUsd = (job as any).estimated_cost_usd;
+                  const costUsd = (job as Record<string, unknown>).estimated_cost_usd as number | undefined;
 
                   return (
                     <TableRow key={job.id}>
@@ -181,7 +181,7 @@ export default function AILearningJobs() {
                         <span className="text-muted-foreground"> / {job.items_total}</span>
                       </TableCell>
                       <TableCell className="text-sm">
-                        {((job as any).total_tokens || 0).toLocaleString('pt-BR')}
+                        {((job as Record<string, unknown>).total_tokens as number || 0).toLocaleString('pt-BR')}
                       </TableCell>
                       <TableCell className="text-sm">
                         {costUsd != null ? `$${Number(costUsd).toFixed(4)}` : '-'}

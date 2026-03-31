@@ -102,9 +102,6 @@ import VagasPublicas from "./pages/VagasPublicas";
 import NotFound from "./pages/NotFound";
 
 // Landing pages (lazy loading - public)
-const LandingPreInauguracao = lazy(() => import("./pages/landing/LandingPreInauguracao"));
-const LandingIndicacoes = lazy(() => import("./pages/landing/LandingIndicacoes"));
-const LandingGrupoVIP = lazy(() => import("./pages/landing/LandingGrupoVIP"));
 const LandingViniun = lazy(() => import("./pages/landing/LandingViniun"));
 const SignupEmpresa = lazy(() => import("./pages/landing/SignupEmpresa"));
 const SignupSucesso = lazy(() => import("./pages/landing/SignupSucesso"));
@@ -304,18 +301,6 @@ const TrackView = lazy(() => import("./pages/treinamentos/TrackView"));
 const LessonPlayer = lazy(() => import("./pages/treinamentos/LessonPlayer"));
 const QuizPlayer = lazy(() => import("./pages/treinamentos/QuizPlayer"));
 
-// Novo Site Público (lazy loading)
-const SiteLayout = lazy(() => import("./components/novosite/SiteLayout").then(m => ({ default: m.SiteLayout })));
-const SiteHome = lazy(() => import("./pages/novosite/SiteHome"));
-const SiteCatalogo = lazy(() => import("./pages/novosite/SiteCatalogo"));
-const SiteServicoDetalhe = lazy(() => import("./pages/novosite/SiteServicoDetalhe"));
-const SiteCarrinho = lazy(() => import("./pages/novosite/SiteCarrinho"));
-const SiteCheckout = lazy(() => import("./pages/novosite/SiteCheckout"));
-const SiteTermos = lazy(() => import("./pages/novosite/SiteTermos"));
-const SitePrivacidade = lazy(() => import("./pages/novosite/SitePrivacidade"));
-const SiteSobre = lazy(() => import("./pages/novosite/SiteSobre"));
-const SiteTecnologias = lazy(() => import("./pages/novosite/SiteTecnologias"));
-const SitePromocoes = lazy(() => import("./pages/novosite/SitePromocoes"));
 
 // Gamificação (lazy loading)
 const GamificationDashboard = lazy(() => import("./pages/gamificacao/GamificationDashboard"));
@@ -1058,33 +1043,11 @@ const App = () => (
             <Route path="/trabalhe-conosco" element={<VagasPublicas />} />
             <Route path="/vagas" element={<VagasPublicas />} />
 
-            {/* Landing Pages (Sem autenticação) */}
-            <Route path="/lp/praia-grande" element={<Suspense fallback={null}><LandingPreInauguracao /></Suspense>} />
-            <Route path="/lp/indicacoes" element={<Suspense fallback={null}><LandingIndicacoes /></Suspense>} />
-            <Route path="/lp/grupo-vip" element={<Suspense fallback={null}><LandingGrupoVIP /></Suspense>} />
 
             {/* Loja Pública (Sem autenticação) */}
             <Route path="/loja" element={<LojaPublica />} />
             <Route path="/loja/:slug" element={<LojaProdutoPublico />} />
 
-            {/* Novo Site Público (Sem autenticação) */}
-            <Route path="/novosite" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><SiteLayout /></Suspense>}>
-              <Route index element={<SiteHome />} />
-              <Route path="promocoes" element={<SitePromocoes />} />
-              <Route path="pacotes" element={<SiteCatalogo />} />
-              <Route path="sobre" element={<SiteSobre />} />
-              <Route path="tecnologias" element={<SiteTecnologias />} />
-              <Route path="termos" element={<SiteTermos />} />
-              <Route path="termos-de-uso" element={<SiteTermos />} />
-              <Route path="privacidade" element={<SitePrivacidade />} />
-              <Route path="politica-de-privacidade" element={<SitePrivacidade />} />
-              <Route path="carrinho" element={<SiteCarrinho />} />
-              <Route path="checkout" element={<SiteCheckout />} />
-              <Route path=":cat1" element={<SiteCatalogo />} />
-              <Route path=":cat1/:cat2" element={<SiteCatalogo />} />
-              <Route path=":cat1/:cat2/:cat3" element={<SiteCatalogo />} />
-              <Route path=":cat1/:cat2/:cat3/:serviceSlug" element={<SiteServicoDetalhe />} />
-            </Route>
 
             {/* Portal do Cliente (Autenticação própria) */}
             <Route path="/cliente" element={<ClienteLogin />} />

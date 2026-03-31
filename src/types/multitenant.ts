@@ -361,6 +361,7 @@ export interface TenantContextType {
   selectFranchise: (franchiseId: string | null) => void;
   refreshTenant: () => Promise<void>;
   refreshBranding: () => Promise<void>;
+  refreshFranchises: () => Promise<void>;
 }
 
 export interface BrandingContextType {

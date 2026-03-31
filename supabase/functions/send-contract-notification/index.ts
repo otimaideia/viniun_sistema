@@ -444,7 +444,7 @@ async function enviarEmail(
           user: m.smtp_user,
           pass: m.smtp_pass,
           from_email: m.smtp_from_email || m.smtp_user,
-          from_name: m.smtp_from_name || "YESlaser",
+          from_name: m.smtp_from_name || "Viniun",
         };
       }
     }
@@ -460,7 +460,7 @@ async function enviarEmail(
           secure: Deno.env.get("SMTP_SECURE") === "true",
           user, pass,
           from_email: Deno.env.get("SMTP_FROM_EMAIL") || user,
-          from_name: Deno.env.get("SMTP_FROM_NAME") || "YESlaser",
+          from_name: Deno.env.get("SMTP_FROM_NAME") || "Viniun",
         };
       }
     }
@@ -546,13 +546,13 @@ Deno.serve(async (req: Request) => {
       .eq("id", tenantId)
       .maybeSingle();
 
-    const tenantName = tenantInfo?.nome_fantasia || "YESlaser";
+    const tenantName = tenantInfo?.nome_fantasia || "Viniun";
     const nome = influencer.nome || "Influenciadora";
     const telefone = influencer.whatsapp || influencer.telefone;
     const email = influencer.email;
 
     // Construir portal URL a partir do domínio do tenant
-    const domain = tenantInfo?.dominio_customizado || "www.yeslaserpraiagrande.com.br";
+    const domain = tenantInfo?.dominio_customizado || "www.viniun.com.br";
     const portalUrl = `https://${domain}/influenciadores/painel`;
 
     // 4. Montar mensagem (inclui portalUrl no extra se não fornecido)

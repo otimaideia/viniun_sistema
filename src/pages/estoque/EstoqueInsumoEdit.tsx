@@ -78,7 +78,7 @@ export default function EstoqueInsumoEdit() {
       ? Number((form.custo_pix / form.doses_por_unidade).toFixed(2))
       : null;
 
-  const handleChange = (field: keyof InventoryProductCreate, value: any) => {
+  const handleChange = (field: keyof InventoryProductCreate, value: unknown) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -97,8 +97,8 @@ export default function EstoqueInsumoEdit() {
         await createProduct(form);
       }
       navigate("/estoque/insumos");
-    } catch (err: any) {
-      toast.error(err.message || "Erro ao salvar insumo");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Erro ao salvar insumo");
     } finally {
       setSaving(false);
     }

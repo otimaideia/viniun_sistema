@@ -53,9 +53,9 @@ import {
 import { toast } from "sonner";
 
 const ROOM_TYPES: { value: RoomType; label: string }[] = [
-  { value: "laser", label: "Laser" },
-  { value: "injetaveis", label: "Injetáveis" },
-  { value: "estetica", label: "Estética" },
+  { value: "laser", label: "Principal" },
+  { value: "injetaveis", label: "Especializada" },
+  { value: "estetica", label: "Serviços" },
   { value: "avaliacao", label: "Avaliação" },
   { value: "multiuso", label: "Multiuso" },
 ];
@@ -172,9 +172,9 @@ export default function SalaEdit() {
     setEquipamentos(equipamentos.filter((_, i) => i !== index));
   };
 
-  const updateScheduleRow = (index: number, field: keyof ScheduleRow, value: any) => {
+  const updateScheduleRow = (index: number, field: keyof ScheduleRow, value: unknown) => {
     const updated = [...scheduleRows];
-    (updated[index] as any)[field] = value;
+    (updated[index] as Record<string, unknown>)[field] = value;
     setScheduleRows(updated);
   };
 
@@ -222,8 +222,8 @@ export default function SalaEdit() {
         toast.success("Sala criada com sucesso");
         navigate(`/configuracoes/salas/${created.id}/editar`);
       }
-    } catch (err: any) {
-      toast.error(err.message || "Erro ao salvar sala");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Erro ao salvar sala");
     } finally {
       setIsSaving(false);
     }
@@ -270,7 +270,7 @@ export default function SalaEdit() {
                   <FormItem>
                     <FormLabel>Nome da Sala</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ex: Sala Laser 1" {...field} />
+                      <Input placeholder="Ex: Sala Principal 1" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

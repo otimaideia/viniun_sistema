@@ -1,5 +1,5 @@
 // Hook para gerenciar grupos do WhatsApp
-// Adaptado para YESlaser
+// Viniun Sistema
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { wahaClient } from '@/services/waha/wahaDirectClient';

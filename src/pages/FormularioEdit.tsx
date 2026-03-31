@@ -186,15 +186,16 @@ export default function FormularioEdit() {
         setFormulario(data);
         setSelectedFranqueadoId(data.franqueado_id);
         // Carregar valores de Round Robin
-        setRoundRobinEnabled((data as any).round_robin_enabled ?? false);
-        setRoundRobinMode((data as any).round_robin_mode || 'team');
-        setSelectedTeamId((data as any).team_id || '');
-        setSelectedDepartmentId((data as any).department_id || '');
+        const extData = data as Record<string, unknown>;
+        setRoundRobinEnabled((extData.round_robin_enabled as boolean) ?? false);
+        setRoundRobinMode((extData.round_robin_mode as string) || 'team');
+        setSelectedTeamId((extData.team_id as string) || '');
+        setSelectedDepartmentId((extData.department_id as string) || '');
         // Popular form
         Object.keys(data).forEach((key) => {
           const value = data[key as keyof Formulario];
           if (value !== undefined && value !== null) {
-            setValue(key as keyof FormularioFormData, value as any);
+            setValue(key as keyof FormularioFormData, value as FormularioFormData[keyof FormularioFormData]);
           }
         });
       }
@@ -756,8 +757,16 @@ export default function FormularioEdit() {
                               variant="ghost"
                               size="icon"
                               onClick={() => {
-                                // TODO: Abrir modal de edição
-                                toast.info("Edite os campos abaixo na lista expandida");
+                                // A edição inline já está disponível na seção expandida abaixo deste item.
+                                // Scroll para o campo editável correspondente para melhor UX.
+                                const fieldElement = document.getElementById(`campo-edit-${campo.id}`);
+                                if (fieldElement) {
+                                  fieldElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                  fieldElement.classList.add('ring-2', 'ring-primary', 'ring-offset-2');
+                                  setTimeout(() => fieldElement.classList.remove('ring-2', 'ring-primary', 'ring-offset-2'), 2000);
+                                } else {
+                                  toast.info("Edite os campos abaixo na lista expandida");
+                                }
                               }}
                             >
                               <Pencil className="h-4 w-4" />
@@ -774,7 +783,7 @@ export default function FormularioEdit() {
                         </div>
 
                         {/* Campos Editáveis (expandido) */}
-                        <div className="mt-4 pt-4 border-t grid gap-4 md:grid-cols-4">
+                        <div id={`campo-edit-${campo.id}`} className="mt-4 pt-4 border-t grid gap-4 md:grid-cols-4 transition-all rounded-md">
                           <div className="space-y-1">
                             <Label className="text-xs text-muted-foreground">Label</Label>
                             <Input
@@ -1115,7 +1124,7 @@ export default function FormularioEdit() {
                               <SelectValue placeholder="Selecione uma equipe" />
                             </SelectTrigger>
                             <SelectContent>
-                              {(teams || []).map((team: any) => (
+                              {(teams || []).map((team: { id: string; nome: string }) => (
                                 <SelectItem key={team.id} value={team.id}>
                                   {team.nome}
                                 </SelectItem>
@@ -1136,7 +1145,7 @@ export default function FormularioEdit() {
                               <SelectValue placeholder="Selecione um departamento" />
                             </SelectTrigger>
                             <SelectContent>
-                              {(departments || []).map((dept: any) => (
+                              {(departments || []).map((dept: { id: string; nome: string }) => (
                                 <SelectItem key={dept.id} value={dept.id}>
                                   {dept.nome}
                                 </SelectItem>

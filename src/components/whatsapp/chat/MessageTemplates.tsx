@@ -28,7 +28,7 @@ const DEFAULT_TEMPLATES: Template[] = [
   {
     id: "greeting",
     name: "Saudacao",
-    content: "Ola! Tudo bem? Sou da YESlaser. Como posso ajudar voce hoje?",
+    content: "Ola! Tudo bem? Sou da Viniun. Como posso ajudar voce hoje?",
     category: "Atendimento"
   },
   {

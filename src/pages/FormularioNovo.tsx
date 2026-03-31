@@ -161,7 +161,7 @@ export default function FormularioNovo() {
         wizard_config: baseData.wizard_config || null,
       };
 
-      const created = await createFormulario(formularioData as any);
+      const created = await createFormulario(formularioData as Record<string, unknown>);
 
       // Se tem template com campos, criar os campos
       if (created && selectedTemplate?.campos?.length) {

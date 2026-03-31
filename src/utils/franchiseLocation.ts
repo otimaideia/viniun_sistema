@@ -3,7 +3,7 @@
  * Usado em páginas públicas para mostrar dados da franquia correta
  * quando o tenant possui múltiplas franquias.
  *
- * Ex: "app.yeslaserpraiagrande.com.br" → "praiagrande" → match "YESlaser Praia Grande"
+ * Ex: "app.viniun.com.br" → "praiagrande" → match "Viniun"
  */
 
 /**

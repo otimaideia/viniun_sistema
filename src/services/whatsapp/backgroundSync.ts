@@ -1,6 +1,6 @@
 // Serviço de Sincronização em Background para WhatsApp
 // Sincroniza mensagens do WAHA em segundo plano sem bloquear a UI
-// Adaptado do POPdents para YESlaser
+// Viniun Sistema
 
 import { supabase } from '@/integrations/supabase/client';
 import { wahaClient } from '@/services/waha/wahaDirectClient';
@@ -16,7 +16,7 @@ const DEBUG = import.meta.env.DEV;
  * Protege nomes editados manualmente pelo usuário de serem sobrescritos pelo pushName do WAHA.
  */
 // Nomes de sessão/business que NÃO devem ser usados como nome de contato
-const KNOWN_SESSION_NAMES = ['yeslaser praia grande', 'yeslaser praia grande boqueirão', 'yeslaser', 'popdents', 'novalaser', 'intimacenter'];
+const KNOWN_SESSION_NAMES = ['viniun', 'novalaser', 'intimacenter'];
 
 function isSessionName(name: string | null | undefined): boolean {
   if (!name) return false;

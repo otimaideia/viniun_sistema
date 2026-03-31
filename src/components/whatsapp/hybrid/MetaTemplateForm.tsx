@@ -206,7 +206,7 @@ export function MetaTemplateForm({
       {/* Footer */}
       <div>
         <Label>Rodapé</Label>
-        <Input {...form.register('footer_text')} placeholder="Ex: YESlaser - Não responda" />
+        <Input {...form.register('footer_text')} placeholder="Ex: Viniun - Não responda" />
       </div>
 
       <div className="flex justify-end gap-3 pt-2">

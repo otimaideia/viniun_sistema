@@ -288,7 +288,7 @@ export default function OnboardingInfluenciadora() {
           <Sparkles className="h-6 w-6 text-white" />
         </div>
         <div>
-          <p className="font-bold text-xl text-[#662E8E]">YESlaser</p>
+          <p className="font-bold text-xl text-[#662E8E]">Viniun</p>
           <p className="text-xs text-gray-500">Portal do Influenciador(a)</p>
         </div>
       </div>
@@ -423,7 +423,7 @@ export default function OnboardingInfluenciadora() {
             : undefined;
 
           const contratoData: ContratoData = {
-            template_tipo: (contratoSelecionado.template_tipo as any) ?? (contratoSelecionado.tipo === 'permuta' ? 'contrato_permuta' : 'contrato_normal'),
+            template_tipo: (contratoSelecionado.template_tipo as string) ?? (contratoSelecionado.tipo === 'permuta' ? 'contrato_permuta' : 'contrato_normal'),
             influenciadora_nome: influenciadora?.nome_completo || influenciadora?.nome || '',
             influenciadora_cpf: influenciadora?.cpf || undefined,
             influenciadora_rg: influenciadora?.rg || undefined,
@@ -449,7 +449,7 @@ export default function OnboardingInfluenciadora() {
             reels_mes: contratoSelecionado.reels_mes,
             servicos_permuta: contratoSelecionado.servicos_permuta ?? [],
             // Dados da empresa (franquia tem precedência sobre tenant genérico)
-            empresa_nome: franquiaInfo?.nome_fantasia ?? 'YESlaser',
+            empresa_nome: franquiaInfo?.nome_fantasia ?? 'Viniun',
             empresa_cnpj: franquiaInfo?.cnpj ?? undefined,
             empresa_cidade: franquiaInfo?.cidade ?? undefined,
             empresa_estado: franquiaInfo?.estado ?? undefined,
@@ -486,9 +486,9 @@ export default function OnboardingInfluenciadora() {
                   </div>
                   <div className="overflow-y-auto max-h-[420px] bg-white">
                     {/* Texto personalizado (se existir) */}
-                    {(contratoSelecionado as any).texto_contrato ? (
+                    {(contratoSelecionado as Record<string, unknown>).texto_contrato as string ? (
                       <div className="p-6 prose prose-sm max-w-none whitespace-pre-wrap text-sm text-gray-700 leading-relaxed">
-                        {(contratoSelecionado as any).texto_contrato}
+                        {(contratoSelecionado as Record<string, unknown>).texto_contrato as string}
                       </div>
                     ) : (
                       <ContratoTemplate data={contratoData} hideButtons />
@@ -499,7 +499,7 @@ export default function OnboardingInfluenciadora() {
                 {/* Disclaimer legal */}
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-xs text-yellow-800">
                   <strong>Declaração:</strong> Ao assinar abaixo, declaro que li e concordo com todas as
-                  condições deste contrato de influenciadora com a YESlaser. Esta assinatura digital tem
+                  condições deste contrato de influenciadora com a Viniun. Esta assinatura digital tem
                   validade legal conforme a Lei 14.063/2020 (assinaturas eletrônicas no Brasil).
                 </div>
 
@@ -676,7 +676,7 @@ export default function OnboardingInfluenciadora() {
                   Tudo pronto, {influenciadora?.nome?.split(' ')[0]}! 🎉
                 </h2>
                 <p className="text-muted-foreground max-w-sm">
-                  Seu cadastro como influenciadora YESlaser está completo. Você já pode começar a compartilhar seu link!
+                  Seu cadastro como influenciadora Viniun está completo. Você já pode começar a compartilhar seu link!
                 </p>
               </div>
 

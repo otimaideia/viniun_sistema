@@ -13,7 +13,7 @@ export interface CartItem {
   sessoes_protocolo?: number | null;
 }
 
-const CART_STORAGE_KEY = 'yeslaser-cart';
+const CART_STORAGE_KEY = 'viniun-cart';
 
 function loadCart(): CartItem[] {
   try {

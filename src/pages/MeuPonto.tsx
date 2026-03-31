@@ -43,6 +43,8 @@ function timestampToTime(ts: string): string {
 }
 
 // Tela de login standalone para funcionários
+// NOTE: Uses direct supabase.auth.signInWithPassword because this component is standalone
+// (outside AuthProvider). See comment on MeuPonto component for details.
 function MeuPontoLogin({ onLogin }: { onLogin: () => void }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -553,9 +555,9 @@ function MeuPontoContent() {
                   <span className="text-xs text-yellow-600 tabular-nums">
                     {timestampToTime(d.checkin_em)} - ...
                   </span>
-                ) : d.status === 'falta_justificada' && (d as any).justificativa_tipo ? (
-                  <span className="text-xs text-amber-600 truncate max-w-[120px]" title={(d as any).justificativa_observacoes || ''}>
-                    {JUSTIFICATIVA_TIPO_LABELS[(d as any).justificativa_tipo as keyof typeof JUSTIFICATIVA_TIPO_LABELS] || (d as any).justificativa_tipo}
+                ) : d.status === 'falta_justificada' && (d as Record<string, unknown>).justificativa_tipo ? (
+                  <span className="text-xs text-amber-600 truncate max-w-[120px]" title={((d as Record<string, unknown>).justificativa_observacoes as string) || ''}>
+                    {JUSTIFICATIVA_TIPO_LABELS[(d as Record<string, unknown>).justificativa_tipo as keyof typeof JUSTIFICATIVA_TIPO_LABELS] || (d as Record<string, unknown>).justificativa_tipo as string}
                   </span>
                 ) : (
                   <span className="text-xs text-muted-foreground">—</span>
@@ -618,11 +620,11 @@ function MeuPontoContent() {
               value={String(summary.faltas)}
               valueClassName={summary.faltas > 0 ? 'text-red-600' : ''}
             />
-            {(summary as any).faltas_justificadas > 0 && (
+            {((summary as Record<string, unknown>).faltas_justificadas as number) > 0 && (
               <SummaryItem
                 icon={<FileText className="h-4 w-4 text-amber-500" />}
                 label="Justificadas"
-                value={String((summary as any).faltas_justificadas)}
+                value={String((summary as Record<string, unknown>).faltas_justificadas)}
                 valueClassName="text-amber-600"
               />
             )}
@@ -634,6 +636,9 @@ function MeuPontoContent() {
 }
 
 // Página principal standalone
+// NOTE: This page manages its own auth flow (standalone totem login) and is rendered
+// OUTSIDE the AuthProvider tree (no ProtectedRoute/DashboardLayout wrapper).
+// Therefore, direct supabase.auth calls are required here — useAuth() cannot be used.
 export default function MeuPonto() {
   const [authState, setAuthState] = useState<'loading' | 'logged_in' | 'logged_out'>('loading');
 

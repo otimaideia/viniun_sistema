@@ -29,7 +29,7 @@ import * as LucideIcons from "lucide-react";
 import type { Department } from "@/types/multitenant";
 
 function DepartmentIcon({ iconName, className, style }: { iconName: string; className?: string; style?: React.CSSProperties }) {
-  const Icon = (LucideIcons as any)[iconName] || Building2;
+  const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName] || Building2;
   return <Icon className={className} style={style} />;
 }
 
@@ -74,11 +74,11 @@ export default function DepartamentoDetail() {
     );
   }
 
-  const children = (department as any).children || [];
-  const users = (department as any).users || [];
-  const parent = (department as any).parent;
-  const tenant = (department as any).tenant;
-  const franchise = (department as any).franchise;
+  const children = (department as Record<string, unknown>).children as unknown[] || [];
+  const users = (department as Record<string, unknown>).users as unknown[] || [];
+  const parent = (department as Record<string, unknown>).parent as Record<string, unknown> | undefined;
+  const tenant = (department as Record<string, unknown>).tenant as Record<string, unknown> | undefined;
+  const franchise = (department as Record<string, unknown>).franchise as Record<string, unknown> | undefined;
 
   return (
     <div className="space-y-6">
@@ -230,7 +230,7 @@ export default function DepartamentoDetail() {
               </p>
             ) : (
               <div className="space-y-2">
-                {children.map((child: any) => (
+                {children.map((child: Record<string, unknown>) => (
                   <Link
                     key={child.id}
                     to={`/configuracoes/departamentos/${child.id}`}
@@ -280,7 +280,7 @@ export default function DepartamentoDetail() {
               </p>
             ) : (
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {users.map((membership: any) => (
+                {users.map((membership: Record<string, unknown>) => (
                   <div
                     key={membership.id}
                     className="flex items-center gap-3 p-3 rounded-lg border"

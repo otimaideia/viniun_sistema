@@ -6,7 +6,7 @@ import {
   useSupplierPricesMT,
 } from "@/hooks/multitenant/useSupplierPricesMT";
 import { useTenantContext } from "@/contexts/TenantContext";
-import { supabase } from "@/integrations/supabase/client";
+import { useStorageBucketUpload } from "@/hooks/useStorageBucketUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -75,7 +75,13 @@ export default function EstoqueTabelaPrecos() {
   // Price rows
   const [rows, setRows] = useState<PriceRow[]>([{ ...EMPTY_ROW }]);
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
+  const { upload: uploadPriceFile, isUploading: uploading } = useStorageBucketUpload({
+    bucket: 'supplier-price-lists',
+    pathPrefix: `${tenant?.id || 'unknown'}/${supplierId}/`,
+    maxSizeBytes: 10 * 1024 * 1024,
+    allowedMimeTypes: ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'],
+    upsert: true,
+  });
   const [autoMapping, setAutoMapping] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -148,52 +154,16 @@ export default function EstoqueTabelaPrecos() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const maxSize = 10 * 1024 * 1024; // 10MB
-    if (file.size > maxSize) {
-      toast.error("Arquivo muito grande. Maximo 10MB.");
-      return;
-    }
+    const result = await uploadPriceFile(file);
 
-    const allowedTypes = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
-    if (!allowedTypes.includes(file.type)) {
-      toast.error("Tipo de arquivo nao suportado. Use PDF, JPEG, PNG ou WEBP.");
-      return;
-    }
-
-    setUploading(true);
-    try {
-      const ext = file.name.split(".").pop() || "pdf";
-      const filePath = `${tenant?.id || "unknown"}/${supplierId}/${Date.now()}.${ext}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("supplier-price-lists")
-        .upload(filePath, file, { upsert: true });
-
-      if (uploadError) {
-        // Bucket may not exist, try creating it
-        if (uploadError.message?.includes("not found") || uploadError.message?.includes("Bucket")) {
-          // Upload directly anyway - bucket might need to be created in dashboard
-          toast.error("Bucket 'supplier-price-lists' nao encontrado. Crie no Supabase Storage.");
-          return;
-        }
-        throw uploadError;
-      }
-
-      const { data: { publicUrl } } = supabase.storage
-        .from("supplier-price-lists")
-        .getPublicUrl(filePath);
-
-      setArquivoUrl(publicUrl);
-      setArquivoPath(filePath);
+    if (result) {
+      setArquivoUrl(result.publicUrl);
+      setArquivoPath(result.path);
       setArquivoTipo(file.type === "application/pdf" ? "pdf" : "image");
       toast.success("Arquivo enviado com sucesso");
-    } catch (err: any) {
-      console.error("Erro no upload:", err);
-      toast.error(err.message || "Erro ao enviar arquivo");
-    } finally {
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
     }
+
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleAutoMap = async () => {
@@ -303,8 +273,8 @@ export default function EstoqueTabelaPrecos() {
       }
 
       navigate(`/estoque/fornecedores/${supplierId}`);
-    } catch (err: any) {
-      toast.error(err.message || "Erro ao salvar");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Erro ao salvar");
     } finally {
       setSaving(false);
     }

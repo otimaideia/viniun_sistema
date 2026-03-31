@@ -111,7 +111,7 @@ export const AI_AGENT_TEMPLATES: AIAgentTemplate[] = [
     cor: '#3b82f6',
     tipo: 'assistant',
     system_prompt: 'Você é um SDR especialista em qualificação de leads...',
-    context_instructions: 'Contexto: empresa de franquias de estética/odontologia.',
+    context_instructions: 'Contexto: empresa de franquias do mercado imobiliário.',
     output_format: 'suggestions',
   },
   {
@@ -161,7 +161,7 @@ export const AI_AGENT_TEMPLATES: AIAgentTemplate[] = [
   {
     codigo: 'agendamento',
     nome: 'Agendamento',
-    descricao: 'Foca em agendar procedimentos e confirmar horários',
+    descricao: 'Foca em agendar atendimentos e confirmar horários',
     icone: 'CalendarCheck',
     cor: '#06b6d4',
     tipo: 'assistant',

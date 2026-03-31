@@ -1,5 +1,5 @@
 import { MapPin } from 'lucide-react';
-import logoYeslaser from '@/assets/logo-yeslaser.png';
+import logoViniun from '@/assets/logo-viniun.png';
 
 interface TotemHeaderProps {
   nomeUnidade: string;
@@ -16,7 +16,7 @@ export function TotemHeader({ nomeUnidade, cidade, estado }: TotemHeaderProps) {
       <div className="mb-2">
         <div className="bg-white rounded-lg px-4 py-2 inline-block shadow-md">
           <img
-            src={logoYeslaser}
+            src={logoViniun}
             alt="Viniun"
             className="h-8 md:h-10 mx-auto"
           />

@@ -26,7 +26,6 @@ export function useChatActions({ sessionName, onSuccess }: UseChatActionsOptions
 
       // Se proxy falhar, usar cliente direto como fallback
       if (!result.success) {
-        console.log('[useChatActions] archiveChat: Proxy falhou, usando cliente direto');
         result = await wahaClient.archiveChat(sessionName, chatId);
       }
 
@@ -60,7 +59,6 @@ export function useChatActions({ sessionName, onSuccess }: UseChatActionsOptions
 
       // Se proxy falhar, usar cliente direto como fallback
       if (!result.success) {
-        console.log('[useChatActions] unarchiveChat: Proxy falhou, usando cliente direto');
         result = await wahaClient.unarchiveChat(sessionName, chatId);
       }
 
@@ -94,7 +92,6 @@ export function useChatActions({ sessionName, onSuccess }: UseChatActionsOptions
 
       // Se proxy falhar, usar cliente direto como fallback
       if (!result.success) {
-        console.log('[useChatActions] deleteChat: Proxy falhou, usando cliente direto');
         result = await wahaClient.deleteChat(sessionName, chatId);
       }
 

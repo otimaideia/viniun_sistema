@@ -104,7 +104,7 @@ export function useExportHistory() {
   // Formatar para TXT
   const formatToTxt = (data: { conversation: Conversation; messages: Message[] }[]): string => {
     let output = '='.repeat(60) + '\n';
-    output += 'EXPORTAÇÃO DE HISTÓRICO WHATSAPP - YESLASER\n';
+    output += 'EXPORTAÇÃO DE HISTÓRICO WHATSAPP - VINIUN\n';
     output += `Data da exportação: ${format(new Date(), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}\n`;
     output += '='.repeat(60) + '\n\n';
 
@@ -173,7 +173,7 @@ export function useExportHistory() {
   const formatToJson = (data: { conversation: Conversation; messages: Message[] }[]): string => {
     const exportData = {
       exportDate: new Date().toISOString(),
-      system: 'YESlaser WhatsApp',
+      system: 'Viniun WhatsApp',
       totalConversations: data.length,
       totalMessages: data.reduce((acc, d) => acc + d.messages.length, 0),
       conversations: data.map(({ conversation, messages }) => ({
@@ -203,7 +203,7 @@ export function useExportHistory() {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exportação WhatsApp YESlaser - ${format(new Date(), "dd/MM/yyyy", { locale: ptBR })}</title>
+  <title>Exportação WhatsApp Viniun - ${format(new Date(), "dd/MM/yyyy", { locale: ptBR })}</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #e5ddd5; padding: 20px; }
@@ -229,7 +229,7 @@ export function useExportHistory() {
 </head>
 <body>
   <div class="header">
-    <h1>Exportação de Histórico WhatsApp - YESlaser</h1>
+    <h1>Exportação de Histórico WhatsApp - Viniun</h1>
     <p>Data da exportação: ${format(new Date(), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}</p>
   </div>
 `;
@@ -336,7 +336,7 @@ export function useExportHistory() {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `yeslaser-whatsapp-export-${format(new Date(), 'yyyy-MM-dd-HHmm')}.${extension}`;
+      link.download = `viniun-whatsapp-export-${format(new Date(), 'yyyy-MM-dd-HHmm')}.${extension}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

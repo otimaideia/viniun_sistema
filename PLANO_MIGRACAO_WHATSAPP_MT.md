@@ -9,13 +9,13 @@
 
 ## 📊 Resumo Executivo
 
-Migração do módulo WhatsApp/WAHA das tabelas legacy (`yeslaser_whatsapp_*`) para as tabelas multi-tenant (`mt_whatsapp_*`), implementando isolamento por tenant e franchise via adapters e feature flags.
+Migração do módulo WhatsApp/WAHA das tabelas legacy (`viniun_whatsapp_*`) para as tabelas multi-tenant (`mt_whatsapp_*`), implementando isolamento por tenant e franchise via adapters e feature flags.
 
 ### Status Atual
 
 | Aspecto | Legacy | MT | Status |
 |---------|--------|-----|--------|
-| **Tabelas** | 8 tabelas `yeslaser_whatsapp_*` | 8 tabelas `mt_whatsapp_*` | ✅ Migradas |
+| **Tabelas** | 8 tabelas `viniun_whatsapp_*` | 8 tabelas `mt_whatsapp_*` | ✅ Migradas |
 | **Dados** | 1 sessão, 0 conversas | **2 sessões, 6.666 conversas, 225.772 mensagens** | ✅ Migrados |
 | **Hooks MT** | - | 7 hooks criados | ✅ Criados |
 | **Adapters** | - | 7 adapters criados | ✅ Criados |
@@ -24,7 +24,7 @@ Migração do módulo WhatsApp/WAHA das tabelas legacy (`yeslaser_whatsapp_*`) p
 ### Benefícios da Migração
 
 1. **Isolamento de Dados**: Cada tenant vê apenas suas sessões/conversas
-2. **Escalabilidade**: Suporte a múltiplas empresas (YESlaser, PopDents, etc.)
+2. **Escalabilidade**: Suporte a múltiplas empresas (Viniun, PopDents, etc.)
 3. **Segurança**: RLS impede vazamento de dados entre tenants
 4. **Configuração por Tenant**: WAHA URL/API Key diferentes por empresa
 5. **Permissões Granulares**: Controle por franchise e usuário

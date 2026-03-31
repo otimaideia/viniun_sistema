@@ -113,7 +113,6 @@ export function useMetaMessagesMT(conversationId: string) {
           filter: `conversation_id=eq.${conversationId}`,
         },
         (payload) => {
-          console.log('[Real-time] Mensagem atualizada:', payload);
           queryClient.invalidateQueries({ queryKey: ['mt-meta-messages', conversationId] });
           queryClient.invalidateQueries({ queryKey: ['mt-meta-conversations'] });
         }

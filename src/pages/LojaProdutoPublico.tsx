@@ -30,7 +30,7 @@ import {
 } from 'lucide-react';
 
 // =============================================================================
-// CORES E IDENTIDADE VISUAL YESLASER
+// CORES E IDENTIDADE VISUAL VINIUN
 // =============================================================================
 
 const COLORS = {
@@ -57,7 +57,7 @@ const COLORS = {
 };
 
 const GRADIENT = `linear-gradient(135deg, ${COLORS.purple}, ${COLORS.cyan})`;
-const LOGO_URL = '/images/landing/depilacao-a-laser-em-praia-grande-yeslaser.png';
+const LOGO_URL = '/images/landing/viniun-logo.png';
 
 // =============================================================================
 // INTERFACES

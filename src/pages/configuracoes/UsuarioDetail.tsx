@@ -27,6 +27,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { wahaClient } from '@/services/waha/wahaDirectClient';
 import { useToast } from '@/hooks/use-toast';
+import { useAdminManageAuthUser } from '@/hooks/multitenant/useAdminAuthUserMT';
 import { useUserDepartments } from '@/hooks/multitenant/useDepartments';
 import { useUserTeams } from '@/hooks/multitenant/useTeams';
 import { useUserRolesAdmin, useRoles, usePermissionsList } from '@/hooks/multitenant/useRolesAdmin';
@@ -146,6 +147,9 @@ export default function UsuarioDetail() {
   // Hook para histórico de login
   const { loginHistory, isLoading: isLoadingLoginHistory, stats: loginStats } = useLoginHistoryMT(id);
 
+  // Hook para gerenciar auth user via RPC
+  const adminManageAuthUser = useAdminManageAuthUser();
+
   // Estado para adicionar novo cargo
   const [selectedRoleId, setSelectedRoleId] = useState<string>('');
 
@@ -234,15 +238,11 @@ export default function UsuarioDetail() {
 
     setIsResettingPassword(true);
     try {
-      // Usar função SECURITY DEFINER no banco (não precisa de service key no frontend)
-      const { data: result, error: rpcError } = await supabase.rpc('admin_manage_auth_user', {
-        p_mt_user_id: usuario!.id,
-        p_password: newPassword,
-        p_email: usuario!.email,
+      const result = await adminManageAuthUser.mutateAsync({
+        mtUserId: usuario!.id,
+        password: newPassword,
+        email: usuario!.email,
       });
-
-      if (rpcError) throw new Error(rpcError.message);
-      if (result && !result.success) throw new Error(result.error || 'Erro ao redefinir senha');
 
       toast({
         title: 'Senha redefinida',
@@ -256,11 +256,11 @@ export default function UsuarioDetail() {
       setConfirmPassword('');
       setShowPassword(false);
       loadUsuario();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao redefinir senha:', error);
       toast({
         title: 'Erro ao redefinir senha',
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
         variant: 'destructive',
       });
     } finally {
@@ -295,15 +295,12 @@ export default function UsuarioDetail() {
       // 1. Gerar senha
       const password = generatePassword();
 
-      // 2. Definir senha no Auth via função SECURITY DEFINER
-      const { data: result, error: rpcError } = await supabase.rpc('admin_manage_auth_user', {
-        p_mt_user_id: usuario.id,
-        p_password: password,
-        p_email: usuario.email,
+      // 2. Definir senha no Auth via hook useAdminManageAuthUser
+      await adminManageAuthUser.mutateAsync({
+        mtUserId: usuario.id,
+        password,
+        email: usuario.email,
       });
-
-      if (rpcError) throw new Error(rpcError.message);
-      if (result && !result.success) throw new Error(result.error || 'Erro ao definir senha');
 
       // 3. Buscar sessão WhatsApp ativa
       const { data: sessions } = await supabase
@@ -336,7 +333,7 @@ export default function UsuarioDetail() {
       }
 
       const chatId = `${phone}@c.us`;
-      const loginUrl = 'https://app.yeslaserpraiagrande.com.br';
+      const loginUrl = 'https://app.viniun.com.br';
 
       const message = `🔐 *Credenciais de Acesso*\n\nOlá, *${usuario.nome_curto || usuario.nome}*!\n\nSeguem suas credenciais para acessar o sistema:\n\n📧 *E-mail:* ${usuario.email}\n🔑 *Senha:* ${password}\n🌐 *Link:* ${loginUrl}\n\n⚠️ _Por segurança, recomendamos alterar sua senha no primeiro acesso._`;
 
@@ -351,11 +348,11 @@ export default function UsuarioDetail() {
         description: `Senha gerada e enviada via WhatsApp para ${rawPhone}.`,
       });
       loadUsuario();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao enviar credenciais:', error);
       toast({
         title: 'Erro ao enviar credenciais',
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
         variant: 'destructive',
       });
     } finally {
@@ -548,7 +545,7 @@ export default function UsuarioDetail() {
                       <span className="text-muted-foreground italic">Nenhum</span>
                     ) : (
                       <div className="flex flex-wrap gap-1 justify-end">
-                        {userDepartments.map((ud: any) => (
+                        {userDepartments.map((ud: { id: string; is_primary?: boolean; department?: { cor?: string; nome?: string } }) => (
                           <Badge
                             key={ud.id}
                             variant={ud.is_primary ? 'default' : 'outline'}
@@ -581,7 +578,7 @@ export default function UsuarioDetail() {
                       <span className="text-muted-foreground italic">Nenhuma</span>
                     ) : (
                       <div className="flex flex-wrap gap-1 justify-end">
-                        {userTeams.map((ut: any) => (
+                        {userTeams.map((ut: { id: string; is_leader?: boolean; team?: { cor?: string; nome?: string } }) => (
                           <Badge
                             key={ut.id}
                             variant="outline"
@@ -959,7 +956,7 @@ export default function UsuarioDetail() {
                 <p className="text-sm text-muted-foreground italic">Nenhum cargo atribuído.</p>
               ) : (
                 <div className="space-y-2">
-                  {userRoles.map((ur: any) => (
+                  {userRoles.map((ur: { id: string; role_id?: string; role?: { nome?: string; nivel?: number } }) => (
                     <div key={ur.id} className="flex items-center justify-between p-2 rounded-md border bg-muted/20">
                       <div className="flex items-center gap-2">
                         <Shield className="h-4 w-4 text-primary" />
@@ -996,7 +993,7 @@ export default function UsuarioDetail() {
                   </SelectTrigger>
                   <SelectContent>
                     {availableRoles
-                      .filter(role => !userRoles.some((ur: any) => ur.role_id === role.id))
+                      .filter(role => !userRoles.some((ur: { id: string; role_id?: string }) => ur.role_id === role.id))
                       .map(role => (
                         <SelectItem key={role.id} value={role.id}>
                           <span>{role.nome}</span>
@@ -1055,8 +1052,8 @@ export default function UsuarioDetail() {
                       </div>
                       <div className="flex flex-wrap gap-1 pl-2">
                         {moduleData.permissions.map(perm => {
-                          const hasIt = userRoles.some((ur: any) =>
-                            ur.role?.nivel <= 2 // tenant/platform admin tem tudo
+                          const hasIt = userRoles.some((ur: { id: string; role?: { nivel?: number } }) =>
+                            (ur.role?.nivel ?? 99) <= 2 // tenant/platform admin tem tudo
                           );
                           return (
                             <Badge

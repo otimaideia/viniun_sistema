@@ -396,7 +396,7 @@ export function CampanhaFormModal({
                   id="utm_term"
                   value={formData.utm_term}
                   onChange={(e) => setFormData({ ...formData, utm_term: e.target.value })}
-                  placeholder="Ex: depilacao_laser"
+                  placeholder="Ex: imoveis_praia_grande"
                 />
               </div>
             </div>

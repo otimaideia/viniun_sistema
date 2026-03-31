@@ -115,7 +115,7 @@ const ModulosCrud = () => {
   );
 
   const getIcon = (iconName: string) => {
-    const IconComponent = (icons as any)[iconName];
+    const IconComponent = (icons as Record<string, React.ComponentType<{ className?: string }>>)[iconName];
     return IconComponent ? <IconComponent className="h-5 w-5" /> : <Puzzle className="h-5 w-5" />;
   };
 
@@ -191,9 +191,9 @@ const ModulosCrud = () => {
 
       setDialogOpen(false);
       refetch();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro ao salvar módulo:', err);
-      toast.error(err.message || 'Erro ao salvar módulo');
+      toast.error(err instanceof Error ? err.message : 'Erro ao salvar módulo');
     } finally {
       setSaving(false);
     }
@@ -214,9 +214,9 @@ const ModulosCrud = () => {
       toast.success('Módulo excluído com sucesso');
       setDeleteDialogOpen(false);
       refetch();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro ao excluir módulo:', err);
-      toast.error(err.message || 'Erro ao excluir módulo');
+      toast.error(err instanceof Error ? err.message : 'Erro ao excluir módulo');
     } finally {
       setDeleting(false);
     }

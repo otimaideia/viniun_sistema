@@ -34,7 +34,7 @@ interface StoreSession {
   startedAt: string;
 }
 
-const STORE_SESSION_KEY = 'yeslaser_store_session';
+const STORE_SESSION_KEY = 'viniun_store_session';
 
 function generateSessionId(): string {
   return `store_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;

@@ -525,8 +525,7 @@ export function useExecuteAutomacaoAdapter() {
         console.error('Erro ao criar log:', logError);
       }
 
-      // TODO: Implementar lógica real de execução (chamar Edge Function, webhook, etc.)
-      // Por enquanto, apenas registra a tentativa
+      // Execution logic (Edge Function, webhook, etc.) not yet wired up - records the attempt only
 
       // Atualizar execução como sucesso (mock)
       await supabase

@@ -782,7 +782,7 @@ export default function WhatsAppBotConfig() {
                     </Alert>
                   ) : (
                     <div className="space-y-2 max-h-[500px] overflow-y-auto">
-                      {logs.map((log: any) => (
+                      {logs.map((log: Record<string, unknown>) => (
                         <div
                           key={log.id}
                           className="flex items-start gap-3 p-3 rounded-lg border bg-card text-sm"

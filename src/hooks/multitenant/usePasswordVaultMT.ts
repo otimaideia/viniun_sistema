@@ -13,7 +13,7 @@ import type {
   VaultFolderFormData,
 } from '@/types/password-vault';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://supabase-app.yeslaserpraiagrande.com.br';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://supabase.viniun.com.br';
 
 // =============================================================================
 // Helper: Call vault-api Edge Function

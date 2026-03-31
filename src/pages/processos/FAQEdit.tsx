@@ -126,7 +126,7 @@ export default function FAQEdit() {
       }
 
       navigate("/processos/faq");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Erro ao salvar FAQ:", err);
     } finally {
       setIsSaving(false);

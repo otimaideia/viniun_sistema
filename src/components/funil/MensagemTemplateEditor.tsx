@@ -141,7 +141,7 @@ export function MensagemTemplateEditor({ funilId }: MensagemTemplateEditorProps)
     let preview = formMensagem;
     preview = preview.replace(/{{nome}}/g, 'Maria Silva');
     preview = preview.replace(/{{etapa}}/g, 'Contato Iniciado');
-    preview = preview.replace(/{{unidade}}/g, 'YESlaser Centro');
+    preview = preview.replace(/{{unidade}}/g, 'Viniun Centro');
     preview = preview.replace(/{{responsavel}}/g, 'João');
     preview = preview.replace(/{{telefone}}/g, '(11) 99999-9999');
     preview = preview.replace(/{{data}}/g, new Date().toLocaleDateString('pt-BR'));

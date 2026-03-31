@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useClienteAuthContext } from '@/contexts/ClienteAuthContext';
 import { Calendar, User, LogOut, Home, Menu, Sparkles, History } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import logoYeslaser from '@/assets/logo-yeslaser.png';
+import logoViniun from '@/assets/logo-viniun.png';
 import { useState } from 'react';
 import {
   Sheet,
@@ -66,8 +66,8 @@ export function ClienteLayout({ children }: ClienteLayoutProps) {
         <div className="flex items-center h-16 px-6 border-b">
           <Link to="/cliente/dashboard">
             <img
-              src={logoYeslaser}
-              alt="YESlaser"
+              src={logoViniun}
+              alt="Viniun"
               className="h-8"
             />
           </Link>
@@ -120,7 +120,7 @@ export function ClienteLayout({ children }: ClienteLayoutProps) {
                 <div className="flex flex-col h-full">
                   {/* Logo */}
                   <div className="flex items-center h-16 px-6 border-b">
-                    <img src={logoYeslaser} alt="YESlaser" className="h-8" />
+                    <img src={logoViniun} alt="Viniun" className="h-8" />
                   </div>
 
                   {/* User info */}
@@ -161,7 +161,7 @@ export function ClienteLayout({ children }: ClienteLayoutProps) {
 
             {/* Logo center */}
             <Link to="/cliente/dashboard">
-              <img src={logoYeslaser} alt="YESlaser" className="h-7" />
+              <img src={logoViniun} alt="Viniun" className="h-7" />
             </Link>
 
             {/* User avatar / logout */}
@@ -183,7 +183,7 @@ export function ClienteLayout({ children }: ClienteLayoutProps) {
             <h1 className="text-lg font-semibold text-gray-900">
               Olá, {firstName}!
             </h1>
-            <p className="text-sm text-gray-500">Bem-vindo(a) ao seu portal YESlaser</p>
+            <p className="text-sm text-gray-500">Bem-vindo(a) ao seu portal Viniun</p>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-600">{lead?.email || lead?.telefone}</span>

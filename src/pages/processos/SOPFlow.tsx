@@ -14,7 +14,7 @@ export default function SOPFlow() {
 
   // Use useSOPsMT to get single SOP
   const { data: sops, isLoading: isSOPLoading } = useSOPsMT();
-  const sop = sops?.find((s: any) => s.id === id);
+  const sop = sops?.find((s: { id: string }) => s.id === id);
 
   const { steps, isLoading: isStepsLoading, updatePositions } = useSOPStepsMT(id);
   const { connections, isLoading: isFlowLoading, replaceAll } = useSOPFlowMT(id);

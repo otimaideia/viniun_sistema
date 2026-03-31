@@ -1,5 +1,5 @@
 // Utilitario para rastreamento de pixels (Facebook, GA4, TikTok)
-// Clone do PopDents para YESlaser
+// Viniun Sistema
 
 export interface PixelConfig {
   facebook?: string;

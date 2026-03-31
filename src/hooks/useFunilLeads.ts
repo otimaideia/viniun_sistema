@@ -148,11 +148,11 @@ export function useFunilLeads(funilId: string | undefined, filters?: FunilFilter
 
       // Filtrar por unidade se o usuário não pode ver todos os leads
       if (!canViewAllLeads && franqueadoNome) {
-        // Normalizar nomes removendo prefixos comuns (YESlaser, YES)
+        // Normalizar nomes removendo prefixos comuns (Viniun)
         const normalizeName = (name: string) => {
           return name
             .toLowerCase()
-            .replace(/^(yeslaser|yes)\s*/i, '') // Remove "YESlaser " ou "YES " do início
+            .replace(/^(viniun)\s*/i, '') // Remove "Viniun " do início
             .trim();
         };
 

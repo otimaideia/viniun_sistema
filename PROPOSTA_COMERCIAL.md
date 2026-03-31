@@ -34,7 +34,7 @@ Uma **plataforma centralizada** que permite:
 
 | # | Empresa | Segmento | Cor da Marca | Franquias Estimadas |
 |---|---------|----------|--------------|---------------------|
-| 1 | YESlaser | Estética e Depilação | Rosa (#E91E63) | 34 |
+| 1 | Viniun | Estética e Depilação | Rosa (#E91E63) | 34 |
 | 2 | PopDents | Odontologia | Azul (#2196F3) | 59 |
 | 3 | NovaLaser | Estética | Roxo (#9C27B0) | 10 |
 | 4 | IntimaCenter | Saúde Íntima | Laranja (#FF5722) | 5 |

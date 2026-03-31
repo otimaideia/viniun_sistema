@@ -173,8 +173,6 @@ export async function getNextResponsible(config: RoundRobinConfig): Promise<Roun
     })
     .eq('id', state.id);
 
-  console.log(`[RoundRobin] Atribuído a ${selectedMember.nome} (${currentIndex + 1}/${members.length})`);
-
   return {
     user_id: selectedMember.user_id,
     user_name: selectedMember.nome,

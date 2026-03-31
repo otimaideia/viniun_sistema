@@ -14,7 +14,7 @@ export interface Unidade {
   endereco: string | null;
   email: string | null;
   telefone: string | null;
-  id_api: number | null; // ID na API Yeslaser Office
+  id_api: number | null; // ID na API Viniun Office (deprecated)
   modelo: UnidadeModelo | null;
   created_at: string;
 }

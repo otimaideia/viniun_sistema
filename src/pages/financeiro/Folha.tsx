@@ -28,8 +28,8 @@ export default function Folha() {
     setGenerating(true);
     try {
       await generatePayrollRun(competencia);
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Erro desconhecido');
     } finally {
       setGenerating(false);
     }

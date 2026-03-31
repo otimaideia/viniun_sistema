@@ -450,7 +450,7 @@ interface Module {
 
 > ⚠️ **REGRA CRÍTICA 3**: TODO código DEVE usar tabelas `mt_*` e hooks MT. Código sem isolamento de tenant será REJEITADO.
 
-> ❌ **PROIBIDO**: Usar tabelas `yeslaser_*`, `popdents_*` ou qualquer tabela sem prefixo `mt_`. Usar hooks legacy sem sufixo `MT` ou `Adapter`.
+> ❌ **PROIBIDO**: Usar tabelas `viniun_*`, `popdents_*` ou qualquer tabela sem prefixo `mt_`. Usar hooks legacy sem sufixo `MT` ou `Adapter`.
 
 ---
 
@@ -462,9 +462,9 @@ interface Module {
 
 ```typescript
 // ❌ PROIBIDO - Tabelas legacy
-supabase.from("sistema_leads_yeslaser")
-supabase.from("yeslaser_franqueados")
-supabase.from("yeslaser_*")
+supabase.from("sistema_leads_viniun")
+supabase.from("viniun_franqueados")
+supabase.from("viniun_*")
 
 // ✅ OBRIGATÓRIO - Tabelas multi-tenant
 supabase.from("mt_leads")
@@ -857,7 +857,7 @@ export function useNomeModulo(filters?: FilterType) {
 }
 ```
 
-> ❌ **PROIBIDO**: Criar hooks que acessem tabelas `yeslaser_*` ou sem `TenantContext`.
+> ❌ **PROIBIDO**: Criar hooks que acessem tabelas `viniun_*` ou sem `TenantContext`.
 
 ### Regra 8: Tipos TypeScript Multi-Tenant
 
@@ -1161,7 +1161,7 @@ Ver seção **"26 Módulos do Sistema"** acima para lista completa.
 ## Estrutura do Projeto
 
 ```
-yeslaserpainel/
+viniunpainel/
 ├── src/
 │   ├── components/       # 95 componentes
 │   │   ├── ui/          # 49 componentes shadcn
@@ -1211,36 +1211,36 @@ yeslaserpainel/
 
 ### Variáveis Necessárias (.env)
 ```env
-VITE_SUPABASE_URL=https://supabase-app.yeslaserpraiagrande.com.br
-VITE_SUPABASE_ANON_KEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3MDc4MTc0MCwiZXhwIjo0OTI2NDU1MzQwLCJyb2xlIjoiYW5vbiJ9.fPIz99uMBXqwF9vwupAtYO_mGLlrGdeBoHofmjWg1L4
+VITE_SUPABASE_URL=https://supabase.viniun.com.br
+VITE_SUPABASE_ANON_KEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3NDkwMDgwMCwiZXhwIjo0OTMwNTc0NDAwLCJyb2xlIjoiYW5vbiJ9.vMKvTpdmIMjvL9MFwIkU_7GWYG3HtA5s_UVtinAdVuA
 ```
 
 ### Chaves de Acesso Supabase (Admin)
 ```
 # Service Role Key (ADMIN - usado para SQL e operações privilegiadas)
-SERVICE_ROLE_KEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3MDc4MTc0MCwiZXhwIjo0OTI2NDU1MzQwLCJyb2xlIjoic2VydmljZV9yb2xlIn0.K1j07Xd07FuQHNNXqnwXnWvakPBfUirpKXqB5sZmkTE
+SERVICE_ROLE_KEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3NDkwMDgwMCwiZXhwIjo0OTMwNTc0NDAwLCJyb2xlIjoic2VydmljZV9yb2xlIn0.QTxwodH12TivsqI5vrZJzVfH7i0oI_5u2c1GczpCTJ4
 
 # Dashboard do Supabase (Basic Auth) - Coolify
-SUPABASE_DASHBOARD_USER=OlJafwzZkirOedBv
-SUPABASE_DASHBOARD_PASSWORD=IQp1QWS8r2lhIZ4tk29ZyOmRdcgxs0Tt
+SUPABASE_DASHBOARD_USER=VT2mdGiP22gy4osG
+SUPABASE_DASHBOARD_PASSWORD=53CTKcZIYkcUQneZgz8fTMaPIS42X9NG
 
 # PostgreSQL
-POSTGRES_PASSWORD=ZZy07JXbfuFDWaOuEdVrYhEAl6b9Lld3
+POSTGRES_PASSWORD=K8Pv3bIDE2kPT1Faz9BvHIUgKsSg7o42
 
 # MinIO (Object Storage)
-MINIO_ROOT_USER=8w7SHVe62ZAKfj6d
-MINIO_ROOT_PASSWORD=w1BdMeqJESrapnytl6tLPV8T8Cg2Sb1W
+MINIO_ROOT_USER=EmnFIhjld0yMaSkh
+MINIO_ROOT_PASSWORD=glBIMgMnx72VXbdv78W7u1YitSjh8kXt
 ```
 
 ### Coolify (Gerenciamento de Containers)
 ```
 # Coolify Dashboard
-URL=https://coolify.otimaideia.com.br
+URL=https://coolify.viniun.com.br
 EMAIL=marketing@otimaideia.com.br
 PASSWORD=Marketing@Otimaideia@2025
 
 # Projeto Supabase no Coolify
-PROJECT_URL=https://coolify.otimaideia.com.br/project/ps4sk44kkcowcc08g48cg4cg/environment/cck0kw448oowss080oco8wsk
+PROJECT_URL=https://coolify.viniun.com.br/project/ps4sk44kkcowcc08g48cg4cg/environment/cck0kw448oowss080oco8wsk
 SERVICE_ID=tk0sw4gskkwgc8gw08swoccc
 
 # Edge Functions - Volume Persistente
@@ -1266,10 +1266,10 @@ npm run preview      # Preview do build
 ```
 
 ### Infraestrutura - Coolify (Deploy & Docker)
-- **Coolify URL**: https://coolify.otimaideia.com.br
+- **Coolify URL**: https://coolify.viniun.com.br
 - **Servidor**: VPS DigitalOcean (146.190.141.13)
-- **Supabase Self-Hosted**: https://supabase-app.yeslaserpraiagrande.com.br
-- **WAHA Server**: https://waha.yeslaser.com.br
+- **Supabase Self-Hosted**: https://supabase.viniun.com.br
+- **WAHA Server**: https://waha.otimaideia.com.br
 
 ### Repositório Git
 ```bash
@@ -1278,7 +1278,7 @@ origin → https://github.com/otimaideia/sistema-otima-crm-whatsapp.git
 ```
 
 ### Coolify App (Deploy Automático)
-- **URL**: https://coolify.otimaideia.com.br/project/ps4sk44kkcowcc08g48cg4cg/environment/cck0kw448oowss080oco8wsk/application/vcgg4sgwkkg4c0wwg4c84gk8
+- **URL**: https://coolify.viniun.com.br/project/ps4sk44kkcowcc08g48cg4cg/environment/cck0kw448oowss080oco8wsk/application/vcgg4sgwkkg4c0wwg4c84gk8
 - Puxa automaticamente do repo `sistema-otima-crm-whatsapp.git` ao dar push
 
 ### Deploy do Frontend
@@ -1294,7 +1294,7 @@ chatbot, chatbot-embed, chatbot-train, check-in,
 form-submit, meta-oauth-callback, meta-webhook,
 send-appointment-notifications, totem-public, whatsapp-send
 ```
-- **Deploy bundle**: https://supabase-app.yeslaserpraiagrande.com.br/storage/v1/object/public/deploy/edge-functions-all.tar.gz
+- **Deploy bundle**: https://supabase.viniun.com.br/storage/v1/object/public/deploy/edge-functions-all.tar.gz
 - **Caminho no container**: `/home/deno/functions/`
 - **Container**: `supabase/edge-runtime:v1.69.28`
 
@@ -1350,7 +1350,7 @@ Ver seção **"Tabelas Multi-Tenant (88 tabelas mt_*)"** acima para lista comple
                           │
 ┌─────────────────────────▼───────────────────────────────────┐
 │                    WAHA API SERVER                           │
-│  https://waha.yeslaser.com.br                                │
+│  https://waha.otimaideia.com.br                                │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -1736,39 +1736,39 @@ O código é capturado em `FormularioPublico.tsx` e registrado na tabela `mt_inf
 
 ### Painel Admin
 - **URL Local**: http://localhost:8080
-- **URL Produção**: https://www.yeslaserpraiagrande.com.br (ou https://www.depilacaoalaserpraiagrande.com.br)
-- **Email**: marketing@franquiayeslaser.com.br
-- **Senha**: yeslaser@2025M
+- **URL Produção**: https://www.viniun.com.br (ou https://www.)
+- **Email**: contato@viniun.com.br
+- **Senha**: viniun@2025M
 
 ### WAHA Server
-- **URL**: https://waha.yeslaser.com.br
-- **API Key**: GY9SDuKPFnJ4_dr (atualizada em mt_waha_config - Feb 2026)
+- **URL**: https://waha.otimaideia.com.br
+- **API Key**: CONFIGURAR_NO_COOLIFY (atualizada em mt_waha_config - Feb 2026)
 - **API Key Antiga**: ~~wahamkt@310809~~ (OBSOLETA - retorna 401)
 - **Engine**: NOWEB
-- **Auth Header**: `X-Api-Key: GY9SDuKPFnJ4_dr`
+- **Auth Header**: `X-Api-Key: CONFIGURAR_NO_COOLIFY`
 - **Configuração**: Via painel em Configurações → WhatsApp
 
 ### Supabase Dashboard (Studio)
-- **URL**: https://supabase.yeslaserpraiagrande.com.br
-- **User**: OlJafwzZkirOedBv
-- **Password**: IQp1QWS8r2lhIZ4tk29ZyOmRdcgxs0Tt
+- **URL**: https://supabase.viniun.com.br
+- **User**: VT2mdGiP22gy4osG
+- **Password**: 53CTKcZIYkcUQneZgz8fTMaPIS42X9NG
 
 ### Supabase API
-- **URL**: https://supabase-app.yeslaserpraiagrande.com.br
-- **Anon Key**: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3MDc4MTc0MCwiZXhwIjo0OTI2NDU1MzQwLCJyb2xlIjoiYW5vbiJ9.fPIz99uMBXqwF9vwupAtYO_mGLlrGdeBoHofmjWg1L4
-- **Service Role Key**: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3MDc4MTc0MCwiZXhwIjo0OTI2NDU1MzQwLCJyb2xlIjoic2VydmljZV9yb2xlIn0.K1j07Xd07FuQHNNXqnwXnWvakPBfUirpKXqB5sZmkTE
+- **URL**: https://supabase.viniun.com.br
+- **Anon Key**: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3NDkwMDgwMCwiZXhwIjo0OTMwNTc0NDAwLCJyb2xlIjoiYW5vbiJ9.vMKvTpdmIMjvL9MFwIkU_7GWYG3HtA5s_UVtinAdVuA
+- **Service Role Key**: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3NDkwMDgwMCwiZXhwIjo0OTMwNTc0NDAwLCJyb2xlIjoic2VydmljZV9yb2xlIn0.QTxwodH12TivsqI5vrZJzVfH7i0oI_5u2c1GczpCTJ4
 
 ### PostgreSQL (Direto)
-- **Host**: supabase-app.yeslaserpraiagrande.com.br
+- **Host**: supabase.viniun.com.br
 - **Database**: postgres
-- **Password**: ZZy07JXbfuFDWaOuEdVrYhEAl6b9Lld3
+- **Password**: K8Pv3bIDE2kPT1Faz9BvHIUgKsSg7o42
 
 ### MinIO (Object Storage)
-- **User**: 8w7SHVe62ZAKfj6d
-- **Password**: w1BdMeqJESrapnytl6tLPV8T8Cg2Sb1W
+- **User**: EmnFIhjld0yMaSkh
+- **Password**: glBIMgMnx72VXbdv78W7u1YitSjh8kXt
 
 ### Coolify (Docker Management)
-- **URL**: https://coolify.otimaideia.com.br
+- **URL**: https://coolify.viniun.com.br
 - **Servidor**: VPS DigitalOcean (146.190.141.13)
 
 ### SSH Server (VPS)
@@ -1786,9 +1786,9 @@ O código é capturado em `FormularioPublico.tsx` e registrado na tabela `mt_inf
 ### Formato de Execução
 
 ```bash
-SERVICE_KEY="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3MDc4MTc0MCwiZXhwIjo0OTI2NDU1MzQwLCJyb2xlIjoic2VydmljZV9yb2xlIn0.K1j07Xd07FuQHNNXqnwXnWvakPBfUirpKXqB5sZmkTE"
+SERVICE_KEY="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3NDkwMDgwMCwiZXhwIjo0OTMwNTc0NDAwLCJyb2xlIjoic2VydmljZV9yb2xlIn0.QTxwodH12TivsqI5vrZJzVfH7i0oI_5u2c1GczpCTJ4"
 
-curl -s -X POST "https://supabase-app.yeslaserpraiagrande.com.br/pg/query" \
+curl -s -X POST "https://supabase.viniun.com.br/pg/query" \
   -H "Content-Type: application/json" \
   -H "apikey: $SERVICE_KEY" \
   -H "Authorization: Bearer $SERVICE_KEY" \
@@ -1799,7 +1799,7 @@ curl -s -X POST "https://supabase-app.yeslaserpraiagrande.com.br/pg/query" \
 
 **Consulta simples:**
 ```bash
-curl -s -X POST "https://supabase-app.yeslaserpraiagrande.com.br/pg/query" \
+curl -s -X POST "https://supabase.viniun.com.br/pg/query" \
   -H "Content-Type: application/json" \
   -H "apikey: $SERVICE_KEY" \
   -H "Authorization: Bearer $SERVICE_KEY" \
@@ -1808,7 +1808,7 @@ curl -s -X POST "https://supabase-app.yeslaserpraiagrande.com.br/pg/query" \
 
 **ALTER TABLE:**
 ```bash
-curl -s -X POST "https://supabase-app.yeslaserpraiagrande.com.br/pg/query" \
+curl -s -X POST "https://supabase.viniun.com.br/pg/query" \
   -H "Content-Type: application/json" \
   -H "apikey: $SERVICE_KEY" \
   -H "Authorization: Bearer $SERVICE_KEY" \
@@ -1817,7 +1817,7 @@ curl -s -X POST "https://supabase-app.yeslaserpraiagrande.com.br/pg/query" \
 
 **CREATE TABLE:**
 ```bash
-curl -s -X POST "https://supabase-app.yeslaserpraiagrande.com.br/pg/query" \
+curl -s -X POST "https://supabase.viniun.com.br/pg/query" \
   -H "Content-Type: application/json" \
   -H "apikey: $SERVICE_KEY" \
   -H "Authorization: Bearer $SERVICE_KEY" \
@@ -1826,7 +1826,7 @@ curl -s -X POST "https://supabase-app.yeslaserpraiagrande.com.br/pg/query" \
 
 **CREATE FUNCTION (escapar aspas):**
 ```bash
-curl -s -X POST "https://supabase-app.yeslaserpraiagrande.com.br/pg/query" \
+curl -s -X POST "https://supabase.viniun.com.br/pg/query" \
   -H "Content-Type: application/json" \
   -H "apikey: $SERVICE_KEY" \
   -H "Authorization: Bearer $SERVICE_KEY" \
@@ -2001,13 +2001,13 @@ O BrandingContext converte automaticamente as cores hexadecimais do branding do 
 
 ```typescript
 // Em produção: detecta por subdomínio
-// yeslaser.app.com → tenant YESlaser
+// viniun.app.com → tenant Viniun
 // popdents.app.com → tenant PopDents
 
 // Em desenvolvimento: usa query param ou path
 // localhost:8080?tenant=popdents → tenant PopDents
 
-// Fallback: yeslaser (tenant padrão)
+// Fallback: viniun (tenant padrão)
 ```
 
 #### Hooks Multi-Tenant de Leads
@@ -2260,7 +2260,7 @@ Handler de chatbot IA com integração OpenAI/Anthropic para WhatsApp.
 
 **Endpoint:**
 ```bash
-POST https://supabase-app.yeslaserpraiagrande.com.br/functions/v1/whatsapp-chatbot-handler
+POST https://supabase.viniun.com.br/functions/v1/whatsapp-chatbot-handler
 Content-Type: application/json
 Authorization: Bearer <anon-key>
 
@@ -2290,19 +2290,19 @@ Authorization: Bearer <anon-key>
 
 ## Contato
 
-Desenvolvido para **YESlaser Franquias**
+Desenvolvido para **Viniun**
 
-- **Suporte**: marketing@franquiayeslaser.com.br
+- **Suporte**: contato@viniun.com.br
 
 ---
 
 ## Configurações WAHA (Atual)
 
 ### Servidor WAHA
-- **URL**: https://waha.yeslaser.com.br
-- **API Key**: GY9SDuKPFnJ4_dr (de mt_waha_config)
+- **URL**: https://waha.otimaideia.com.br
+- **API Key**: CONFIGURAR_NO_COOLIFY (de mt_waha_config)
 - **Engine**: NOWEB (Recomendado)
-- **Webhook URL**: https://supabase-app.yeslaserpraiagrande.com.br/functions/v1/waha-webhook
+- **Webhook URL**: https://supabase.viniun.com.br/functions/v1/waha-webhook
 
 ### Endpoints WAHA Disponíveis
 ```
@@ -2316,8 +2316,8 @@ GET       /api/{session}/chats/{chatId}/messages - Listar mensagens
 ### Sessões Cadastradas
 | Nome | Session Name | Franquia | Status |
 |------|--------------|----------|--------|
-| Vendas Danilo | vendas_danilo_altamira | YESlaser Altamira | Aguardando QR |
-| session_01ketg7204z5yq9phm3mf708pr | session_01ketg7204z5yq9phm3mf708pr | MCC YESlaser | Aguardando QR |
+| Vendas Danilo | vendas_danilo_altamira | Viniun Altamira | Aguardando QR |
+| session_01ketg7204z5yq9phm3mf708pr | session_01ketg7204z5yq9phm3mf708pr | MCC Viniun | Aguardando QR |
 
 ---
 
@@ -2336,12 +2336,12 @@ GET       /api/{session}/chats/{chatId}/messages - Listar mensagens
 
 ---
 
-## Integração Yeslaser Office API
+## Integração Office API (Legado)
 
 ### Configuração Atual
-- **Usuário**: marketing@franquiayeslaser.com.br
-- **Senha**: yeslaser@2025M
-- **Documentação**: https://apiaberta.yeslaseroffice.com.br/swagger/ui/index
+- **Usuário**: contato@viniun.com.br
+- **Senha**: viniun@2025M
+- **Documentação**: https://apiaberta.viniunoffice.com.br/swagger/ui/index
 
 ### Funcionalidades
 - Sincronizar agendamentos com sistema principal
@@ -2359,16 +2359,16 @@ GET       /api/{session}/chats/{chatId}/messages - Listar mensagens
 
 ### Corrigir Permissões do Projeto
 ```bash
-sudo chown -R $(whoami) /Applications/XAMPP/xamppfiles/htdocs/sites/yeslaserpainel
+sudo chown -R $(whoami) /Applications/XAMPP/xamppfiles/htdocs/sites/viniunpainel
 ```
 
  modelo para usar a sql 
- SERVICE_KEY="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3MDc4MTc0MCwiZXhwIjo0OTI2NDU1MzQwLCJyb2xlIjoic2VydmljZV9yb2xlIn0.K1j07Xd07FuQHNNXqnwXnWvakPBfUirpKXqB5sZmkTE"
+ SERVICE_KEY="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3NDkwMDgwMCwiZXhwIjo0OTMwNTc0NDAwLCJyb2xlIjoic2VydmljZV9yb2xlIn0.QTxwodH12TivsqI5vrZJzVfH7i0oI_5u2c1GczpCTJ4"
 
 echo "=== LIMPANDO DADOS DE TESTE ==="
 
 # Deletar leads de teste (historico será deletado por CASCADE)
-curl -s -X POST "https://supabase-app.yeslaserpraiagrande.com.br/pg/query" \
+curl -s -X POST "https://supabase.viniun.com.br/pg/query" \
   -H "Content-Type: application/json" \
   -H "apikey: $SERVICE_KEY" \
   -H "Authorization: Bearer $SERVICE_KEY" \
@@ -2377,7 +2377,7 @@ curl -s -X POST "https://supabase-app.yeslaserpraiagrande.com.br/pg/query" \
 echo ""
 
 # Deletar submissões de teste
-curl -s -X POST "https://supabase-app.yeslaserpraiagrande.com.br/pg/query" \
+curl -s -X POST "https://supabase.viniun.com.br/pg/query" \
   -H "Content-Type: application/json" \
   -H "apikey: $SERVICE_KEY" \
   -H "Authorization: Bearer $SERVICE_KEY" \
@@ -2386,7 +2386,7 @@ curl -s -X POST "https://supabase-app.yeslaserpraiagrande.com.br/pg/query" \
 echo ""
 
 # Deletar formulário de teste (campos serão deletados por CASCADE)
-curl -s -X POST "https://supabase-app.yeslaserpraiagrande.com.br/pg/query" \
+curl -s -X POST "https://supabase.viniun.com.br/pg/query" \
   -H "Content-Type: application/json" \
   -H "apikey: $SERVICE_KEY" \
   -H "Authorization: Bearer $SERVICE_KEY" \

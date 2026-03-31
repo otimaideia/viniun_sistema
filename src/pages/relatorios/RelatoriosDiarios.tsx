@@ -204,7 +204,7 @@ export default function RelatoriosDiarios() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {metrics.leads.items.map((lead: any) => (
+                    {metrics.leads.items.map((lead: Record<string, unknown>) => (
                       <TableRow key={lead.id}>
                         <TableCell className="font-medium">{lead.nome || '-'}</TableCell>
                         <TableCell>{lead.telefone || '-'}</TableCell>
@@ -241,7 +241,7 @@ export default function RelatoriosDiarios() {
                     <XAxis type="number" />
                     <YAxis type="category" dataKey="step" width={100} />
                     <Tooltip
-                      formatter={(value: number, name: string, props: any) => [
+                      formatter={(value: number, name: string, props: Record<string, unknown>) => [
                         `${value} (${props.payload.percentage}%)`,
                         "Quantidade",
                       ]}

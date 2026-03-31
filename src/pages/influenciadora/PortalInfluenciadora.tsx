@@ -185,12 +185,12 @@ export default function PortalInfluenciadora() {
   const handleShare = async () => {
     if (influenciadora?.codigo_indicacao) {
       const link = gerarLinkIndicacao(influenciadora.codigo_indicacao);
-      const text = `Olá! Eu indico a YESlaser para você! Use meu código ${influenciadora.codigo_indicacao} ou acesse: ${link}`;
+      const text = `Olá! Eu indico a Viniun para você! Use meu código ${influenciadora.codigo_indicacao} ou acesse: ${link}`;
 
       if (navigator.share) {
         try {
           await navigator.share({
-            title: 'YESlaser - Indicação',
+            title: 'Viniun - Indicação',
             text,
             url: link,
           });
@@ -439,7 +439,7 @@ export default function PortalInfluenciadora() {
                       {/* Serviços incluídos */}
                       {promo.services && promo.services.length > 0 && (
                         <div className="flex flex-wrap gap-1">
-                          {promo.services.slice(0, 3).map((ps: any) => (
+                          {promo.services.slice(0, 3).map((ps: Record<string, unknown>) => (
                             <Badge key={ps.id} variant="secondary" className="text-xs">
                               {ps.service?.nome}
                             </Badge>

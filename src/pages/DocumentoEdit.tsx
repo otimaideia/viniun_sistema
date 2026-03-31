@@ -149,9 +149,9 @@ export default function DocumentoEdit() {
         });
         navigate("/documentos");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao salvar documento:", error);
-      toast.error(error.message || "Erro ao salvar documento");
+      toast.error(error instanceof Error ? error.message : "Erro ao salvar documento");
     } finally {
       setIsUploading(false);
     }

@@ -27,7 +27,7 @@ function getCurrentTenantSlug(): string {
     if (param) return param.toLowerCase();
   }
 
-  return 'yeslaser';
+  return 'viniun';
 }
 
 interface MagicAuthState {

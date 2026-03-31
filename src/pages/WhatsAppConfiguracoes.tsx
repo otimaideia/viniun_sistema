@@ -31,6 +31,7 @@ import { ModuleLayout } from '@/components/shared/index';
 import { supabase } from '@/integrations/supabase/client';
 import { useWahaConfigAdapter, useWahaConfigList, type WahaConfigWithLevel } from '@/hooks/useWahaConfigAdapter';
 import { useTenantContext } from '@/contexts/TenantContext';
+import { useFranchisesMT } from '@/hooks/multitenant/useFranchisesMT';
 import { toast } from 'sonner';
 
 interface DiagnosticResult {
@@ -55,32 +56,11 @@ export default function WhatsAppConfiguracoes() {
   const [showApiKey, setShowApiKey] = useState(false);
   const [configLoaded, setConfigLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState('empresa');
-  const [franchises, setFranchises] = useState<{ id: string; nome: string; cidade?: string }[]>([]);
+  const { franchises: franchisesMT } = useFranchisesMT();
+  const franchises = (franchisesMT || []).map(f => ({ id: f.id, nome: f.nome, cidade: f.cidade }));
   const [selectedFranchiseId, setSelectedFranchiseId] = useState<string>('');
   const [franchiseConfig, setFranchiseConfig] = useState<WAHAConfig>({ baseUrl: '', apiKey: '' });
   const [showFranchiseApiKey, setShowFranchiseApiKey] = useState(false);
-
-  // Carregar franquias do tenant
-  useEffect(() => {
-    async function loadFranchises() {
-      if (!tenant?.id && accessLevel !== 'platform') return;
-
-      let query = supabase
-        .from('mt_franchises')
-        .select('id, nome, cidade')
-        .eq('is_active', true)
-        .order('nome');
-
-      if (tenant?.id) {
-        query = query.eq('tenant_id', tenant.id);
-      }
-
-      const { data } = await query;
-      setFranchises(data || []);
-    }
-
-    loadFranchises();
-  }, [tenant?.id, accessLevel]);
 
   // Carregar configurações do banco de dados
   useEffect(() => {
@@ -415,7 +395,7 @@ export default function WhatsAppConfiguracoes() {
                       )}
                     </div>
                   </div>
-                  <Badge variant={getBadgeVariant(item.status) as any}>
+                  <Badge variant={getBadgeVariant(item.status) as "default" | "secondary" | "destructive" | "outline"}>
                     {item.status === 'success' ? 'OK' :
                      item.status === 'error' ? 'Erro' :
                      item.status === 'warning' ? 'Atenção' : '...'}
@@ -718,7 +698,7 @@ export default function WhatsAppConfiguracoes() {
           <CardContent>
             <div className="flex items-center gap-2">
               <Input
-                value="https://supabase-app.yeslaserpraiagrande.com.br/functions/v1/waha-webhook"
+                value="https://supabase.viniun.com.br/functions/v1/waha-webhook"
                 readOnly
                 className="font-mono text-sm"
               />
@@ -726,7 +706,7 @@ export default function WhatsAppConfiguracoes() {
                 variant="outline"
                 size="icon"
                 onClick={() => {
-                  navigator.clipboard.writeText('https://supabase-app.yeslaserpraiagrande.com.br/functions/v1/waha-webhook');
+                  navigator.clipboard.writeText('https://supabase.viniun.com.br/functions/v1/waha-webhook');
                   toast.success('URL do webhook copiada!');
                 }}
                 title="Copiar"

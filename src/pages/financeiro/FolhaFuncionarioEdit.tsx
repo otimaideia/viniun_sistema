@@ -290,7 +290,7 @@ export default function FolhaFuncionarioEdit() {
         vr_valor: tipoContratacao === 'clt' && hasVr ? parseFloat(vrValor || '0') : 0,
         fgts_percentual: tipoContratacao === 'clt' ? parseFloat(fgtsPct || '8') : 0,
         inss_percentual: tipoContratacao === 'clt' ? parseFloat(inssPct || '11') : 0,
-        comissao_tipo: tipoContratacao === 'clt' && comissaoTipo ? comissaoTipo as any : undefined,
+        comissao_tipo: tipoContratacao === 'clt' && comissaoTipo ? comissaoTipo as string : undefined,
         comissao_valor: tipoContratacao === 'clt' && comissaoValor ? parseFloat(comissaoValor) : 0,
         comissao_descricao: tipoContratacao === 'clt' ? comissaoDescricao || undefined : undefined,
         comissao_meta_global_pct: tipoContratacao === 'clt' ? parseFloat(comissaoMetaGlobalPct || '0') : 0,
@@ -356,7 +356,7 @@ export default function FolhaFuncionarioEdit() {
         // Status
         is_active: isActive,
         data_desligamento: !isActive && dataDesligamento ? dataDesligamento : null,
-      } as any;
+      } as Record<string, unknown>;
 
       if (isEditing) {
         await updateEmployee(id!, data);
@@ -364,8 +364,8 @@ export default function FolhaFuncionarioEdit() {
         await createEmployee(data);
       }
       navigate('/financeiro/folha');
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setSaving(false);
     }
@@ -939,11 +939,11 @@ export default function FolhaFuncionarioEdit() {
                 <div className="p-4 rounded-lg bg-green-50 border border-green-200 text-sm space-y-2">
                   <p className="font-medium text-green-800">Como funciona o pagamento MEI:</p>
                   <p className="text-green-700">
-                    A cada dia que a profissional estiver <strong>presente na clínica</strong>, ela recebe o <strong>maior valor</strong> entre:
+                    A cada dia que a profissional estiver <strong>presente na empresa</strong>, ela recebe o <strong>maior valor</strong> entre:
                   </p>
                   <ul className="list-disc pl-5 text-green-700 space-y-1">
                     <li><strong>Diária mínima</strong> — valor garantido por dia de trabalho</li>
-                    <li><strong>Comissão dos procedimentos</strong> — soma das comissões dos atendimentos realizados no dia</li>
+                    <li><strong>Comissão dos atendimentos</strong> — soma das comissões dos atendimentos realizados no dia</li>
                   </ul>
                   <p className="text-green-700 font-medium">
                     Fórmula: pagamento_dia = MAX(diária_mínima, comissões_do_dia)
@@ -954,7 +954,7 @@ export default function FolhaFuncionarioEdit() {
                   <div className="space-y-2">
                     <Label>Diária Mínima (R$) *</Label>
                     <Input type="number" step="0.01" value={diariaMinima} onChange={e => setDiariaMinima(e.target.value)} placeholder="100,00" />
-                    <p className="text-xs text-muted-foreground">Valor mínimo garantido por dia de presença na clínica</p>
+                    <p className="text-xs text-muted-foreground">Valor mínimo garantido por dia de presença na empresa</p>
                   </div>
                 </div>
 

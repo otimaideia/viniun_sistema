@@ -1,7 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { sanitizeObjectForJSON, createSanitizedFetch } from "../_shared/unicodeSanitizer.ts";
 
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL") || "https://supabase-app.yeslaserpraiagrande.com.br";
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL") || "https://supabase.viniun.com.br";
 
 // Helper: Log de atividade no lead (fire-and-forget)
 async function logLeadActivity(supabase: any, params: {
@@ -486,7 +486,7 @@ async function downloadAndStoreMedia(
     }
 
     // Use external URL directly (edge runtime may resolve to internal supabase-kong hostname)
-    const EXTERNAL_URL = "https://supabase-app.yeslaserpraiagrande.com.br";
+    const EXTERNAL_URL = "https://supabase.viniun.com.br";
     const publicUrl = `${EXTERNAL_URL}/storage/v1/object/public/${MEDIA_BUCKET}/${storagePath}`;
 
     console.log(`[MediaStorage] ✅ Salvo: ${storagePath} (${blob.size} bytes)`);
@@ -658,7 +658,7 @@ function detectOrigemFromMessage(message: string): string {
     { origem: 'tiktok', keywords: ['tiktok.com', 'tiktok', 'pelo tiktok'] },
     { origem: 'google', keywords: ['google.com', 'pesquisa google', 'achei no google', 'vi no google', 'pelo google'] },
     { origem: 'bio_link', keywords: ['linktr.ee', 'bio.link', 'link da bio', 'linkin.bio'] },
-    { origem: 'site', keywords: ['yeslaser.com', 'site de vocês', 'pelo site', 'vi no site'] },
+    { origem: 'site', keywords: ['viniun.com', 'site de vocês', 'pelo site', 'vi no site'] },
     { origem: 'indicacao', keywords: ['indicação', 'indicou', 'amigo indicou', 'conhecida indicou', 'amiga indicou'] },
   ];
 
@@ -859,7 +859,7 @@ Deno.serve(async (req) => {
 
     // Initialize Supabase client with service role
     // IMPORTANTE: Para self-hosted Supabase, SEMPRE usar URL externa
-    const supabaseUrl = "https://supabase-app.yeslaserpraiagrande.com.br";
+    const supabaseUrl = "https://supabase.viniun.com.br";
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || Deno.env.get("SERVICE_ROLE_KEY") || "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3MDc4MTc0MCwiZXhwIjo0OTI2NDU1MzQwLCJyb2xlIjoic2VydmljZV9yb2xlIn0.K1j07Xd07FuQHNNXqnwXnWvakPBfUirpKXqB5sZmkTE";
     if (!Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") && !Deno.env.get("SERVICE_ROLE_KEY")) {
       console.warn("[Webhook] AVISO: SUPABASE_SERVICE_ROLE_KEY não configurada como env var - usando fallback hardcoded. Configurar a env var em produção.");
@@ -1284,7 +1284,7 @@ Deno.serve(async (req) => {
                 .eq("tenant_id", sessao.tenant_id)
                 .maybeSingle();
 
-              const apiUrl = wahaMediaConfig?.api_url || "https://waha.yeslaserpraiagrande.com.br";
+              const apiUrl = wahaMediaConfig?.api_url || "https://waha.otimaideia.com.br";
               const apiKey = wahaMediaConfig?.api_key || "";
 
               if (apiKey) {

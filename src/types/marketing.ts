@@ -6,7 +6,7 @@ export type CampanhaStatus = 'ativa' | 'pausada' | 'finalizada';
 export type AssetTipo = 'imagem' | 'video' | 'banner' | 'logo' | 'arte_social';
 export type AssetCategoria =
   | 'destaques'
-  | 'material_yeslaser'
+  | 'material_viniun'
   | 'material_aedgel'
   | 'stories'
   | 'tv_interna'
@@ -172,7 +172,7 @@ export const ASSET_TYPE_OPTIONS = [
 // Asset category options (based on Google Drive structure)
 export const ASSET_CATEGORY_OPTIONS = [
   { value: 'destaques', label: 'Destaques' },
-  { value: 'material_yeslaser', label: 'Material Yes Laser' },
+  { value: 'material_viniun', label: 'Material Viniun' },
   { value: 'material_aedgel', label: 'Material A-Edgel' },
   { value: 'stories', label: 'Stories' },
   { value: 'tv_interna', label: 'TV Interna' },

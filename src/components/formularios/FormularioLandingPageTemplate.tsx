@@ -165,7 +165,7 @@ export default function FormularioLandingPageTemplate({
   const [cepLoading, setCepLoading] = useState(false);
   const [enderecoInfo, setEnderecoInfo] = useState<string | null>(null);
 
-  // Estilos personalizados do formulario - YESlaser usa verde como padrao
+  // Estilos personalizados do formulario - Viniun usa verde como padrao
   const styles = {
     // Cores principais
     primary: formulario.cor_primaria || '#10b981',

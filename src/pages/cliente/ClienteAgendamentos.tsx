@@ -96,7 +96,7 @@ export default function ClienteAgendamentos() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Agendamentos</h1>
-            <p className="text-gray-500">Gerencie suas sessões na YESlaser</p>
+            <p className="text-gray-500">Gerencie suas sessões na Viniun</p>
           </div>
 
           {/* Stats - Desktop only */}
@@ -140,7 +140,7 @@ export default function ClienteAgendamentos() {
                       Nenhum agendamento futuro
                     </h3>
                     <p className="text-gray-500 max-w-sm mx-auto">
-                      Entre em contato com a unidade YESlaser para agendar sua próxima sessão
+                      Entre em contato com a unidade Viniun para agendar sua próxima sessão
                     </p>
                   </CardContent>
                 </Card>

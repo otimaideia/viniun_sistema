@@ -407,7 +407,7 @@ export default function PacoteDetail() {
                     </label>
                     <p className="text-sm mt-1">
                       <Badge variant="outline" className="border-blue-200 text-blue-700 bg-blue-50">
-                        {(pacote.campanha as any)?.nome || 'Campanha'}
+                        {(pacote.campanha as Record<string, unknown> | undefined)?.nome as string || 'Campanha'}
                       </Badge>
                     </p>
                   </div>

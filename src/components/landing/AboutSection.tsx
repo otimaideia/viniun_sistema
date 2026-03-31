@@ -21,11 +21,11 @@ const AboutSection = () => {
           }`}
         >
           <h2 className="text-3xl md:text-5xl font-bold mb-6 text-foreground">
-            A Yeslaser chegou em Praia Grande!
+            A Viniun chegou em Praia Grande!
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-            Com mais de 100 unidades e 500 mil clientes satisfeitos, a Yeslaser traz para
-            Praia Grande o que há de mais moderno em depilação a laser, estética e botox.
+            Com mais de 100 unidades e 500 mil clientes satisfeitos, a Viniun traz para
+            Praia Grande o que há de mais moderno em soluções para o seu negócio.
           </p>
         </div>
 

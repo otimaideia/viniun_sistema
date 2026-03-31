@@ -71,7 +71,7 @@ export function useWhatsAppMetrics(sessaoId: string | undefined) {
       // Buscar dados das conversas
       const { data: chatsData, error: chatsError } = await supabase
         .from('mt_whatsapp_conversations')
-        .select('id, is_muted, ultimo_contato')
+        .select('id, is_muted, ultimo_contato, unread_count')
         .eq('session_id', sessaoId);
 
       if (chatsError) {
@@ -103,7 +103,7 @@ export function useWhatsAppMetrics(sessaoId: string | undefined) {
       const chatMetrics: ChatMetrics = {
         total: chats.length,
         active: chats.filter(c => c.ultimo_contato && new Date(c.ultimo_contato) >= new Date(weekAgo)).length,
-        unread: 0, // TODO: implementar contagem de não lidos
+        unread: chats.filter(c => (c as any).unread_count > 0).length,
         withMessages: new Set(messages.map(m => m.conversa_id)).size,
       };
 

@@ -225,7 +225,7 @@ serve(async (req) => {
           mensagem = templates[templateIndex]
             .replace('{{nome}}', lead.nome || 'você')
             .replace('{{servico}}', lead.servico_interesse || 'nossos serviços')
-            .replace('{{empresa}}', 'YESlaser');
+            .replace('{{empresa}}', 'Viniun');
         } else if (openaiKey) {
           // Gerar com IA
           try {
@@ -240,13 +240,13 @@ serve(async (req) => {
                 messages: [
                   {
                     role: 'system',
-                    content: `Você é a Loren, consultora da YESlaser. Gere UMA mensagem curta (2-3 frases) de follow-up para WhatsApp.
+                    content: `Você é uma consultora da Viniun. Gere UMA mensagem curta (2-3 frases) de follow-up para WhatsApp.
 Esta é a ${tentativaDesc} tentativa de contato. ${currentAttempt >= 2 ? 'Seja mais direta e ofereça algo especial.' : 'Seja amigável e mostre interesse genuíno.'}
 NUNCA diga que é IA. Use emojis moderados (1-2). Seja natural.`
                   },
                   {
                     role: 'user',
-                    content: `Lead: ${lead.nome || 'Cliente'}, interesse em: ${lead.servico_interesse || 'depilação a laser'}. Temperatura: ${lead.temperatura || 'morno'}. Tentativa ${currentAttempt + 1} de ${maxAttempts}.`
+                    content: `Lead: ${lead.nome || 'Cliente'}, interesse em: ${lead.servico_interesse || 'nossos serviços'}. Temperatura: ${lead.temperatura || 'morno'}. Tentativa ${currentAttempt + 1} de ${maxAttempts}.`
                   }
                 ]
               })

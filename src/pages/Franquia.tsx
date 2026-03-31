@@ -90,7 +90,7 @@ export default function Franquia() {
     return leads.filter(lead =>
       lead.franqueado_id === franquia.id ||
       lead.unidade?.toLowerCase().includes(nomeFantasia) ||
-      lead.unidade?.toLowerCase().replace("yes ", "yeslaser ").includes(nomeFantasia)
+      lead.unidade?.toLowerCase().includes(nomeFantasia)
     );
   }, [leads, franquia]);
 

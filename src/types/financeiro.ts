@@ -33,10 +33,10 @@ export const CLT_CARGOS = [
 ] as const;
 
 export const MEI_CARGOS = [
-  'Esteticista',
-  'Biomédica',
-  'Aplicadora de Laser',
-  'Aplicadora',
+  'Especialista',
+  'Consultora',
+  'Profissional de Atendimento',
+  'Atendente',
 ] as const;
 
 // === LABELS ===

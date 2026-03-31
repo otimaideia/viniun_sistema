@@ -104,12 +104,12 @@ export default function MinhasIndicacoesInfluenciadora() {
   const handleShare = async () => {
     if (influenciadora?.codigo_indicacao) {
       const link = gerarLinkIndicacao(influenciadora.codigo_indicacao);
-      const text = `Olá! Eu indico a YESlaser para você! Use meu código ${influenciadora.codigo_indicacao} ou acesse: ${link}`;
+      const text = `Olá! Eu indico a Viniun para você! Use meu código ${influenciadora.codigo_indicacao} ou acesse: ${link}`;
 
       if (navigator.share) {
         try {
           await navigator.share({
-            title: 'YESlaser - Indicação',
+            title: 'Viniun - Indicação',
             text,
             url: link,
           });

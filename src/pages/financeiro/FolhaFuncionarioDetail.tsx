@@ -59,7 +59,7 @@ export default function FolhaFuncionarioDetail() {
       const emp = employees.find(e => e.id === id);
       if (emp) {
         setEmployee(emp);
-        setFields({ ...(emp as any) });
+        setFields({ ...(emp as Record<string, unknown>) });
       }
     }
   }, [employees, id]);
@@ -79,7 +79,7 @@ export default function FolhaFuncionarioDetail() {
     }
   }, [demissionalData.data, demissionalFormLoaded]);
 
-  const handleFieldChange = (key: string, value: any) => {
+  const handleFieldChange = (key: string, value: unknown) => {
     setFields(prev => ({ ...prev, [key]: value }));
   };
 
@@ -168,8 +168,8 @@ export default function FolhaFuncionarioDetail() {
       await updateEmployee(id, data);
       setEditing(null);
       toast.success('Dados atualizados');
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setSaving(false);
     }
@@ -183,7 +183,7 @@ export default function FolhaFuncionarioDetail() {
     );
   }
 
-  const emp = fields as any;
+  const emp = fields as Record<string, unknown>;
   const isCLT = emp.tipo_contratacao === 'clt';
   const isMEI = emp.tipo_contratacao === 'mei';
 
@@ -192,7 +192,7 @@ export default function FolhaFuncionarioDetail() {
       <h3 className="font-semibold text-lg">{title}</h3>
       {editing === section ? (
         <div className="flex gap-2">
-          <Button size="sm" variant="outline" onClick={() => { setFields({ ...(employee as any) }); setEditing(null); }}>
+          <Button size="sm" variant="outline" onClick={() => { setFields({ ...(employee as Record<string, unknown>) }); setEditing(null); }}>
             Cancelar
           </Button>
           <Button size="sm" onClick={() => handleSaveSection(section)} disabled={saving}>
@@ -307,7 +307,7 @@ export default function FolhaFuncionarioDetail() {
                       await updateEmployee(id!, {
                         is_active: newStatus,
                         data_desligamento: newStatus ? null : new Date().toISOString().split('T')[0],
-                      } as any);
+                      } as Record<string, unknown>);
                       setEmployee(prev => prev ? { ...prev, is_active: newStatus, data_desligamento: newStatus ? null : new Date().toISOString().split('T')[0] } : prev);
                       // Auto-create demissional checklist when deactivating (CLT only)
                       if (!newStatus && isCLT && employee.tenant_id) {
@@ -317,8 +317,8 @@ export default function FolhaFuncionarioDetail() {
                         } catch { /* ignore if fails */ }
                       }
                       toast.success(newStatus ? 'Colaborador reativado' : 'Colaborador desativado');
-                    } catch (err: any) {
-                      toast.error(`Erro: ${err.message}`);
+                    } catch (err: unknown) {
+                      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
                     }
                   }}
                 >
@@ -1377,8 +1377,8 @@ export default function FolhaFuncionarioDetail() {
                         } else {
                           toast.info('Checklist demissional já existe');
                         }
-                      } catch (err: any) {
-                        toast.error(`Erro: ${err.message}`);
+                      } catch (err: unknown) {
+                        toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
                       }
                     }}
                     className="bg-red-600 hover:bg-red-700"
@@ -1472,7 +1472,7 @@ export default function FolhaFuncionarioDetail() {
                     </div>
 
                     <Button
-                      onClick={() => demissionalData.upsert.mutate(demissionalForm as any)}
+                      onClick={() => demissionalData.upsert.mutate(demissionalForm as Record<string, unknown>)}
                       disabled={demissionalData.upsert.isPending}
                     >
                       <Save className="h-4 w-4 mr-2" />

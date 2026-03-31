@@ -9,9 +9,8 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Verificar se está na página de pré-inauguração
-  // "/" no domínio landing também renderiza LandingPreInauguracao
-  const isPreInaugPage = location.pathname === "/lp/praia-grande" || location.pathname === "/lp/praia-grande/" || location.pathname === "/";
+  // Verificar se está na landing page principal
+  const isPreInaugPage = location.pathname === "/" || location.pathname === "/lp/viniun";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,7 +65,7 @@ const Header = () => {
 
       <Button
         onClick={() => window.open("https://www.asaas.com/c/7ytngzlfment5bsu", "_blank")}
-        className="hidden md:flex bg-gradient-to-r from-yeslaser-purple to-yeslaser-lightBlue hover:from-yeslaser-darkPurple hover:to-yeslaser-lightBlue text-white font-semibold uppercase tracking-wide shadow-lg hover:shadow-xl transition-all"
+        className="hidden md:flex bg-gradient-to-r from-viniun-navy to-viniun-lightBlue hover:from-viniun-dark hover:to-viniun-lightBlue text-white font-semibold uppercase tracking-wide shadow-lg hover:shadow-xl transition-all"
       >
         Comprar Agora
       </Button>
@@ -103,7 +102,7 @@ const Header = () => {
             </button>
             <Button
               onClick={() => window.open("https://www.asaas.com/c/7ytngzlfment5bsu", "_blank")}
-              className="bg-gradient-to-r from-yeslaser-purple to-yeslaser-lightBlue hover:from-yeslaser-darkPurple hover:to-yeslaser-lightBlue text-white font-semibold uppercase tracking-wide"
+              className="bg-gradient-to-r from-viniun-navy to-viniun-lightBlue hover:from-viniun-dark hover:to-viniun-lightBlue text-white font-semibold uppercase tracking-wide"
             >
               Comprar Agora
             </Button>
@@ -146,7 +145,7 @@ const Header = () => {
 
       <Button
         onClick={() => scrollToSection("hero")}
-        className="hidden md:flex bg-gradient-to-r from-yeslaser-purple to-yeslaser-lightBlue hover:from-yeslaser-darkPurple hover:to-yeslaser-lightBlue text-white font-semibold uppercase tracking-wide shadow-lg hover:shadow-xl transition-all"
+        className="hidden md:flex bg-gradient-to-r from-viniun-navy to-viniun-lightBlue hover:from-viniun-dark hover:to-viniun-lightBlue text-white font-semibold uppercase tracking-wide shadow-lg hover:shadow-xl transition-all"
       >
         Ganhe 10 Sessões Grátis
       </Button>
@@ -189,7 +188,7 @@ const Header = () => {
             </button>
             <Button
               onClick={() => scrollToSection("hero")}
-              className="bg-gradient-to-r from-yeslaser-purple to-yeslaser-lightBlue hover:from-yeslaser-darkPurple hover:to-yeslaser-lightBlue text-white font-semibold uppercase tracking-wide"
+              className="bg-gradient-to-r from-viniun-navy to-viniun-lightBlue hover:from-viniun-dark hover:to-viniun-lightBlue text-white font-semibold uppercase tracking-wide"
             >
               Ganhe 10 Sessões Grátis
             </Button>
@@ -209,8 +208,8 @@ const Header = () => {
         <div className="flex items-center justify-between h-[70px]">
           <div className="flex items-center gap-2">
             <img
-              src="/images/landing/depilacao-a-laser-em-praia-grande-yeslaser.png"
-              alt="Yeslaser - Depilação a Laser e Estética"
+              src="/images/landing/viniun-logo.png"
+              alt="Viniun"
               className="h-10 md:h-12 w-auto cursor-pointer transition-transform hover:scale-105"
               onClick={handleLogoClick}
             />

@@ -63,8 +63,8 @@ export default function Produtividade() {
     setSavingSchedule(true);
     try {
       await saveSchedule(selectedUserId, scheduleForm);
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setSavingSchedule(false);
     }
@@ -76,8 +76,8 @@ export default function Produtividade() {
     try {
       const workingDays = getWorkingDaysInMonth(yearMonth);
       await generateFromSchedule(selectedUserId, yearMonth, workingDays);
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setGeneratingAttendance(false);
     }
@@ -88,8 +88,8 @@ export default function Produtividade() {
     setGeneratingProductivity(true);
     try {
       await generateProductivity(selectedUserId, yearMonth);
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setGeneratingProductivity(false);
     }
@@ -101,8 +101,8 @@ export default function Produtividade() {
     const nextStatus = statusCycle[(currentIdx + 1) % statusCycle.length];
     try {
       await updateAttendanceStatus(date, nextStatus);
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     }
   };
 

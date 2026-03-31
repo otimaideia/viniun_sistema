@@ -83,8 +83,8 @@ export default function AuditoriaDetail() {
       toast.success('Auditoria marcada como realizada');
       navigate(`/auditorias/${auditoria.id}`);
       window.location.reload();
-    } catch (err: any) {
-      toast.error(err.message || 'Erro ao atualizar auditoria');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Erro ao atualizar auditoria');
     } finally {
       setIsUpdating(false);
     }
@@ -106,8 +106,8 @@ export default function AuditoriaDetail() {
       await updateStatus(auditoria.id, 'nao_convertida', { notas: notas || undefined });
       toast.success('Auditoria marcada como nao convertida');
       window.location.reload();
-    } catch (err: any) {
-      toast.error(err.message || 'Erro ao atualizar auditoria');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Erro ao atualizar auditoria');
     } finally {
       setIsUpdating(false);
     }

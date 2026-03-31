@@ -199,7 +199,6 @@ export function useBroadcastCampaignsMT(filters?: BroadcastCampaignFilters) {
           ...(tenant ? { filter: `tenant_id=eq.${tenant.id}` } : {}),
         },
         (payload) => {
-          console.log('[Broadcast] Campaign change:', payload.eventType);
           queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
         }
       )
@@ -822,7 +821,6 @@ export function useBroadcastCampaignMT(id: string | undefined) {
           filter: `id=eq.${id}`,
         },
         (payload) => {
-          console.log('[Broadcast] Campaign update:', payload.new);
           queryClient.setQueryData(
             [QUERY_KEY, 'detail', id],
             (old: MTBroadcastCampaign | null) => {

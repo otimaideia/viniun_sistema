@@ -27,7 +27,7 @@ export function QRCodeIndicacao({
   codigo_indicacao,
   nome_influenciadora,
   formulario_slug = 'cadastro-leads',
-  tenant_slug = 'yeslaser',
+  tenant_slug = 'viniun',
 }: QRCodeIndicacaoProps) {
   const [showDialog, setShowDialog] = useState(false);
   const [copied, setCopied] = useState(false);

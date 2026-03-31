@@ -88,7 +88,7 @@ export function FranqueadoIntegracaoCard({
   "nome": "João Silva",
   "telefone": "(11) 99999-9999",
   "email": "joao@email.com",
-  "servico": "${servicosVinculados[0]?.nome || "Depilação a Laser"}",
+  "servico": "${servicosVinculados[0]?.nome || "Consultoria Imobiliária"}",
   "origem": "Landing Page",
   "observacao": "Interesse em pacote completo"
 }`;

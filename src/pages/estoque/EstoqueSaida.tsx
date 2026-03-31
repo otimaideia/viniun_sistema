@@ -204,8 +204,8 @@ export default function EstoqueSaida() {
       });
 
       navigate("/estoque/movimentacoes");
-    } catch (err: any) {
-      toast.error(err.message || "Erro ao registrar movimentacao");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Erro ao registrar movimentacao");
     } finally {
       setSaving(false);
     }

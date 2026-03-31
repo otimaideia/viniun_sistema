@@ -132,8 +132,8 @@ export default function RecorrenteEdit() {
         await createRecurring(data);
       }
       handleVoltar();
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setSaving(false);
     }

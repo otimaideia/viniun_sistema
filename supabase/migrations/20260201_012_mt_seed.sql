@@ -24,15 +24,15 @@ INSERT INTO mt_tenants (
     max_usuarios,
     data_ativacao
 ) VALUES
--- 1. YESlaser (Principal - 37 franquias)
+-- 1. Viniun (Principal - 37 franquias)
 (
-    'yeslaser',
-    'YESlaser',
-    'YESlaser Franchising Ltda',
+    'viniun',
+    'Viniun',
+    'Viniun Franchising Ltda',
     '12.345.678/0001-90',
     'São Paulo',
     'SP',
-    'contato@yeslaser.com.br',
+    'contato@viniun.com.br',
     '+5511999999901',
     '+5511999999901',
     'ativo',
@@ -227,7 +227,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Aplicar branding para cada tenant
-SELECT insert_tenant_branding('yeslaser', '#E91E63', '#9C27B0', 'https://yeslaser.com.br/logo.png');
+SELECT insert_tenant_branding('viniun', '#E91E63', '#9C27B0', 'https://yeslaser.com.br/logo.png');
 SELECT insert_tenant_branding('popdents', '#2196F3', '#00BCD4', 'https://popdents.com.br/logo.png');
 SELECT insert_tenant_branding('novalaser', '#4CAF50', '#8BC34A', NULL);
 SELECT insert_tenant_branding('intimacenter', '#FF9800', '#FF5722', NULL);
@@ -285,7 +285,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Liberar módulos CORE para todos os tenants
-SELECT liberar_modulos_core('yeslaser');
+SELECT liberar_modulos_core('viniun');
 SELECT liberar_modulos_core('popdents');
 SELECT liberar_modulos_core('novalaser');
 SELECT liberar_modulos_core('intimacenter');
@@ -295,17 +295,17 @@ SELECT liberar_modulos_core('amorimplantes');
 SELECT liberar_modulos_core('confiacredito');
 SELECT liberar_modulos_core('franqueadora');
 
--- Liberar módulos adicionais para YESlaser (todos)
-SELECT liberar_modulo('yeslaser', 'funil');
-SELECT liberar_modulo('yeslaser', 'whatsapp');
-SELECT liberar_modulo('yeslaser', 'formularios');
-SELECT liberar_modulo('yeslaser', 'influenciadoras');
-SELECT liberar_modulo('yeslaser', 'parcerias');
-SELECT liberar_modulo('yeslaser', 'campanhas');
-SELECT liberar_modulo('yeslaser', 'recrutamento');
-SELECT liberar_modulo('yeslaser', 'metas');
-SELECT liberar_modulo('yeslaser', 'servicos');
-SELECT liberar_modulo('yeslaser', 'integracoes');
+-- Liberar módulos adicionais para Viniun (todos)
+SELECT liberar_modulo('viniun', 'funil');
+SELECT liberar_modulo('viniun', 'whatsapp');
+SELECT liberar_modulo('viniun', 'formularios');
+SELECT liberar_modulo('viniun', 'influenciadoras');
+SELECT liberar_modulo('viniun', 'parcerias');
+SELECT liberar_modulo('viniun', 'campanhas');
+SELECT liberar_modulo('viniun', 'recrutamento');
+SELECT liberar_modulo('viniun', 'metas');
+SELECT liberar_modulo('viniun', 'servicos');
+SELECT liberar_modulo('viniun', 'integracoes');
 
 -- Liberar módulos adicionais para PopDents
 SELECT liberar_modulo('popdents', 'funil');
@@ -360,44 +360,44 @@ DROP FUNCTION liberar_modulo;
 -- INSERIR FRANQUIAS DE EXEMPLO (Apenas 2-3 por tenant)
 -- =============================================================================
 
--- YESlaser - 3 franquias de exemplo
+-- Viniun - 3 franquias de exemplo
 INSERT INTO mt_franchises (tenant_id, codigo, nome, cidade, estado, telefone, whatsapp, status)
 SELECT
     t.id,
     'YL001',
-    'YESlaser Paulista',
+    'Viniun Paulista',
     'São Paulo',
     'SP',
     '+5511999990001',
     '+5511999990001',
     'ativo'
-FROM mt_tenants t WHERE t.slug = 'yeslaser'
+FROM mt_tenants t WHERE t.slug = 'viniun'
 ON CONFLICT DO NOTHING;
 
 INSERT INTO mt_franchises (tenant_id, codigo, nome, cidade, estado, telefone, whatsapp, status)
 SELECT
     t.id,
     'YL002',
-    'YESlaser Moema',
+    'Viniun Moema',
     'São Paulo',
     'SP',
     '+5511999990002',
     '+5511999990002',
     'ativo'
-FROM mt_tenants t WHERE t.slug = 'yeslaser'
+FROM mt_tenants t WHERE t.slug = 'viniun'
 ON CONFLICT DO NOTHING;
 
 INSERT INTO mt_franchises (tenant_id, codigo, nome, cidade, estado, telefone, whatsapp, status)
 SELECT
     t.id,
     'YL003',
-    'YESlaser Campinas',
+    'Viniun Campinas',
     'Campinas',
     'SP',
     '+5519999990003',
     '+5519999990003',
     'ativo'
-FROM mt_tenants t WHERE t.slug = 'yeslaser'
+FROM mt_tenants t WHERE t.slug = 'viniun'
 ON CONFLICT DO NOTHING;
 
 -- PopDents - 2 franquias de exemplo
@@ -497,7 +497,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Criar admins para cada tenant
-SELECT criar_tenant_admin('yeslaser', 'admin@yeslaser.com.br', 'Admin YESlaser');
+SELECT criar_tenant_admin('viniun', 'admin@viniun.com.br', 'Admin Viniun');
 SELECT criar_tenant_admin('popdents', 'admin@popdents.com.br', 'Admin PopDents');
 SELECT criar_tenant_admin('novalaser', 'admin@novalaser.com.br', 'Admin NovaLaser');
 SELECT criar_tenant_admin('intimacenter', 'admin@intimacenter.com.br', 'Admin IntimaCenter');
@@ -510,7 +510,7 @@ SELECT criar_tenant_admin('franqueadora', 'admin@franqueadora.com.br', 'Admin Fr
 DROP FUNCTION criar_tenant_admin;
 
 -- =============================================================================
--- INSERIR INTEGRAÇÕES DE EXEMPLO (WhatsApp para YESlaser)
+-- INSERIR INTEGRAÇÕES DE EXEMPLO (WhatsApp para Viniun)
 -- =============================================================================
 
 INSERT INTO mt_tenant_integrations (
@@ -525,13 +525,13 @@ INSERT INTO mt_tenant_integrations (
 SELECT
     t.id,
     it.id,
-    'WhatsApp Business YESlaser',
+    'WhatsApp Business Viniun',
     'Integração WhatsApp via WAHA',
-    '{"waha_url": "https://waha.yeslaser.com.br", "api_key": "encrypted_key"}',
+    '{"waha_url": "https://waha.otimaideia.com.br", "api_key": "encrypted_key"}',
     true,
     'connected'
 FROM mt_tenants t, mt_integration_types it
-WHERE t.slug = 'yeslaser' AND it.codigo = 'whatsapp'
+WHERE t.slug = 'viniun' AND it.codigo = 'whatsapp'
 ON CONFLICT DO NOTHING;
 
 -- =============================================================================
@@ -546,7 +546,7 @@ SELECT
     'Olá {nome}! 👋 Seja bem-vindo(a) à {empresa}! Como posso ajudar você hoje?',
     ARRAY['nome', 'empresa'],
     true
-FROM mt_tenants t WHERE t.slug = 'yeslaser'
+FROM mt_tenants t WHERE t.slug = 'viniun'
 ON CONFLICT DO NOTHING;
 
 INSERT INTO mt_whatsapp_templates (tenant_id, nome, categoria, conteudo, variaveis, is_active)
@@ -557,7 +557,7 @@ SELECT
     'Olá {nome}! ✅ Seu agendamento está confirmado para {data} às {hora} na unidade {unidade}. Até lá!',
     ARRAY['nome', 'data', 'hora', 'unidade'],
     true
-FROM mt_tenants t WHERE t.slug = 'yeslaser'
+FROM mt_tenants t WHERE t.slug = 'viniun'
 ON CONFLICT DO NOTHING;
 
 INSERT INTO mt_whatsapp_templates (tenant_id, nome, categoria, conteudo, variaveis, is_active)
@@ -568,7 +568,7 @@ SELECT
     'Oi {nome}! 📅 Lembrete: amanhã você tem um agendamento às {hora} na {unidade}. Confirma sua presença? Responda SIM ou NÃO.',
     ARRAY['nome', 'hora', 'unidade'],
     true
-FROM mt_tenants t WHERE t.slug = 'yeslaser'
+FROM mt_tenants t WHERE t.slug = 'viniun'
 ON CONFLICT DO NOTHING;
 
 -- =============================================================================

@@ -152,7 +152,7 @@ serve(async (req) => {
             messages: [
               {
                 role: 'system',
-                content: `Você é um analista de vendas de clínica de estética/depilação a laser.
+                content: `Você é um analista de vendas do mercado imobiliário.
 Analise as conversas de WhatsApp abaixo e extraia conhecimento útil.
 
 Retorne um JSON com a seguinte estrutura:

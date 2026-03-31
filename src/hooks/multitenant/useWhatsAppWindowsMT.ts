@@ -138,3 +138,55 @@ export function useWhatsAppWindowsListMT() {
     isLoading: query.isLoading || isTenantLoading,
   };
 }
+
+/**
+ * Aggregated window statistics for the WhatsApp Hybrid Stats dashboard.
+ * Counts open/closed windows, awaiting response, messages in window, etc.
+ */
+export function useWhatsAppWindowsStatsMT() {
+  const { tenant, franchise, accessLevel, isLoading: isTenantLoading } = useTenantContext();
+
+  const query = useQuery({
+    queryKey: [QUERY_KEY, 'stats', tenant?.id, franchise?.id],
+    queryFn: async () => {
+      const now = new Date().toISOString();
+
+      let qOpen = (supabase.from(TABLE) as any)
+        .select('id, window_type, window_expires_at, messages_sent_in_window', { count: 'exact' })
+        .gt('window_expires_at', now);
+
+      let qAll = (supabase.from(TABLE) as any)
+        .select('id, window_type, window_expires_at, messages_sent_in_window, last_customer_message_at', { count: 'exact' });
+
+      if (accessLevel === 'tenant' && tenant) {
+        qOpen = qOpen.eq('tenant_id', tenant.id);
+        qAll = qAll.eq('tenant_id', tenant.id);
+      }
+      if (franchise?.id) {
+        qOpen = qOpen.eq('franchise_id', franchise.id);
+        qAll = qAll.eq('franchise_id', franchise.id);
+      }
+
+      const [openRes, allRes] = await Promise.all([qOpen, qAll]);
+
+      const openWindows = (openRes.data || []) as Array<{ window_type: string; messages_sent_in_window: number | null }>;
+      const allWindows = (allRes.data || []) as Array<{ window_type: string; messages_sent_in_window: number | null }>;
+      const closedCount = allWindows.length - openWindows.length;
+
+      const open24h = openWindows.filter((w) => w.window_type === '24h').length;
+      const open72h = openWindows.filter((w) => w.window_type === '72h').length;
+      const totalMsgsInWindow = allWindows.reduce((sum, w) => sum + (w.messages_sent_in_window || 0), 0);
+      const awaitingResponse = openWindows.filter((w) => (w.messages_sent_in_window || 0) === 0).length;
+
+      return { totalWindows: allWindows.length, openCount: openWindows.length, closedCount, open24h, open72h, totalMsgsInWindow, awaitingResponse };
+    },
+    enabled: !isTenantLoading && (!!tenant || accessLevel === 'platform'),
+    refetchInterval: 60_000,
+  });
+
+  return {
+    stats: query.data,
+    isLoading: query.isLoading || isTenantLoading,
+    refetch: query.refetch,
+  };
+}

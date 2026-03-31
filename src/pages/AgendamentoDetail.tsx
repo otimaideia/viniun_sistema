@@ -92,7 +92,7 @@ export default function AgendamentoDetail() {
 
   const statusConfig = AGENDAMENTO_STATUS_CONFIG[agendamento.status];
   const unidade = franqueados.find((f) => f.id === agendamento.unidade_id);
-  const tipo = ((agendamento as any).tipo || 'avaliacao') as AppointmentType;
+  const tipo = ((agendamento as Record<string, unknown>).tipo as string || 'avaliacao') as AppointmentType;
   const tipoColor = APPOINTMENT_TYPE_COLORS[tipo];
   const TIPO_ICONS: Record<AppointmentType, typeof Calendar> = {
     avaliacao: Stethoscope,
@@ -104,10 +104,10 @@ export default function AgendamentoDetail() {
   const handleWhatsApp = () => {
     if (!agendamento.telefone_lead) return;
     const cleanPhone = cleanPhoneNumber(agendamento.telefone_lead);
-    const codigoPais = (agendamento as any).telefone_lead_codigo_pais || '55';
+    const codigoPais = (agendamento as Record<string, unknown>).telefone_lead_codigo_pais as string || '55';
     const primeiroNome = agendamento.nome_lead?.split(" ")[0] || "";
     const mensagem = encodeURIComponent(
-      `Olá ${primeiroNome}! 😊 Aqui é da YESlaser, confirmando seu agendamento.`
+      `Olá ${primeiroNome}! 😊 Aqui é da Viniun, confirmando seu agendamento.`
     );
     window.open(`https://wa.me/${codigoPais}${cleanPhone}?text=${mensagem}`, "_blank");
   };
@@ -116,7 +116,7 @@ export default function AgendamentoDetail() {
     updateStatus({ id: agendamento.id, status });
   };
 
-  const InfoRow = ({ icon: Icon, label, value, link }: { icon: any; label: string; value?: string | null; link?: string }) => {
+  const InfoRow = ({ icon: Icon, label, value, link }: { icon: React.ComponentType<{ className?: string }>; label: string; value?: string | null; link?: string }) => {
     if (!value) return null;
     return (
       <div className="flex items-start gap-3 py-1.5">
@@ -289,7 +289,7 @@ export default function AgendamentoDetail() {
               <CardContent>
                 <div className="grid gap-1 sm:grid-cols-2">
                   <InfoRow icon={User} label="Nome" value={agendamento.nome_lead} link={agendamento.lead_id ? `/leads/${agendamento.lead_id}` : undefined} />
-                  <InfoRow icon={Phone} label="Telefone" value={agendamento.telefone_lead ? formatPhoneDisplay(agendamento.telefone_lead, (agendamento as any).telefone_lead_codigo_pais || '55') : null} />
+                  <InfoRow icon={Phone} label="Telefone" value={agendamento.telefone_lead ? formatPhoneDisplay(agendamento.telefone_lead, (agendamento as Record<string, unknown>).telefone_lead_codigo_pais as string || '55') : null} />
                   <InfoRow icon={Mail} label="Email" value={agendamento.email_lead} />
                   {!agendamento.nome_lead && !agendamento.email_lead && agendamento.lead_id && (
                     <div className="sm:col-span-2 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800">

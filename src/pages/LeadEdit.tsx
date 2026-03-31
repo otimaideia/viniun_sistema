@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { LeadStatus, STATUS_OPTIONS, STATUS_CONFIG, COMO_CONHECEU_OPTIONS, ORIGEM_OPTIONS } from "@/types/lead-mt";
+import { LeadStatus, STATUS_OPTIONS, STATUS_CONFIG, COMO_CONHECEU_OPTIONS, ORIGEM_OPTIONS, LeadWithExtras, spreadDadosExtras } from "@/types/lead-mt";
 import { toast } from "sonner";
 import {
   ArrowLeft,
@@ -57,6 +57,25 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useUserPermissions } from "@/hooks/multitenant/useUserPermissions";
 
+// Tipo para dados do funil retornados pela query Supabase
+interface FunilData {
+  id: string;
+  valor_estimado: number | null;
+  data_entrada: string | null;
+  data_etapa: string | null;
+  stage_id: string | null;
+  responsavel_id: string | null;
+  funil: { id: string; nome: string } | null;
+  etapa: { id: string; nome: string; cor: string; ordem: number } | null;
+  responsavel: { full_name: string } | null;
+}
+
+// Tipo para campanhas ativas
+interface CampanhaAtiva {
+  id: string;
+  nome: string;
+}
+
 export default function LeadEdit() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -72,7 +91,7 @@ export default function LeadEdit() {
   const { servicos, franqueadoServicos, getServicosByFranqueado } = useServicosAdapter();
 
   // Dados do funil do lead
-  const { data: funilData } = useQuery({
+  const { data: funilData } = useQuery<FunilData | null>({
     queryKey: ['lead-funil-data', id, tenant?.id],
     queryFn: async () => {
       if (!id) return null;
@@ -132,18 +151,8 @@ export default function LeadEdit() {
 
   const isNew = !id;
   // dados_extras é JSONB com campos extras (redes sociais, saúde, preferências, etc.)
-  // Espalhamos dados_extras PRIMEIRO, depois os campos reais sobrescrevem
-  const lead = isNew ? null : (leadData ? {
-    ...(typeof (leadData as any).dados_extras === 'object' && (leadData as any).dados_extras !== null
-      ? (leadData as any).dados_extras
-      : {}),
-    ...leadData,
-    // Aliases de compatibilidade
-    unidade: leadData.franchise?.nome || (leadData as any).unidade || null,
-    servico: leadData.servico_interesse || (leadData as any).servico || null,
-    responsible_id: (leadData as any).atribuido_para || (leadData as any).responsible_user_id || null,
-    franqueado_id: leadData.franchise_id || null,
-  } : null);
+  // Usamos spreadDadosExtras que espalha dados_extras no objeto para acesso direto
+  const lead: LeadWithExtras | null = isNew ? null : (leadData ? spreadDadosExtras(leadData) : null);
 
   // Lista de leads para busca de indicadores (usado no filtro)
   const leads = allLeads || [];
@@ -258,7 +267,7 @@ export default function LeadEdit() {
     const search = indicadorSearch.toLowerCase();
     return leads.filter((l) =>
       l.nome?.toLowerCase().includes(search) ||
-      (l as any).codigo_indicacao?.toLowerCase().includes(search)
+      l.codigo_indicacao?.toLowerCase().includes(search)
     ).slice(0, 5);
   }, [leads, indicadorSearch]);
 
@@ -281,101 +290,101 @@ export default function LeadEdit() {
     if (lead) {
       setFormData({
         nome: lead.nome || "",
-        sobrenome: (lead as any).sobrenome || "",
+        sobrenome: lead.sobrenome || "",
         telefone: lead.telefone || "",
-        telefone_codigo_pais: (lead as any).telefone_codigo_pais || "55",
-        whatsapp: (lead as any).whatsapp || "",
-        whatsapp_codigo_pais: (lead as any).whatsapp_codigo_pais || "55",
+        telefone_codigo_pais: lead.telefone_codigo_pais || "55",
+        whatsapp: lead.whatsapp || "",
+        whatsapp_codigo_pais: lead.whatsapp_codigo_pais || "55",
         email: lead.email || "",
-        telefone_secundario: (lead as any).telefone_secundario || "",
-        telefone_secundario_codigo_pais: (lead as any).telefone_secundario_codigo_pais || "55",
-        cpf: (lead as any).cpf || "",
-        rg: (lead as any).rg || "",
-        cep: (lead as any).cep || "",
-        endereco: (lead as any).endereco || "",
-        numero: (lead as any).numero || "",
-        complemento: (lead as any).complemento || "",
-        bairro: (lead as any).bairro || "",
+        telefone_secundario: lead.telefone_secundario || "",
+        telefone_secundario_codigo_pais: lead.telefone_secundario_codigo_pais || "55",
+        cpf: lead.cpf || "",
+        rg: lead.rg || "",
+        cep: lead.cep || "",
+        endereco: lead.endereco || "",
+        numero: lead.numero || "",
+        complemento: lead.complemento || "",
+        bairro: lead.bairro || "",
         cidade: lead.cidade || "",
-        estado: (lead as any).estado || "",
-        pais: (lead as any).pais || "Brasil",
-        proximidade: (lead as any).proximidade || "",
-        data_nascimento: (lead as any).data_nascimento || "",
-        genero: (lead as any).genero || "",
-        profissao: (lead as any).profissao || "",
-        como_conheceu: (lead as any).como_conheceu || "",
-        estado_civil: (lead as any).estado_civil || "",
-        nacionalidade: (lead as any).nacionalidade || "",
-        foto_url: (lead as any).foto_url || "",
-        instagram: (lead as any).instagram || "",
-        facebook: (lead as any).facebook || "",
-        tiktok: (lead as any).tiktok || "",
-        youtube: (lead as any).youtube || "",
-        linkedin: (lead as any).linkedin || "",
-        twitter: (lead as any).twitter || "",
-        website: (lead as any).website || "",
-        preferencia_contato: (lead as any).preferencia_contato || "",
-        melhor_horario_contato: (lead as any).melhor_horario_contato || "",
-        dia_preferencial: (lead as any).dia_preferencial || "",
-        chave_pix: (lead as any).chave_pix || "",
-        tipo_chave_pix: (lead as any).tipo_chave_pix || "",
-        nota_interna: (lead as any).nota_interna || "",
+        estado: lead.estado || "",
+        pais: lead.pais || "Brasil",
+        proximidade: lead.proximidade || "",
+        data_nascimento: lead.data_nascimento || "",
+        genero: lead.genero || "",
+        profissao: lead.profissao || "",
+        como_conheceu: lead.como_conheceu || "",
+        estado_civil: lead.estado_civil || "",
+        nacionalidade: lead.nacionalidade || "",
+        foto_url: lead.foto_url || "",
+        instagram: lead.instagram || "",
+        facebook: lead.facebook || "",
+        tiktok: lead.tiktok || "",
+        youtube: lead.youtube || "",
+        linkedin: lead.linkedin || "",
+        twitter: lead.twitter || "",
+        website: lead.website || "",
+        preferencia_contato: lead.preferencia_contato || "",
+        melhor_horario_contato: lead.melhor_horario_contato || "",
+        dia_preferencial: lead.dia_preferencial || "",
+        chave_pix: lead.chave_pix || "",
+        tipo_chave_pix: lead.tipo_chave_pix || "",
+        nota_interna: lead.nota_interna || "",
         observacoes: lead.observacoes || "",
-        tipo_pele: (lead as any).tipo_pele || "",
-        alergias: (lead as any).alergias || "",
-        condicoes_medicas: (lead as any).condicoes_medicas || "",
-        medicamentos_uso: (lead as any).medicamentos_uso || "",
-        historico_tratamentos: (lead as any).historico_tratamentos || "",
-        areas_interesse: (lead as any).areas_interesse || "",
-        fotossensibilidade: (lead as any).fotossensibilidade || false,
-        gravidez_lactacao: (lead as any).gravidez_lactacao || false,
-        contato_emergencia_nome: (lead as any).contato_emergencia_nome || "",
-        contato_emergencia_telefone: (lead as any).contato_emergencia_telefone || "",
-        contato_emergencia_telefone_codigo_pais: (lead as any).contato_emergencia_telefone_codigo_pais || "55",
-        contato_emergencia_parentesco: (lead as any).contato_emergencia_parentesco || "",
-        aceita_marketing: (lead as any).aceita_marketing !== false,
-        aceita_pesquisa: (lead as any).aceita_pesquisa !== false,
-        consentimento: (lead as any).consentimento !== false,
-        interesse: (lead as any).interesse || (lead as any).servico_interesse || "",
-        servicos_interesse: (lead as any).servicos_interesse ||
-          ((lead as any).interesse || (lead as any).servico_interesse
-            ? [(lead as any).interesse || (lead as any).servico_interesse].filter(Boolean)
+        tipo_pele: lead.tipo_pele || "",
+        alergias: lead.alergias || "",
+        condicoes_medicas: lead.condicoes_medicas || "",
+        medicamentos_uso: lead.medicamentos_uso || "",
+        historico_tratamentos: lead.historico_tratamentos || "",
+        areas_interesse: lead.areas_interesse || "",
+        fotossensibilidade: lead.fotossensibilidade || false,
+        gravidez_lactacao: lead.gravidez_lactacao || false,
+        contato_emergencia_nome: lead.contato_emergencia_nome || "",
+        contato_emergencia_telefone: lead.contato_emergencia_telefone || "",
+        contato_emergencia_telefone_codigo_pais: lead.contato_emergencia_telefone_codigo_pais || "55",
+        contato_emergencia_parentesco: lead.contato_emergencia_parentesco || "",
+        aceita_marketing: lead.aceita_marketing !== false,
+        aceita_pesquisa: lead.aceita_pesquisa !== false,
+        consentimento: lead.consentimento !== false,
+        interesse: lead.interesse || lead.servico_interesse || "",
+        servicos_interesse: lead.servicos_interesse ||
+          (lead.interesse || lead.servico_interesse
+            ? [lead.interesse || lead.servico_interesse].filter(Boolean)
             : []),
-        como_conheceu_outro: (lead as any).como_conheceu_outro || "",
-        origem: (lead as any).origem || "",
+        como_conheceu_outro: lead.como_conheceu_outro || "",
+        origem: lead.origem || "",
         unidade: lead.unidade || "",
-        franqueado_id: (lead as any).franqueado_id || "",
+        franqueado_id: lead.franqueado_id || "",
         status: lead.status || "novo",
-        franquias_vinculadas: (lead as any).franquias_vinculadas || [],
-        id_giga: (lead as any).id_giga || null,
-        id_api: (lead as any).id_api || "",
-        indicado_por_id: (lead as any).indicado_por_id || "",
-        codigo_indicacao: (lead as any).codigo_indicacao || "",
-        campanha: (lead as any).campanha || "",
-        campanha_id: (lead as any).campanha_id || "",
-        landing_page: (lead as any).landing_page || "",
-        utm_source: (lead as any).utm_source || "",
-        utm_medium: (lead as any).utm_medium || "",
-        utm_campaign: (lead as any).utm_campaign || "",
-        utm_content: (lead as any).utm_content || "",
-        utm_term: (lead as any).utm_term || "",
-        gclid: (lead as any).gclid || "",
-        fbclid: (lead as any).fbclid || "",
-        ttclid: (lead as any).ttclid || "",
-        msclkid: (lead as any).msclkid || "",
-        li_fat_id: (lead as any).li_fat_id || "",
-        embed_url: (lead as any).embed_url || "",
-        referrer_url: (lead as any).referrer_url || "",
+        franquias_vinculadas: lead.franquias_vinculadas || [],
+        id_giga: lead.id_giga || null,
+        id_api: lead.id_api || "",
+        indicado_por_id: lead.indicado_por_id || "",
+        codigo_indicacao: lead.codigo_indicacao || "",
+        campanha: lead.campanha || "",
+        campanha_id: lead.campanha_id || "",
+        landing_page: lead.landing_page || "",
+        utm_source: lead.utm_source || "",
+        utm_medium: lead.utm_medium || "",
+        utm_campaign: lead.utm_campaign || "",
+        utm_content: lead.utm_content || "",
+        utm_term: lead.utm_term || "",
+        gclid: lead.gclid || "",
+        fbclid: lead.fbclid || "",
+        ttclid: lead.ttclid || "",
+        msclkid: lead.msclkid || "",
+        li_fat_id: lead.li_fat_id || "",
+        embed_url: lead.embed_url || "",
+        referrer_url: lead.referrer_url || "",
       });
 
       // Se o lead foi indicado, buscar o indicador
-      if ((lead as any).indicado_por_id) {
-        const indicador = leads.find((l) => l.id === (lead as any).indicado_por_id);
+      if (lead.indicado_por_id) {
+        const indicador = leads.find((l) => l.id === lead.indicado_por_id);
         if (indicador) {
           setSelectedIndicador({
             id: indicador.id,
             nome: indicador.nome,
-            codigo: (indicador as any).codigo_indicacao,
+            codigo: indicador.codigo_indicacao,
           });
         }
       }
@@ -456,11 +465,11 @@ export default function LeadEdit() {
       );
 
       if (isNew) {
-        createLeadMutation.mutate(cleanData as any);
+        createLeadMutation.mutate(cleanData as Record<string, unknown>);
         toast.success("Lead criado com sucesso!");
         navigate("/");
       } else {
-        updateLeadMutation.mutate({ id: lead!.id, ...cleanData } as any);
+        updateLeadMutation.mutate({ id: lead!.id, ...cleanData } as Record<string, unknown> & { id: string });
         toast.success("Lead atualizado com sucesso!");
         navigate(`/leads/${lead!.id}`);
       }
@@ -1211,15 +1220,15 @@ export default function LeadEdit() {
                       <div className="grid gap-3 sm:grid-cols-2">
                         <div>
                           <span className="text-xs text-muted-foreground">Funil</span>
-                          <p className="text-sm font-medium">{(funilData.funil as any)?.nome || 'Sem funil'}</p>
+                          <p className="text-sm font-medium">{funilData.funil?.nome || 'Sem funil'}</p>
                         </div>
                         <div>
                           <span className="text-xs text-muted-foreground">Etapa Atual</span>
                           <div className="flex items-center gap-2 mt-0.5">
-                            {(funilData.etapa as any)?.cor && (
-                              <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: (funilData.etapa as any).cor }} />
+                            {funilData.etapa?.cor && (
+                              <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: funilData.etapa.cor }} />
                             )}
-                            <p className="text-sm font-medium">{(funilData.etapa as any)?.nome || 'Sem etapa'}</p>
+                            <p className="text-sm font-medium">{funilData.etapa?.nome || 'Sem etapa'}</p>
                           </div>
                         </div>
                         {funilData.valor_estimado ? (
@@ -1230,10 +1239,10 @@ export default function LeadEdit() {
                             </p>
                           </div>
                         ) : null}
-                        {(funilData.responsavel as any)?.full_name && (
+                        {funilData.responsavel?.full_name && (
                           <div>
                             <span className="text-xs text-muted-foreground">Responsavel</span>
-                            <p className="text-sm font-medium">{(funilData.responsavel as any).full_name}</p>
+                            <p className="text-sm font-medium">{funilData.responsavel.full_name}</p>
                           </div>
                         )}
                       </div>
@@ -1242,7 +1251,7 @@ export default function LeadEdit() {
                         variant="outline"
                         size="sm"
                         className="w-full"
-                        onClick={() => funilData.funil && navigate(`/funil/${(funilData.funil as any).id}`)}
+                        onClick={() => funilData.funil && navigate(`/funil/${funilData.funil.id}`)}
                       >
                         <TrendingUp className="h-3.5 w-3.5 mr-2" />
                         Ver no Funil
@@ -1251,31 +1260,31 @@ export default function LeadEdit() {
                   )}
 
                   {/* Marketing Info (read-only) */}
-                  {lead && ((lead as any).influenciador_id || (lead as any).influenciador_codigo || (lead as any).parceria_id || (lead as any).landing_page) && (
+                  {lead && (lead.influenciador_id || lead.influenciador_codigo || lead.parceria_id || lead.landing_page) && (
                     <div className="border rounded-lg p-4 bg-purple-50/50 space-y-2">
                       <div className="flex items-center gap-2 mb-2">
                         <Target className="h-4 w-4 text-purple-600" />
                         <h3 className="text-sm font-medium text-purple-900">Origem de Marketing</h3>
                       </div>
                       <div className="grid gap-2 sm:grid-cols-2 text-sm">
-                        {(lead as any).influenciador_codigo && (
+                        {lead.influenciador_codigo && (
                           <div>
                             <span className="text-xs text-muted-foreground">Influenciadora</span>
-                            <p className="font-medium">{(lead as any).influenciador_codigo}</p>
+                            <p className="font-medium">{lead.influenciador_codigo}</p>
                           </div>
                         )}
-                        {(lead as any).parceria_id && (
+                        {lead.parceria_id && (
                           <div>
                             <span className="text-xs text-muted-foreground">Parceria</span>
-                            <p className="font-medium">{(lead as any).parceria_codigo || 'Vinculado'}</p>
+                            <p className="font-medium">{lead.parceria_codigo || 'Vinculado'}</p>
                           </div>
                         )}
-                        {(lead as any).landing_page && (
+                        {lead.landing_page && (
                           <div className="sm:col-span-2">
                             <span className="text-xs text-muted-foreground">Landing Page</span>
                             <p className="font-medium text-xs truncate">
-                              <a href={(lead as any).landing_page} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                {(lead as any).landing_page}
+                              <a href={lead.landing_page} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                {lead.landing_page}
                               </a>
                             </p>
                           </div>
@@ -1438,7 +1447,7 @@ export default function LeadEdit() {
                                   setSelectedIndicador({
                                     id: indicador.id,
                                     nome: indicador.nome,
-                                    codigo: (indicador as any).codigo_indicacao,
+                                    codigo: indicador.codigo_indicacao,
                                   });
                                   setFormData((prev) => ({ ...prev, indicado_por_id: indicador.id }));
                                   setIndicadorSearch("");
@@ -1446,7 +1455,7 @@ export default function LeadEdit() {
                               >
                                 <p className="font-medium text-sm">{indicador.nome}</p>
                                 <p className="text-xs text-muted-foreground">
-                                  {(indicador as any).codigo_indicacao || indicador.telefone}
+                                  {indicador.codigo_indicacao || indicador.telefone}
                                 </p>
                               </button>
                             ))}
@@ -1551,7 +1560,7 @@ export default function LeadEdit() {
                     <h3 className="text-sm font-medium mb-4">Integrações</h3>
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
-                        <Label htmlFor="id_giga">ID Giga (Yeslaser Office)</Label>
+                        <Label htmlFor="id_giga">ID Giga (Viniun Office (deprecated))</Label>
                         <Input
                           id="id_giga"
                           type="number"

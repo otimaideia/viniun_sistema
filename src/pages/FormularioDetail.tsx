@@ -337,7 +337,7 @@ export default function FormularioDetail() {
                 <>
                   <Separator orientation="vertical" className="h-4 hidden sm:block" />
                   <span className="text-sm text-muted-foreground">
-                    Clínica: <span className="font-medium text-foreground">{formulario.franqueado.nome_fantasia}</span>
+                    Unidade: <span className="font-medium text-foreground">{formulario.franqueado.nome_fantasia}</span>
                   </span>
                 </>
               )}

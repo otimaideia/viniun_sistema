@@ -231,7 +231,7 @@ export default function LeadsSemResposta() {
               Leads Sem Resposta
             </h1>
             <p className="text-muted-foreground text-sm">
-              Conversas onde o cliente mandou mensagem e a clínica nunca respondeu
+              Conversas onde o cliente mandou mensagem e a empresa nunca respondeu
             </p>
           </div>
         </div>

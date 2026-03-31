@@ -1,5 +1,5 @@
 // Hook para gerenciar sessões WhatsApp com sincronização WAHA
-// Adaptado para YESlaser
+// Viniun Sistema
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -161,7 +161,6 @@ export function useWhatsAppSessions(franqueadoId?: string) {
             } else {
               // Criar nova sessão - precisa de tenant_id
               if (!tenant?.id) {
-                console.log(`[Sessões] Sessão ${wahaSession.name} não será criada (tenant não identificado)`);
                 continue;
               }
               const { data: newSession, error: insertError } = await supabase
@@ -182,12 +181,10 @@ export function useWhatsAppSessions(franqueadoId?: string) {
               if (insertError) {
                 console.error('Erro ao criar sessão:', insertError);
               } else if (newSession) {
-                console.log(`[Sessões] ✅ Sessão ${wahaSession.name} criada com sucesso!`);
                 syncedSessions.push(newSession as WhatsAppSession);
               }
             }
           } else {
-            console.log(`[Sessões] Sessão ${wahaSession.name} não será criada no banco (franqueadoId inválido ou ausente)`);
           }
           // Se não tem franqueadoId válido, criar sessão virtual para exibição
           if (!isValidUUID) {

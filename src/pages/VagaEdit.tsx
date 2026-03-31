@@ -240,7 +240,7 @@ export default function VagaEdit() {
                 <Select value={form.franchise_id} onValueChange={(v) => set("franchise_id", v)}>
                   <SelectTrigger><SelectValue placeholder="Todas" /></SelectTrigger>
                   <SelectContent>
-                    {(franchises || []).map((f: any) => (
+                    {(franchises || []).map((f: { id: string; nome?: string; nome_fantasia?: string }) => (
                       <SelectItem key={f.id} value={f.id}>
                         {f.nome_fantasia || f.nome}
                       </SelectItem>

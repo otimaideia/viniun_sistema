@@ -6,7 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 // URL do webhook da Edge Function
-const WEBHOOK_URL = 'https://supabase-app.yeslaserpraiagrande.com.br/functions/v1/waha-webhook';
+const WEBHOOK_URL = 'https://supabase.viniun.com.br/functions/v1/waha-webhook';
 
 // Eventos que queremos receber
 const WEBHOOK_EVENTS = [
@@ -26,7 +26,6 @@ async function getWebhookSecret(): Promise<string | null> {
       .single();
 
     if (error || !data?.value) {
-      console.log('[Webhook] Secret não configurado no banco');
       return null;
     }
 
@@ -101,9 +100,6 @@ export function useWebhookConfig(): UseWebhookConfigReturn {
   const configureWebhook = useCallback(async (sessionName: string): Promise<boolean> => {
     setIsConfiguring(true);
     try {
-      console.log(`[Webhook] Configurando webhook para sessão: ${sessionName}`);
-      console.log(`[Webhook] URL: ${WEBHOOK_URL}`);
-      console.log(`[Webhook] Eventos: ${WEBHOOK_EVENTS.join(', ')}`);
 
       const result = await wahaClient.setWebhook(sessionName, WEBHOOK_URL, WEBHOOK_EVENTS);
 

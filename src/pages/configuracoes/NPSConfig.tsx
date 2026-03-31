@@ -118,15 +118,15 @@ export default function NPSConfig() {
     setIsSaving(true);
     try {
       if (editingSurvey) {
-        await updateSurvey(editingSurvey.id, form as any);
+        await updateSurvey(editingSurvey.id, form as Parameters<typeof updateSurvey>[1]);
         toast.success('Pesquisa NPS atualizada');
       } else {
-        await createSurvey(form as any);
+        await createSurvey(form as Parameters<typeof createSurvey>[0]);
         toast.success('Pesquisa NPS criada');
       }
       setIsDialogOpen(false);
-    } catch (err: any) {
-      toast.error(err.message || 'Erro ao salvar');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Erro ao salvar');
     } finally {
       setIsSaving(false);
     }
@@ -136,8 +136,8 @@ export default function NPSConfig() {
     try {
       await deleteSurvey(id);
       toast.success('Pesquisa removida');
-    } catch (err: any) {
-      toast.error(err.message || 'Erro ao remover');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Erro ao remover');
     }
   };
 
@@ -145,8 +145,8 @@ export default function NPSConfig() {
     try {
       await toggleActive(id, active);
       toast.success(active ? 'Pesquisa ativada' : 'Pesquisa desativada');
-    } catch (err: any) {
-      toast.error(err.message || 'Erro ao alterar status');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Erro ao alterar status');
     }
   };
 

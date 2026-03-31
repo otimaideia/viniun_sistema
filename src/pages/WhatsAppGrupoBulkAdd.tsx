@@ -610,7 +610,7 @@ export default function WhatsAppGrupoBulkAdd() {
                 <div>
                   <label className="text-sm font-medium mb-1.5 block">Nome do novo grupo</label>
                   <Input
-                    placeholder="Ex: Grupo VIP - YESlaser 2026"
+                    placeholder="Ex: Grupo VIP - Viniun 2026"
                     value={newGroupName}
                     onChange={(e) => setNewGroupName(e.target.value)}
                     maxLength={100}

@@ -52,7 +52,7 @@ function getPeriodRange(type: PeriodType): { from: string; to: string; label: st
   };
 }
 
-function exportCSV(transactions: any[], periodLabel: string) {
+function exportCSV(transactions: Record<string, unknown>[], periodLabel: string) {
   const header = ['Tipo', 'Descricao', 'Valor', 'Categoria', 'Status', 'Data Competencia', 'Data Vencimento', 'Forma Pagamento'];
   const rows = transactions.map((t) => [
     t.tipo,

@@ -42,7 +42,7 @@ const reports: ReportCard[] = [
   },
   {
     title: "Leads Sem Resposta",
-    description: "Conversas onde o cliente mandou mensagem e a clínica nunca respondeu",
+    description: "Conversas onde o cliente mandou mensagem e a empresa nunca respondeu",
     icon: <AlertTriangle className="h-8 w-8 text-red-600" />,
     href: "/relatorios/leads/sem-resposta",
     available: true,

@@ -379,6 +379,21 @@ export function useTarefasMT(filters?: TaskFilters) {
     },
   });
 
+  const syncAssignees = async (taskId: string, assigneeIds: string[]) => {
+    await (supabase.from('mt_task_assignees') as any).delete().eq('task_id', taskId);
+    if (assigneeIds.length > 0) {
+      await (supabase.from('mt_task_assignees') as any).insert(
+        assigneeIds.map((uid) => ({ tenant_id: tenant?.id, task_id: taskId, user_id: uid, status: 'pendente' })),
+      );
+    }
+    queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+  };
+
+  const fetchTask = async (taskId: string): Promise<MTTask | null> => {
+    const { data } = await (supabase.from('mt_tasks') as any).select('*').eq('id', taskId).single();
+    return data as MTTask | null;
+  };
+
   return {
     tasks: query.data || [],
     isLoading: query.isLoading || isTenantLoading,
@@ -389,6 +404,8 @@ export function useTarefasMT(filters?: TaskFilters) {
     changeStatus,
     finalize,
     remove,
+    syncAssignees,
+    fetchTask,
     refetch: query.refetch,
   };
 }

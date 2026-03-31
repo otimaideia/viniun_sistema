@@ -453,7 +453,7 @@ const PromocaoDetail = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {servicos.map((s: any, idx: number) => (
+                  {servicos.map((s: Record<string, unknown>, idx: number) => (
                     <TableRow key={s.id || idx}>
                       <TableCell className="font-medium">
                         {s.service?.nome || "-"}
@@ -501,7 +501,7 @@ const PromocaoDetail = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {influenciadoras.map((sub: any, idx: number) => (
+                  {influenciadoras.map((sub: Record<string, unknown>, idx: number) => (
                     <TableRow key={sub.id || idx}>
                       <TableCell className="font-medium">
                         {sub.influencer?.nome || "-"}
@@ -557,7 +557,7 @@ const PromocaoDetail = () => {
             </p>
           ) : (
             <div className="space-y-3">
-              {log_usos.slice(0, 20).map((log: any, idx: number) => (
+              {log_usos.slice(0, 20).map((log: Record<string, unknown>, idx: number) => (
                 <div
                   key={log.id || idx}
                   className="flex items-center justify-between py-2 border-b last:border-b-0"

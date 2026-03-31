@@ -595,9 +595,9 @@ export default function CadastroParceiro() {
 
               <div className="border rounded-lg p-4 h-40 overflow-y-auto text-sm text-gray-600 bg-gray-50">
                 <p className="font-semibold text-gray-800 mb-2">Termos e Condições de Parceria</p>
-                <p className="mb-2">Ao se cadastrar como parceiro da {tenant.nome_fantasia || "YESlaser"}, você concorda com:</p>
+                <p className="mb-2">Ao se cadastrar como parceiro da {tenant.nome_fantasia || "Viniun"}, você concorda com:</p>
                 <ul className="list-disc list-inside space-y-1">
-                  <li>A {tenant.nome_fantasia || "YESlaser"} analisará o cadastro e entrará em contato em até 5 dias úteis;</li>
+                  <li>A {tenant.nome_fantasia || "Viniun"} analisará o cadastro e entrará em contato em até 5 dias úteis;</li>
                   <li>A parceria só será ativada após aprovação pela nossa equipe;</li>
                   <li>Seus dados serão utilizados apenas para contato e gestão da parceria;</li>
                   <li>O código de indicação gerado é exclusivo para uso da sua empresa;</li>
@@ -612,7 +612,7 @@ export default function CadastroParceiro() {
                   onCheckedChange={(checked) => updateField("aceite_termos", checked as boolean)}
                 />
                 <Label htmlFor="aceite_termos" className="text-sm leading-relaxed cursor-pointer">
-                  Li e concordo com os termos e condições de parceria da {tenant.nome_fantasia || "YESlaser"}
+                  Li e concordo com os termos e condições de parceria da {tenant.nome_fantasia || "Viniun"}
                 </Label>
               </div>
               {errors.aceite_termos && <p className="text-sm text-red-500">{errors.aceite_termos}</p>}
@@ -656,7 +656,7 @@ export default function CadastroParceiro() {
         </div>
 
         <p className="text-center text-xs text-gray-400 mt-8">
-          Ao se cadastrar, você concorda com a política de privacidade da {tenant.nome_fantasia || "YESlaser"}.
+          Ao se cadastrar, você concorda com a política de privacidade da {tenant.nome_fantasia || "Viniun"}.
         </p>
       </div>
     </PublicPageLayout>

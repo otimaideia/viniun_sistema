@@ -2,7 +2,7 @@ import * as XLSX from 'xlsx';
 import type { ParsedProjection, ProjectionLineCreate } from '@/types/projecao';
 
 /**
- * Parser de Plano de Negócio YESlaser (Excel)
+ * Parser de Plano de Negócio Viniun (Excel)
  * Extrai ~42 linhas de 5 abas: DRE, Despesas, Faturamento, PayBack, Invest. inicial
  */
 export function parseProjectionExcel(file: ArrayBuffer): ParsedProjection {
@@ -185,12 +185,12 @@ function parseFaturamento(wb: XLSX.WorkBook): ProjectionLineCreate[] {
   const data = XLSX.utils.sheet_to_json<any[]>(ws, { header: 1, defval: null });
   const lines: ProjectionLineCreate[] = [];
 
-  // Row 2 = header: A="ENTRADAS", B="LASER", C="Botox...", D="Caixa", E="Faturamento Bruto", G="Qtd pacotes"
-  // Row 3..62 = data: A="1º Mês", B=laser, C=botox, D=caixa, E=fat_bruto, G=qtd_pacotes
+  // Row 2 = header: A="ENTRADAS", B="PRINCIPAL", C="Complementar", D="Caixa", E="Faturamento Bruto", G="Qtd pacotes"
+  // Row 3..62 = data: A="1º Mês", B=principal, C=complementar, D=caixa, E=fat_bruto, G=qtd_pacotes
 
   const colDefs = [
-    { colIdx: 1, codigo: 'receita_laser',    nome: 'Receita Laser',             tipo: 'receita' as const },
-    { colIdx: 2, codigo: 'receita_estetica', nome: 'Receita Botox/Estética',    tipo: 'receita' as const },
+    { colIdx: 1, codigo: 'receita_laser',    nome: 'Receita Principal',         tipo: 'receita' as const },
+    { colIdx: 2, codigo: 'receita_estetica', nome: 'Receita Complementar',      tipo: 'receita' as const },
     { colIdx: 3, codigo: 'fat_caixa',        nome: 'Faturamento Caixa',         tipo: 'subtotal' as const },
     { colIdx: 4, codigo: 'fat_bruto',        nome: 'Faturamento Bruto',         tipo: 'subtotal' as const },
     { colIdx: 6, codigo: 'qtd_pacotes',      nome: 'Qtd Pacotes Vendidos',      tipo: 'indicador' as const },
@@ -227,7 +227,7 @@ function parseFaturamento(wb: XLSX.WorkBook): ProjectionLineCreate[] {
     const rowIdx = m + 2; // Row 3 = month 1
     const row = data[rowIdx];
     if (!row) continue;
-    const val = row[10]; // col 10 = Inadimplência (3% sobre caixa laser)
+    const val = row[10]; // col 10 = Inadimplência (3% sobre caixa principal)
     if (typeof val === 'number') {
       inadValores[String(m)] = Math.round(val * 100) / 100;
     }
@@ -360,9 +360,9 @@ function parseHeader(wb: XLSX.WorkBook): ParsedProjection['header'] {
   if (parcFranquia) {
     parcelamentos.push({ desc: 'Taxa de Franquia', parcelas: 10, valor: parcFranquia });
   }
-  const parcLaser = getNumericCell(invData, 18, 1);
-  if (parcLaser) {
-    parcelamentos.push({ desc: 'Laser', parcelas: 36, valor: parcLaser });
+  const parcEquip = getNumericCell(invData, 18, 1);
+  if (parcEquip) {
+    parcelamentos.push({ desc: 'Equipamentos', parcelas: 36, valor: parcEquip });
   }
 
   return {

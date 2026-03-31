@@ -127,7 +127,7 @@ Deno.serve(async (req: Request) => {
 
   // IMPORTANT: Env vars do container estao ERRADAS. Usar valores hardcoded.
   const supabase = createClient(
-    "https://supabase-app.yeslaserpraiagrande.com.br",
+    "https://supabase.viniun.com.br",
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3MDc4MTc0MCwiZXhwIjo0OTI2NDU1MzQwLCJyb2xlIjoic2VydmljZV9yb2xlIn0.K1j07Xd07FuQHNNXqnwXnWvakPBfUirpKXqB5sZmkTE",
   );
 
@@ -249,7 +249,7 @@ Deno.serve(async (req: Request) => {
         // Self-reinvoke
         try {
           // Self-reinvoke via internal Supabase URL (bypasses Cloudflare timeout)
-          const internalUrl = Deno.env.get("SUPABASE_URL") || "https://supabase-app.yeslaserpraiagrande.com.br";
+          const internalUrl = Deno.env.get("SUPABASE_URL") || "https://supabase.viniun.com.br";
           const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3MDc4MTc0MCwiZXhwIjo0OTI2NDU1MzQwLCJyb2xlIjoiYW5vbiJ9.fPIz99uMBXqwF9vwupAtYO_mGLlrGdeBoHofmjWg1L4";
           fetch(`${internalUrl}/functions/v1/broadcast-processor`, {
             method: "POST",

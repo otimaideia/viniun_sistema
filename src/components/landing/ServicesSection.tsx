@@ -54,19 +54,19 @@ const ServicesSection = () => {
             Todos os Nossos Serviços
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Depilação a laser de alta tecnologia para todas as áreas do corpo,
-            com tratamentos complementares para sua pele perfeita
+            Soluções completas e personalizadas para atender
+            todas as suas necessidades com excelência
           </p>
         </div>
 
-        {/* Depilação Feminina */}
+        {/* Serviços Categoria A */}
         <div className="mb-16">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
               <Heart className="w-6 h-6 text-primary" />
             </div>
             <h3 className="text-2xl md:text-3xl font-bold text-foreground">
-              Depilação a Laser Feminina
+              Serviços Femininos
             </h3>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -78,7 +78,7 @@ const ServicesSection = () => {
                 <div className="aspect-square bg-gradient-to-br from-primary/10 to-secondary/10 relative overflow-hidden">
                   <img
                     src={service.image}
-                    alt={`Depilação a laser ${service.name} em Praia Grande`}
+                    alt={`${service.name} - Viniun Praia Grande`}
                     loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -94,14 +94,14 @@ const ServicesSection = () => {
           </div>
         </div>
 
-        {/* Depilação Masculina */}
+        {/* Serviços Categoria B */}
         <div className="mb-16">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
               <Users className="w-6 h-6 text-secondary" />
             </div>
             <h3 className="text-2xl md:text-3xl font-bold text-foreground">
-              Depilação a Laser Masculina
+              Serviços Masculinos
             </h3>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -113,7 +113,7 @@ const ServicesSection = () => {
                 <div className="aspect-square bg-gradient-to-br from-secondary/10 to-primary/10 relative overflow-hidden">
                   <img
                     src={service.image}
-                    alt={`Depilação a laser ${service.name} em Praia Grande`}
+                    alt={`${service.name} - Viniun Praia Grande`}
                     loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -173,7 +173,7 @@ const ServicesSection = () => {
             <span className="bg-white px-4 py-2 rounded-full shadow-sm">✅ Avaliação personalizada</span>
             <span className="bg-white px-4 py-2 rounded-full shadow-sm">✅ Sessão teste</span>
             <span className="bg-white px-4 py-2 rounded-full shadow-sm">✅ Sessões de manutenção</span>
-            <span className="bg-white px-4 py-2 rounded-full shadow-sm">✅ Protocolos pós-laser</span>
+            <span className="bg-white px-4 py-2 rounded-full shadow-sm">✅ Protocolos de qualidade</span>
             <span className="bg-white px-4 py-2 rounded-full shadow-sm">✅ Acompanhamento WhatsApp</span>
           </div>
         </div>

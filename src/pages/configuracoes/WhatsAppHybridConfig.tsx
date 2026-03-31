@@ -72,7 +72,7 @@ export default function WhatsAppHybridConfig() {
     }
   };
 
-  const updateLocal = (key: keyof HybridConfigUpdate, value: any) => {
+  const updateLocal = (key: keyof HybridConfigUpdate, value: unknown) => {
     setLocalConfig(prev => ({ ...prev, [key]: value }));
     setHasChanges(true);
   };
@@ -86,7 +86,7 @@ export default function WhatsAppHybridConfig() {
     });
   };
 
-  const getValue = <K extends keyof HybridConfigUpdate>(key: K): any => {
+  const getValue = <K extends keyof HybridConfigUpdate>(key: K): HybridConfigUpdate[K] => {
     if (key in localConfig) return localConfig[key];
     return config?.[key as keyof typeof config];
   };

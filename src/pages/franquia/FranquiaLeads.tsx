@@ -53,12 +53,12 @@ const FranquiaLeads = () => {
   // Calcular estatísticas
   const stats = useMemo(() => ({
     total: leads.length,
-    novos: leads.filter((l: any) => l.status === "novo" || !l.status).length,
-    emContato: leads.filter((l: any) => l.status === "em_contato" || l.status === "contato").length,
-    convertidos: leads.filter((l: any) => l.status === "convertido" || l.status === "ganho").length,
+    novos: leads.filter((l) => l.status === "novo" || !l.status).length,
+    emContato: leads.filter((l) => l.status === "em_contato" || l.status === "contato").length,
+    convertidos: leads.filter((l) => l.status === "convertido" || l.status === "ganho").length,
   }), [leads]);
 
-  const filteredLeads = useMemo(() => leads.filter((lead: any) => {
+  const filteredLeads = useMemo(() => leads.filter((lead) => {
     const matchesSearch =
       !search ||
       lead.nome?.toLowerCase().includes(search.toLowerCase()) ||

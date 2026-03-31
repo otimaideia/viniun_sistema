@@ -100,16 +100,16 @@ export default function CartaoPonto() {
   const handleClockIn = async () => {
     try {
       await clockIn();
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     }
   };
 
   const handleClockOut = async () => {
     try {
       await clockOut();
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     }
   };
 
@@ -127,8 +127,8 @@ export default function CartaoPonto() {
         manualDialog.motivo
       );
       setManualDialog({ open: false, date: '', entries: [], deletedIds: [], motivo: '' });
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     }
   };
 
@@ -142,8 +142,8 @@ export default function CartaoPonto() {
         justifyDialog.file || undefined,
       );
       setJustifyDialog({ open: false, date: '', tipo: 'atestado', observacoes: '', file: null, existingUrl: null, existingTipo: null, existingObs: null });
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setIsSavingJustify(false);
     }
@@ -152,8 +152,8 @@ export default function CartaoPonto() {
   const handleRemoveJustification = async (date: string) => {
     try {
       await removeJustification(date, 'Remoção de justificativa pelo administrador');
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     }
   };
 

@@ -201,7 +201,6 @@ export function useMarketingCampanhasAdapter() {
               console.error(`[MT] Erro ao finalizar campanha ${campanha.nome}:`, error);
               autoUpdateRef.current.delete(campanha.id);
             } else {
-              console.log(`[MT] Campanha "${campanha.nome}" finalizada automaticamente (expirada)`);
               queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
             }
           });

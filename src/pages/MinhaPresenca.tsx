@@ -40,6 +40,8 @@ function timestampToTime(ts: string): string {
 }
 
 // Tela de login standalone para prestadores
+// NOTE: Uses direct supabase.auth.signInWithPassword because this component is standalone
+// (outside AuthProvider). See comment on MinhaPresenca component for details.
 function MinhaPresencaLogin({ onLogin }: { onLogin: () => void }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -537,6 +539,9 @@ function MinhaPresencaContent() {
 }
 
 // Pagina principal standalone
+// NOTE: This page manages its own auth flow (standalone totem login) and is rendered
+// OUTSIDE the AuthProvider tree (no ProtectedRoute/DashboardLayout wrapper).
+// Therefore, direct supabase.auth calls are required here — useAuth() cannot be used.
 export default function MinhaPresenca() {
   const [authState, setAuthState] = useState<'loading' | 'logged_in' | 'logged_out'>('loading');
 

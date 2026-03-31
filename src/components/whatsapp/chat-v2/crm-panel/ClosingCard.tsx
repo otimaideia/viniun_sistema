@@ -273,7 +273,7 @@ export function ClosingCard({ leadId, lead, conversationId, phone, contactName, 
     if (payments.length === 1 && payments[0].forma === "") {
       setPayments(prev => [{ ...prev[0], valor: total }]);
     }
-  }, [total]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [total, payments]);
 
   // Load profissionais
   const { data: profissionais = [] } = useQuery({

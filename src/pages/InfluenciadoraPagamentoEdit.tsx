@@ -126,8 +126,8 @@ export default function InfluenciadoraPagamentoEdit() {
       }
 
       navigate(`/influenciadoras/${influenciadoraId}`);
-    } catch (error: any) {
-      toast.error(error.message || "Erro ao salvar pagamento");
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Erro ao salvar pagamento");
     } finally {
       setIsSubmitting(false);
     }

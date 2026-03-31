@@ -43,13 +43,13 @@ const TIPOS_CONTRATO: { value: MTContractType; label: string; description: strin
   { value: "mensal", label: "Mensal", description: "Pagamento fixo mensal" },
   { value: "por_post", label: "Por Post", description: "Valor por conteúdo produzido" },
   { value: "comissao", label: "Comissão", description: "% ou valor fixo por conversão" },
-  { value: "permuta", label: "Permuta", description: "Troca por procedimentos estéticos" },
+  { value: "permuta", label: "Permuta", description: "Troca por serviços" },
   { value: "misto", label: "Misto", description: "Combinação de modalidades" },
 ];
 
 const TEMPLATE_TIPOS = [
   { value: "contrato_normal", label: "Contrato de Parceria (com pagamento)", description: "Para contratos mensal, por post, comissão ou misto" },
-  { value: "contrato_permuta", label: "Contrato de Permuta (sem pagamento)", description: "Para parcerias apenas com procedimentos estéticos" },
+  { value: "contrato_permuta", label: "Contrato de Permuta (sem pagamento)", description: "Para parcerias apenas com serviços" },
   { value: "encerramento", label: "Notificação de Encerramento", description: "Para encerrar uma parceria existente" },
   { value: "distrato", label: "Termo de Distrato", description: "Cancelamento bilateral com quitação mútua" },
 ];
@@ -122,12 +122,12 @@ export default function InfluenciadoraContratoEdit() {
         ...prev,
         template_tipo: 'distrato',
         data_inicio: new Date().toISOString().split('T')[0],
-        status: 'cancelado' as any,
+        status: 'cancelado' as const,
       }));
     }
   }, [searchParams, isEditing]);
 
-  // Auto-selecionar TODOS os procedimentos (depilação + estética) ao criar contrato permuta
+  // Auto-selecionar TODOS os serviços (principais + complementares) ao criar contrato permuta
   useEffect(() => {
     if (!isEditing && formData.tipo === "permuta" && servicosSelecionados.length === 0) {
       setServicosSelecionados([...SERVICOS_DEPILACAO, ...SERVICOS_ESTETICA].map(s => s.id));
@@ -212,8 +212,8 @@ export default function InfluenciadoraContratoEdit() {
       }
 
       navigate(`/influenciadoras/${influenciadoraId}`);
-    } catch (error: any) {
-      toast.error(error.message || "Erro ao salvar contrato");
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Erro ao salvar contrato");
     } finally {
       setIsSubmitting(false);
       setShowAditivoDialog(false);
@@ -372,15 +372,15 @@ export default function InfluenciadoraContratoEdit() {
                   {!isEditing && (
                     <div className="flex items-center gap-2 text-xs text-purple-600 bg-purple-50 px-3 py-1.5 rounded-md">
                       <Sparkles className="h-3 w-3" />
-                      Plano Básico (3 áreas de depilação) pré-selecionado — você pode adicionar ou remover procedimentos
+                      Plano Básico (3 serviços) pré-selecionado — você pode adicionar ou remover serviços
                     </div>
                   )}
 
-                  {/* Depilação a Laser */}
+                  {/* Serviços Principais */}
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                       <Scissors className="h-3.5 w-3.5" />
-                      Depilação a Laser
+                      Serviços Principais
                     </div>
                     <div className="grid grid-cols-1 gap-2 pl-5">
                       {SERVICOS_DEPILACAO.map((s) => (
@@ -395,11 +395,11 @@ export default function InfluenciadoraContratoEdit() {
                     </div>
                   </div>
 
-                  {/* Procedimentos Estéticos */}
+                  {/* Serviços Complementares */}
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                       <Sparkles className="h-3.5 w-3.5" />
-                      Procedimentos Estéticos
+                      Serviços Complementares
                     </div>
                     <div className="grid grid-cols-1 gap-2 pl-5">
                       {SERVICOS_ESTETICA.map((s) => (

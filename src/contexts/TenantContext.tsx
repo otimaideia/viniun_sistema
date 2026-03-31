@@ -425,6 +425,13 @@ export function TenantProvider({ children }: TenantProviderProps) {
     }
   }, [tenant?.id, loadBranding]);
 
+  const refreshFranchises = useCallback(async () => {
+    if (tenant?.id) {
+      const freshFranchises = await loadFranchises(tenant.id);
+      setFranchises(freshFranchises);
+    }
+  }, [tenant?.id, loadFranchises]);
+
   // Effect para carregar dados quando authUser mudar
   useEffect(() => {
     loadInitialData();
@@ -445,6 +452,7 @@ export function TenantProvider({ children }: TenantProviderProps) {
     selectFranchise,
     refreshTenant,
     refreshBranding,
+    refreshFranchises,
   };
 
   return (
@@ -479,7 +487,7 @@ export function useTenant() {
 
 // Hook simplificado para franquia
 export function useFranchise() {
-  const { franchise, franchises, isLoading, error, selectFranchise } = useTenantContext();
+  const { franchise, franchises, isLoading, error, selectFranchise, refreshFranchises } = useTenantContext();
 
   return {
     franchise,
@@ -487,7 +495,7 @@ export function useFranchise() {
     isLoading,
     error,
     selectFranchise,
-    refetch: async () => {}, // TODO: Implementar refresh de franquias
+    refetch: refreshFranchises,
   };
 }
 

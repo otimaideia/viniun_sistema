@@ -3,12 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useQuery } from '@tanstack/react-query';
 import { useTenantContext } from '@/contexts/TenantContext';
 import { useTarefasMT } from '@/hooks/multitenant/useTarefasMT';
 import { useTarefaMT } from '@/hooks/multitenant/useTarefaMT';
 import { useTarefaCategoriesMT } from '@/hooks/multitenant/useTarefaCategoriesMT';
 import { useTarefaNotificationsMT } from '@/hooks/multitenant/useTarefaNotificationsMT';
+import { useUsersMT } from '@/hooks/multitenant/useUsersMT';
 import type { TaskPriority, MTTask } from '@/types/tarefa';
 import { TASK_PRIORITY_LABELS, TASK_PRIORITY_COLORS } from '@/types/tarefa';
 import { Button } from '@/components/ui/button';
@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ArrowLeft, Save, Loader2, Calendar, Clock, Search, Sparkles, Wand2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
 // =============================================================
@@ -65,9 +65,10 @@ export default function TarefaEdit() {
   const navigate = useNavigate();
 
   const { tenant, accessLevel, isLoading: isTenantLoading } = useTenantContext();
+  const { session: authSession } = useAuth();
   const { task, isLoading: isTaskLoading } = useTarefaMT(isEditing ? id : undefined);
   const { categories, isLoading: isCategoriesLoading } = useTarefaCategoriesMT();
-  const { create, update } = useTarefasMT();
+  const { create, update, syncAssignees, fetchTask } = useTarefasMT();
   const { notifyStatusChange } = useTarefaNotificationsMT();
 
   const [searchUser, setSearchUser] = useState('');
@@ -76,26 +77,8 @@ export default function TarefaEdit() {
   const [aiApplied, setAiApplied] = useState(false);
 
   // ---- Fetch tenant users for assignee selection ----
-  const usersQuery = useQuery({
-    queryKey: ['mt-users-for-tasks', tenant?.id],
-    queryFn: async () => {
-      let q = (supabase.from('mt_users') as any)
-        .select('id, nome, email')
-        .eq('is_active', true)
-        .order('nome', { ascending: true });
-
-      if (accessLevel === 'tenant' && tenant) {
-        q = q.eq('tenant_id', tenant.id);
-      }
-
-      const { data, error } = await q;
-      if (error) throw error;
-      return (data || []) as TenantUser[];
-    },
-    enabled: !isTenantLoading && (!!tenant?.id || accessLevel === 'platform'),
-  });
-
-  const users = usersQuery.data ?? [];
+  const { users: mtUsers } = useUsersMT({ is_active: true });
+  const users: TenantUser[] = (mtUsers || []).map(u => ({ id: u.id, nome: u.nome, email: u.email }));
 
   const filteredUsers = useMemo(() => {
     if (!searchUser.trim()) return users;
@@ -124,7 +107,7 @@ export default function TarefaEdit() {
       due_date: '',
       due_time: '',
       category_id: '',
-      estimated_minutes: '' as any,
+      estimated_minutes: '' as unknown as number,
       assignee_ids: [],
     },
   });
@@ -157,7 +140,7 @@ export default function TarefaEdit() {
         due_date: dateStr,
         due_time: timeStr,
         category_id: task!.category_id || '',
-        estimated_minutes: task!.estimated_minutes ?? ('' as any),
+        estimated_minutes: task!.estimated_minutes ?? ('' as unknown as number),
         assignee_ids: task!.assignees?.map((a) => a.user_id) || [],
       });
       setPopulated(true);
@@ -190,26 +173,11 @@ export default function TarefaEdit() {
       const { assignee_ids, ...updatePayload } = payload;
       await update.mutateAsync({ id, ...updatePayload });
 
-      // Sync assignees: remove old, add new
-      await (supabase.from('mt_task_assignees') as any)
-        .delete()
-        .eq('task_id', id);
-
-      if (assignee_ids.length > 0) {
-        const rows = assignee_ids.map((uid) => ({
-          tenant_id: tenant?.id,
-          task_id: id,
-          user_id: uid,
-          status: 'pendente',
-        }));
-        await (supabase.from('mt_task_assignees') as any).insert(rows);
-      }
+      // Sync assignees via hook
+      await syncAssignees(id, assignee_ids);
 
       // Fire-and-forget WhatsApp notification to all assignees
-      const { data: updatedTask } = await (supabase.from('mt_tasks') as any)
-        .select('*')
-        .eq('id', id)
-        .single();
+      const updatedTask = await fetchTask(id);
 
       if (updatedTask && assignee_ids.length > 0) {
         notifyStatusChange(
@@ -248,8 +216,7 @@ export default function TarefaEdit() {
 
     setIsAiLoading(true);
     try {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData?.session?.access_token;
+      const token = authSession?.access_token;
 
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/task-ai-assist`,
@@ -294,7 +261,7 @@ export default function TarefaEdit() {
     } finally {
       setIsAiLoading(false);
     }
-  }, [aiIdea, tenant, categories, setValue]);
+  }, [aiIdea, tenant, categories, setValue, authSession]);
 
   // ---- Quick time helpers ----
   const quickTimes = [

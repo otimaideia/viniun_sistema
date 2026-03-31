@@ -24,7 +24,6 @@ const DEBUG = import.meta.env.DEV;
 
 // Helper para sincronizar config com todos os clientes WAHA
 function syncWahaConfig(apiUrl: string, apiKey: string, webhookUrl?: string) {
-  if (DEBUG) console.log('[useWahaConfigAdapter] Sincronizando config com wahaApi e wahaClient...');
   wahaApi.setConfig(apiUrl, apiKey);
   // Definir config diretamente no wahaClient (evita re-query ao banco que pode falhar por RLS)
   wahaClient.setConfig(apiUrl, apiKey, webhookUrl || undefined);
@@ -78,14 +77,12 @@ export function useWahaConfigAdapter(franchiseIdOverride?: string) {
     queryKey: [QUERY_KEY, tenant?.id, targetFranchiseId],
     queryFn: async (): Promise<WahaConfigWithLevel | null> => {
       if (!tenant && accessLevel !== 'platform') {
-        if (DEBUG) console.log('[useWahaConfigAdapter] Sem tenant e não é platform admin');
         return null;
       }
 
       try {
         // PRIORIDADE 1: Buscar config da FRANQUIA específica (se houver)
         if (targetFranchiseId) {
-          if (DEBUG) console.log('[useWahaConfigAdapter] Buscando config da franquia:', targetFranchiseId);
           const { data: franchiseConfig, error: franchiseError } = await supabase
             .from('mt_waha_config')
             .select('*, franchise:mt_franchises(nome)')
@@ -93,7 +90,6 @@ export function useWahaConfigAdapter(franchiseIdOverride?: string) {
             .maybeSingle();
 
           if (!franchiseError && franchiseConfig?.api_url && franchiseConfig?.api_key) {
-            if (DEBUG) console.log('[useWahaConfigAdapter] ✓ Config encontrada para franquia');
             syncWahaConfig(franchiseConfig.api_url, franchiseConfig.api_key, franchiseConfig.webhook_url);
 
             return {
@@ -114,7 +110,6 @@ export function useWahaConfigAdapter(franchiseIdOverride?: string) {
         }
 
         // PRIORIDADE 2: Buscar config do TENANT (global)
-        if (DEBUG) console.log('[useWahaConfigAdapter] Buscando config do tenant...');
         let wahaConfigQuery = supabase
           .from('mt_waha_config')
           .select('*')
@@ -127,7 +122,6 @@ export function useWahaConfigAdapter(franchiseIdOverride?: string) {
         const { data: wahaConfig, error: wahaConfigError } = await wahaConfigQuery.maybeSingle();
 
         if (!wahaConfigError && wahaConfig?.api_url && wahaConfig?.api_key) {
-          if (DEBUG) console.log('[useWahaConfigAdapter] ✓ Config encontrada para tenant (global)');
           syncWahaConfig(wahaConfig.api_url, wahaConfig.api_key, wahaConfig.webhook_url);
 
           return {
@@ -148,11 +142,9 @@ export function useWahaConfigAdapter(franchiseIdOverride?: string) {
         if (wahaConfigError) {
           console.warn('[useWahaConfigAdapter] Erro ao buscar mt_waha_config:', wahaConfigError.message);
         } else {
-          if (DEBUG) console.log('[useWahaConfigAdapter] mt_waha_config vazio ou incompleto');
         }
 
         // PRIORIDADE 2: Fallback para mt_whatsapp_sessions
-        if (DEBUG) console.log('[useWahaConfigAdapter] Tentando fallback para mt_whatsapp_sessions...');
         let sessionQuery = supabase
           .from('mt_whatsapp_sessions')
           .select('waha_url, waha_api_key')
@@ -167,7 +159,6 @@ export function useWahaConfigAdapter(franchiseIdOverride?: string) {
         const { data: session } = await sessionQuery.maybeSingle();
 
         if (session?.waha_url && session?.waha_api_key) {
-          if (DEBUG) console.log('[useWahaConfigAdapter] ✓ Config encontrada em mt_whatsapp_sessions');
           syncWahaConfig(session.waha_url, session.waha_api_key);
 
           return {
@@ -186,7 +177,6 @@ export function useWahaConfigAdapter(franchiseIdOverride?: string) {
         }
 
         // PRIORIDADE 3: Fallback para mt_tenant_integrations (estrutura antiga)
-        if (DEBUG) console.log('[useWahaConfigAdapter] Tentando fallback para mt_tenant_integrations...');
         const { data: integrationType } = await supabase
           .from('mt_integration_types')
           .select('id')
@@ -208,12 +198,11 @@ export function useWahaConfigAdapter(franchiseIdOverride?: string) {
           if (integration) {
             // Extrair do campo credentials (jsonb)
             const credentials = integration.credentials as { api_key?: string; waha_url?: string } | null;
-            const apiUrl = credentials?.waha_url || 'https://waha.yeslaserpraiagrande.com.br';
+            const apiUrl = credentials?.waha_url || 'https://waha.otimaideia.com.br';
             const apiKey = credentials?.api_key || '';
 
             // Verificar se não é placeholder
             if (apiKey && apiKey !== 'encrypted_key' && apiKey.length > 10) {
-              if (DEBUG) console.log('[useWahaConfigAdapter] ✓ Config encontrada em mt_tenant_integrations');
               syncWahaConfig(apiUrl, apiKey);
 
               return {
@@ -262,8 +251,6 @@ export function useWahaConfigAdapter(franchiseIdOverride?: string) {
       const targetFranchiseIdForSave = input.franchise_id !== undefined ? input.franchise_id : targetFranchiseId;
       const isForFranchise = !!targetFranchiseIdForSave;
 
-      if (DEBUG) console.log(`[useWahaConfigAdapter] Salvando config para ${isForFranchise ? 'franquia: ' + targetFranchiseIdForSave : 'tenant (global)'}...`);
-
       // Verificar se já existe config
       let existingQuery = supabase
         .from('mt_waha_config')
@@ -302,8 +289,6 @@ export function useWahaConfigAdapter(franchiseIdOverride?: string) {
 
         if (error) throw error;
 
-        if (DEBUG) console.log('[useWahaConfigAdapter] ✓ Config atualizada');
-
         return {
           id: data.id,
           api_url: data.api_url,
@@ -331,8 +316,6 @@ export function useWahaConfigAdapter(franchiseIdOverride?: string) {
           .single();
 
         if (error) throw error;
-
-        if (DEBUG) console.log('[useWahaConfigAdapter] ✓ Config criada');
 
         return {
           id: data.id,
@@ -383,7 +366,6 @@ export function useWahaConfigAdapter(franchiseIdOverride?: string) {
   // ==========================================================================
   useEffect(() => {
     if (config?.api_url && config?.api_key) {
-      if (DEBUG) console.log('[useWahaConfigAdapter] Sincronizando config carregada com wahaClient...');
       syncWahaConfig(config.api_url, config.api_key, (config as any).webhook_url);
     }
   }, [config?.api_url, config?.api_key]);

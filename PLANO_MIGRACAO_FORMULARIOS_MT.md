@@ -9,13 +9,13 @@
 
 ## Resumo Executivo
 
-Migração do módulo Formulários das tabelas legacy (`yeslaser_formularios`) para as tabelas multi-tenant (`mt_forms`), implementando isolamento por tenant e franchise via adapters e feature flags.
+Migração do módulo Formulários das tabelas legacy (`viniun_formularios`) para as tabelas multi-tenant (`mt_forms`), implementando isolamento por tenant e franchise via adapters e feature flags.
 
 ### Status Atual
 
 | Aspecto | Legacy | MT | Status |
 |---------|--------|-----|--------|
-| **Tabelas** | 2 tabelas `yeslaser_formularios*` | 3 tabelas `mt_forms*` | ✅ Criadas |
+| **Tabelas** | 2 tabelas `viniun_formularios*` | 3 tabelas `mt_forms*` | ✅ Criadas |
 | **Dados** | 7 formulários | 16 formulários (migrados) | ✅ Migrados |
 | **Hooks MT** | - | 3 hooks criados | ✅ Criados |
 | **Adapters** | - | 3 adapters criados | ✅ Criados |
@@ -288,7 +288,7 @@ const {
 
 ### 1. Compatibilidade com FormularioPublico
 
-O componente `FormularioPublico.tsx` que renderiza formulários públicos continua usando a tabela legacy `yeslaser_formularios` por enquanto. Quando ativar o modo MT, será necessário atualizar também a lógica de renderização pública.
+O componente `FormularioPublico.tsx` que renderiza formulários públicos continua usando a tabela legacy `viniun_formularios` por enquanto. Quando ativar o modo MT, será necessário atualizar também a lógica de renderização pública.
 
 ### 2. Templates de Formulário
 
@@ -296,7 +296,7 @@ Os templates (`useFormularioTemplates`) ainda usam tabelas legacy. A migração 
 
 ### 3. Campos Legacy
 
-O hook `useFormularioCampos` ainda é usado em `FormularioEdit.tsx`. Ele funciona com a tabela legacy `yeslaser_formulario_campos`. No modo MT, o adapter `useFormFieldsAdapter` assume.
+O hook `useFormularioCampos` ainda é usado em `FormularioEdit.tsx`. Ele funciona com a tabela legacy `viniun_formulario_campos`. No modo MT, o adapter `useFormFieldsAdapter` assume.
 
 ---
 

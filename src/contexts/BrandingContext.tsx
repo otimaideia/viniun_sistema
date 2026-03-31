@@ -224,7 +224,6 @@ function applyShadcnVariables(branding: Branding | null) {
     root.style.setProperty('--radius', branding.border_radius);
   }
 
-  console.log('[BrandingContext] CSS variables aplicadas para tenant:', branding.cor_primaria);
 }
 
 // Função para remover CSS variables customizadas

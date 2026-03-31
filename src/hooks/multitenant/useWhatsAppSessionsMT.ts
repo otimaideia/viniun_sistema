@@ -140,7 +140,6 @@ export function useWhatsAppSessionsMT(filters?: SessionFilters) {
               can_manage: true,
               can_delete_messages: false,
             });
-          console.log('[WhatsApp] Permissão auto-criada para responsável:', variables.responsible_user_id);
         } catch (err) {
           console.warn('[WhatsApp] Erro ao auto-criar permissão:', err);
         }
@@ -152,7 +151,6 @@ export function useWhatsAppSessionsMT(filters?: SessionFilters) {
         try {
           await supabase.rpc('seed_default_whatsapp_labels', { p_tenant_id: sessionTenantId });
           queryClient.invalidateQueries({ queryKey: ['mt-whatsapp-labels'] });
-          console.log('[WhatsApp] Labels padrão verificadas/criadas para tenant:', sessionTenantId);
         } catch (err) {
           console.warn('[WhatsApp] Erro ao seed labels padrão:', err);
         }

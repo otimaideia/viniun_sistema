@@ -51,7 +51,6 @@ export function useSendMessage() {
 
       // IMPORTANTE: NÃO salvamos a mensagem aqui
       // O webhook do WAHA vai salvar automaticamente (evita duplicatas)
-      console.log('✅ Mensagem enviada via WAHA - webhook vai salvar no banco');
 
       // Invalidar queries para atualizar UI
       queryClient.invalidateQueries({ queryKey: ['whatsapp-messages'] });
@@ -93,7 +92,6 @@ export function useSendMessage() {
 
       // IMPORTANTE: NÃO salvamos a imagem aqui
       // O webhook do WAHA vai salvar automaticamente (evita duplicatas)
-      console.log('✅ Imagem enviada via WAHA - webhook vai salvar no banco');
 
       queryClient.invalidateQueries({ queryKey: ['whatsapp-messages'] });
       queryClient.invalidateQueries({ queryKey: ['whatsapp-conversations'] });
@@ -129,7 +127,6 @@ export function useSendMessage() {
 
       // IMPORTANTE: NÃO salvamos o documento aqui
       // O webhook do WAHA vai salvar automaticamente (evita duplicatas)
-      console.log('✅ Documento enviado via WAHA - webhook vai salvar no banco');
 
       queryClient.invalidateQueries({ queryKey: ['whatsapp-messages'] });
       queryClient.invalidateQueries({ queryKey: ['whatsapp-conversations'] });
@@ -167,8 +164,6 @@ export function useSendMessage() {
         throw new Error(result.error || 'Erro ao enviar áudio');
       }
 
-      console.log('✅ Áudio enviado via WAHA - webhook vai salvar no banco');
-
       queryClient.invalidateQueries({ queryKey: ['whatsapp-messages'] });
       queryClient.invalidateQueries({ queryKey: ['whatsapp-conversations'] });
 
@@ -205,8 +200,6 @@ export function useSendMessage() {
       if (!result.success) {
         throw new Error(result.error || 'Erro ao enviar vídeo');
       }
-
-      console.log('✅ Vídeo enviado via WAHA - webhook vai salvar no banco');
 
       queryClient.invalidateQueries({ queryKey: ['whatsapp-messages'] });
       queryClient.invalidateQueries({ queryKey: ['whatsapp-conversations'] });

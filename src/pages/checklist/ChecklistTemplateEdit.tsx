@@ -198,9 +198,9 @@ export default function ChecklistTemplateEdit() {
     setNewItems([...newItems, { ...emptyItem }]);
   };
 
-  const updateNewItem = (index: number, field: keyof NewItemForm, value: any) => {
+  const updateNewItem = (index: number, field: keyof NewItemForm, value: unknown) => {
     const updated = [...newItems];
-    (updated[index] as any)[field] = value;
+    (updated[index] as Record<string, unknown>)[field] = value;
     setNewItems(updated);
   };
 

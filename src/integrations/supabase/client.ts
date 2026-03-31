@@ -21,8 +21,6 @@ export async function getUnidadeData(unidade: string): Promise<{ cidade: string 
       .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase();
     
-    console.log('Buscando dados para unidade:', unidade, '| Normalizado:', normalizedName);
-    
     // Primeiro tenta busca exata
     let { data, error } = await supabase
       .from('mt_franchises')
@@ -30,8 +28,6 @@ export async function getUnidadeData(unidade: string): Promise<{ cidade: string 
       .eq('nome_franquia', unidade)
       .limit(1)
       .maybeSingle();
-
-    console.log('Resultado busca exata:', { data, error });
 
     // Se não encontrou, tenta busca case-insensitive
     if (!data && !error) {
@@ -44,7 +40,6 @@ export async function getUnidadeData(unidade: string): Promise<{ cidade: string 
       
       data = result2.data;
       error = result2.error;
-      console.log('Resultado busca ilike:', { data, error });
     }
 
     if (error) {
@@ -58,7 +53,6 @@ export async function getUnidadeData(unidade: string): Promise<{ cidade: string 
       id_api: data?.id_api ? Number(data.id_api) : null
     };
     
-    console.log('Dados da unidade retornados - Cidade:', result.cidade, '| Estado:', result.estado, '| id_api:', result.id_api);
     return result;
   } catch (error) {
     console.error('Erro ao consultar Supabase:', error);

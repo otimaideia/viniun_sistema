@@ -83,7 +83,7 @@ export default function PatrimonioCategorias() {
     if (editingId) {
       await updateCategory.mutateAsync({ id: editingId, ...form });
     } else {
-      await createCategory.mutateAsync(form as any);
+      await createCategory.mutateAsync(form as Record<string, unknown>);
     }
     setShowDialog(false);
   };
@@ -179,7 +179,7 @@ export default function PatrimonioCategorias() {
               <div className="space-y-2">
                 <Label>Código *</Label>
                 <Input
-                  placeholder="LASER"
+                  placeholder="EQUIP"
                   value={form.codigo}
                   onChange={(e) => setForm(f => ({ ...f, codigo: e.target.value }))}
                 />
@@ -187,7 +187,7 @@ export default function PatrimonioCategorias() {
               <div className="space-y-2">
                 <Label>Nome *</Label>
                 <Input
-                  placeholder="Equipamentos Laser"
+                  placeholder="Equipamentos Gerais"
                   value={form.nome}
                   onChange={(e) => setForm(f => ({ ...f, nome: e.target.value }))}
                 />

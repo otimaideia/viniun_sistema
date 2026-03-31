@@ -1,7 +1,7 @@
 // Hook híbrido: busca mensagens direto do WAHA em tempo real
 // com fallback para banco de dados se WAHA estiver offline
 // + sincronização em background
-// Adaptado do PopDents para YESlaser
+// Viniun Sistema
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useQuery, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
@@ -90,8 +90,6 @@ export function useMessagesHybrid(options: UseMessagesHybridOptions) {
         throw new Error('SessionName e ChatId são obrigatórios');
       }
 
-      console.log(`[Hybrid] Buscando mensagens do WAHA: ${sessionName} / ${chatId}`);
-
       const result = await wahaClient.getChatMessages(sessionName, chatId, PAGE_SIZE, {
         downloadMedia: true,
         sortOrder: 'desc',
@@ -108,8 +106,6 @@ export function useMessagesHybrid(options: UseMessagesHybridOptions) {
       // Converter formato WAHA → formato interno
       const rawMessages = result.data as WAHAMessageRaw[];
       const messages = rawMessages.map((msg) => mapWahaToInternal(msg, chatId));
-
-      console.log(`[Hybrid] ${messages.length} mensagens carregadas do WAHA`);
 
       // Inverter ordem: WAHA retorna desc (recentes primeiro),
       // mas WhatsApp mostra antigas em cima, novas em baixo
@@ -129,8 +125,6 @@ export function useMessagesHybrid(options: UseMessagesHybridOptions) {
     queryFn: async ({ pageParam = 0 }) => {
       if (!conversationId) return { data: [], nextPage: null };
 
-      console.log(`[Hybrid] Fallback: buscando do banco de dados (página ${pageParam})`);
-
       const from = pageParam * PAGE_SIZE;
       const to = from + PAGE_SIZE - 1;
 
@@ -145,8 +139,6 @@ export function useMessagesHybrid(options: UseMessagesHybridOptions) {
         console.error('[Hybrid] Erro no fallback do banco:', error);
         throw error;
       }
-
-      console.log(`[Hybrid] ${data.length} mensagens do banco de dados`);
 
       return {
         data: (data as WhatsAppMessage[]).reverse(),
@@ -167,7 +159,6 @@ export function useMessagesHybrid(options: UseMessagesHybridOptions) {
     }
 
     setIsSyncing(true);
-    console.log('[Hybrid] Sincronizando WAHA → Banco de dados...');
 
     try {
       // Buscar mensagens do WAHA
@@ -182,7 +173,6 @@ export function useMessagesHybrid(options: UseMessagesHybridOptions) {
       }
 
       const wahaMessages = result.data as WAHAMessageRaw[];
-      console.log(`[Hybrid] ${wahaMessages.length} mensagens para sincronizar`);
 
       // Buscar session_id e tenant_id do banco
       const { data: conversation } = await supabase
@@ -249,8 +239,6 @@ export function useMessagesHybrid(options: UseMessagesHybridOptions) {
           syncedCount++;
         }
       }
-
-      console.log(`[Hybrid] ${syncedCount} mensagens sincronizadas com sucesso`);
 
       // Invalidar queries do banco para atualizar UI se estiver em fallback
       if (!isWahaOnline) {

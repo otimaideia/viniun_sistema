@@ -90,7 +90,7 @@ const Influenciadoras = () => {
   const { franqueados } = useFranqueadosAdapter();
 
   const handleCopyRegistrationLink = () => {
-    const slug = tenant?.slug || "yeslaser";
+    const slug = tenant?.slug || "viniun";
     const path = "/influenciadores";
     // Em produção gera URL limpa (sem ?tenant=); em dev usa ?tenant=slug
     const link = getTenantUrl(slug, path).startsWith("http")

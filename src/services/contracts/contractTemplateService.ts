@@ -119,11 +119,8 @@ export class ContractTemplateService {
    */
   async generateDOCX(templateType: TemplateType, data: ContractData): Promise<ArrayBuffer> {
     try {
-      console.log('[PDF] Iniciando geração do PDF...');
       const formattedData = this.formatTemplateData(data);
-      console.log('[PDF] Dados formatados');
       const pdfContent = this.buildPDFContent(templateType, formattedData);
-      console.log('[PDF] Conteúdo PDF construído');
 
       const docDefinition: TDocumentDefinitions = {
         pageSize: 'A4',
@@ -133,7 +130,7 @@ export class ContractTemplateService {
           author: data.tenant_nome_fantasia,
           subject: `Contrato de Parceria - ${data.influencer_nome}`,
           keywords: 'contrato, influenciadora, parceria',
-          creator: 'YESlaser System',
+          creator: 'Viniun System',
           producer: 'pdfMake',
         },
         content: pdfContent,
@@ -176,12 +173,9 @@ export class ContractTemplateService {
       };
 
       // Gerar PDF e converter para ArrayBuffer
-      console.log('[PDF] Criando Promise para geração...');
       return new Promise((resolve, reject) => {
         try {
-          console.log('[PDF] Criando documento PDF com pdfMake...');
           const pdfDocGenerator = pdfMake.createPdf(docDefinition);
-          console.log('[PDF] Documento criado, chamando getBlob...');
 
           // Timeout de 30 segundos
           const timeout = setTimeout(() => {
@@ -192,11 +186,6 @@ export class ContractTemplateService {
           // getBlob funciona no browser (getBuffer é apenas para Node.js)
           pdfDocGenerator.getBlob((blob) => {
             clearTimeout(timeout);
-            console.log('[PDF] Blob recebido!', {
-              type: blob?.type,
-              size: blob?.size,
-              blobExists: !!blob
-            });
 
             if (!blob) {
               console.error('[PDF] Blob é null ou undefined');
@@ -204,15 +193,10 @@ export class ContractTemplateService {
               return;
             }
 
-            console.log('[PDF] Convertendo blob para ArrayBuffer...');
             // Converter Blob para ArrayBuffer
             const reader = new FileReader();
             reader.onloadend = () => {
-              console.log('[PDF] Leitura do blob concluída');
               if (reader.result) {
-                console.log('[PDF] ArrayBuffer gerado com sucesso!', {
-                  byteLength: (reader.result as ArrayBuffer).byteLength
-                });
                 resolve(reader.result as ArrayBuffer);
               } else {
                 console.error('[PDF] reader.result é null');
@@ -223,7 +207,6 @@ export class ContractTemplateService {
               console.error('[PDF] Erro ao converter blob para ArrayBuffer:', error);
               reject(new Error('Erro ao converter blob para ArrayBuffer'));
             };
-            console.log('[PDF] Iniciando readAsArrayBuffer...');
             reader.readAsArrayBuffer(blob);
           }, (error: any) => {
             // Error callback do getBlob (caso pdfMake retorne erro)
@@ -481,7 +464,7 @@ export class ContractTemplateService {
       mensal: 'Mensal - Pagamento Fixo Mensal',
       por_post: 'Por Post - Valor por Conteúdo Produzido',
       comissao: 'Comissão - Percentual ou Valor Fixo por Conversão',
-      permuta: 'Permuta - Troca por Procedimentos',
+      permuta: 'Permuta - Troca por Serviços',
       misto: 'Misto - Combinação de Modalidades',
     };
     return labels[type] || type;

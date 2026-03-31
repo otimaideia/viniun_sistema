@@ -96,8 +96,8 @@ export default function TabelaPrecoEdit() {
         vigencia_fim: vigenciaFim || null,
       });
       navigate('/vendas/tabela-precos');
-    } catch (err: any) {
-      toast.error(err.message || 'Erro ao salvar precos');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Erro ao salvar precos');
     } finally {
       setIsSaving(false);
     }

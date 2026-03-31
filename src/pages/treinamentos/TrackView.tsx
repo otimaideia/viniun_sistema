@@ -41,8 +41,8 @@ export default function TrackView() {
     if (!track?.modules) return null;
     for (const mod of track.modules) {
       const lessons = (mod.lessons || [])
-        .filter((l: any) => l.is_published)
-        .sort((a: any, b: any) => a.ordem - b.ordem);
+        .filter((l: { is_published?: boolean; id?: string; ordem?: number }) => l.is_published)
+        .sort((a: { ordem: number }, b: { ordem: number }) => a.ordem - b.ordem);
       for (const lesson of lessons) {
         const status = progressMap.get(lesson.id);
         if (status !== 'concluido') return lesson;
@@ -87,7 +87,7 @@ export default function TrackView() {
   }
 
   const nivelConfig = TRACK_NIVEL_CONFIG[track.nivel];
-  const modules = (track.modules || []).sort((a: any, b: any) => a.ordem - b.ordem);
+  const modules = (track.modules || []).sort((a: { ordem: number }, b: { ordem: number }) => a.ordem - b.ordem);
   const progressPct = enrollment?.progresso_pct ?? 0;
   const isEnrolled = !!enrollment;
 
@@ -179,13 +179,13 @@ export default function TrackView() {
 
       {/* Modules & Lessons */}
       <div className="space-y-4">
-        {modules.map((mod: any, mIndex: number) => {
+        {modules.map((mod: Record<string, unknown>, mIndex: number) => {
           const lessons = (mod.lessons || [])
-            .filter((l: any) => l.is_published)
-            .sort((a: any, b: any) => a.ordem - b.ordem);
+            .filter((l: { is_published?: boolean; id?: string; ordem?: number }) => l.is_published)
+            .sort((a: { ordem: number }, b: { ordem: number }) => a.ordem - b.ordem);
 
           const completedLessons = lessons.filter(
-            (l: any) => progressMap.get(l.id) === 'concluido'
+            (l: { id: string }) => progressMap.get(l.id) === 'concluido'
           ).length;
           const moduleCompleted = lessons.length > 0 && completedLessons === lessons.length;
 
@@ -215,7 +215,7 @@ export default function TrackView() {
               </CardHeader>
               <CardContent className="pt-0">
                 <div className="space-y-1">
-                  {lessons.map((lesson: any, lIndex: number) => {
+                  {lessons.map((lesson: Record<string, unknown>, lIndex: number) => {
                     const status = progressMap.get(lesson.id) || 'nao_iniciado';
                     const isCompleted = status === 'concluido';
                     const isLocked =

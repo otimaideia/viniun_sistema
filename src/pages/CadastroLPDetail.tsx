@@ -63,10 +63,10 @@ export default function CadastroLPDetail() {
 
   const handleWhatsApp = () => {
     const cleanPhone = cleanPhoneNumber(cadastro.telefone);
-    const codigoPais = (cadastro as any).telefone_codigo_pais || '55';
+    const codigoPais = (cadastro as Record<string, unknown>).telefone_codigo_pais as string || '55';
     const primeiroNome = cadastro.nome.split(" ")[0];
     const mensagem = encodeURIComponent(
-      `Olá ${primeiroNome}! 😊 Tudo bem? Aqui é da YESlaser!`
+      `Olá ${primeiroNome}! 😊 Tudo bem? Aqui é da Viniun!`
     );
     window.open(`https://wa.me/${codigoPais}${cleanPhone}?text=${mensagem}`, "_blank");
   };
@@ -140,7 +140,7 @@ export default function CadastroLPDetail() {
               <CardContent className="space-y-3">
                 <div className="flex items-center gap-3">
                   <Phone className="h-4 w-4 text-muted-foreground" />
-                  <span>{formatPhoneDisplay(cadastro.telefone, (cadastro as any).telefone_codigo_pais || '55')}</span>
+                  <span>{formatPhoneDisplay(cadastro.telefone, (cadastro as Record<string, unknown>).telefone_codigo_pais as string || '55')}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="h-4 w-4 text-muted-foreground" />
@@ -214,7 +214,7 @@ export default function CadastroLPDetail() {
                           <div className="text-sm text-muted-foreground space-y-1">
                             <div className="flex items-center gap-2">
                               <Phone className="h-3 w-3" />
-                              <span>{formatPhoneDisplay(indicacao.telefone, (indicacao as any).telefone_codigo_pais || '55')}</span>
+                              <span>{formatPhoneDisplay(indicacao.telefone, (indicacao as Record<string, unknown>).telefone_codigo_pais as string || '55')}</span>
                             </div>
                             {indicacao.email && (
                               <div className="flex items-center gap-2">

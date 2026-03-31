@@ -23,6 +23,7 @@ import { useWhatsAppConversationsMT } from "@/hooks/multitenant/useWhatsAppConve
 import { useWhatsAppMessagesMT } from "@/hooks/multitenant/useWhatsAppMessagesMT";
 import type { LeadFieldData } from "@/components/whatsapp/chat/DynamicFieldMenu";
 import type { WhatsAppSessao } from "@/types/whatsapp-sessao";
+import type { MTWhatsAppSession } from "@/types/whatsapp-mt";
 import type { WhatsAppConversa } from "@/types/whatsapp-chat";
 import type { WhatsAppSession } from "@/types/whatsapp";
 import { SessionSelectorPage } from "@/components/whatsapp/SessionSelectorPage";
@@ -52,7 +53,7 @@ export default function WhatsAppChat() {
   const { tenant, franchise, user: mtUser } = useTenantContext();
   const { sessions: sessoes, isLoading: isLoadingSessoes } = useWhatsAppSessionsAdapter();
   const getSessao = (id: string) => sessoes.find(s => s.id === id) || null;
-  const [sessao, setSessao] = useState<WhatsAppSessao | null>(null);
+  const [sessao, setSessao] = useState<MTWhatsAppSession | null>(null);
   const [isLoadingSessao, setIsLoadingSessao] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -158,16 +159,16 @@ export default function WhatsAppChat() {
               const phone = meId.replace('@c.us', '');
               const updates: Record<string, unknown> = {};
 
-              if (phone && phone !== (data as any).telefone) {
+              if (phone && phone !== data.telefone) {
                 updates.telefone = phone;
               }
-              if (pushName && pushName !== (data as any).display_name) {
+              if (pushName && pushName !== data.display_name) {
                 updates.display_name = pushName;
               }
 
               try {
                 const contactInfo = await wahaApi.getContactInfo(data.session_name, meId, phone);
-                if (contactInfo.picture && contactInfo.picture.length > 10 && contactInfo.picture !== (data as any).profile_picture_url) {
+                if (contactInfo.picture && contactInfo.picture.length > 10 && contactInfo.picture !== data.profile_picture_url) {
                   updates.profile_picture_url = contactInfo.picture;
                 }
               } catch {
@@ -176,7 +177,6 @@ export default function WhatsAppChat() {
 
               if (Object.keys(updates).length > 0) {
                 updates.updated_at = new Date().toISOString();
-                console.log('[WAHA Sync] Atualizando sessão no banco:', updates);
                 await supabase
                   .from('mt_whatsapp_sessions')
                   .update(updates)
@@ -201,8 +201,7 @@ export default function WhatsAppChat() {
     };
 
     fetchSessao();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessaoId, isLoadingSessoes, loadingWahaConfig, wahaConfig?.api_url]); // Only depend on api_url, not the whole object
+  }, [sessaoId, isLoadingSessoes, loadingWahaConfig, wahaConfig?.api_url, wahaConfig?.api_key, sessoes]);
 
   const { canSend, isLoading: isLoadingPermissions } = useWhatsAppPermissionsMT(sessaoId || undefined);
 
@@ -474,7 +473,7 @@ export default function WhatsAppChat() {
           setSearchParams(newParams, { replace: true });
         });
     }
-  }, [searchParams, chats, isLoadingChats]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchParams, chats, isLoadingChats, selectChat, setSearchParams]);
 
   // Reset the ref when URL changes (new navigation)
   useEffect(() => {
@@ -823,10 +822,10 @@ export default function WhatsAppChat() {
       }
       conversationList={
         <ConversationListPanel
-          sessionName={(sessao as any)?.display_name || sessao?.nome || 'WhatsApp'}
-          sessionPhone={(sessao as any)?.telefone || sessao?.phone_number}
+          sessionName={sessao?.display_name || sessao?.nome || 'WhatsApp'}
+          sessionPhone={sessao?.telefone || null}
           sessionStatus={sessao?.status}
-          sessionAvatar={(sessao as any)?.profile_picture_url || null}
+          sessionAvatar={sessao?.profile_picture_url || null}
           chatCount={displayChats.length}
           chats={displayChats}
           isSearching={isSearching}
@@ -860,9 +859,9 @@ export default function WhatsAppChat() {
           availableSessions={sessoes.filter(s => s.is_active !== false).map(s => ({
             id: s.id,
             nome: s.nome || s.session_name,
-            telefone: (s as any).telefone || (s as any).phone_number || null,
+            telefone: s.telefone || null,
             status: s.status,
-            display_name: (s as any).display_name || null,
+            display_name: s.display_name || null,
           }))}
           currentSessionId={sessaoId}
           onSwitchSession={(newSessionId) => navigate(`/whatsapp/conversas/${newSessionId}`)}

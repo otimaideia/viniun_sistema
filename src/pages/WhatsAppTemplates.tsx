@@ -70,7 +70,7 @@ const DEFAULT_TEMPLATES = [
   {
     id: "greeting",
     name: "Saudação",
-    content: "Olá! Tudo bem? Sou da YESlaser. Como posso ajudar você hoje?",
+    content: "Olá! Tudo bem? Sou da Viniun. Como posso ajudar você hoje?",
     category: "Atendimento",
   },
   {
@@ -535,10 +535,10 @@ export default function WhatsAppTemplates() {
             ) : (
               <MarketingTemplateCard
                 key={template.id}
-                template={(template as any).originalTemplate}
+                template={(template as Record<string, unknown>).originalTemplate}
                 onCopy={() => handleCopy(template.content)}
                 onPreview={() => setPreviewContent(template.content)}
-                onToggleActive={() => handleToggleActive((template as any).originalTemplate)}
+                onToggleActive={() => handleToggleActive((template as Record<string, unknown>).originalTemplate)}
               />
             )
           ))}

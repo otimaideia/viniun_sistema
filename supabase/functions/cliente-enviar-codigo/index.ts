@@ -46,7 +46,7 @@ async function enviarWhatsApp(
 ): Promise<boolean> {
   try {
     const chatId = `${telefone}@c.us`;
-    const mensagem = `Ola ${nomeCliente}! Seu codigo de verificacao YESlaser e: *${codigo}*\n\nEste codigo expira em 5 minutos.`;
+    const mensagem = `Ola ${nomeCliente}! Seu codigo de verificacao Viniun e: *${codigo}*\n\nEste codigo expira em 5 minutos.`;
 
     const response = await fetch(`${wahaConfig.api_url}/api/sendText`, {
       method: "POST",

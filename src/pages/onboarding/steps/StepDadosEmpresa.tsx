@@ -36,7 +36,7 @@ export default function StepDadosEmpresa({ data, onUpdate }: Props) {
           <Label htmlFor="nome_fantasia">Nome Fantasia *</Label>
           <Input
             id="nome_fantasia"
-            placeholder="Ex: YESlaser"
+            placeholder="Ex: Viniun"
             value={data.nome_fantasia || ''}
             onChange={(e) => onUpdate({ nome_fantasia: e.target.value })}
           />
@@ -46,7 +46,7 @@ export default function StepDadosEmpresa({ data, onUpdate }: Props) {
           <Label htmlFor="razao_social">Razão Social *</Label>
           <Input
             id="razao_social"
-            placeholder="Ex: YESlaser Franchising Ltda"
+            placeholder="Ex: Viniun Franchising Ltda"
             value={data.razao_social || ''}
             onChange={(e) => onUpdate({ razao_social: e.target.value })}
           />
@@ -80,7 +80,7 @@ export default function StepDadosEmpresa({ data, onUpdate }: Props) {
             <Label htmlFor="slug">Slug (identificador único) *</Label>
             <Input
               id="slug"
-              placeholder="ex: yeslaser"
+              placeholder="ex: viniun"
               value={data.slug || ''}
               onChange={(e) => onUpdate({
                 slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''),
@@ -97,7 +97,7 @@ export default function StepDadosEmpresa({ data, onUpdate }: Props) {
             <div className="flex items-center gap-2">
               <Input
                 id="subdominio"
-                placeholder="ex: yeslaser"
+                placeholder="ex: viniun"
                 value={data.subdominio || ''}
                 onChange={(e) => onUpdate({
                   subdominio: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''),

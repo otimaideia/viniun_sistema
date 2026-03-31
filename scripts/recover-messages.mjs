@@ -12,9 +12,9 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://supabase-app.yeslaserpraiagrande.com.br';
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://supabase.viniun.com.br';
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3MDc4MTc0MCwiZXhwIjo0OTI2NDU1MzQwLCJyb2xlIjoic2VydmljZV9yb2xlIn0.K1j07Xd07FuQHNNXqnwXnWvakPBfUirpKXqB5sZmkTE';
-const WAHA_BASE_URL = process.env.WAHA_URL || 'https://waha.yeslaser.com.br';
+const WAHA_BASE_URL = process.env.WAHA_URL || 'https://waha.viniun.com.br';
 const WAHA_KEY = process.env.WAHA_API_KEY || 'GY9SDuKPFnJ4_dr';
 
 const SESSIONS = process.argv.slice(2).length > 0

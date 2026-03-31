@@ -141,8 +141,6 @@ export function useRealtimeMessages(options: UseRealtimeMessagesOptions = {}) {
   }) => {
     const message = payload.new as unknown as WhatsAppMessage;
 
-    if (DEBUG) console.log('[Realtime] Mensagem:', payload.eventType, message);
-
     // Invalidar queries para atualizar UI
     queryClient.invalidateQueries({ queryKey: ['whatsapp-messages'] });
 
@@ -177,8 +175,6 @@ export function useRealtimeMessages(options: UseRealtimeMessagesOptions = {}) {
   }) => {
     const conversation = payload.new as unknown as WhatsAppConversation;
 
-    if (DEBUG) console.log('[Realtime] Conversa:', payload.eventType, conversation);
-
     // Invalidar queries
     queryClient.invalidateQueries({ queryKey: ['whatsapp-conversations'] });
 
@@ -198,8 +194,6 @@ export function useRealtimeMessages(options: UseRealtimeMessagesOptions = {}) {
       messageFilter = `conversation_id=eq.${conversationId}`;
     }
 
-    if (DEBUG) console.log('[Realtime] Inscrevendo para mensagens:', messageFilter);
-
     const messagesChannel = supabase
       .channel(`messages:${franqueadoId}:${conversationId || 'all'}`)
       .on(
@@ -213,11 +207,9 @@ export function useRealtimeMessages(options: UseRealtimeMessagesOptions = {}) {
         handleMessageChange
       )
       .subscribe((status) => {
-        if (DEBUG) console.log('[Realtime] Status mensagens:', status);
       });
 
     return () => {
-      if (DEBUG) console.log('[Realtime] Removendo canal de mensagens');
       supabase.removeChannel(messagesChannel);
     };
   }, [franqueadoId, conversationId, handleMessageChange]);
@@ -225,8 +217,6 @@ export function useRealtimeMessages(options: UseRealtimeMessagesOptions = {}) {
   // Inscrever no canal de conversas
   useEffect(() => {
     if (!franqueadoId) return;
-
-    if (DEBUG) console.log('[Realtime] Inscrevendo para conversas:', franqueadoId);
 
     const conversationsChannel = supabase
       .channel(`conversations:${franqueadoId}`)
@@ -241,11 +231,9 @@ export function useRealtimeMessages(options: UseRealtimeMessagesOptions = {}) {
         handleConversationChange
       )
       .subscribe((status) => {
-        if (DEBUG) console.log('[Realtime] Status conversas:', status);
       });
 
     return () => {
-      if (DEBUG) console.log('[Realtime] Removendo canal de conversas');
       supabase.removeChannel(conversationsChannel);
     };
   }, [franqueadoId, handleConversationChange]);
@@ -278,8 +266,6 @@ export function useRealtimeConversation(
   useEffect(() => {
     if (!conversationId) return;
 
-    if (DEBUG) console.log('[Realtime] Inscrevendo para conversa:', conversationId);
-
     const channel = supabase
       .channel(`conversation:${conversationId}`)
       .on(
@@ -292,7 +278,6 @@ export function useRealtimeConversation(
         },
         (payload) => {
           const message = payload.new as unknown as WhatsAppMessage;
-          if (DEBUG) console.log('[Realtime] Nova mensagem na conversa:', message);
 
           queryClient.invalidateQueries({
             queryKey: ['whatsapp-messages', conversationId],
@@ -311,7 +296,6 @@ export function useRealtimeConversation(
         },
         (payload) => {
           const message = payload.new as unknown as WhatsAppMessage;
-          if (DEBUG) console.log('[Realtime] Mensagem atualizada:', message);
 
           queryClient.invalidateQueries({
             queryKey: ['whatsapp-messages', conversationId],
@@ -321,11 +305,9 @@ export function useRealtimeConversation(
         }
       )
       .subscribe((status) => {
-        if (DEBUG) console.log('[Realtime] Status conversa:', status);
       });
 
     return () => {
-      if (DEBUG) console.log('[Realtime] Removendo canal da conversa');
       supabase.removeChannel(channel);
     };
   }, [conversationId, queryClient]);

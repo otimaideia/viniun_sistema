@@ -113,7 +113,7 @@ export function useDiretorias() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["mt-directorates"] });
-      queryClient.invalidateQueries({ queryKey: ["yeslaser-franqueados"] });
+      queryClient.invalidateQueries({ queryKey: ["viniun-franqueados"] });
       toast.success("Diretoria removida com sucesso!");
     },
     onError: (error) => {
@@ -139,7 +139,7 @@ export function useDiretorias() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["mt-directorates"] });
-      queryClient.invalidateQueries({ queryKey: ["yeslaser-franqueados"] });
+      queryClient.invalidateQueries({ queryKey: ["viniun-franqueados"] });
       toast.success("Franquia vinculada com sucesso!");
     },
     onError: (error) => {

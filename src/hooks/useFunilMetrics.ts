@@ -222,7 +222,7 @@ export function useFunilMetrics(funilId: string | undefined, periodo?: { inicio:
         taxa_conversao: sanitizedLeads.length > 0
           ? Math.round((leadsGanhos.length / sanitizedLeads.length) * 100)
           : 0,
-        tempo_medio_fechamento: 0, // TODO: calcular baseado no histórico
+        tempo_medio_fechamento: 0, // Requires lead stage change history tracking to calculate average days to close
         leads_novos_periodo: leadsNovosPeriodo.length,
         valor_ganho_periodo: leadsGanhos.reduce((acc, l) => acc + (l.valor_estimado || 0), 0),
       };

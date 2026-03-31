@@ -46,7 +46,7 @@ export default function AdCampaignDetail() {
   const { data: campaign, isLoading } = useQuery({
     queryKey: ['mt-ad-campaign', id],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('mt_ad_campaigns')
         .select('*')
         .eq('id', id)

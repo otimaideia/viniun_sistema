@@ -138,7 +138,7 @@ export default function ConcorrenteEdit() {
                 <Label>Tipo</Label>
                 <Select
                   value={watch('tipo') || 'concorrente'}
-                  onValueChange={(v) => setValue('tipo', v as any)}
+                  onValueChange={(v) => setValue('tipo', v as string)}
                 >
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -151,7 +151,7 @@ export default function ConcorrenteEdit() {
                 <Label>Região</Label>
                 <Select
                   value={watch('regiao') || 'nacional'}
-                  onValueChange={(v) => setValue('regiao', v as any)}
+                  onValueChange={(v) => setValue('regiao', v as string)}
                 >
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -185,7 +185,7 @@ export default function ConcorrenteEdit() {
               <Label htmlFor="url_base_feminino">URL Base Feminino</Label>
               <Input
                 id="url_base_feminino"
-                placeholder="https://site.com/depilacao-feminino-{area}"
+                placeholder="https://site.com/servicos-feminino-{area}"
                 {...register('url_base_feminino')}
               />
               <p className="text-xs text-muted-foreground mt-1">
@@ -196,7 +196,7 @@ export default function ConcorrenteEdit() {
               <Label htmlFor="url_base_masculino">URL Base Masculino</Label>
               <Input
                 id="url_base_masculino"
-                placeholder="https://site.com/depilacao-masculino-{area}"
+                placeholder="https://site.com/servicos-masculino-{area}"
                 {...register('url_base_masculino')}
               />
             </div>

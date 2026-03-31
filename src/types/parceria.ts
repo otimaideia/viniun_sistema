@@ -16,7 +16,7 @@ export type BeneficioTipo =
   | 'desconto_percentual'
   | 'desconto_valor'
   | 'sessoes_gratis'
-  | 'procedimento_gratis'
+  | 'servico_gratis'
   | 'brinde'
   | 'pacote_especial'
   | 'avaliacao_gratis'
@@ -44,7 +44,7 @@ export const BENEFICIO_TIPO_LABELS: Record<BeneficioTipo, string> = {
   desconto_percentual: 'Desconto Percentual',
   desconto_valor: 'Desconto em Valor',
   sessoes_gratis: 'Sessões Grátis',
-  procedimento_gratis: 'Procedimento Grátis',
+  servico_gratis: 'Serviço Grátis',
   brinde: 'Brinde',
   pacote_especial: 'Pacote Especial',
   avaliacao_gratis: 'Avaliação Grátis',
@@ -86,8 +86,8 @@ export const parceriaStatusColors = PARCERIA_STATUS_COLORS;
 export const RAMOS_ATIVIDADE = [
   'Academia/Fitness',
   'Alimentação/Restaurante',
-  'Beleza/Estética',
-  'Clínica Médica',
+  'Beleza/Bem-estar',
+  'Saúde/Clínica',
   'Comércio Varejista',
   'Consultoria',
   'Educação',
@@ -400,7 +400,7 @@ export interface ParceriaIndicacaoMetrics {
  * @param baseUrl - URL base (default: window.location.origin)
  */
 export function gerarLinkIndicacaoParceria(codigoIndicacao: string, baseUrl?: string): string {
-  const url = baseUrl || (typeof window !== 'undefined' ? window.location.origin : 'https://www.yeslaserpraiagrande.com.br');
+  const url = baseUrl || (typeof window !== 'undefined' ? window.location.origin : 'https://www.viniun.com.br');
   return `${url}/form/${FORMULARIO_INDICACAO_SLUG}?parceria=${codigoIndicacao}`;
 }
 
@@ -418,7 +418,7 @@ export function gerarMensagemWhatsAppParceria(
   beneficioPrincipal?: string
 ): string {
   const link = linkFormulario || gerarLinkIndicacaoParceria(codigoIndicacao);
-  let mensagem = `Olá! A *${nomeParceria}* tem uma parceria especial com a YESlaser para você!\n\n`;
+  let mensagem = `Olá! A *${nomeParceria}* tem uma parceria especial com a Viniun para você!\n\n`;
 
   if (beneficioPrincipal) {
     mensagem += `*Benefício:* ${beneficioPrincipal}\n\n`;
@@ -527,7 +527,7 @@ export function formatarValorBeneficio(beneficio: ParceriaBeneficio): string {
       return `R$ ${beneficio.valor} de desconto`;
     case 'sessoes_gratis':
       return `${beneficio.valor} sessões grátis`;
-    case 'procedimento_gratis':
+    case 'servico_gratis':
       return `${beneficio.valor} grátis`;
     case 'brinde':
       return `Brinde: ${beneficio.valor}`;

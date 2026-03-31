@@ -109,8 +109,8 @@ export default function TabletTreatmentView() {
   const [isFinishing, setIsFinishing] = useState(false);
 
   // Lead info from appointment
-  const lead = appointment?.lead as any;
-  const treatmentSession = appointment?.treatment_session as any;
+  const lead = appointment?.lead as Record<string, unknown> | undefined;
+  const treatmentSession = appointment?.treatment_session as Record<string, unknown> | undefined;
 
   // Handle timer actions
   const handleStart = useCallback(() => {
@@ -174,9 +174,9 @@ export default function TabletTreatmentView() {
 
       toast.success('Atendimento finalizado com sucesso');
       navigate('/tablet/fila');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Erro ao finalizar atendimento:', err);
-      toast.error(`Erro ao finalizar: ${err.message}`);
+      toast.error(`Erro ao finalizar: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setIsFinishing(false);
     }
@@ -231,8 +231,8 @@ export default function TabletTreatmentView() {
       setShowReschedule(false);
       setRescheduleDate('');
       setRescheduleTime('');
-    } catch (err: any) {
-      toast.error(`Erro ao reagendar: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro ao reagendar: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     }
   }, [appointment, rescheduleDate, rescheduleTime]);
 
@@ -376,7 +376,7 @@ export default function TabletTreatmentView() {
             {/* Linked venda */}
             {appointment.venda_id && (
               <p className="text-sm text-muted-foreground">
-                Vinculado a venda #{(appointment as any).venda?.numero_venda || appointment.venda_id.slice(0, 8)}
+                Vinculado a venda #{(appointment as Record<string, unknown>).venda ? ((appointment as Record<string, unknown>).venda as Record<string, string>)?.numero_venda : appointment.venda_id.slice(0, 8)}
               </p>
             )}
           </CardContent>

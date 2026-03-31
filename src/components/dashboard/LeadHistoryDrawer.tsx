@@ -161,7 +161,7 @@ export function LeadHistoryDrawer({
     const codigoPais = lead.whatsapp_codigo_pais || lead.telefone_codigo_pais || '55';
     const primeiroNome = lead.nome.split(" ")[0];
     const mensagem = encodeURIComponent(
-      `Olá ${primeiroNome}! 😊 Tudo bem? Aqui é da YESlaser! Vi que você demonstrou interesse nos nossos tratamentos. Posso te ajudar com mais informações?`
+      `Olá ${primeiroNome}! 😊 Tudo bem? Aqui é da Viniun! Vi que você demonstrou interesse nos nossos tratamentos. Posso te ajudar com mais informações?`
     );
     window.open(`https://wa.me/${codigoPais}${cleanPhone}?text=${mensagem}`, "_blank");
   };

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useClienteMagicAuth } from '@/hooks/useClienteMagicAuth';
 import { useDisponibilidade } from '@/hooks/multitenant/useAgendamentosMT';
 import { supabase } from '@/integrations/supabase/client';
+import { useClienteAgendarPublic } from '@/hooks/public/useClienteAgendarPublic';
 import { Lead } from '@/types/lead-mt';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -89,6 +90,10 @@ export default function ClienteAgendar() {
   const navigate = useNavigate();
   const { franchiseSlug } = useParams<{ franchiseSlug: string }>();
   const { isAuthenticating, lead: magicLead, error: authError, hasToken, checkExistingAuth } = useClienteMagicAuth();
+  const {
+    fetchBranding, fetchFranchiseBySlug, fetchFranchiseDetailBySlug,
+    fetchFranchisesByTenant, createMagicToken, logAppointmentNotifications,
+  } = useClienteAgendarPublic();
 
   const [lead, setLead] = useState<Lead | null>(null);
   const [franchises, setFranchises] = useState<Franchise[]>([]);
@@ -132,12 +137,7 @@ export default function ClienteAgendar() {
     // Fallback: se tem franchiseSlug mas sem dados no localStorage, buscar tenant do franchise
     if (franchiseSlug) {
       const fetchTenantFromSlug = async () => {
-        const { data: f } = await supabase
-          .from('mt_franchises')
-          .select('id, tenant_id')
-          .eq('slug', franchiseSlug)
-          .eq('is_active', true)
-          .maybeSingle();
+        const f = await fetchFranchiseBySlug(franchiseSlug);
         if (f) {
           setLead({ id: '', nome: 'Cliente', tenant_id: f.tenant_id, franchise_id: f.id } as Lead);
         }
@@ -149,21 +149,11 @@ export default function ClienteAgendar() {
   // Buscar branding do tenant
   useEffect(() => {
     if (!lead?.tenant_id) return;
-    const fetchBranding = async () => {
-      const [tenantRes, brandingRes] = await Promise.all([
-        supabase.from('mt_tenants').select('nome_fantasia').eq('id', lead.tenant_id).single(),
-        supabase.from('mt_tenant_branding').select('cor_primaria, cor_primaria_hover, cor_secundaria, logo_url, logo_branco_url').eq('tenant_id', lead.tenant_id).maybeSingle(),
-      ]);
-      setBranding({
-        cor_primaria: brandingRes.data?.cor_primaria || DEFAULT_COLOR,
-        cor_primaria_hover: brandingRes.data?.cor_primaria_hover || DEFAULT_HOVER,
-        cor_secundaria: brandingRes.data?.cor_secundaria || DEFAULT_SECONDARY,
-        logo_url: brandingRes.data?.logo_url || null,
-        logo_branco_url: brandingRes.data?.logo_branco_url || null,
-        nome_fantasia: tenantRes.data?.nome_fantasia || '',
-      });
+    const loadBranding = async () => {
+      const b = await fetchBranding(lead.tenant_id);
+      setBranding(b);
     };
-    fetchBranding();
+    loadBranding();
   }, [lead?.tenant_id]);
 
   // Detectar franquia pelo domínio
@@ -183,19 +173,14 @@ export default function ClienteAgendar() {
   useEffect(() => {
     if (!lead?.tenant_id) return;
     const fetchData = async () => {
-      // Se tem slug na URL, buscar franchise direto pelo slug (mais rápido)
+      // Se tem slug na URL, buscar franchise direto pelo slug (mais rapido)
       if (franchiseSlug) {
-        const { data: slugFranchise } = await supabase
-          .from('mt_franchises')
-          .select('id, nome_fantasia, nome, cidade, estado, whatsapp, endereco, numero, complemento, bairro, cep, horario_funcionamento, tenant_id')
-          .eq('slug', franchiseSlug)
-          .eq('is_active', true)
-          .maybeSingle();
+        const slugFranchise = await fetchFranchiseDetailBySlug(franchiseSlug);
 
         if (slugFranchise) {
           setFranchises([slugFranchise]);
           setSelectedFranchise(slugFranchise.id);
-          // Se não tem tenant_id no lead, pegar do franchise
+          // Se nao tem tenant_id no lead, pegar do franchise
           if (!lead.tenant_id && slugFranchise.tenant_id) {
             setLead(prev => prev ? { ...prev, tenant_id: slugFranchise.tenant_id } : prev);
           }
@@ -204,12 +189,7 @@ export default function ClienteAgendar() {
       }
 
       // Fallback: buscar todas as franquias do tenant
-      const { data } = await supabase
-        .from('mt_franchises')
-        .select('id, nome_fantasia, nome, cidade, estado, whatsapp, endereco, numero, complemento, bairro, cep, horario_funcionamento')
-        .eq('tenant_id', lead.tenant_id)
-        .eq('is_active', true)
-        .order('cidade');
+      const data = await fetchFranchisesByTenant(lead.tenant_id);
       if (data) {
         setFranchises(data);
         if (lead.franchise_id && data.some(f => f.id === lead.franchise_id)) {
@@ -304,13 +284,13 @@ export default function ClienteAgendar() {
             .eq('lead_id', resolvedLeadId)
             .maybeSingle();
           if (referral?.influencer) {
-            const inf = referral.influencer as any;
+            const inf = referral.influencer as { nome?: string; nome_artistico?: string };
             influencerNome = inf.nome || inf.nome_artistico || '';
           }
         } catch {}
       }
 
-      const servicoNome = 'Avaliação + 10 Sessões de Depilação a Laser em Área P';
+      const servicoNome = 'Avaliação + Sessões de Serviços Exclusivos';
 
       const { data: appointment, error: createError } = await supabase
         .from('mt_appointments')
@@ -354,13 +334,10 @@ export default function ClienteAgendar() {
       let clienteTokenLink = '';
       if (resolvedLeadId) {
         try {
-          const clienteToken = crypto.randomUUID().replace(/-/g, '');
-          await supabase.from('mt_cliente_magic_tokens' as any).insert({
+          const clienteToken = await createMagicToken({
             tenant_id: lead.tenant_id,
             lead_id: resolvedLeadId,
-            token: clienteToken,
             type: 'cliente',
-            expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 dias
           });
           clienteTokenLink = `${origin}/cliente/agendar/${franchiseSlug || ''}?token=${clienteToken}`;
         } catch {}
@@ -368,7 +345,7 @@ export default function ClienteAgendar() {
 
       // Token para o influenciador (acesso à área de indicações)
       let influencerTokenLink = '';
-      let influencerData: any = null;
+      let influencerData: { id: string; tenant_id: string; nome?: string; nome_artistico?: string } | null = null;
       if (resolvedLeadId) {
         try {
           const { data: referral } = await supabase
@@ -377,14 +354,11 @@ export default function ClienteAgendar() {
             .eq('lead_id', resolvedLeadId)
             .maybeSingle();
           if (referral?.influencer) {
-            influencerData = referral.influencer as any;
-            const infToken = crypto.randomUUID().replace(/-/g, '');
-            await supabase.from('mt_cliente_magic_tokens' as any).insert({
+            influencerData = referral.influencer as typeof influencerData;
+            const infToken = await createMagicToken({
               tenant_id: influencerData.tenant_id,
               influencer_id: influencerData.id,
-              token: infToken,
               type: 'influenciador',
-              expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
             });
             influencerTokenLink = `${origin}/influenciadores/painel?token=${infToken}`;
           }
@@ -395,11 +369,9 @@ export default function ClienteAgendar() {
       const leadAdminLink = resolvedLeadId ? `${origin}/leads/${resolvedLeadId}` : '';
 
       // ===== NOTIFICAÇÕES WHATSAPP (3 destinatários) =====
-      console.log('[Agendamento] Disparando notificações WhatsApp...');
 
       // 1. Notificar a FRANQUIA/EMPRESA
       const franchisePhone = String(franchise?.whatsapp || '').replace(/\D/g, '');
-      console.log('[Agendamento] 1. Franquia:', franchisePhone || 'SEM WHATSAPP');
       if (franchisePhone) {
         const empresaMsg = `📅 *Novo agendamento online!*\n\n` +
           `*Cliente:* ${lead.nome}\n` +
@@ -420,8 +392,7 @@ export default function ClienteAgendar() {
             message: empresaMsg,
             tenant_id: lead.tenant_id,
           }
-        }).then(res => console.log('[Agendamento] Franquia notificada:', res?.data))
-          .catch(err => console.warn('[Agendamento] Erro franquia:', err));
+        }).catch(() => {});
       }
 
       // 2. Confirmar para o CLIENTE
@@ -429,7 +400,6 @@ export default function ClienteAgendar() {
       const clientPhone = rawClientPhone
         ? (rawClientPhone.startsWith('55') ? rawClientPhone : `55${rawClientPhone}`)
         : '';
-      console.log('[Agendamento] 2. Cliente:', clientPhone || 'SEM TELEFONE');
       if (clientPhone) {
         const clienteMsg = `✅ *Agendamento confirmado!*\n\n` +
           `${firstName}, sua sessão está marcada:\n\n` +
@@ -444,14 +414,12 @@ export default function ClienteAgendar() {
 
         supabase.functions.invoke('whatsapp-send', {
           body: { phone: clientPhone, message: clienteMsg, tenant_id: lead.tenant_id }
-        }).then(res => console.log('[Agendamento] Cliente notificado:', res?.data))
-          .catch(err => console.warn('[Agendamento] Erro cliente:', err));
+        }).catch(() => {});
       }
 
       // 3. Notificar o INFLUENCIADOR que indicou
       if (influencerData) {
         const infPhone = String(influencerData.whatsapp || '').replace(/\D/g, '');
-        console.log('[Agendamento] 3. Influenciador:', influencerData.nome, infPhone || 'SEM WHATSAPP');
         if (infPhone) {
           const infMsg = `🎉 *Boa notícia, ${influencerData.nome}!*\n\n` +
             `*${lead.nome}*, que você indicou, acabou de agendar uma sessão cortesia!\n\n` +
@@ -467,16 +435,16 @@ export default function ClienteAgendar() {
               message: infMsg,
               tenant_id: lead.tenant_id,
             }
-          }).then(res => console.log('[Agendamento] Influenciador notificado:', res?.data))
-            .catch(err => console.warn('[Agendamento] Erro influenciador:', err));
+          }).catch(() => {});
         }
       }
 
-      // Log notificações (fire-and-forget)
-      supabase.from('mt_appointment_notifications' as any).insert([
-        { tenant_id: lead.tenant_id, franchise_id: selectedFranchise, appointment_id: appointment.id, notification_type: 'confirmacao', channel: 'whatsapp', status: 'sent', sent_at: new Date().toISOString() },
-        { tenant_id: lead.tenant_id, franchise_id: selectedFranchise, appointment_id: appointment.id, notification_type: 'notificacao_franquia', channel: 'whatsapp', status: 'sent', sent_at: new Date().toISOString() },
-      ]).then(() => {}).catch(() => {});
+      // Log notificacoes (fire-and-forget)
+      logAppointmentNotifications({
+        tenant_id: lead.tenant_id,
+        franchise_id: selectedFranchise,
+        appointment_id: appointment.id,
+      });
 
       setIsSuccess(true);
       toast.success('Agendamento confirmado!');
@@ -579,7 +547,7 @@ export default function ClienteAgendar() {
                   </div>
                   <div>
                     <p className="text-xs text-gray-500">Serviço</p>
-                    <p className="font-semibold text-gray-900">Avaliação + 10 Sessões Depilação a Laser Área P</p>
+                    <p className="font-semibold text-gray-900">Avaliação + Sessões de Serviços Exclusivos</p>
                   </div>
                 </div>
                 {sf && (
@@ -709,7 +677,7 @@ export default function ClienteAgendar() {
                 <Sparkles className="h-6 w-6 text-white" />
               </div>
               <div>
-                <p className="font-bold text-gray-900">Avaliação + 10 Sessões Depilação a Laser Área P</p>
+                <p className="font-bold text-gray-900">Avaliação + Sessões de Serviços Exclusivos</p>
                 <p className="text-sm text-gray-500">Duração: ~50 minutos</p>
               </div>
             </div>

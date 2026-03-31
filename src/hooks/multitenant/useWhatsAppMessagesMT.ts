@@ -114,7 +114,6 @@ export function useWhatsAppMessagesMT(conversationId: string | undefined, filter
           filter: `conversation_id=eq.${conversationId}`,
         },
         (payload) => {
-          console.log('Nova mensagem:', payload);
           queryClient.invalidateQueries({ queryKey: ['mt-whatsapp-messages', conversationId] });
         }
       )
@@ -127,12 +126,10 @@ export function useWhatsAppMessagesMT(conversationId: string | undefined, filter
           filter: `conversation_id=eq.${conversationId}`,
         },
         (payload) => {
-          console.log('Mensagem atualizada:', payload);
           queryClient.invalidateQueries({ queryKey: ['mt-whatsapp-messages', conversationId] });
         }
       )
       .subscribe((status, err) => {
-        console.log(`[RT] mt-whatsapp-messages-${conversationId} status:`, status);
         if (err) console.error(`[RT] mt-whatsapp-messages-${conversationId} error:`, err);
       });
 
@@ -173,7 +170,7 @@ export function useWhatsAppMessagesMT(conversationId: string | undefined, filter
       let status: MessageStatus = 'pending';
 
       try {
-        const wahaUrl = session.waha_url || 'https://waha.yeslaserpraiagrande.com.br';
+        const wahaUrl = session.waha_url || 'https://waha.otimaideia.com.br';
         const endpoint = input.media_url ? '/api/sendFile' : '/api/sendText';
 
         const wahaPayload = input.media_url
@@ -576,7 +573,7 @@ export function useSendMessageMT(sessionId: string | undefined) {
       };
 
       // Enviar via WAHA
-      const wahaUrl = session.waha_url || 'https://waha.yeslaserpraiagrande.com.br';
+      const wahaUrl = session.waha_url || 'https://waha.otimaideia.com.br';
       const response = await fetch(`${wahaUrl}/api/sendText`, {
         method: 'POST',
         headers: {
@@ -670,7 +667,7 @@ export function useSendMessageMT(sessionId: string | undefined) {
         waha_api_key: string;
       };
 
-      const wahaUrl = session.waha_url || 'https://waha.yeslaserpraiagrande.com.br';
+      const wahaUrl = session.waha_url || 'https://waha.otimaideia.com.br';
       const response = await fetch(`${wahaUrl}/api/sendFile`, {
         method: 'POST',
         headers: {

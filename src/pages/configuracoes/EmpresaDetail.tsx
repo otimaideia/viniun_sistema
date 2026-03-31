@@ -62,8 +62,8 @@ import type { Tenant, TenantBranding, Franchise } from '@/types/multitenant';
 interface TenantWithDetails extends Tenant {
   branding?: TenantBranding;
   franchises?: Franchise[];
-  users?: any[];
-  modules?: any[];
+  users?: Record<string, unknown>[];
+  modules?: Record<string, unknown>[];
 }
 
 export default function EmpresaDetail() {
@@ -188,11 +188,11 @@ export default function EmpresaDetail() {
       });
 
       navigate('/configuracoes/empresas');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao deletar empresa:', error);
       toast({
         title: 'Erro ao remover empresa',
-        description: error.message || 'Não foi possível remover a empresa.',
+        description: error instanceof Error ? error.message : 'Não foi possível remover a empresa.',
         variant: 'destructive',
       });
     } finally {

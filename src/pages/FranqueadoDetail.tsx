@@ -190,7 +190,7 @@ export default function FranqueadoDetail() {
                 {franqueado.whatsapp_business && (
                   <div className="flex items-center gap-3">
                     <Phone className="h-4 w-4 text-muted-foreground" />
-                    <span>{formatPhoneDisplay(franqueado.whatsapp_business, (franqueado as any).whatsapp_business_codigo_pais || '55')}</span>
+                    <span>{formatPhoneDisplay(franqueado.whatsapp_business, (franqueado as Record<string, unknown>).whatsapp_business_codigo_pais as string || '55')}</span>
                   </div>
                 )}
                 {franqueado.email && (

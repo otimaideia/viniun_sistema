@@ -66,7 +66,7 @@ export function IndicacaoShareCard({ lead, formularioSlug, className }: Indicaca
   };
 
   const handleShareEmail = () => {
-    const subject = encodeURIComponent("Indique e Ganhe - YESlaser");
+    const subject = encodeURIComponent("Indique e Ganhe - Viniun");
     const body = encodeURIComponent(mensagemWhatsApp);
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };

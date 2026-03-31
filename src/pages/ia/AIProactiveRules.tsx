@@ -36,8 +36,8 @@ export default function AIProactiveRules() {
   const { data: rules = [], isLoading, refetch } = useQuery({
     queryKey: ['mt-ai-proactive-rules', tenant?.id],
     queryFn: async () => {
-      let query = (supabase as any)
-        .from('mt_ai_proactive_rules')
+      let query = supabase
+        .from('mt_ai_proactive_rules' as never)
         .select('*')
         .is('deleted_at', null)
         .order('created_at', { ascending: false });
@@ -55,8 +55,8 @@ export default function AIProactiveRules() {
 
   const toggleActive = useMutation({
     mutationFn: async ({ id, is_active }: { id: string; is_active: boolean }) => {
-      const { error } = await (supabase as any)
-        .from('mt_ai_proactive_rules')
+      const { error } = await supabase
+        .from('mt_ai_proactive_rules' as never)
         .update({ is_active, updated_at: new Date().toISOString() })
         .eq('id', id);
       if (error) throw error;
@@ -65,7 +65,7 @@ export default function AIProactiveRules() {
       queryClient.invalidateQueries({ queryKey: ['mt-ai-proactive-rules'] });
       toast.success('Status atualizado');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(`Erro: ${error.message}`);
     },
   });
@@ -163,9 +163,10 @@ export default function AIProactiveRules() {
                 </TableRow>
               ) : (
                 rules.map((rule) => {
-                  const createdBy = (rule as any).created_by;
-                  const cooldown = (rule as any).cooldown_minutes;
-                  const maxPerDay = (rule as any).max_per_day;
+                  const ruleExt = rule as Record<string, unknown>;
+                  const createdBy = ruleExt.created_by as string | undefined;
+                  const cooldown = ruleExt.cooldown_minutes as number | undefined;
+                  const maxPerDay = ruleExt.max_per_day as number | undefined;
 
                   return (
                     <TableRow key={rule.id}>

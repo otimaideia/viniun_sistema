@@ -210,7 +210,7 @@ export default function QuizPlayer() {
                       </p>
                     </div>
                     <div className="ml-7 space-y-1">
-                      {(question.options || []).map((opt: any) => {
+                      {(question.options || []).map((opt: Record<string, unknown>) => {
                         const isSelected = opt.id === selectedOptionId;
                         const isCorrectOption = opt.is_correta;
                         let className = 'text-sm p-1.5 rounded';
@@ -357,7 +357,7 @@ export default function QuizPlayer() {
                         }
                         className="space-y-2"
                       >
-                        {sortedOptions.map((opt: any) => (
+                        {sortedOptions.map((opt: Record<string, unknown>) => (
                           <div
                             key={opt.id}
                             className="flex items-center space-x-2 p-2 rounded border hover:bg-accent cursor-pointer"
@@ -380,7 +380,7 @@ export default function QuizPlayer() {
                         }
                         className="space-y-2"
                       >
-                        {sortedOptions.map((opt: any) => (
+                        {sortedOptions.map((opt: Record<string, unknown>) => (
                           <div
                             key={opt.id}
                             className="flex items-center space-x-2 p-2 rounded border hover:bg-accent cursor-pointer"

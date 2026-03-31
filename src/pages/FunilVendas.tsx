@@ -256,8 +256,8 @@ export default function FunilVendas() {
       });
       setAssignLead(null);
       setSelectedUserId('');
-    } catch (error: any) {
-      toast.error(`Erro ao atribuir: ${error.message}`);
+    } catch (error: unknown) {
+      toast.error(`Erro ao atribuir: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
     }
   };
 
@@ -597,7 +597,7 @@ export default function FunilVendas() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="__none__">Nenhum (remover)</SelectItem>
-                {tenantUsers.map((user: any) => (
+                {tenantUsers.map((user: { id: string; nome?: string; email?: string }) => (
                   <SelectItem key={user.id} value={user.id}>
                     {user.nome || user.email}
                   </SelectItem>

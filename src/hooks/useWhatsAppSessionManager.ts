@@ -74,7 +74,6 @@ export function useWhatsAppSessionManager(): UseWhatsAppSessionManagerReturn {
 
     const currentAttempts = reconnectAttemptsRef.current.get(sessionName) || 0;
     if (currentAttempts >= MAX_RECONNECT_ATTEMPTS) {
-      console.log(`Máximo de tentativas de reconexão atingido para ${sessionName}`);
       return false;
     }
 
@@ -82,7 +81,6 @@ export function useWhatsAppSessionManager(): UseWhatsAppSessionManagerReturn {
     reconnectAttemptsRef.current.set(sessionName, currentAttempts + 1);
 
     try {
-      console.log(`Auto-reconectando sessão ${sessionName} (tentativa ${currentAttempts + 1}/${MAX_RECONNECT_ATTEMPTS})`);
 
       await wahaApi.startSession(sessionName);
       await new Promise(resolve => setTimeout(resolve, 3000));
@@ -297,7 +295,6 @@ export function useWhatsAppSessionManager(): UseWhatsAppSessionManagerReturn {
     }
 
     try {
-      console.log(`Tentando reconectar sessão: ${sessionName}`);
 
       // First check current status
       const currentStatus = await checkSessionStatus(sessionName);
@@ -349,7 +346,6 @@ export function useWhatsAppSessionManager(): UseWhatsAppSessionManagerReturn {
     }
 
     try {
-      console.log(`Reiniciando sessão: ${sessionName}`);
 
       await wahaApi.restartSession(sessionName);
 
@@ -406,7 +402,6 @@ export function useWhatsAppSessionManager(): UseWhatsAppSessionManagerReturn {
       }
     }, safeInterval);
 
-    console.log(`Auto-check de sessões iniciado (intervalo: ${safeInterval}ms)`);
   }, []); // Empty deps - uses refs internally
 
   // Stop automatic checking
@@ -414,7 +409,6 @@ export function useWhatsAppSessionManager(): UseWhatsAppSessionManagerReturn {
     if (autoCheckIntervalRef.current) {
       clearInterval(autoCheckIntervalRef.current);
       autoCheckIntervalRef.current = null;
-      console.log("Auto-check de sessões parado");
     }
   }, []);
 
@@ -425,7 +419,6 @@ export function useWhatsAppSessionManager(): UseWhatsAppSessionManagerReturn {
       // Reset all reconnect attempts when disabled
       reconnectAttemptsRef.current.clear();
     }
-    console.log(`Auto-reconnect ${enable ? "habilitado" : "desabilitado"}`);
   }, []);
 
   // Cleanup on unmount

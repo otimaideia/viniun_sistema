@@ -124,9 +124,9 @@ async function hashOTP(otp: string): Promise<string> {
 
 /**
  * Derives the current tenant slug from the browser URL.
- * In production: reads the subdomain (e.g. yeslaser.app.com → 'yeslaser').
+ * In production: reads the subdomain (e.g. viniun.app.com → 'viniun').
  * In development: reads the ?tenant= query param.
- * Falls back to 'yeslaser' so the influenciadora portal always has a tenant scope.
+ * Falls back to 'viniun' so the influenciadora portal always has a tenant scope.
  */
 function getCurrentTenantSlug(): string {
   const hostname = window.location.hostname;
@@ -144,13 +144,13 @@ function getCurrentTenantSlug(): string {
     if (param) return param.toLowerCase();
   }
 
-  return 'yeslaser';
+  return 'viniun';
 }
 
 /**
  * Resolves the tenant UUID for the given slug.
  * Falls back to dominio_customizado lookup when slug is a generic subdomain
- * (e.g. "app" in app.yeslaserpraiagrande.com.br) that doesn't match any tenant slug.
+ * (e.g. "app" in app.viniun.com.br) that doesn't match any tenant slug.
  * Returns null if the tenant is not found or inactive.
  */
 async function resolveTenantId(slug: string): Promise<string | null> {
@@ -165,7 +165,7 @@ async function resolveTenantId(slug: string): Promise<string | null> {
   if (data) return (data as { id: string }).id;
 
   // 2. Fallback: try by dominio_customizado (full hostname)
-  // Handles cases like "app.yeslaserpraiagrande.com.br" where "app" is not a tenant slug
+  // Handles cases like "app.viniun.com.br" where "app" is not a tenant slug
   const hostname = window.location.hostname;
   const { data: domainData } = await supabase
     .from('mt_tenants')
@@ -176,15 +176,15 @@ async function resolveTenantId(slug: string): Promise<string | null> {
 
   if (domainData) return (domainData as { id: string }).id;
 
-  // 3. Fallback: for known YESlaser domains, resolve to 'yeslaser'
-  if (hostname.includes('yeslaser')) {
-    const { data: yeslaser } = await supabase
+  // 3. Fallback: for known Viniun domains, resolve to 'viniun'
+  if (hostname.includes('viniun')) {
+    const { data: viniunTenant } = await supabase
       .from('mt_tenants')
       .select('id')
-      .eq('slug', 'yeslaser')
+      .eq('slug', 'viniun')
       .eq('is_active', true)
       .maybeSingle();
-    if (yeslaser) return (yeslaser as { id: string }).id;
+    if (viniunTenant) return (viniunTenant as { id: string }).id;
   }
 
   return null;
@@ -252,7 +252,7 @@ async function sendWhatsAppOTP(phone: string, code: string, nome: string): Promi
     }
 
     const chatId = formatPhoneForWhatsApp(phone);
-    const message = `🔐 *YESlaser - Portal de Parceiros*
+    const message = `🔐 *Viniun - Portal de Parceiros*
 
 Olá${nome ? `, ${nome}` : ''}!
 
@@ -264,7 +264,7 @@ Este código é válido por 10 minutos.
 
 ⚠️ Se você não solicitou este código, ignore esta mensagem.
 
-_Equipe YESlaser_`;
+_Equipe Viniun_`;
 
     await wahaApi.sendText({
       session: sessionName,
@@ -272,7 +272,6 @@ _Equipe YESlaser_`;
       text: message,
     });
 
-    console.log(`[WAHA] OTP enviado para ${chatId} via ${sessionName}`);
     return true;
   } catch (err) {
     console.error('[WAHA] Erro ao enviar:', err);

@@ -27,7 +27,7 @@ export default function AIAnalytics() {
   const { data: analyses = [], isLoading, refetch } = useQuery({
     queryKey: ['mt-ai-agent-analyses', tenant?.id],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = supabase
         .from('mt_ai_agent_analyses')
         .select('id, score, total_tokens, processing_time_ms, created_at')
         .order('created_at', { ascending: false });
@@ -52,7 +52,7 @@ export default function AIAnalytics() {
   }
 
   const stats = analyses.reduce(
-    (acc: any, item: any) => {
+    (acc: Record<string, number>, item: Record<string, unknown>) => {
       acc.totalAnalyses += 1;
       acc.totalScore += item.score || 0;
       acc.totalTokens += item.total_tokens || 0;

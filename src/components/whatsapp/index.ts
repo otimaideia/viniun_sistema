@@ -1,4 +1,4 @@
-// Componentes WhatsApp - YESlaser
+// Componentes WhatsApp - Viniun
 // Exportação centralizada dos componentes ativos
 
 // Componentes de sessão

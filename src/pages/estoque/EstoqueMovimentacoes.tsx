@@ -68,7 +68,7 @@ export default function EstoqueMovimentacoes() {
   const [dateTo, setDateTo] = useState("");
 
   const { movements, isLoading } = useInventoryMovementsMT({
-    tipo: (tipo && tipo !== "all" ? tipo : undefined) as any,
+    tipo: (tipo && tipo !== "all" ? tipo : undefined) as string | undefined,
     product_id: (productId && productId !== "all" ? productId : undefined),
     date_from: dateFrom || undefined,
     date_to: dateTo || undefined,

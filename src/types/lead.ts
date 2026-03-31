@@ -36,7 +36,7 @@ export interface Lead {
   data_nascimento?: string | null;
   genero?: string | null;
   profissao?: string | null;
-  como_conheceu?: string | null; // Como conheceu a YESlaser
+  como_conheceu?: string | null; // Como conheceu a Viniun
   estado_civil?: 'solteiro' | 'casado' | 'divorciado' | 'viuvo' | 'uniao_estavel' | null;
   nacionalidade?: string | null;
   foto_url?: string | null;
@@ -58,7 +58,7 @@ export interface Lead {
   tipo_chave_pix?: 'cpf' | 'email' | 'telefone' | 'aleatoria' | null;
   // Notas internas (apenas para equipe)
   nota_interna?: string | null;
-  // Saúde e Tratamento (Importante para Laser)
+  // Saúde e Informações Adicionais
   tipo_pele?: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | null; // Escala Fitzpatrick
   alergias?: string | null;
   condicoes_medicas?: string | null;
@@ -84,7 +84,7 @@ export interface Lead {
   consentimento?: boolean | null;
   franqueado_id?: string | null;
   franquias_vinculadas?: string[] | null; // Array de IDs das franquias vinculadas ao lead
-  id_giga?: number | null; // ID do lead no sistema Giga/Yeslaser Office
+  id_giga?: number | null; // ID do lead no sistema Giga/Viniun Office (deprecated)
   id_api?: string | null; // ID na API externa
   landing_page?: string | null;
   // UTM Parameters

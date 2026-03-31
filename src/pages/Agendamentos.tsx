@@ -95,7 +95,7 @@ export default function Agendamentos() {
     if (filterStatus !== "all" && a.status !== filterStatus) return false;
 
     // Filtro por tipo
-    if (filterTipo !== "all" && ((a as any).tipo || 'avaliacao') !== filterTipo) return false;
+    if (filterTipo !== "all" && ((a as Record<string, unknown>).tipo as string || 'avaliacao') !== filterTipo) return false;
 
     return true;
   });

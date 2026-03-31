@@ -74,8 +74,8 @@ export default function ContaEdit() {
         await createAccount(payload);
       }
       navigate('/financeiro/contas');
-    } catch (err: any) {
-      toast.error(err.message || 'Erro ao salvar');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Erro ao salvar');
     } finally {
       setSaving(false);
     }

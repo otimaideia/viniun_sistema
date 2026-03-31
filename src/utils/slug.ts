@@ -33,7 +33,7 @@ export function removeAccents(text: string): string {
 
 /**
  * Gera um slug a partir de uma string
- * Ex: "YESlaser Altamira" => "yeslaser-altamira"
+ * Ex: "Viniun Altamira" => "viniun-altamira"
  */
 export function generateSlug(name: string): string {
   if (!name) return '';

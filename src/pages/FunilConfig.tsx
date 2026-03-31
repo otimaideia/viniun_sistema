@@ -112,11 +112,11 @@ function AutomacoesGlobaisTab({ funilId }: { funilId: string }) {
   useEffect(() => {
     (async () => {
       const { data, error } = await supabase
-        .from('mt_funnel_automation_config' as any)
+        .from('mt_funnel_automation_config' as never)
         .select('*')
         .eq('funnel_id', funilId)
         .single();
-      if (data) setConfig(data as any);
+      if (data) setConfig(data as AutomationConfig);
       setIsLoading(false);
     })();
   }, [funilId]);
@@ -128,13 +128,13 @@ function AutomacoesGlobaisTab({ funilId }: { funilId: string }) {
     setIsSaving(true);
     try {
       const { error } = await supabase
-        .from('mt_funnel_automation_config' as any)
+        .from('mt_funnel_automation_config' as never)
         .update({ [key]: newValue, updated_at: new Date().toISOString() })
         .eq('funnel_id', funilId);
       if (error) throw error;
       toast.success(`${newValue ? 'Ativado' : 'Desativado'}: ${AUTOMATION_LABELS.find(l => l.key === key)?.label}`);
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
       setConfig({ ...config, [key]: !newValue }); // rollback
     }
     setIsSaving(false);
@@ -208,7 +208,7 @@ function CadenciaTabContent({ funilId, etapas }: { funilId: string; etapas: Funi
     try {
       const dias = intervalos.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
       const { error } = await supabase
-        .from('mt_cadencia_config' as any)
+        .from('mt_cadencia_config' as never)
         .update({
           min_tentativas: parseInt(minTentativas) || 5,
           max_tentativas: parseInt(maxTentativas) || 8,
@@ -218,8 +218,8 @@ function CadenciaTabContent({ funilId, etapas }: { funilId: string; etapas: Funi
         .eq('id', config.id);
       if (error) throw error;
       toast.success('Cadência atualizada!');
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setIsSaving(false);
     }

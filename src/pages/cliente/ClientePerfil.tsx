@@ -170,7 +170,7 @@ export default function ClientePerfil() {
                     <h2 className="text-xl lg:text-2xl font-semibold text-gray-900">
                       {lead?.nome}
                     </h2>
-                    <p className="text-gray-500">Cliente YESlaser</p>
+                    <p className="text-gray-500">Cliente Viniun</p>
                     {lead?.email && (
                       <p className="text-sm text-[#662E8E] mt-1">{lead.email}</p>
                     )}
@@ -1028,7 +1028,7 @@ export default function ClientePerfil() {
               <CardContent className="p-6">
                 <h4 className="font-semibold text-blue-900 mb-2">Precisa de ajuda?</h4>
                 <p className="text-sm text-blue-700 mb-4">
-                  Para alterar informações sensíveis como CPF, entre em contato com a unidade YESlaser mais próxima.
+                  Para alterar informações sensíveis como CPF, entre em contato com a unidade Viniun mais próxima.
                 </p>
                 <Button
                   variant="outline"

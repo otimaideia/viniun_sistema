@@ -76,7 +76,7 @@ function useServicesList() {
       .eq("tenant_id", tenant.id)
       .is("deleted_at", null)
       .order("nome")
-      .then(({ data }) => setServices((data || []) as any));
+      .then(({ data }) => setServices((data || []) as typeof services));
   }, [tenant?.id]);
 
   return services;
@@ -124,8 +124,8 @@ export default function EstoqueVinculos() {
         is_obrigatorio: true,
         observacoes: "",
       });
-    } catch (err: any) {
-      toast.error(err.message || "Erro ao criar vinculo");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Erro ao criar vinculo");
     } finally {
       setSaving(false);
     }
@@ -163,8 +163,8 @@ export default function EstoqueVinculos() {
       await updateServiceProduct(editingId, { quantidade: qty });
       setEditingId(null);
       setEditQuantidade("");
-    } catch (err: any) {
-      toast.error(err.message || "Erro ao atualizar quantidade");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Erro ao atualizar quantidade");
     } finally {
       setSaving(false);
     }

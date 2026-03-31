@@ -56,7 +56,7 @@ function ComparativoTable({ data, competitors }: { data: ComparativoArea[]; comp
               </th>
             ))}
             <th colSpan={2 + competitors.length + 1} rowSpan={1} className="text-center p-2 font-semibold border-l bg-primary/5">
-              YESlaser (18x)
+              Viniun (18x)
             </th>
             <th rowSpan={2} className="text-center p-2 font-semibold border-l min-w-[80px]">
               Posição
@@ -125,7 +125,7 @@ function ComparativoTable({ data, competitors }: { data: ComparativoArea[]; comp
                   );
                 })}
 
-                {/* Nossa coluna YESlaser */}
+                {/* Nossa coluna Viniun */}
                 <td className="p-2 text-center border-l bg-primary/5 font-semibold tabular-nums">
                   <PriceCell value={row.nosso_preco} />
                 </td>
@@ -270,8 +270,8 @@ export default function AnaliseConcorrencia() {
       {/* Tabs: Feminino / Masculino */}
       <Tabs value={genero} onValueChange={(v) => setGenero(v as 'feminino' | 'masculino')}>
         <TabsList>
-          <TabsTrigger value="feminino">Depilação Feminina</TabsTrigger>
-          <TabsTrigger value="masculino">Depilação Masculina</TabsTrigger>
+          <TabsTrigger value="feminino">Serviços Femininos</TabsTrigger>
+          <TabsTrigger value="masculino">Serviços Masculinos</TabsTrigger>
         </TabsList>
 
         <TabsContent value={genero}>

@@ -162,8 +162,8 @@ export default function InfluenciadoraPostEdit() {
       }
 
       navigate(`/influenciadoras/${influenciadoraId}`);
-    } catch (error: any) {
-      toast.error(error.message || "Erro ao salvar post");
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Erro ao salvar post");
     } finally {
       setIsSubmitting(false);
     }
@@ -294,7 +294,7 @@ export default function InfluenciadoraPostEdit() {
                   id="hashtags"
                   value={hashtagsText}
                   onChange={(e) => setHashtagsText(e.target.value)}
-                  placeholder="#yeslaser #beleza #estetica"
+                  placeholder="#viniun #imoveis #negocios"
                   rows={2}
                 />
                 <p className="text-xs text-muted-foreground">

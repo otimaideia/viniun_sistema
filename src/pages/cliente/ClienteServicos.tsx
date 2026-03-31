@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Sparkles, Loader2, CheckCircle2, Clock, XCircle, Gift, Calendar } from 'lucide-react';
 
-const statusConfig: Record<string, { label: string; color: string; icon: any }> = {
+const statusConfig: Record<string, { label: string; color: string; icon: React.ComponentType<{ className?: string }> }> = {
   ativo: { label: 'Ativo', color: 'bg-green-100 text-green-700', icon: Clock },
   em_andamento: { label: 'Em Andamento', color: 'bg-blue-100 text-blue-700', icon: Clock },
   concluido: { label: 'Concluído', color: 'bg-gray-100 text-gray-700', icon: CheckCircle2 },

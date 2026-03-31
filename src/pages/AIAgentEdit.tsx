@@ -27,7 +27,7 @@ const ICON_OPTIONS = [
 ];
 
 function getIcon(iconName: string) {
-  return (LucideIcons as any)[iconName] || BrainCircuit;
+  return (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName] || BrainCircuit;
 }
 
 export default function AIAgentEdit() {
@@ -104,9 +104,9 @@ export default function AIAgentEdit() {
       }
 
       if (isEditing && id) {
-        await update.mutateAsync({ id, ...payload } as any);
+        await update.mutateAsync({ id, ...payload } as Record<string, unknown>);
       } else {
-        await create.mutateAsync(payload as any);
+        await create.mutateAsync(payload as Record<string, unknown>);
       }
       navigate('/whatsapp/ai-agents');
     } catch {

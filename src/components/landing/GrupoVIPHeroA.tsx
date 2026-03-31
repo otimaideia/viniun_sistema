@@ -79,7 +79,7 @@ const GrupoVIPHeroA = ({ scrollToForm }: GrupoVIPHeroAProps) => {
         </Badge>
 
         <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
-          Grupo VIP YESlaser 💎
+          Grupo VIP Viniun 💎
         </h1>
 
         <p className="text-xl md:text-2xl text-white font-semibold mb-2">

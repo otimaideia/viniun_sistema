@@ -68,13 +68,8 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Landing page YESlaser colors (legacy)
-        yeslaser: {
-          purple: "#6B3AA3",
-          lightBlue: "#5DC4DA",
-          darkPurple: "#5A2B8A",
-          violet: "#8C52FF",
-        },
+        // Landing page colors (legacy - mapped to viniun equivalents)
+        // Note: yeslaser-* classes have been migrated to viniun-* classes
         // Viniun brand colors
         viniun: {
           navy: "#1E3A5F",

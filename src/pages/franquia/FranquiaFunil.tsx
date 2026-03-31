@@ -219,7 +219,7 @@ const FranquiaFunil = () => {
                     {etapa.nome}
                   </div>
                   <div className="border rounded-b-lg p-2 min-h-[120px] bg-muted/20">
-                    {data?.leadsByStatus?.[etapa.id]?.slice(0, 5).map((lead: any) => (
+                    {data?.leadsByStatus?.[etapa.id]?.slice(0, 5).map((lead: Record<string, unknown>) => (
                       <div
                         key={lead.id}
                         className="bg-background rounded p-2 mb-2 text-sm border hover:shadow-sm transition-shadow"

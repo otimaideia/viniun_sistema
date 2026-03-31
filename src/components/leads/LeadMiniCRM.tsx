@@ -140,7 +140,7 @@ export function LeadMiniCRM({ leadId, leadPhone, leadPhoneCountryCode, leadName,
     const codigoPais = leadPhoneCountryCode || '55';
     const firstName = leadName?.split(' ')[0] || '';
     const message = encodeURIComponent(
-      `Ola ${firstName}! Tudo bem? Aqui e da YESlaser!`
+      `Ola ${firstName}! Tudo bem? Aqui e da Viniun!`
     );
     window.open(`https://wa.me/${codigoPais}${cleanPhone}?text=${message}`, '_blank');
   };
@@ -170,7 +170,7 @@ export function LeadMiniCRM({ leadId, leadPhone, leadPhoneCountryCode, leadName,
 
   return (
     <div className="space-y-6">
-      {/* Quick Actions - Estilo PopDents */}
+      {/* Quick Actions - Viniun */}
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
@@ -230,7 +230,7 @@ export function LeadMiniCRM({ leadId, leadPhone, leadPhoneCountryCode, leadName,
         </CardContent>
       </Card>
 
-      {/* Stats Rapidos - Estilo PopDents */}
+      {/* Stats Rapidos - Viniun */}
       {(activities.length > 0 || pendingTasksCount > 0 || totalUnread > 0) && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card>
@@ -260,7 +260,7 @@ export function LeadMiniCRM({ leadId, leadPhone, leadPhoneCountryCode, leadName,
         </div>
       )}
 
-      {/* Tabs de Conteudo - Estilo PopDents */}
+      {/* Tabs de Conteudo - Viniun */}
       <Tabs defaultValue="timeline" className="space-y-4">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <TabsList>

@@ -93,7 +93,7 @@ const PRESET_COLORS = [
 ];
 
 function IconPreview({ iconName, className, style }: { iconName: string; className?: string; style?: React.CSSProperties }) {
-  const Icon = (LucideIcons as any)[iconName] || Users;
+  const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName] || Users;
   return <Icon className={className} style={style} />;
 }
 
@@ -263,9 +263,9 @@ export default function EquipeEdit() {
       }
 
       navigate("/configuracoes/equipes");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      if (err.message?.includes("duplicate")) {
+      if (err instanceof Error && err.message?.includes("duplicate")) {
         toast.error("Já existe uma equipe com este código");
       } else {
         toast.error(isEditing ? "Erro ao atualizar equipe" : "Erro ao criar equipe");

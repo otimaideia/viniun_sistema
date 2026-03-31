@@ -389,7 +389,6 @@ export function useRealtimeMessages(
           filter: `conversation_id=eq.${conversationId}`,
         },
         (payload) => {
-          console.log('New message:', payload);
 
           // Invalidar queries
           queryClient.invalidateQueries({ queryKey: [MESSAGES_KEY, conversationId] });
@@ -410,7 +409,6 @@ export function useRealtimeMessages(
           filter: `conversation_id=eq.${conversationId}`,
         },
         (payload) => {
-          console.log('Message updated:', payload);
 
           // Atualizar status da mensagem (ACK)
           queryClient.invalidateQueries({ queryKey: [MESSAGES_KEY, conversationId] });

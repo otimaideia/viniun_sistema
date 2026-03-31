@@ -123,12 +123,12 @@ export default function InfluenciadoraContratoPreview() {
 
     // Dados da Empresa (Tenant = franqueadora)
     empresa_nome: tenant.nome_fantasia,
-    empresa_cnpj: (tenant as any).cnpj || undefined,
-    empresa_cidade: (tenant as any).cidade || undefined,
-    empresa_estado: (tenant as any).estado || undefined,
+    empresa_cnpj: (tenant as Record<string, unknown>).cnpj as string || undefined,
+    empresa_cidade: (tenant as Record<string, unknown>).cidade as string || undefined,
+    empresa_estado: (tenant as Record<string, unknown>).estado as string || undefined,
 
     // Representante (franquia tem precedência)
-    empresa_representante: (franchiseData as any)?.responsavel_nome?.trim() || undefined,
+    empresa_representante: ((franchiseData as Record<string, unknown> | null)?.responsavel_nome as string)?.trim() || undefined,
 
     // Franquia/Unidade (tem preferência sobre empresa para endereço no contrato)
     franquia_nome: franchiseData?.nome_fantasia || franchiseData?.nome || undefined,
@@ -136,7 +136,7 @@ export default function InfluenciadoraContratoPreview() {
     franquia_endereco: franchiseData?.endereco || undefined,
     franquia_cidade: franchiseData?.cidade || undefined,
     franquia_estado: franchiseData?.estado || undefined,
-    franquia_cep: (franchiseData as any)?.cep || undefined,
+    franquia_cep: (franchiseData as Record<string, unknown> | null)?.cep as string || undefined,
 
     // Menor de Idade / Responsável Legal
     eh_menor: influenciadora.eh_menor || false,
@@ -225,7 +225,7 @@ export default function InfluenciadoraContratoPreview() {
   }
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, { variant: any; icon: any; label: string }> = {
+    const variants: Record<string, { variant: "default" | "secondary" | "outline" | "destructive"; icon: React.ComponentType<{ className?: string }>; label: string }> = {
       ativo: { variant: "default", icon: Check, label: "Assinado e Ativo" },
       pausado: { variant: "secondary", icon: Clock, label: "Aguardando Assinatura" },
       encerrado: { variant: "outline", icon: AlertCircle, label: "Encerrado" },

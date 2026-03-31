@@ -2,8 +2,8 @@
  * @deprecated This barrel file exports legacy WhatsApp hooks.
  * Use the MT/adapter versions from @/hooks/multitenant/ or @/hooks/ instead.
  */
-// Hooks para integração WhatsApp - YESlaser
-// Baseado na implementação completa do POPdents
+// Hooks para integração WhatsApp - Viniun
+// Viniun Sistema
 
 // Sessões
 export { useWhatsAppSessions } from './useWhatsAppSessions';

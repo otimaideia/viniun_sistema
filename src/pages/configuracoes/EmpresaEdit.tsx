@@ -37,6 +37,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { useEmpresaSave } from '@/hooks/multitenant/useEmpresaSave';
 import type { Tenant, TenantBranding } from '@/types/multitenant';
 
 // =============================================================================
@@ -92,6 +93,7 @@ export default function EmpresaEdit() {
   const [isSaving, setIsSaving] = useState(false);
   const [isFetchingCep, setIsFetchingCep] = useState(false);
   const [modules, setModules] = useState<Module[]>([]);
+  const { save: saveEmpresa } = useEmpresaSave();
 
   // Estado do formulário - Dados da Empresa
   const [empresa, setEmpresa] = useState({
@@ -386,73 +388,13 @@ export default function EmpresaEdit() {
         subdominio: empresa.subdominio || empresa.slug,
       };
 
-      let tenantId = id;
-
-      if (isEditing) {
-        // Atualizar tenant existente
-        const { error } = await supabase
-          .from('mt_tenants')
-          .update(tenantData)
-          .eq('id', id);
-
-        if (error) throw error;
-      } else {
-        // Criar novo tenant
-        const { data, error } = await supabase
-          .from('mt_tenants')
-          .insert(tenantData)
-          .select()
-          .single();
-
-        if (error) throw error;
-        tenantId = data.id;
-      }
-
-      // Salvar branding
-      const brandingData = {
-        tenant_id: tenantId,
-        ...branding,
-      };
-
-      if (isEditing) {
-        // Verificar se já existe branding
-        const { data: existingBranding } = await supabase
-          .from('mt_tenant_branding')
-          .select('id')
-          .eq('tenant_id', tenantId)
-          .single();
-
-        if (existingBranding) {
-          await supabase
-            .from('mt_tenant_branding')
-            .update(branding)
-            .eq('tenant_id', tenantId);
-        } else {
-          await supabase.from('mt_tenant_branding').insert(brandingData);
-        }
-      } else {
-        await supabase.from('mt_tenant_branding').insert(brandingData);
-      }
-
-      // Salvar módulos
-      if (isEditing) {
-        // Remover módulos existentes
-        await supabase
-          .from('mt_tenant_modules')
-          .delete()
-          .eq('tenant_id', tenantId);
-      }
-
-      // Inserir módulos selecionados
-      const modulesToInsert = modulosSelecionados.map((moduleId) => ({
-        tenant_id: tenantId,
-        module_id: moduleId,
-        is_enabled: true,
-      }));
-
-      if (modulesToInsert.length > 0) {
-        await supabase.from('mt_tenant_modules').insert(modulesToInsert);
-      }
+      const tenantId = await saveEmpresa({
+        isEditing,
+        tenantId: id,
+        tenantData,
+        brandingData: branding,
+        modulosSelecionados,
+      });
 
       toast({
         title: isEditing ? 'Empresa atualizada' : 'Empresa criada',
@@ -460,11 +402,11 @@ export default function EmpresaEdit() {
       });
 
       navigate(`/configuracoes/empresas/${tenantId}`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao salvar empresa:', error);
       toast({
         title: 'Erro ao salvar',
-        description: error.message || 'Não foi possível salvar a empresa.',
+        description: error instanceof Error ? error.message : 'Não foi possível salvar a empresa.',
         variant: 'destructive',
       });
     } finally {

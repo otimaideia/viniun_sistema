@@ -106,7 +106,7 @@ export default function LoginInfluenciadora() {
             <Sparkles className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Portal do Influenciador(a)</h1>
-          <p className="text-gray-500 mt-1">YESlaser</p>
+          <p className="text-gray-500 mt-1">Viniun</p>
         </div>
 
         <Card className="shadow-xl border-0">
@@ -296,7 +296,7 @@ export default function LoginInfluenciadora() {
           <p className="text-xs text-gray-400">
             Precisa de ajuda?{' '}
             <a
-              href="mailto:marketing@franquiayeslaser.com.br"
+              href="mailto:contato@viniun.com.br"
               className="text-[#662E8E] hover:underline"
             >
               Entre em contato

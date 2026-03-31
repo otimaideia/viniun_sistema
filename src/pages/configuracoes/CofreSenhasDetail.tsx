@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { usePasswordVaultEntryMT } from "@/hooks/multitenant/usePasswordVaultMT";
+import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { VAULT_CATEGORIES } from "@/types/password-vault";
 import { copyToClipboard } from "@/lib/password-generator";
@@ -52,17 +53,17 @@ const CofreSenhasDetail = () => {
   const navigate = useNavigate();
 
   const { entry, accessLog, shares, history, isLoading, refetch } = usePasswordVaultEntryMT(id);
+  const { session } = useAuth();
 
   const [revealedValue, setRevealedValue] = useState<string | null>(null);
   const [isRevealing, setIsRevealing] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [autoHideTimer, setAutoHideTimer] = useState<number | null>(null);
 
-  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://supabase-app.yeslaserpraiagrande.com.br';
+  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://supabase.viniun.com.br';
 
   // Lightweight vault operations (avoid loading all entries)
   const revealValue = useCallback(async (entryId: string): Promise<string> => {
-    const { data: { session } } = await supabase.auth.getSession();
     if (!session?.access_token) throw new Error('Nao autenticado');
     const res = await fetch(`${SUPABASE_URL}/functions/v1/vault-api/decrypt`, {
       method: 'POST',
@@ -76,7 +77,7 @@ const CofreSenhasDetail = () => {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Erro ao revelar');
     return data.value as string;
-  }, [SUPABASE_URL]);
+  }, [SUPABASE_URL, session]);
 
   const toggleFavorite = useCallback(async (entryId: string) => {
     if (!entry) return;

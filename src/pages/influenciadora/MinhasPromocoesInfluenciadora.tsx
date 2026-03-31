@@ -96,7 +96,7 @@ export default function MinhasPromocoesInfluenciadora() {
   // Mutation para aderir a uma promoção
   const aderir = useMutation({
     mutationFn: async (promotionId: string) => {
-      const promotion = promotions?.find((p: any) => p.id === promotionId);
+      const promotion = promotions?.find((p: { id: string }) => p.id === promotionId);
       const link = `${window.location.origin}/form/boas-vindas?influenciadores=${influenciadora!.codigo_indicacao}&promo=${promotion?.codigo || ''}`;
 
       const { data, error } = await supabase
@@ -121,7 +121,7 @@ export default function MinhasPromocoesInfluenciadora() {
         description: 'Você aderiu com sucesso. Compartilhe seu link exclusivo!',
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: 'Erro ao aderir',
         description: error.message || 'Tente novamente.',
@@ -141,14 +141,14 @@ export default function MinhasPromocoesInfluenciadora() {
   };
 
   const getSubscription = (promoId: string) => {
-    return subscriptions?.find((s: any) => s.promotion_id === promoId);
+    return subscriptions?.find((s: { promotion_id: string }) => s.promotion_id === promoId);
   };
 
   const getPromoStats = (promoId: string) => {
     return referralStats?.[promoId] || { leads: 0, convertidos: 0 };
   };
 
-  const formatDiscount = (promo: any) => {
+  const formatDiscount = (promo: Record<string, unknown>) => {
     if (promo.desconto_tipo === 'percentual' && promo.desconto_valor) {
       return `${promo.desconto_valor}% de desconto`;
     }
@@ -198,7 +198,7 @@ export default function MinhasPromocoesInfluenciadora() {
         {/* Promotions Grid */}
         {!isLoading && promotions && promotions.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {promotions.map((promo: any) => {
+            {promotions.map((promo: Record<string, unknown>) => {
               const subscription = getSubscription(promo.id);
               const isSubscribed = !!subscription;
               const stats = getPromoStats(promo.id);
@@ -272,7 +272,7 @@ export default function MinhasPromocoesInfluenciadora() {
                           Serviços incluídos
                         </p>
                         <div className="flex flex-wrap gap-1.5">
-                          {promo.services.map((ps: any) => (
+                          {promo.services.map((ps: Record<string, unknown>) => (
                             <Badge key={ps.id} variant="secondary" className="text-xs">
                               {ps.service?.nome || 'Serviço'}
                             </Badge>
@@ -349,7 +349,7 @@ export default function MinhasPromocoesInfluenciadora() {
                           Artes para compartilhar
                         </p>
                         <div className="flex flex-wrap gap-2">
-                          {promo.assets.map((asset: any) => (
+                          {promo.assets.map((asset: Record<string, unknown>) => (
                             <a
                               key={asset.id}
                               href={asset.url}

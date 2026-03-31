@@ -1,5 +1,5 @@
 // Utilitario para envio de webhooks apos submissao de formulario
-// Clone do PopDents para YESlaser
+// Viniun Sistema
 
 export interface WebhookConfig {
   url: string;
@@ -133,7 +133,7 @@ export async function testWebhook(url: string, headers?: Record<string, string>)
       body: JSON.stringify({
         test: true,
         timestamp: new Date().toISOString(),
-        message: 'Teste de conectividade do webhook YESlaser',
+        message: 'Teste de conectividade do webhook Viniun',
       }),
     });
 

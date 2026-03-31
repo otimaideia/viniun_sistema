@@ -183,7 +183,7 @@ export function mapConversaMTToLegacy(c: DbConversaMT): WhatsAppConversa {
 
   // Prioridade do nome: lead.nome > contact_name (se não for nome da sessão) > phone
   const leadNome = (c as any).lead?.nome;
-  const SESSION_NAMES = ['yeslaser praia grande', 'yeslaser praia grande boqueirão', 'yeslaser', 'popdents'];
+  const SESSION_NAMES = ['viniun', 'viniun boqueirão'];
   const isSessionName = c.contact_name && SESSION_NAMES.some(sn => c.contact_name!.toLowerCase().includes(sn));
   const displayName = leadNome || (isSessionName ? null : c.contact_name) || c.contact_name;
 

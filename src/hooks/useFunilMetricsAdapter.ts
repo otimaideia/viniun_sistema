@@ -194,7 +194,7 @@ export function useFunilMetricsAdapter(
       return {
         overview,
         etapasMetrics,
-        conversaoMetrics: [] as ConversaoMetrics[], // TODO: Implementar com histórico MT
+        conversaoMetrics: [] as ConversaoMetrics[], // Requires MT stage change history for conversion metrics
         responsavelMetrics,
       };
     },

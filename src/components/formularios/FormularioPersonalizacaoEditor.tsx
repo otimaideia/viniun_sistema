@@ -183,7 +183,7 @@ interface FormularioPersonalizacaoEditorProps {
 
 // Cores pre-definidas para selecao rapida
 const PRESET_COLORS = [
-  { name: 'Verde YESlaser', primary: '#10b981', secondary: '#059669' },
+  { name: 'Verde Viniun', primary: '#10b981', secondary: '#059669' },
   { name: 'Azul', primary: '#3B82F6', secondary: '#1E40AF' },
   { name: 'Roxo', primary: '#8B5CF6', secondary: '#5B21B6' },
   { name: 'Rosa', primary: '#EC4899', secondary: '#BE185D' },
@@ -1175,7 +1175,7 @@ export default function FormularioPersonalizacaoEditor({
                         <FormItem>
                           <FormLabel>Texto do Footer</FormLabel>
                           <FormControl>
-                            <Input {...field} placeholder="Nome da clinica ou mensagem" />
+                            <Input {...field} placeholder="Nome da empresa ou mensagem" />
                           </FormControl>
                         </FormItem>
                       )}

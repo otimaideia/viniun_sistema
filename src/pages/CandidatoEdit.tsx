@@ -213,7 +213,7 @@ export default function CandidatoEdit() {
     }
   };
 
-  const set = (field: string, value: any) => {
+  const set = (field: string, value: unknown) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 

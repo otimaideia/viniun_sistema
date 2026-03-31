@@ -11,7 +11,7 @@ import { useFinancialTransactionsMT, useFinancialTransactionMT, useFinancialCate
 import { useTenantContext } from '@/contexts/TenantContext';
 import { TRANSACTION_TYPE_LABELS, TRANSACTION_STATUS_LABELS } from '@/types/financeiro';
 import type { TransactionType, TransactionStatus, FinancialTransactionCreate } from '@/types/financeiro';
-import { supabase } from '@/integrations/supabase/client';
+import { useStorageBucketUpload } from '@/hooks/useStorageBucketUpload';
 import { toast } from 'sonner';
 
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'application/pdf'];
@@ -32,7 +32,12 @@ export default function LancamentoEdit() {
   const [comprovanteFile, setComprovanteFile] = useState<File | null>(null);
   const [comprovantePreview, setComprovantePreview] = useState<string | null>(null);
   const [existingComprovanteUrl, setExistingComprovanteUrl] = useState<string | null>(null);
-  const [uploadingComprovante, setUploadingComprovante] = useState(false);
+  const { upload: uploadToStorage, isUploading: uploadingComprovante } = useStorageBucketUpload({
+    bucket: 'comprovantes',
+    pathPrefix: 'comprovantes/',
+    maxSizeBytes: MAX_FILE_SIZE,
+    allowedMimeTypes: ALLOWED_FILE_TYPES,
+  });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     tipo: 'despesa' as TransactionType,
@@ -114,30 +119,8 @@ export default function LancamentoEdit() {
   const uploadComprovante = async (): Promise<string | null> => {
     if (!comprovanteFile) return existingComprovanteUrl || null;
 
-    setUploadingComprovante(true);
-    try {
-      const ext = comprovanteFile.name.split('.').pop()?.toLowerCase() || 'pdf';
-      const fileName = `${Date.now()}_${crypto.randomUUID().slice(0, 8)}.${ext}`;
-      const filePath = `comprovantes/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('comprovantes')
-        .upload(filePath, comprovanteFile, { contentType: comprovanteFile.type });
-
-      if (uploadError) throw uploadError;
-
-      const { data: urlData } = supabase.storage
-        .from('comprovantes')
-        .getPublicUrl(filePath);
-
-      return urlData.publicUrl;
-    } catch (err: any) {
-      console.error('Erro ao fazer upload do comprovante:', err);
-      toast.error('Erro ao fazer upload do comprovante');
-      return null;
-    } finally {
-      setUploadingComprovante(false);
-    }
+    const result = await uploadToStorage(comprovanteFile);
+    return result?.publicUrl || null;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -183,8 +166,8 @@ export default function LancamentoEdit() {
         }
       }
       navigate('/financeiro/lancamentos');
-    } catch (err: any) {
-      toast.error(err.message || 'Erro ao salvar');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Erro ao salvar');
     } finally {
       setSaving(false);
     }

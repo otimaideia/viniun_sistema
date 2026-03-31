@@ -35,7 +35,7 @@ async function getSecret(key: string): Promise<string> {
   console.log(`[Secret] ${key} não encontrado nas env vars, buscando do banco...`)
 
   try {
-    const supabaseUrl = Deno.env.get('SUPABASE_URL') || 'https://supabase-app.yeslaserpraiagrande.com.br'
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') || 'https://supabase.viniun.com.br'
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ||
       'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTc3MDc4MTc0MCwiZXhwIjo0OTI2NDU1MzQwLCJyb2xlIjoic2VydmljZV9yb2xlIn0.K1j07Xd07FuQHNNXqnwXnWvakPBfUirpKXqB5sZmkTE'
 

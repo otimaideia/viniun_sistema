@@ -62,7 +62,7 @@ export default function ChecklistTemplates() {
     }
   };
 
-  const getAssignmentLabel = (template: any) => {
+  const getAssignmentLabel = (template: Record<string, unknown>) => {
     if (template.assigned_user) return template.assigned_user.nome;
     if (template.role) return template.role.nome;
     if (template.department) return template.department.nome;

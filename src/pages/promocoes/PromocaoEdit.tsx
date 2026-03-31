@@ -214,7 +214,7 @@ const PromocaoEdit = () => {
       await uploadAsset.mutateAsync({
         promotionId: id,
         file,
-        tipo: tipo as any,
+        tipo: tipo as "banner" | "documento",
       });
     } catch {
       // toast already handled by hook
@@ -314,8 +314,8 @@ const PromocaoEdit = () => {
 
       toast.success(isEditing ? "Promoção atualizada com sucesso" : "Promoção criada com sucesso");
       navigate("/promocoes");
-    } catch (error: any) {
-      toast.error(`Erro ao salvar: ${error.message}`);
+    } catch (error: unknown) {
+      toast.error(`Erro ao salvar: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
     }
   };
 
@@ -406,7 +406,7 @@ const PromocaoEdit = () => {
                 <Label htmlFor="tipo">Tipo *</Label>
                 <Select
                   value={watch("tipo")}
-                  onValueChange={(value: any) => setValue("tipo", value)}
+                  onValueChange={(value: string) => setValue("tipo", value as "desconto" | "pacote" | "lancamento" | "evento" | "sazonal")}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -446,7 +446,7 @@ const PromocaoEdit = () => {
                 <Label htmlFor="desconto_tipo">Tipo de Desconto</Label>
                 <Select
                   value={watch("desconto_tipo") || "percentual"}
-                  onValueChange={(value: any) => setValue("desconto_tipo", value)}
+                  onValueChange={(value: string) => setValue("desconto_tipo", value as "percentual" | "fixo")}
                 >
                   <SelectTrigger>
                     <SelectValue />

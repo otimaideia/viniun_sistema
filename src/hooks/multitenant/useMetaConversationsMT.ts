@@ -142,7 +142,6 @@ export function useMetaConversationsMT(
           filter: tenant ? `tenant_id=eq.${tenant.id}` : undefined,
         },
         (payload) => {
-          console.log('[Real-time] Conversa atualizada:', payload);
           queryClient.invalidateQueries({ queryKey: ['mt-meta-conversations'] });
         }
       )

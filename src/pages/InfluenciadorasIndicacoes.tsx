@@ -52,8 +52,8 @@ const buildWhatsAppLink = (phone: string, leadName: string, influencerName: stri
 
   const message = encodeURIComponent(
     `Olá, ${firstName}! Tudo bem? 😊\n\n` +
-    `A *${influencerName}* te indicou e você ganhou *10 sessões de depilação a laser GRATUITAS* em área P! 🎁\n\n` +
-    `Para garantir suas sessões, é só agendar uma *avaliação gratuita* aqui na *YESlaser Praia Grande*. A avaliação é rápida, sem compromisso, e nossa especialista vai analisar sua pele e tirar todas as suas dúvidas.\n\n` +
+    `A *${influencerName}* te indicou e você ganhou *benefícios exclusivos GRATUITOS*! 🎁\n\n` +
+    `Para garantir seus benefícios, é só agendar um *atendimento gratuito* aqui na *Viniun*. O atendimento é rápido, sem compromisso, e nosso especialista vai tirar todas as suas dúvidas.\n\n` +
     `📅 Quer agendar? Me conta qual o melhor dia e horário para você!\n\n` +
     `📍 Estamos na Praia Grande - SP\n\n` +
     `Te esperamos! 💜`
@@ -95,7 +95,7 @@ const InfluenciadorasIndicacoes = () => {
     refetch,
     stats: hookStats,
   } = useInfluencerReferralsMT({
-    status: statusFilter !== "all" ? (statusFilter as any) : undefined,
+    status: statusFilter !== "all" ? (statusFilter as string) : undefined,
     influencer_id: influenciadoraFilter !== "all" ? influenciadoraFilter : undefined,
   });
 

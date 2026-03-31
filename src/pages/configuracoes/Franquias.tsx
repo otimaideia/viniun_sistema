@@ -183,11 +183,11 @@ export default function Franquias() {
       });
 
       loadFranchises();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao deletar franquia:', error);
       toast({
         title: 'Erro ao remover franquia',
-        description: error.message || 'Não foi possível remover a franquia.',
+        description: error instanceof Error ? error.message : 'Não foi possível remover a franquia.',
         variant: 'destructive',
       });
     } finally {

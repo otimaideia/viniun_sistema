@@ -36,8 +36,8 @@ export default function AITraining() {
   const { data: feedback = [], isLoading, refetch } = useQuery({
     queryKey: ['mt-chatbot-training', tenant?.id],
     queryFn: async () => {
-      let query = (supabase as any)
-        .from('mt_chatbot_training')
+      let query = supabase
+        .from('mt_chatbot_training' as never)
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -54,8 +54,8 @@ export default function AITraining() {
 
   const toggleReviewed = useMutation({
     mutationFn: async ({ id, is_reviewed }: { id: string; is_reviewed: boolean }) => {
-      const { error } = await (supabase as any)
-        .from('mt_chatbot_training')
+      const { error } = await supabase
+        .from('mt_chatbot_training' as never)
         .update({ is_reviewed })
         .eq('id', id);
       if (error) throw error;
@@ -64,7 +64,7 @@ export default function AITraining() {
       queryClient.invalidateQueries({ queryKey: ['mt-chatbot-training'] });
       toast.success('Status atualizado');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(`Erro: ${error.message}`);
     },
   });
@@ -77,7 +77,7 @@ export default function AITraining() {
     );
   }
 
-  const reviewedCount = feedback.filter((f: any) => f.is_reviewed).length;
+  const reviewedCount = feedback.filter((f: Record<string, unknown>) => f.is_reviewed).length;
   const pendingCount = feedback.length - reviewedCount;
 
   return (
@@ -169,7 +169,7 @@ export default function AITraining() {
                   </TableCell>
                 </TableRow>
               ) : (
-                feedback.map((item: any) => (
+                feedback.map((item: Record<string, unknown>) => (
                   <TableRow key={item.id}>
                     <TableCell className="max-w-[200px]">
                       <span className="line-clamp-2 text-sm">{item.question || '-'}</span>

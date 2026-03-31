@@ -57,7 +57,7 @@ const EmbedCodeModal: React.FC<EmbedCodeModalProps> = ({
   const popupCode = useMemo(() => {
     return `<!-- Botao para abrir o formulario -->
 <button
-  onclick="openYeslaserFormPopup()"
+  onclick="openViniunFormPopup()"
   style="
     background: #10b981;
     color: white;
@@ -73,10 +73,10 @@ const EmbedCodeModal: React.FC<EmbedCodeModalProps> = ({
 
 <!-- Script do popup -->
 <script>
-function openYeslaserFormPopup() {
+function openViniunFormPopup() {
   // Criar overlay
   var overlay = document.createElement('div');
-  overlay.id = 'yeslaser-form-overlay';
+  overlay.id = 'viniun-form-overlay';
   overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;';
 
   // Criar container
@@ -109,13 +109,13 @@ function openYeslaserFormPopup() {
 
   // Gerar codigo inline (widget)
   const inlineCode = useMemo(() => {
-    return `<!-- Container do formulario YESlaser -->
-<div id="yeslaser-form-container"></div>
+    return `<!-- Container do formulario Viniun -->
+<div id="viniun-form-container"></div>
 
 <!-- Script de carregamento -->
 <script>
 (function() {
-  var container = document.getElementById('yeslaser-form-container');
+  var container = document.getElementById('viniun-form-container');
   if (!container) return;
 
   var iframe = document.createElement('iframe');
@@ -126,7 +126,7 @@ function openYeslaserFormPopup() {
 
   // Auto-resize baseado no conteudo
   window.addEventListener('message', function(e) {
-    if (e.data && e.data.type === 'yeslaser-form-height') {
+    if (e.data && e.data.type === 'viniun-form-height') {
       iframe.style.height = e.data.height + 'px';
     }
   });

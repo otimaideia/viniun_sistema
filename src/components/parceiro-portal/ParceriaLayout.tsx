@@ -85,7 +85,7 @@ export function ParceriaLayout({ children }: ParceriaLayoutProps) {
                 <Building2 className="h-5 w-5 text-white" />
               </div>
               <div className="hidden sm:block">
-                <p className="font-bold text-blue-600">YESlaser</p>
+                <p className="font-bold text-blue-600">Viniun</p>
                 <p className="text-xs text-gray-500">Portal do Parceiro</p>
               </div>
             </Link>

@@ -53,12 +53,12 @@ export interface Servico {
   nome: string;
   descricao: string | null;
   categoria: string | null; // 'feminino', 'masculino', 'estetica_facial', 'estetica_corporal'
-  duracao_minutos: number | null; // Tempo do procedimento em minutos (controle interno)
+  duracao_minutos: number | null; // Tempo do serviço em minutos (controle interno)
   imagem_url: string | null; // URL da imagem principal/capa
   ativo: boolean;
   created_at: string;
   updated_at: string;
-  // Campos de área corporal (laser)
+  // Campos de classificação de área
   area_corporal?: string | null;
   tamanho_area?: TamanhoArea | null;
   sessoes_protocolo?: number | null;
@@ -87,8 +87,8 @@ export interface FranqueadoServico {
 
 /** @deprecated Use useServiceCategoriesMT().getCategoryLabel() - categorias agora são dinâmicas no banco */
 export const CATEGORIA_LABELS: Record<string, string> = {
-  feminino: "Depilação Feminina",
-  masculino: "Depilação Masculina",
-  estetica_facial: "Estética Facial",
-  estetica_corporal: "Estética Corporal",
+  feminino: "Serviços Femininos",
+  masculino: "Serviços Masculinos",
+  estetica_facial: "Serviços Especializados",
+  estetica_corporal: "Serviços Corporativos",
 };

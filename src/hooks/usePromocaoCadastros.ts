@@ -52,7 +52,6 @@ export function usePromocaoCadastros() {
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: LeadStatus }) => {
-      console.log("Atualizando status:", { id, status });
       
       const { data, error } = await supabase
         .from("mt_promotion_registrations")
@@ -65,7 +64,6 @@ export function usePromocaoCadastros() {
         throw error;
       }
       
-      console.log("Status atualizado com sucesso:", data);
       return data;
     },
     onSuccess: () => {
@@ -80,7 +78,6 @@ export function usePromocaoCadastros() {
 
   const updateCadastroMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Partial<PromocaoCadastro> }) => {
-      console.log("Atualizando cadastro:", { id, data });
       
       const { data: updated, error } = await supabase
         .from("mt_promotion_registrations")
@@ -94,7 +91,6 @@ export function usePromocaoCadastros() {
         throw error;
       }
       
-      console.log("Cadastro atualizado com sucesso:", updated);
       return updated;
     },
     onSuccess: () => {

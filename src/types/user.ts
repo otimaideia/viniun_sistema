@@ -10,8 +10,8 @@
 // sdr = pré-vendas (prospecção e qualificação de leads)
 // consultora_vendas = consultora de vendas (antigo atendente)
 // avaliadora = avaliadora técnica (antigo avaliador)
-// aplicadora = profissional que aplica procedimentos (vê própria agenda)
-// esteticista = esteticista (vê própria agenda)
+// aplicadora = profissional que realiza serviços (vê própria agenda)
+// esteticista = profissional especializado (vê própria agenda)
 // unidade = colaborador da unidade (somente visualização)
 export type AppRole =
   | 'super_admin'

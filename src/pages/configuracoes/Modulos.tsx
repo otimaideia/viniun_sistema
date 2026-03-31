@@ -110,7 +110,7 @@ const Modulos = () => {
 
   // Obter ícone do módulo
   const getModuleIcon = (iconeName: string) => {
-    const IconComponent = (LucideIcons as any)[iconeName];
+    const IconComponent = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconeName];
     return IconComponent || LucideIcons.Puzzle;
   };
 

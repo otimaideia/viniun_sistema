@@ -163,7 +163,7 @@ function UserPermissionsTab({ userId, selectedRoleId }: { userId: string; select
     onError: (error: Error) => {
       toast({
         title: 'Erro ao alterar permissão',
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
         variant: 'destructive',
       });
     },
@@ -502,7 +502,7 @@ export default function UsuarioEdit() {
   const [selectedRoleId, setSelectedRoleId] = useState<string>('');
 
   // Estado local para equipes do usuário (carregadas separadamente)
-  const [userTeams, setUserTeams] = useState<any[]>([]);
+  const [userTeams, setUserTeams] = useState<{ team_id: string; team?: { nome: string } }[]>([]);
   const [isLoadingUserTeams, setIsLoadingUserTeams] = useState(false);
 
   // Estado do formulário - pré-preencher com contexto do usuário atual
@@ -791,7 +791,7 @@ export default function UsuarioEdit() {
       });
 
       navigate(`/configuracoes/usuarios/${id}`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao salvar usuário:', error);
 
       // Verificar erro de e-mail duplicado
@@ -804,7 +804,7 @@ export default function UsuarioEdit() {
       } else {
         toast({
           title: 'Erro ao salvar',
-          description: error.message || 'Não foi possível salvar o usuário.',
+          description: error instanceof Error ? error.message : 'Erro desconhecido' || 'Não foi possível salvar o usuário.',
           variant: 'destructive',
         });
       }
@@ -813,7 +813,7 @@ export default function UsuarioEdit() {
     }
   };
 
-  const updateField = (field: string, value: any) => {
+  const updateField = (field: string, value: string | boolean | string[] | null) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -826,10 +826,10 @@ export default function UsuarioEdit() {
         title: 'Departamento vinculado',
         description: 'Usuário adicionado ao departamento.',
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: 'Erro ao vincular departamento',
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
         variant: 'destructive',
       });
     }
@@ -843,10 +843,10 @@ export default function UsuarioEdit() {
         title: 'Departamento removido',
         description: 'Usuário removido do departamento.',
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: 'Erro ao remover departamento',
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
         variant: 'destructive',
       });
     }
@@ -860,10 +860,10 @@ export default function UsuarioEdit() {
         title: 'Departamento principal definido',
         description: 'Este é agora o departamento principal do usuário.',
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: 'Erro ao definir departamento principal',
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
         variant: 'destructive',
       });
     }
@@ -879,10 +879,10 @@ export default function UsuarioEdit() {
         title: 'Equipe vinculada',
         description: 'Usuário adicionado à equipe.',
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: 'Erro ao vincular equipe',
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
         variant: 'destructive',
       });
     }
@@ -897,18 +897,18 @@ export default function UsuarioEdit() {
         title: 'Equipe removida',
         description: 'Usuário removido da equipe.',
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: 'Erro ao remover da equipe',
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
         variant: 'destructive',
       });
     }
   };
 
   // Filtrar departamentos e equipes já vinculados
-  const assignedDeptIds = userDepartments.map((ud: any) => ud.department_id);
-  const assignedTeamIds = userTeams.map((ut: any) => ut.team_id);
+  const assignedDeptIds = userDepartments.map((ud: { department_id: string; department?: { nome: string } }) => ud.department_id);
+  const assignedTeamIds = userTeams.map((ut: { team_id: string; team?: { nome: string } }) => ut.team_id);
   const availableDepartments = departments.filter((d) => !assignedDeptIds.includes(d.id));
   const availableTeams = teams.filter((t) => !assignedTeamIds.includes(t.id));
 
@@ -1358,7 +1358,7 @@ export default function UsuarioEdit() {
                     </p>
                   ) : (
                     <div className="space-y-2">
-                      {userDepartments.map((ud: any) => (
+                      {userDepartments.map((ud: { department_id: string; department?: { nome: string } }) => (
                         <div
                           key={ud.id}
                           className="flex items-center justify-between p-2 rounded-lg border bg-muted/30"
@@ -1457,7 +1457,7 @@ export default function UsuarioEdit() {
                     </p>
                   ) : (
                     <div className="space-y-2">
-                      {userTeams.map((ut: any) => (
+                      {userTeams.map((ut: { team_id: string; team?: { nome: string } }) => (
                         <div
                           key={ut.id}
                           className="flex items-center justify-between p-2 rounded-lg border bg-muted/30"

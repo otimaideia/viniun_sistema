@@ -106,7 +106,6 @@ export function useMarketingCampanhas() {
         MarketingService.updateCampanha(campanha.id, { status: "finalizada" })
           .then(() => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
-            console.log(`Campanha "${campanha.nome}" finalizada automaticamente (expirada)`);
           })
           .catch((error) => {
             console.error(`Erro ao finalizar campanha ${campanha.nome}:`, error);

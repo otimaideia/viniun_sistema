@@ -3,12 +3,12 @@
 # INSTALL ALL EDGE FUNCTIONS - Supabase Self-Hosted (Coolify)
 # ==========================================================
 # Instala TODAS as 14 Edge Functions + _shared no container
-# Target: supabase-app.yeslaserpraiagrande.com.br
+# Target: supabase.viniun.com.br
 # Container: supabase-edge-functions
 # Data: 12/02/2026
 #
 # COMO USAR:
-# 1. Acesse Coolify > Automacao Yeslaser > supabase-yeslaser
+# 1. Acesse Coolify > Automacao Yeslaser > supabase-viniun
 # 2. Va em Terminal
 # 3. Selecione container: supabase-edge-functions-*
 # 4. Cole TODO o conteudo deste arquivo no terminal

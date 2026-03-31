@@ -390,7 +390,6 @@ export default function WhatsAppDashboard() {
     queryKey: ['whatsapp_dashboard_metrics', tenant?.id, franchise?.id, accessLevel],
     queryFn: async () => {
       if (!tenant && accessLevel !== 'platform') {
-        console.warn('[Dashboard] Tenant não carregado');
         return null;
       }
 
@@ -410,13 +409,6 @@ export default function WhatsAppDashboard() {
         console.error('[Dashboard] Erro ao buscar métricas:', error);
         throw error;
       }
-
-      console.log('[Dashboard] Métricas carregadas via RPC:', {
-        totalMessages: data?.totalMessages,
-        totalConversations: data?.totalConversations,
-        todayMessages: data?.todayMessages,
-        todayConversations: data?.todayConversations,
-      });
 
       return {
         ...data,

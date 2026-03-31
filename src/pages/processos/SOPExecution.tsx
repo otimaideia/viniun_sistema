@@ -209,12 +209,12 @@ export default function SOPExecution() {
               <div className="space-y-2">
                 <p className="text-sm font-medium">Checklist:</p>
                 {(() => {
-                  const sopStep = execution.sop.steps.find((s: any) => s.id === currentExecStep.step_id);
+                  const sopStep = execution.sop.steps.find((s: { id: string }) => s.id === currentExecStep.step_id);
                   const checklistItems = sopStep?.checklist_items || [];
-                  return checklistItems.map((item: any) => {
+                  return checklistItems.map((item: Record<string, unknown>) => {
                     const execChecklist = currentExecStep.checklist || [];
                     const checked = execChecklist.find(
-                      (c: any) => c.checklist_item_id === item.id
+                      (c: { checklist_item_id: string }) => c.checklist_item_id === item.id
                     )?.is_checked || false;
                     return (
                       <div key={item.id} className="flex items-center gap-2">

@@ -71,7 +71,7 @@ export function useFormularios(options: UseFormulariosOptions = {}) {
       // Buscar stats se solicitado
       if (options.includeStats && formulariosWithStats.length > 0) {
         const statsPromises = formulariosWithStats.map(async (form) => {
-          const { data: statsData } = await supabase.rpc("get_formulario_stats_yeslaser", {
+          const { data: statsData } = await supabase.rpc("get_formulario_stats_viniun", {
             p_formulario_id: form.id,
           });
           return { ...form, stats: statsData?.[0] as FormularioStats };
@@ -168,7 +168,7 @@ export function useFormularios(options: UseFormulariosOptions = {}) {
 
     if (data) {
       // Buscar stats
-      const { data: statsData } = await supabase.rpc("get_formulario_stats_yeslaser", {
+      const { data: statsData } = await supabase.rpc("get_formulario_stats_viniun", {
         p_formulario_id: id,
       });
       return { ...data, stats: statsData?.[0] as FormularioStats } as FormularioWithRelations;

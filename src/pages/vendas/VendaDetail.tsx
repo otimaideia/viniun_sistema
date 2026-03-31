@@ -84,7 +84,7 @@ export default function VendaDetail() {
     try {
       await deleteSale(id, motivoCancelamento || undefined);
       navigate('/vendas');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };
@@ -94,7 +94,7 @@ export default function VendaDetail() {
     try {
       await updateSale({ id, status: 'concluido' });
       window.location.reload();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };

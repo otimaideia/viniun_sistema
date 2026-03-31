@@ -47,7 +47,7 @@ import * as LucideIcons from "lucide-react";
 import type { Team } from "@/types/multitenant";
 
 function TeamIcon({ iconName, className }: { iconName: string; className?: string }) {
-  const Icon = (LucideIcons as any)[iconName] || Users;
+  const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName] || Users;
   return <Icon className={className} />;
 }
 
@@ -90,7 +90,7 @@ export default function Equipes() {
       await deleteTeam(teamToDelete.id);
       toast.success("Equipe excluída com sucesso");
       setTeamToDelete(null);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       toast.error("Erro ao excluir equipe");
     }
@@ -185,7 +185,7 @@ export default function Equipes() {
                           <TeamIcon
                             iconName={team.icone}
                             className="h-5 w-5"
-                            style={{ color: team.cor } as any}
+                            style={{ color: team.cor }}
                           />
                         </div>
                         <div>

@@ -39,6 +39,54 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { formatCurrency } from '@/types/influenciadora';
 
+// Extended types for data loaded from Supabase with select('*')
+interface TenantRecord {
+  id: string;
+  slug?: string;
+  nome_fantasia?: string;
+  cnpj?: string;
+  cidade?: string;
+  estado?: string;
+  [key: string]: unknown;
+}
+
+interface FranchiseRecord {
+  id: string;
+  nome_fantasia?: string;
+  nome?: string;
+  responsavel_nome?: string;
+  cnpj?: string;
+  endereco?: string;
+  cidade?: string;
+  estado?: string;
+  cep?: string;
+  [key: string]: unknown;
+}
+
+interface ContratoRecord {
+  id: string;
+  tenant_id: string;
+  franchise_id?: string | null;
+  influencer_id: string;
+  tipo: string;
+  status: string;
+  template_tipo?: string | null;
+  data_inicio?: string | null;
+  data_fim?: string | null;
+  valor_mensal?: number | null;
+  valor_por_post?: number | null;
+  percentual_comissao?: number | null;
+  valor_comissao_fixa?: number | null;
+  credito_permuta?: number | null;
+  posts_mes?: number | null;
+  stories_mes?: number | null;
+  reels_mes?: number | null;
+  servicos_permuta?: string[] | null;
+  created_at: string;
+  updated_at: string;
+  [key: string]: unknown;
+}
+
 const TIPO_LABELS: Record<string, string> = {
   mensal: 'Pagamento Mensal',
   por_post: 'Por Post',
@@ -172,7 +220,7 @@ export default function MeuContratoInfluenciadora() {
             solicitante: 'influenciadora',
             dias_vigencia: diasVigencia,
             dentro_prazo_cdc: dentroPrazoCDC,
-            influencer_nome: (influenciadora as any)?.nome_artistico || influenciadora?.nome || 'Influenciadora',
+            influencer_nome: influenciadora?.nome_artistico || influenciadora?.nome || 'Influenciadora',
           },
         },
       }).catch(err => console.error('[notify] Erro:', err));
@@ -188,7 +236,7 @@ export default function MeuContratoInfluenciadora() {
           : 'Cancelamento solicitado. Prazo de aviso prévio: 30 dias.'
       );
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error?.message || 'Erro ao cancelar contrato');
     },
   });
@@ -203,17 +251,17 @@ export default function MeuContratoInfluenciadora() {
       (contrato.tipo === 'permuta' ? 'contrato_permuta' : 'contrato_normal'),
 
     // Influencer data
-    influenciadora_nome: (influenciadora as any).nome_completo || influenciadora.nome || '',
-    influenciadora_cpf: (influenciadora as any).cpf || undefined,
-    influenciadora_rg: (influenciadora as any).rg || undefined,
+    influenciadora_nome: influenciadora.nome_completo || influenciadora.nome || '',
+    influenciadora_cpf: influenciadora.cpf || undefined,
+    influenciadora_rg: influenciadora.rg || undefined,
     influenciadora_email: influenciadora.email || undefined,
-    influenciadora_telefone: (influenciadora as any).whatsapp || influenciadora.telefone || undefined,
-    influenciadora_rua: (influenciadora as any).endereco || undefined,
-    influenciadora_numero: (influenciadora as any).numero || undefined,
-    influenciadora_bairro: (influenciadora as any).bairro || undefined,
-    influenciadora_cep: (influenciadora as any).cep || undefined,
-    influenciadora_cidade: (influenciadora as any).cidade || undefined,
-    influenciadora_estado: (influenciadora as any).estado || undefined,
+    influenciadora_telefone: influenciadora.whatsapp || influenciadora.telefone || undefined,
+    influenciadora_rua: influenciadora.endereco || undefined,
+    influenciadora_numero: influenciadora.numero || undefined,
+    influenciadora_bairro: influenciadora.bairro || undefined,
+    influenciadora_cep: influenciadora.cep || undefined,
+    influenciadora_cidade: influenciadora.cidade || undefined,
+    influenciadora_estado: influenciadora.estado || undefined,
 
     // Contract data
     contrato_numero: `${tenant?.slug?.toUpperCase() ?? 'YLS'}-INF-${contrato.data_inicio ? new Date(contrato.data_inicio).toISOString().substring(0, 7).replace('-', '') : 'XXXX'}-${contrato.id?.substring(0, 4).toUpperCase()}`,
@@ -231,21 +279,21 @@ export default function MeuContratoInfluenciadora() {
     servicos_permuta: contrato.servicos_permuta ?? [],
 
     // Company data
-    empresa_nome: tenant?.nome_fantasia || 'YESlaser',
-    empresa_cnpj: (tenant as any)?.cnpj || undefined,
-    empresa_cidade: (tenant as any)?.cidade || undefined,
-    empresa_estado: (tenant as any)?.estado || undefined,
+    empresa_nome: tenant?.nome_fantasia || 'Viniun',
+    empresa_cnpj: ((tenant as TenantRecord | null))?.cnpj || undefined,
+    empresa_cidade: ((tenant as TenantRecord | null))?.cidade || undefined,
+    empresa_estado: ((tenant as TenantRecord | null))?.estado || undefined,
 
     // Representative
-    empresa_representante: (franchise as any)?.responsavel_nome?.trim() || undefined,
+    empresa_representante: ((franchise as FranchiseRecord | null))?.responsavel_nome?.trim() || undefined,
 
     // Franchise data
     franquia_nome: franchise?.nome_fantasia || franchise?.nome || undefined,
-    franquia_cnpj: (franchise as any)?.cnpj || undefined,
-    franquia_endereco: (franchise as any)?.endereco || undefined,
-    franquia_cidade: (franchise as any)?.cidade || undefined,
-    franquia_estado: (franchise as any)?.estado || undefined,
-    franquia_cep: (franchise as any)?.cep || undefined,
+    franquia_cnpj: ((franchise as FranchiseRecord | null))?.cnpj || undefined,
+    franquia_endereco: ((franchise as FranchiseRecord | null))?.endereco || undefined,
+    franquia_cidade: ((franchise as FranchiseRecord | null))?.cidade || undefined,
+    franquia_estado: ((franchise as FranchiseRecord | null))?.estado || undefined,
+    franquia_cep: ((franchise as FranchiseRecord | null))?.cep || undefined,
   } : null;
 
   if (isLoading) {
@@ -277,7 +325,7 @@ export default function MeuContratoInfluenciadora() {
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Meu Contrato</h1>
-          <p className="text-muted-foreground">Detalhes do seu contrato com a YESlaser</p>
+          <p className="text-muted-foreground">Detalhes do seu contrato com a Viniun</p>
         </div>
 
         {!contrato ? (
@@ -308,7 +356,7 @@ export default function MeuContratoInfluenciadora() {
                         {TIPO_LABELS[contrato.tipo] || contrato.tipo}
                       </CardTitle>
                       <CardDescription>
-                        Contrato de influenciadora YESlaser
+                        Contrato de influenciadora Viniun
                       </CardDescription>
                     </div>
                   </div>
@@ -424,13 +472,13 @@ export default function MeuContratoInfluenciadora() {
                 </div>
 
                 {/* Serviços de permuta */}
-                {contrato.tipo === 'permuta' && (contrato as any).servicos_permuta?.length > 0 && (
+                {contrato.tipo === 'permuta' && (contrato as ContratoRecord).servicos_permuta?.length > 0 && (
                   <div className="p-4 rounded-lg bg-purple-50 border border-purple-100">
                     <p className="text-sm font-medium text-purple-800 mb-3 flex items-center gap-1">
                       <Sparkles className="h-4 w-4" /> Procedimentos incluídos na permuta
                     </p>
                     <ul className="space-y-1.5">
-                      {((contrato as any).servicos_permuta as string[]).map((id: string) => {
+                      {((contrato as ContratoRecord).servicos_permuta as string[]).map((id: string) => {
                         const servico = TODOS_SERVICOS.find(s => s.id === id);
                         return (
                           <li key={id} className="flex items-center gap-2 text-sm text-purple-700">
@@ -590,7 +638,7 @@ export default function MeuContratoInfluenciadora() {
               {contrato && contrato.tipo === 'permuta' && (
                 <div className="p-3 rounded-lg bg-red-50 border border-red-200">
                   <p className="text-sm text-red-700">
-                    <strong>Atenção:</strong> Ao cancelar, você perderá os procedimentos estéticos
+                    <strong>Atenção:</strong> Ao cancelar, você perderá os serviços
                     acordados na permuta que ainda não foram realizados.
                   </p>
                 </div>

@@ -196,7 +196,7 @@ export default function Auditorias() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos os auditores</SelectItem>
-                  {users?.map((u: any) => (
+                  {users?.map((u: { id: string; nome?: string }) => (
                     <SelectItem key={u.id} value={u.id}>
                       {u.nome_curto || u.nome}
                     </SelectItem>

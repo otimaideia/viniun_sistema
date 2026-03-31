@@ -11,7 +11,7 @@ import { sanitizeObjectForJSON } from "@/utils/unicodeSanitizer";
 import { getWahaApiKeyForUrl } from "@/services/waha-api";
 
 // Configuração WAHA — key centralizada em waha-api.ts
-const WAHA_URL = "https://waha.yeslaser.com.br";
+const WAHA_URL = "https://waha.otimaideia.com.br";
 const API_KEY = getWahaApiKeyForUrl(WAHA_URL, "") || "";
 
 interface WAHASession {
@@ -56,7 +56,6 @@ export default function WhatsAppSessoes2() {
       data,
     };
     setLogs(prev => [entry, ...prev]);
-    console.log(`[${type.toUpperCase()}]`, message, data || '');
   };
 
   // Função genérica para chamadas WAHA (igual ao script)

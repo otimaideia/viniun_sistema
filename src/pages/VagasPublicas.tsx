@@ -1,6 +1,6 @@
 import { useState, useCallback, memo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { useStorageBucketUpload } from "@/hooks/useStorageBucketUpload";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -44,7 +44,7 @@ const COLORS = {
 };
 
 const LOGO_DEFAULT =
-  "/images/landing/depilacao-a-laser-em-praia-grande-yeslaser.png";
+  "/images/landing/viniun-logo.png";
 
 // =============================================================================
 // Validação Zod para candidatura pública
@@ -195,64 +195,42 @@ function PublicFileUpload({
   value: string | null;
   onChange: (url: string | null) => void;
 }) {
-  const [isUploading, setIsUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const { upload, isUploading, progress } = useStorageBucketUpload({
+    bucket: 'curriculos',
+    pathPrefix: 'candidaturas/',
+    maxSizeBytes: 5 * 1024 * 1024,
+    allowedMimeTypes: [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ],
+  });
   const [fileName, setFileName] = useState<string | null>(null);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("Arquivo muito grande. Máximo: 5MB");
-      return;
-    }
-
     const allowedExtensions = [".pdf", ".doc", ".docx"];
-    const allowedMimes = [
-      "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ];
     const ext = "." + file.name.split(".").pop()?.toLowerCase();
-    if (!allowedExtensions.includes(ext) || !allowedMimes.includes(file.type)) {
-      toast.error("Tipo de arquivo não permitido. Use: PDF, DOC ou DOCX");
+    if (!allowedExtensions.includes(ext)) {
+      toast.error("Tipo de arquivo nao permitido. Use: PDF, DOC ou DOCX");
+      if (e.target) e.target.value = "";
       return;
     }
 
-    setIsUploading(true);
-    setProgress(30);
+    const result = await upload(file);
 
-    try {
-      const safeName = file.name
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-zA-Z0-9._-]/g, "_");
-      const path = `candidaturas/${Date.now()}_${safeName}`;
-
-      setProgress(60);
-
-      const { error } = await supabase.storage
-        .from("curriculos")
-        .upload(path, file, { upsert: false });
-
-      if (error) throw error;
-
-      setProgress(90);
-
-      // Salvar bucket/path (admins geram signed URL ao visualizar)
-      onChange(`curriculos/${path}`);
+    if (result) {
+      // Save bucket/path (admins generate signed URL when viewing)
+      onChange(`curriculos/${result.path}`);
       setFileName(file.name);
-      setProgress(100);
-      toast.success("Currículo enviado com sucesso!");
-    } catch (err: any) {
-      toast.error(`Erro no upload: ${err.message}`);
+      toast.success("Curriculo enviado com sucesso!");
+    } else {
       onChange(null);
-    } finally {
-      setIsUploading(false);
-      setProgress(0);
-      if (e.target) e.target.value = "";
     }
+
+    if (e.target) e.target.value = "";
   };
 
   if (value) {
@@ -590,7 +568,7 @@ function CandidaturaModal({
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
       result.error.errors.forEach((err) => {
-        if (err.path[0]) fieldErrors[err.path[0] as string] = err.message;
+        if ((err as {path: string[]}).path[0]) fieldErrors[(err as {path: string[]}).path[0] as string] = (err as {message: string}).message;
       });
       setErrors(fieldErrors);
       toast.error("Verifique os campos destacados");
@@ -650,8 +628,8 @@ function CandidaturaModal({
         setSent(true);
         toast.success("Candidatura enviada com sucesso!");
       }
-    } catch (err: any) {
-      toast.error(`Erro ao enviar: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro ao enviar: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setSending(false);
     }

@@ -5,20 +5,26 @@ import { ptBR } from "date-fns/locale";
 export type TemplateTipo = "contrato_normal" | "contrato_permuta" | "encerramento" | "aditivo" | "distrato";
 
 // Serviços disponíveis para permuta
-export const SERVICOS_DEPILACAO = [
-  { id: "axila", label: "Depilação a Laser – Axila" },
-  { id: "virilha", label: "Depilação a Laser – Virilha" },
-  { id: "meia_perna", label: "Depilação a Laser – Meia Perna" },
+export const SERVICOS_PRINCIPAIS = [
+  { id: "servico_a", label: "Serviço Principal – Tipo A" },
+  { id: "servico_b", label: "Serviço Principal – Tipo B" },
+  { id: "servico_c", label: "Serviço Principal – Tipo C" },
 ];
 
-export const SERVICOS_ESTETICA = [
-  { id: "drenagem", label: "Drenagem Linfática" },
-  { id: "revitalizacao_facial", label: "Revitalização Facial" },
-  { id: "limpeza_pele", label: "Limpeza de Pele" },
-  { id: "pump_gluteo", label: "Pump de Glúteo" },
+// Alias para compatibilidade
+export const SERVICOS_DEPILACAO = SERVICOS_PRINCIPAIS;
+
+export const SERVICOS_COMPLEMENTARES = [
+  { id: "consultoria", label: "Consultoria Especializada" },
+  { id: "assessoria", label: "Assessoria Personalizada" },
+  { id: "avaliacao", label: "Avaliação Completa" },
+  { id: "atendimento_vip", label: "Atendimento VIP" },
 ];
 
-export const TODOS_SERVICOS = [...SERVICOS_DEPILACAO, ...SERVICOS_ESTETICA];
+// Aliases para compatibilidade
+export const SERVICOS_ESTETICA = SERVICOS_COMPLEMENTARES;
+
+export const TODOS_SERVICOS = [...SERVICOS_PRINCIPAIS, ...SERVICOS_COMPLEMENTARES];
 
 export interface ContratoData {
   // Template
@@ -235,7 +241,7 @@ export function ContratoTemplate({ data }: ContratoTemplateProps) {
       posts_mes: "Posts por mês",
       stories_mes: "Stories por mês",
       reels_mes: "Reels por mês",
-      servicos_permuta: "Procedimentos de permuta",
+      servicos_permuta: "Serviços de permuta",
       status: "Status",
     };
 
@@ -430,10 +436,10 @@ export function ContratoTemplate({ data }: ContratoTemplateProps) {
           </div>
           <div className="contrato-texto">
             <span className="destaque">{contratanteNome}</span>
-            {contratanteCNPJ && `, CNPJ nº ${contratanteCNPJ}`}, por meio desta, vem formalizar o encerramento da parceria de permuta anteriormente estabelecida para fins de divulgação dos serviços da marca <span className="destaque">YESLASER</span>, realizada mediante concessão de procedimentos estéticos, sem contrapartida financeira, em troca de publicações e ações de divulgação nas redes sociais.
+            {contratanteCNPJ && `, CNPJ nº ${contratanteCNPJ}`}, por meio desta, vem formalizar o encerramento da parceria de permuta anteriormente estabelecida para fins de divulgação dos serviços da marca <span className="destaque">VINIUN</span>, realizada mediante concessão de serviços, sem contrapartida financeira, em troca de publicações e ações de divulgação nas redes sociais.
           </div>
           <div className="contrato-texto">
-            Informamos que, com a reestruturação do grupo de Embaixadoras YESLASER, a empresa está reorganizando suas parcerias de divulgação, razão pela qual não haverá continuidade das colaborações vigentes sob o formato de permuta.
+            Informamos que, com a reestruturação do grupo de Embaixadoras VINIUN, a empresa está reorganizando suas parcerias de divulgação, razão pela qual não haverá continuidade das colaborações vigentes sob o formato de permuta.
           </div>
           <div className="contrato-texto">
             Dessa forma, consideramos encerradas, de forma definitiva e amigável, todas as tratativas e obrigações anteriormente mantidas, não restando quaisquer pendências financeiras, contratuais ou de outra natureza entre as partes.
@@ -443,7 +449,7 @@ export function ContratoTemplate({ data }: ContratoTemplateProps) {
         <div className="contrato-section">
           <div className="section-title">Declaramos, ainda, que:</div>
           <div className="contrato-texto">
-            • Todas as divulgações e postagens referentes à marca YESLASER já realizadas até o momento são consideradas suficientes para cumprimento da parceria;<br />
+            • Todas as divulgações e postagens referentes à marca VINIUN já realizadas até o momento são consideradas suficientes para cumprimento da parceria;<br />
             • Caso existam conteúdos pendentes de publicação, consideram-se dispensados, sem necessidade de execução ou compensação adicional.
           </div>
         </div>
@@ -598,7 +604,7 @@ export function ContratoTemplate({ data }: ContratoTemplateProps) {
           </div>
           {data.contrato_tipo === "permuta" && data.servicos_permuta && data.servicos_permuta.length > 0 && (
             <div className="servicos-lista">
-              <h4>Procedimentos acordados que serão encerrados:</h4>
+              <h4>Serviços acordados que serão encerrados:</h4>
               <ul>
                 {servicosLabels.map((s, i) => <li key={i}>{s}</li>)}
               </ul>
@@ -757,16 +763,16 @@ export function ContratoTemplate({ data }: ContratoTemplateProps) {
           <div className="clausula">
             <div className="clausula-numero">CLÁUSULA PRIMEIRA – DO OBJETO</div>
             <div className="contrato-texto">
-              O presente CONTRATO tem como objeto a realização de uma parceria e autorização de uso de imagem para divulgação dos serviços do segmento da CONTRATANTE em <span className="destaque">depilação a laser e estética em geral</span>, através de todas as redes sociais do(a) CONTRATADO(A), marcando sempre as redes sociais da CONTRATANTE.
+              O presente CONTRATO tem como objeto a realização de uma parceria e autorização de uso de imagem para divulgação dos serviços do segmento da CONTRATANTE em <span className="destaque">serviços e soluções em geral</span>, através de todas as redes sociais do(a) CONTRATADO(A), marcando sempre as redes sociais da CONTRATANTE.
             </div>
 
             <div className="contrato-texto">
-              <strong>PARÁGRAFO ÚNICO.</strong> A presente parceria ocorrerá sob a forma de <span className="destaque">permuta</span>, mediante a concessão, pela CONTRATANTE, dos seguintes procedimentos gratuitos à CONTRATADA, conforme negociação e aprovação prévia da equipe de marketing:
+              <strong>PARÁGRAFO ÚNICO.</strong> A presente parceria ocorrerá sob a forma de <span className="destaque">permuta</span>, mediante a concessão, pela CONTRATANTE, dos seguintes serviços gratuitos à CONTRATADA, conforme negociação e aprovação prévia da equipe de marketing:
             </div>
 
             {servicosLabels.length > 0 ? (
               <div className="servicos-lista">
-                <h4>Procedimentos incluídos nesta permuta:</h4>
+                <h4>Serviços incluídos nesta permuta:</h4>
                 <ul>
                   {servicosLabels.map((s, i) => (
                     <li key={i}><strong>{s}</strong></li>
@@ -780,19 +786,19 @@ export function ContratoTemplate({ data }: ContratoTemplateProps) {
               </div>
             ) : (
               <div className="contrato-texto">
-                Os procedimentos serão definidos individualmente entre a CONTRATADA e o setor responsável, observadas as condições e a disponibilidade da CONTRATANTE, não gerando qualquer obrigação de pagamento, contraprestação financeira ou conversão em valores monetários.
+                Os serviços serão definidos individualmente entre a CONTRATADA e o setor responsável, observadas as condições e a disponibilidade da CONTRATANTE, não gerando qualquer obrigação de pagamento, contraprestação financeira ou conversão em valores monetários.
               </div>
             )}
 
             <div className="contrato-texto">
-              Tais procedimentos não geram qualquer obrigação de pagamento, contraprestação financeira ou conversão em valores monetários.
+              Tais serviços não geram qualquer obrigação de pagamento, contraprestação financeira ou conversão em valores monetários.
             </div>
           </div>
 
           <div className="clausula">
             <div className="clausula-numero">CESSÃO DE DIREITOS DE IMAGEM</div>
             <div className="contrato-texto">
-              Ficam também incluídas neste objeto: a <span className="destaque">cessão temporária e limitada dos direitos de imagem</span> conforme estipulado neste contrato e a utilização de sua imagem, voz, nome, conteúdo e demais elementos de identificação pessoal em materiais publicitários, campanhas institucionais e promocionais relacionadas à marca da CONTRATANTE – <span className="destaque">YESLASER</span>, em qualquer formato ou meio de comunicação, especialmente mídias digitais pagas.
+              Ficam também incluídas neste objeto: a <span className="destaque">cessão temporária e limitada dos direitos de imagem</span> conforme estipulado neste contrato e a utilização de sua imagem, voz, nome, conteúdo e demais elementos de identificação pessoal em materiais publicitários, campanhas institucionais e promocionais relacionadas à marca da CONTRATANTE – <span className="destaque">VINIUN</span>, em qualquer formato ou meio de comunicação, especialmente mídias digitais pagas.
             </div>
           </div>
         </div>
@@ -828,7 +834,7 @@ export function ContratoTemplate({ data }: ContratoTemplateProps) {
           <div className="clausula">
             <div className="clausula-numero">CLÁUSULA TERCEIRA – OBRIGAÇÕES DA CONTRATANTE</div>
             <div className="contrato-texto">
-              A CONTRATANTE dará ao(à) CONTRATADO(A), durante a vigência do contrato, a execução dos procedimentos estéticos listados na Cláusula Primeira, conforme negociação e aprovação prévia da equipe de marketing.
+              A CONTRATANTE dará ao(à) CONTRATADO(A), durante a vigência do contrato, a execução dos serviços listados na Cláusula Primeira, conforme negociação e aprovação prévia da equipe de marketing.
             </div>
             <div className="contrato-texto">
               • Fornecer à CONTRATADA todas as informações necessárias para a execução do trabalho;<br />
@@ -857,7 +863,7 @@ export function ContratoTemplate({ data }: ContratoTemplateProps) {
               )}
               • Ceder sua imagem, voz, nome e conteúdo à CONTRATANTE para utilização conforme previsto neste contrato, inclusive em anúncios patrocinados;<br />
               • Manter boa apresentação pessoal e conduta compatível com a imagem da campanha;<br />
-              • Comprometer-se com exclusividade no segmento de clínica de estética durante a vigência deste contrato, sob pena de multa de R$ 20.000,00 (vinte mil reais).
+              • Comprometer-se com exclusividade no segmento de empresa do mesmo segmento durante a vigência deste contrato, sob pena de multa de R$ 20.000,00 (vinte mil reais).
             </div>
           </div>
         </div>
@@ -868,7 +874,7 @@ export function ContratoTemplate({ data }: ContratoTemplateProps) {
           <div className="clausula">
             <div className="clausula-numero">CLÁUSULA QUINTA – DIREITOS DE IMAGEM</div>
             <div className="contrato-texto">
-              Para fins de publicidade, o(a) CONTRATADO(A) cede, neste ato, a título gratuito, os direitos de imagem à CONTRATANTE, ficando esta autorizada a utilizar imagens do(a) CONTRATADO(A) para fins exclusivos de divulgação e propaganda da marca YESLASER em jornais, Internet, redes sociais, TV e demais meios de comunicação, pelo período de vigência do contrato.
+              Para fins de publicidade, o(a) CONTRATADO(A) cede, neste ato, a título gratuito, os direitos de imagem à CONTRATANTE, ficando esta autorizada a utilizar imagens do(a) CONTRATADO(A) para fins exclusivos de divulgação e propaganda da marca VINIUN em jornais, Internet, redes sociais, TV e demais meios de comunicação, pelo período de vigência do contrato.
             </div>
           </div>
           <div className="clausula">
@@ -1025,11 +1031,11 @@ export function ContratoTemplate({ data }: ContratoTemplateProps) {
         <div className="clausula">
           <div className="clausula-numero">CLÁUSULA PRIMEIRA – DO OBJETO</div>
           <div className="contrato-texto">
-            O presente CONTRATO tem como objeto a realização de uma parceria e autorização de uso de imagem para divulgação dos serviços do segmento da CONTRATANTE em <span className="destaque">depilação a laser e estética em geral</span>, através de todas as redes sociais do(a) CONTRATADO(A), marcando sempre as redes sociais da CONTRATANTE, nos termos abaixo:
+            O presente CONTRATO tem como objeto a realização de uma parceria e autorização de uso de imagem para divulgação dos serviços do segmento da CONTRATANTE em <span className="destaque">serviços e soluções em geral</span>, através de todas as redes sociais do(a) CONTRATADO(A), marcando sempre as redes sociais da CONTRATANTE, nos termos abaixo:
           </div>
           <div className="contrato-texto">
-            • Depilação a laser em até três áreas, escolhidas pela CONTRATADA, acompanhada da publicação de stories apresentando o processo;<br />
-            • Realização de sessões de estética corporal, com a entrega de Reels ao término das sessões;<br />
+            • Utilização de até três serviços, escolhidos pela CONTRATADA, acompanhada da publicação de stories apresentando a experiência;<br />
+            • Realização de atendimentos especializados, com a entrega de Reels ao término dos serviços;<br />
             • Uma visita presencial por mês para produção de conteúdo e divulgação das instalações;<br />
             • Publicação de um story semanal voltado à divulgação dos serviços e da marca;<br />
             • Cessão temporária e limitada dos direitos de imagem conforme estipulado neste contrato.
@@ -1071,7 +1077,7 @@ export function ContratoTemplate({ data }: ContratoTemplateProps) {
             <div className="contrato-texto">
               A CONTRATANTE pagará ao(à) CONTRATADO(A), durante a vigência do contrato, o valor fixo mensal de{" "}
               <span className="destaque">{formatCurrency(data.valor_mensal)}</span>{" "}
-              ({data.valor_mensal && new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(data.valor_mensal).replace("R$\u00a0", "")} reais), além da execução de procedimentos estéticos conforme combinado.
+              ({data.valor_mensal && new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(data.valor_mensal).replace("R$\u00a0", "")} reais), além da execução de serviços conforme combinado.
             </div>
           )}
 
@@ -1105,8 +1111,8 @@ export function ContratoTemplate({ data }: ContratoTemplateProps) {
             Durante a vigência do presente instrumento, a CONTRATADA deverá realizar publicações em sua rede social Instagram, comentando sobre promoções, serviços e produtos da CONTRATANTE:
           </div>
           <div className="contrato-texto">
-            • Stories sobre os serviços de depilação a laser (à escolha da CONTRATADA), descrevendo a experiência;<br />
-            • Inserção da marcação do endereço social da clínica (@yeslaserbrasil ou de suas franqueadas);<br />
+            • Stories sobre os serviços da empresa (à escolha da CONTRATADA), descrevendo a experiência;<br />
+            • Inserção da marcação do endereço social da empresa (@viniun ou de suas franqueadas);<br />
             • Link "arraste pra cima" para o canal de atendimento da CONTRATANTE;<br />
             {(data.posts_mes ?? 0) > 0 && (
               <span>• <span className="destaque">{data.posts_mes} post(s)</span> no feed por mês;<br /></span>
@@ -1127,13 +1133,13 @@ export function ContratoTemplate({ data }: ContratoTemplateProps) {
         <div className="clausula">
           <div className="clausula-numero">CLÁUSULA QUINTA – DIREITOS DE IMAGEM</div>
           <div className="contrato-texto">
-            O(a) CONTRATADO(A) cede, a título gratuito, os direitos de imagem à CONTRATANTE para fins exclusivos de divulgação e propaganda da marca YESLASER em Internet, redes sociais, TV e demais meios de comunicação, pelo período de vigência do contrato.
+            O(a) CONTRATADO(A) cede, a título gratuito, os direitos de imagem à CONTRATANTE para fins exclusivos de divulgação e propaganda da marca VINIUN em Internet, redes sociais, TV e demais meios de comunicação, pelo período de vigência do contrato.
           </div>
         </div>
         <div className="clausula">
           <div className="clausula-numero">CLÁUSULA SEXTA – EXCLUSIVIDADE</div>
           <div className="contrato-texto">
-            O(a) CONTRATADO(A) compromete-se com exclusividade no segmento de clínica de estética durante a vigência deste contrato, sob pena de multa no valor de <span className="destaque">R$ 20.000,00 (vinte mil reais)</span>.
+            O(a) CONTRATADO(A) compromete-se com exclusividade no segmento de empresa do mesmo segmento durante a vigência deste contrato, sob pena de multa no valor de <span className="destaque">R$ 20.000,00 (vinte mil reais)</span>.
           </div>
         </div>
       </div>

@@ -15,9 +15,9 @@ const TOKEN_EXPIRY_HOURS = 24;
 
 /**
  * Derives the current tenant slug from the browser URL.
- * In production: reads the subdomain (e.g. yeslaser.app.com → 'yeslaser').
+ * In production: reads the subdomain (e.g. viniun.app.com → 'viniun').
  * In development: reads the ?tenant= query param.
- * Falls back to 'yeslaser' so the client portal always has a tenant scope.
+ * Falls back to 'viniun' so the client portal always has a tenant scope.
  */
 function getCurrentTenantSlug(): string {
   const hostname = window.location.hostname;
@@ -35,12 +35,12 @@ function getCurrentTenantSlug(): string {
     if (param) return param.toLowerCase();
   }
 
-  return 'yeslaser';
+  return 'viniun';
 }
 
 /**
  * Resolves the tenant UUID for the given slug.
- * Falls back to dominio_customizado lookup and known YESlaser domains.
+ * Falls back to dominio_customizado lookup and known Viniun domains.
  * Returns null if the tenant is not found or inactive.
  */
 async function resolveTenantId(slug: string): Promise<string | null> {
@@ -65,15 +65,15 @@ async function resolveTenantId(slug: string): Promise<string | null> {
 
   if (domainData) return (domainData as { id: string }).id;
 
-  // 3. Fallback: for known YESlaser domains, resolve to 'yeslaser'
-  if (hostname.includes('yeslaser')) {
-    const { data: yeslaser } = await supabase
+  // 3. Fallback: for known Viniun domains, resolve to 'viniun'
+  if (hostname.includes('viniun')) {
+    const { data: viniunTenant } = await supabase
       .from('mt_tenants')
       .select('id')
-      .eq('slug', 'yeslaser')
+      .eq('slug', 'viniun')
       .eq('is_active', true)
       .maybeSingle();
-    if (yeslaser) return (yeslaser as { id: string }).id;
+    if (viniunTenant) return (viniunTenant as { id: string }).id;
   }
 
   return null;
@@ -159,7 +159,7 @@ async function sendWhatsAppCode(phone: string, code: string, nome: string): Prom
     const chatId = formatPhoneForWhatsApp(phone);
 
     // 4. Montar e enviar mensagem
-    const message = `🔐 *YESlaser - Código de Verificação*
+    const message = `🔐 *Viniun - Código de Verificação*
 
 Olá${nome ? `, ${nome.split(' ')[0]}` : ''}!
 
@@ -171,7 +171,7 @@ Este código é válido por 5 minutos.
 
 ⚠️ Se você não solicitou este código, ignore esta mensagem.
 
-_Atendimento YESlaser_`;
+_Atendimento Viniun_`;
 
     await wahaApi.sendText({
       session: sessionName,
@@ -179,7 +179,6 @@ _Atendimento YESlaser_`;
       text: message,
     });
 
-    console.log(`[WAHA] Código enviado para ${chatId} via sessão ${sessionName}`);
     return true;
   } catch (err) {
     console.error('Erro ao enviar WhatsApp:', err);
@@ -364,9 +363,7 @@ export function useClienteAuth(): UseClienteAuthReturn {
           console.warn('[DEV] Falha ao enviar WhatsApp, código:', code);
         }
       } else {
-        // TODO: Implementar envio por email
-        console.log(`[DEV] Email não implementado. Código: ${code}`);
-        console.log(`[DEV] Destino: ${leadData.email}`);
+        // Email auth requires SMTP integration via mt_tenant_integrations
       }
 
       // Definir para onde foi enviado

@@ -59,7 +59,7 @@ import type { Department } from "@/types/multitenant";
 import * as LucideIcons from "lucide-react";
 
 function DepartmentIcon({ iconName, className }: { iconName: string; className?: string }) {
-  const Icon = (LucideIcons as any)[iconName] || Building2;
+  const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName] || Building2;
   return <Icon className={className} />;
 }
 
@@ -288,7 +288,7 @@ function DepartmentRow({
   isFranchiseAdmin?: boolean;
   currentFranchiseId?: string;
 }) {
-  const scope = (department as any).scope ||
+  const scope = (department as Record<string, unknown>).scope as string ||
     (department.franchise_id ? 'franchise' : department.tenant_id ? 'tenant' : 'global');
 
   // Franchise admins podem excluir departamentos com escopo "franchise" da sua franquia
@@ -309,7 +309,7 @@ function DepartmentRow({
             <DepartmentIcon
               iconName={department.icone}
               className="h-4 w-4"
-              style={{ color: department.cor } as any}
+              style={{ color: department.cor }}
             />
           </div>
           <div>
@@ -333,7 +333,7 @@ function DepartmentRow({
       <TableCell className="text-center">
         <div className="flex items-center justify-center gap-1">
           <Users className="h-4 w-4 text-muted-foreground" />
-          <span>{(department as any).user_count || 0}</span>
+          <span>{(department as Record<string, unknown>).user_count as number || 0}</span>
         </div>
       </TableCell>
       <TableCell className="text-right">

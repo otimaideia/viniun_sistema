@@ -25,7 +25,7 @@ const TOUR_STEPS: TourStep[] = [
   {
     target: 'contrato',
     title: '📄 Meu Contrato',
-    description: 'Visualize os detalhes do seu contrato com a YESlaser, incluindo sua assinatura digital.',
+    description: 'Visualize os detalhes do seu contrato com a Viniun, incluindo sua assinatura digital.',
     position: 'bottom',
   },
   {
@@ -49,7 +49,7 @@ const TOUR_STEPS: TourStep[] = [
   {
     target: 'posts',
     title: '📸 Meus Posts',
-    description: 'Registre e gerencie os posts que você criou para a YESlaser. Tudo organizado em um só lugar!',
+    description: 'Registre e gerencie os posts que você criou para a Viniun. Tudo organizado em um só lugar!',
     position: 'bottom',
   },
 ];

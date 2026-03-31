@@ -69,7 +69,7 @@ const CONVERSATION_EXAMPLES: ConversationExampleData[] = [
     isGood: false,
     messages: [
       { body: "Olá! Tenho interesse e queria mais informações, por favor.", fromMe: false, contactName: "Cliente", timestamp: "19:31" },
-      { body: "Boa tarde, tudo bem?\nMe chamo Melissa, sou da YesLaser Praia Grande ✨", fromMe: true, timestamp: "19:39" },
+      { body: "Boa tarde, tudo bem?\nMe chamo Melissa, sou da Viniun ✨", fromMe: true, timestamp: "19:39" },
       { body: "Boa tarde!", fromMe: false, contactName: "Cliente", timestamp: "19:49" },
     ],
     whatHappened: "Tempo de resposta bom (8 min). Mas a atendente apenas se apresentou e NÃO fez pergunta, não ofereceu promo, não criou urgência. Cliente respondeu 'Boa tarde!' esperando continuidade. Silêncio.",
@@ -107,7 +107,7 @@ const CONVERSATION_EXAMPLES: ConversationExampleData[] = [
     title: "Prospecção que engaja",
     isGood: true,
     messages: [
-      { body: "*PRESENTE LIBERADO* 🎁\n\n4 sessões de estética pra você realizar - vagas limitadas.\n\nVamos agendar? 💜", fromMe: true, timestamp: "14:00" },
+      { body: "*PRESENTE LIBERADO* 🎁\n\n4 sessões de serviços exclusivos pra você aproveitar - vagas limitadas.\n\nVamos agendar? 💜", fromMe: true, timestamp: "14:00" },
     ],
     whatHappened: "Mensagem curta, oferece algo GRÁTIS, cria escassez ('vagas limitadas'), termina com CTA direto. Foi enviada 130 vezes com alto engajamento.",
     whatShouldHappen: "",
@@ -147,8 +147,8 @@ const SENTIMENT_DATA = [
 
 // Client experience: first time vs returning
 const EXPERIENCE_DATA = [
-  { tipo: "Primeira vez (nunca fiz)", mencoes: 123, percentual: "60%", abordagem: "Educação, quebrar medo de dor, explicar protocolo 18 sessões" },
-  { tipo: "Já fez (outra clínica)", mencoes: 82, percentual: "40%", abordagem: "Foco em preço, comparação, velocidade, tecnologia superior" },
+  { tipo: "Primeira vez (nunca utilizou)", mencoes: 123, percentual: "60%", abordagem: "Educação, explicar benefícios, apresentar opções" },
+  { tipo: "Já utilizou (outra empresa)", mencoes: 82, percentual: "40%", abordagem: "Foco em preço, comparação, diferenciais, qualidade superior" },
 ];
 
 // Response rate by day of week
@@ -164,12 +164,12 @@ const RESPONSE_RATE_BY_DAY = [
 
 // Media types exchanged
 const MEDIA_DATA = [
-  { tipo: "Texto", icone: "💬", cliente: 12664, clinica: 11672, insight: "Equilíbrio bom" },
-  { tipo: "Imagem", icone: "📷", cliente: 1601, clinica: 148, insight: "Clínica envia 10x MENOS imagens" },
-  { tipo: "Áudio", icone: "🎤", cliente: 310, clinica: 306, insight: "Equilíbrio bom" },
-  { tipo: "Vídeo", icone: "📹", cliente: 206, clinica: 3, insight: "Clínica quase NÃO envia vídeos" },
-  { tipo: "Documento", icone: "📄", cliente: 157, clinica: 4, insight: "Oportunidade: enviar catálogos/tabelas" },
-  { tipo: "Sticker", icone: "😊", cliente: 125, clinica: 0, insight: "Clientes usam, clínica não" },
+  { tipo: "Texto", icone: "💬", cliente: 12664, empresa: 11672, insight: "Equilíbrio bom" },
+  { tipo: "Imagem", icone: "📷", cliente: 1601, empresa: 148, insight: "Empresa envia 10x MENOS imagens" },
+  { tipo: "Áudio", icone: "🎤", cliente: 310, empresa: 306, insight: "Equilíbrio bom" },
+  { tipo: "Vídeo", icone: "📹", cliente: 206, empresa: 3, insight: "Empresa quase NÃO envia vídeos" },
+  { tipo: "Documento", icone: "📄", cliente: 157, empresa: 4, insight: "Oportunidade: enviar catálogos/tabelas" },
+  { tipo: "Sticker", icone: "😊", cliente: 125, empresa: 0, insight: "Clientes usam, empresa não" },
 ];
 
 // Lead temperature distribution
@@ -673,11 +673,11 @@ const LeadAnalytics = () => {
                   <h4 className="text-sm font-semibold mb-3">Scripts Mais Enviados</h4>
                   <div className="space-y-2 text-sm">
                     {[
-                      { msg: '"Me chamo Julia/Amanda, sou da YesLaser..."', vezes: 694, tipo: "Apresentação" },
+                      { msg: '"Me chamo Julia/Amanda, sou da Viniun..."', vezes: 694, tipo: "Apresentação" },
                       { msg: '"Olá bom dia/tarde! Tudo bem?"', vezes: 237, tipo: "Abertura" },
                       { msg: '"Qual o seu nome por favor?"', vezes: 152, tipo: "Qualificação" },
                       { msg: '"PRESENTE LIBERADO - 4 sessões"', vezes: 130, tipo: "Prospecção" },
-                      { msg: '"Grupo VIP YESLASER - 90% desconto"', vezes: 103, tipo: "Campanha" },
+                      { msg: '"Grupo VIP VINIUN - 90% desconto"', vezes: 103, tipo: "Campanha" },
                       { msg: '"Cadastro: nome, data nasc, CPF..."', vezes: 82, tipo: "Fechamento" },
                       { msg: '"Promoção pré-inauguração R$79,90"', vezes: 63, tipo: "Oferta" },
                       { msg: '"Não estamos disponíveis..."', vezes: 46, tipo: "Fora horário" },
@@ -701,7 +701,7 @@ const LeadAnalytics = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">Taxa de Resposta por Dia da Semana</CardTitle>
-                <CardDescription>Conversas com pelo menos 1 resposta da clínica</CardDescription>
+                <CardDescription>Conversas com pelo menos 1 resposta da empresa</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
@@ -839,8 +839,8 @@ const LeadAnalytics = () => {
             {/* Procedures Bar */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Procedimentos Estéticos</CardTitle>
-                <CardDescription>Além da depilação a laser</CardDescription>
+                <CardTitle className="text-base">Serviços Complementares</CardTitle>
+                <CardDescription>Outros serviços de interesse</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-80">
@@ -890,11 +890,11 @@ const LeadAnalytics = () => {
                     {[
                       { termo: "Promoção", mencoes: 1416, insight: "Cliente é MOVIDO por promoção" },
                       { termo: "Preço/valor/quanto", mencoes: 469, insight: "Preço é decisivo na compra" },
-                      { termo: "Dor/dói", mencoes: 418, insight: "MEDO DE DOR é a barreira #1" },
+                      { termo: "Dúvida/dúvidas", mencoes: 418, insight: "Dúvidas são a barreira #1" },
                       { termo: "Agendamento/marcar", mencoes: 408, insight: "Alta intenção de compra" },
-                      { termo: "Sessão/sessões", mencoes: 335, insight: "Quer entender o protocolo" },
-                      { termo: "Laser", mencoes: 330, insight: "Busca específica" },
-                      { termo: "Depilação", mencoes: 202, insight: "Termo genérico" },
+                      { termo: "Sessão/sessões", mencoes: 335, insight: "Quer entender o processo" },
+                      { termo: "Serviço", mencoes: 330, insight: "Busca específica" },
+                      { termo: "Atendimento", mencoes: 202, insight: "Termo genérico" },
                       { termo: "Pacote", mencoes: 128, insight: "Quer combo/economia" },
                       { termo: "Recorrência/mensal", mencoes: 93, insight: "Prefere pagamento parcelado" },
                       { termo: "Resultado", mencoes: 58, insight: "Quer prova social" },
@@ -1103,7 +1103,7 @@ const LeadAnalytics = () => {
                   <ShieldQuestion className="h-4 w-4 text-purple-600" />
                   Primeira Vez vs. Já Fez
                 </CardTitle>
-                <CardDescription>Experiência prévia dos clientes com depilação a laser</CardDescription>
+                <CardDescription>Experiência prévia dos clientes com nossos serviços</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -1139,7 +1139,7 @@ const LeadAnalytics = () => {
                   <Image className="h-4 w-4 text-indigo-600" />
                   Tipos de Mídia Trocados
                 </CardTitle>
-                <CardDescription>O que clientes enviam vs o que a clínica responde</CardDescription>
+                <CardDescription>O que clientes enviam vs o que a empresa responde</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
@@ -1148,20 +1148,20 @@ const LeadAnalytics = () => {
                       <tr className="border-b">
                         <th className="text-left py-2 font-semibold">Tipo</th>
                         <th className="text-center py-2 font-semibold">Cliente</th>
-                        <th className="text-center py-2 font-semibold">Clínica</th>
+                        <th className="text-center py-2 font-semibold">Empresa</th>
                         <th className="text-left py-2 font-semibold">Insight</th>
                       </tr>
                     </thead>
                     <tbody>
                       {MEDIA_DATA.map((row) => (
                         <tr key={row.tipo} className={`border-b ${
-                          row.cliente > row.clinica * 5 ? "bg-amber-50/50 dark:bg-amber-950/10" : ""
+                          row.cliente > row.empresa * 5 ? "bg-amber-50/50 dark:bg-amber-950/10" : ""
                         }`}>
                           <td className="py-2 font-medium">
                             <span className="mr-1">{row.icone}</span> {row.tipo}
                           </td>
                           <td className="text-center py-2 font-mono text-xs">{row.cliente.toLocaleString()}</td>
-                          <td className="text-center py-2 font-mono text-xs">{row.clinica.toLocaleString()}</td>
+                          <td className="text-center py-2 font-mono text-xs">{row.empresa.toLocaleString()}</td>
                           <td className="py-2 text-xs text-muted-foreground">{row.insight}</td>
                         </tr>
                       ))}
@@ -1170,10 +1170,10 @@ const LeadAnalytics = () => {
                 </div>
                 <div className="mt-3 p-3 rounded-lg bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800">
                   <p className="text-sm font-medium text-indigo-800 dark:text-indigo-300">
-                    Oportunidade: enviar mais imagens (antes/depois) e vídeos (procedimento, tour)
+                    Oportunidade: enviar mais imagens e vídeos (tour, apresentação)
                   </p>
                   <p className="text-xs text-indigo-600 dark:text-indigo-400 mt-1">
-                    Clientes enviam 10x mais imagens e 68x mais vídeos que a clínica. Conteúdo visual vende.
+                    Clientes enviam 10x mais imagens e 68x mais vídeos que a empresa. Conteúdo visual vende.
                   </p>
                 </div>
               </CardContent>
@@ -1190,8 +1190,8 @@ const LeadAnalytics = () => {
                 <div>
                   <p className="font-bold">Script Recomendado de Abertura</p>
                   <div className="mt-2 p-3 rounded-lg bg-white dark:bg-zinc-900 border text-sm">
-                    <p>Oi <strong>[NOME]</strong>! Me chamo <strong>[ATENDENTE]</strong>, da YesLaser Praia Grande ✨</p>
-                    <p className="mt-1">Vi que você se interessou pela depilação a laser! Já fez alguma vez ou seria sua primeira experiência?</p>
+                    <p>Oi <strong>[NOME]</strong>! Me chamo <strong>[ATENDENTE]</strong>, da Viniun ✨</p>
+                    <p className="mt-1">Vi que você se interessou pelos nossos serviços! Já conhece ou seria sua primeira experiência?</p>
                     <p className="mt-1">Estamos com condição especial esse mês:</p>
                     <p className="mt-1">🔥 <strong>[PROMOÇÃO DO MOMENTO]</strong></p>
                     <p className="mt-1">Me conta qual área você tem mais interesse! 😊</p>
@@ -1228,8 +1228,8 @@ const LeadAnalytics = () => {
                 <div className="p-4 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
                   <Badge className="mb-2 bg-red-600">HOJE</Badge>
                   <p className="font-bold text-sm mb-2">1. Corrigir Script de Abertura</p>
-                  <p className="text-xs text-muted-foreground mb-2">De: "Me chamo Julia, sou da YesLaser"</p>
-                  <p className="text-xs font-medium">Para: "Oi [NOME]! Sou a Julia da YesLaser. Vi seu interesse! Já fez laser antes? Temos [PROMO] esse mês. Qual área quer?"</p>
+                  <p className="text-xs text-muted-foreground mb-2">De: "Me chamo Julia, sou da Viniun"</p>
+                  <p className="text-xs font-medium">Para: "Oi [NOME]! Sou a Julia da Viniun. Vi seu interesse! Já fez laser antes? Temos [PROMO] esse mês. Qual área quer?"</p>
                 </div>
                 <div className="p-4 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800">
                   <Badge className="mb-2 bg-amber-600">ESTA SEMANA</Badge>
@@ -1403,7 +1403,7 @@ const LeadAnalytics = () => {
                 </div>
                 <div className="flex items-start gap-2">
                   <ChevronRight className="h-4 w-4 mt-0.5 text-purple-600" />
-                  <span><strong>Seg. D</strong>: Estética Premium (Botox, Preenchimento)</span>
+                  <span><strong>Seg. D</strong>: Serviços Premium</span>
                 </div>
               </CardContent>
             </Card>

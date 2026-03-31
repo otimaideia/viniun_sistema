@@ -77,7 +77,7 @@ serve(async (req) => {
     }
 
     // Fallback defaults
-    if (!wahaUrl) wahaUrl = "https://waha.yeslaserpraiagrande.com.br";
+    if (!wahaUrl) wahaUrl = "https://waha.otimaideia.com.br";
     if (!wahaApiKey) wahaApiKey = "sitema-crm@2025";
 
     if (!wahaSession) {

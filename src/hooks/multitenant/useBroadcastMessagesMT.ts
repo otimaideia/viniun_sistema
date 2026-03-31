@@ -104,7 +104,6 @@ export function useBroadcastMessagesMT(
           filter: `broadcast_campaign_id=eq.${campaignId}`,
         },
         (payload) => {
-          console.log('[Broadcast] Message change:', payload.eventType);
           queryClient.invalidateQueries({ queryKey: [MESSAGES_QUERY_KEY, campaignId] });
           queryClient.invalidateQueries({ queryKey: [STATS_QUERY_KEY, campaignId] });
         }

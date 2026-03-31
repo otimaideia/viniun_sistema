@@ -83,7 +83,7 @@ function WhatsAppSvg({ className }: { className?: string }) {
 }
 
 export default function LandingPageInfluenciadora({
-  tenantName = "YESlaser",
+  tenantName = "Viniun",
   accentColor = "#7c3aed",
   onScrollToForm,
   franchiseName,
@@ -116,10 +116,10 @@ export default function LandingPageInfluenciadora({
 
   // Auto-rotate testimonials
   const testimonials = [
-    { text: "Melhor parceria que já fiz! Recebo procedimentos incríveis e ainda ganho comissão.", author: "Camila R.", location: franchiseCity || "São Paulo", rating: 5 },
-    { text: "O contrato é super simples, sem burocracia. Amo fazer conteúdo para a YESlaser!", author: "Juliana M.", location: franchiseCity || "São Paulo", rating: 5 },
-    { text: "Meus seguidores amam o cupom exclusivo! E eu amo os procedimentos gratuitos.", author: "Amanda S.", location: franchiseCity || "São Paulo", rating: 5 },
-    { text: "Ganhei o prêmio Top 3 e escolhi botox. Experiência incrível do início ao fim!", author: "Fernanda L.", location: franchiseCity || "São Paulo", rating: 5 },
+    { text: "Melhor parceria que já fiz! Recebo serviços incríveis e ainda ganho comissão.", author: "Camila R.", location: franchiseCity || "São Paulo", rating: 5 },
+    { text: "O contrato é super simples, sem burocracia. Amo fazer conteúdo para a Viniun!", author: "Juliana M.", location: franchiseCity || "São Paulo", rating: 5 },
+    { text: "Meus seguidores amam o cupom exclusivo! E eu amo os serviços gratuitos.", author: "Amanda S.", location: franchiseCity || "São Paulo", rating: 5 },
+    { text: "Ganhei o prêmio Top 3 e escolhi o prêmio premium. Experiência incrível do início ao fim!", author: "Fernanda L.", location: franchiseCity || "São Paulo", rating: 5 },
     { text: "A equipe é super atenciosa e profissional. Recomendo para todas as influencers!", author: "Mariana F.", location: franchiseCity || "São Paulo", rating: 5 },
   ];
 
@@ -135,7 +135,7 @@ export default function LandingPageInfluenciadora({
     const displayCity = franchiseCity || "Brasil";
     const displayState = franchiseState || "SP";
     const fullName = franchiseName || `${tenantName} ${displayCity}`;
-    const siteUrl = franchiseWebsite || `https://www.yeslaserpraiagrande.com.br`;
+    const siteUrl = franchiseWebsite || `https://www.viniun.com.br`;
     const phoneClean = franchisePhone?.replace(/\D/g, "") || "";
 
     // SEO Meta tags
@@ -155,9 +155,9 @@ export default function LandingPageInfluenciadora({
       el.setAttribute("content", content);
     };
 
-    const description = `Seja influenciadora ${tenantName} em ${displayCity}! Ganhe 3 procedimentos/mês de permuta, 1% de comissão sobre vendas, cupom exclusivo e prêmios no ranking mensal. Cadastre-se agora!`;
+    const description = `Seja influenciadora ${tenantName} em ${displayCity}! Ganhe 3 serviços/mês de permuta, 1% de comissão sobre vendas, cupom exclusivo e prêmios no ranking mensal. Cadastre-se agora!`;
     setMeta("description", description);
-    setMeta("keywords", `influenciadora ${displayCity}, programa influencer ${tenantName}, parceria depilação laser ${displayCity}, influencer estética, permuta procedimentos, ${tenantName} ${displayCity}`);
+    setMeta("keywords", `influenciadora ${displayCity}, programa influencer ${tenantName}, parceria ${tenantName} ${displayCity}, influencer, permuta serviços, ${tenantName} ${displayCity}`);
 
     // Open Graph
     setMeta("og:title", `Programa de Influenciadoras | ${fullName}`);
@@ -190,7 +190,7 @@ export default function LandingPageInfluenciadora({
           name: fullName,
           alternateName: [tenantName, `${tenantName} ${displayCity}`, fullName],
           url: siteUrl,
-          logo: { "@type": "ImageObject", url: logoUrl || `${siteUrl}/images/landing/depilacao-a-laser-em-praia-grande-yeslaser.png` },
+          logo: { "@type": "ImageObject", url: logoUrl || `${siteUrl}/images/landing/viniun-logo.png` },
           sameAs: [
             franchiseInstagram ? `https://instagram.com/${franchiseInstagram.replace("@", "")}` : null,
             franchiseFacebook || null,
@@ -209,8 +209,8 @@ export default function LandingPageInfluenciadora({
         {
           "@type": "LocalBusiness",
           "@id": `${siteUrl}/#localbusiness`,
-          name: `${fullName} - Clínica de Depilação a Laser e Estética`,
-          description: `Programa de parceria com influenciadoras da ${fullName}. Permuta mensal de 3 procedimentos, 1% de comissão sobre vendas, cupom exclusivo e prêmios no ranking.`,
+          name: `${fullName} - Soluções Imobiliárias`,
+          description: `Programa de parceria com influenciadoras da ${fullName}. Permuta mensal de 3 serviços, 1% de comissão sobre vendas, cupom exclusivo e prêmios no ranking.`,
           image: logoUrl,
           priceRange: "$$",
           currenciesAccepted: "BRL",
@@ -236,12 +236,12 @@ export default function LandingPageInfluenciadora({
         {
           "@type": "Product",
           name: `Programa de Influenciadoras ${tenantName}`,
-          description: `Parceria com permuta mensal: 3 procedimentos/mês (depilação a laser + facial/corporal), 1% de comissão sobre vendas, cupom exclusivo e prêmios no ranking Top 3.`,
+          description: `Parceria com permuta mensal: 3 serviços/mês, 1% de comissão sobre vendas, cupom exclusivo e prêmios no ranking Top 3.`,
           brand: { "@type": "Brand", name: tenantName },
           offers: {
             "@type": "Offer",
             name: `Parceria Influenciadora ${fullName}`,
-            description: "Permuta: 3 procedimentos/mês + 1% comissão + cupom exclusivo + prêmios ranking",
+            description: "Permuta: 3 serviços/mês + 1% comissão + cupom exclusivo + prêmios ranking",
             price: "0",
             priceCurrency: "BRL",
             availability: "https://schema.org/LimitedAvailability",
@@ -253,11 +253,11 @@ export default function LandingPageInfluenciadora({
           "@type": "FAQPage",
           mainEntity: [
             { "@type": "Question", name: `Como ser influenciadora ${tenantName} em ${displayCity}?`, acceptedAnswer: { "@type": "Answer", text: `Para se tornar influenciadora ${tenantName} em ${displayCity}, você precisa ter pelo menos 5.000 seguidores em qualquer rede social, perfil público e morar na região. Cadastre-se pelo formulário e nossa equipe avalia seu perfil em até 48h.` } },
-            { "@type": "Question", name: `O que eu ganho como influenciadora ${tenantName}?`, acceptedAnswer: { "@type": "Answer", text: `Você ganha 3 procedimentos gratuitos por mês (depilação a laser + facial/corporal), 1% de comissão sobre vendas feitas com seu cupom exclusivo, e as Top 3 do ranking ganham prêmios premium como botox, criolipólise e preenchimento.` } },
-            { "@type": "Question", name: "Como funciona a permuta com influenciadoras?", acceptedAnswer: { "@type": "Answer", text: "É um contrato simples de permuta: você recebe procedimentos gratuitos em troca de conteúdo estratégico nas redes sociais (stories antes/durante/depois, posts e reels seguindo nosso plano de conteúdo mensal)." } },
+            { "@type": "Question", name: `O que eu ganho como influenciadora ${tenantName}?`, acceptedAnswer: { "@type": "Answer", text: `Você ganha 3 serviços gratuitos por mês, 1% de comissão sobre vendas feitas com seu cupom exclusivo, e as Top 3 do ranking ganham prêmios premium.` } },
+            { "@type": "Question", name: "Como funciona a permuta com influenciadoras?", acceptedAnswer: { "@type": "Answer", text: "É um contrato simples de permuta: você recebe serviços gratuitos em troca de conteúdo estratégico nas redes sociais (stories, posts e reels seguindo nosso plano de conteúdo mensal)." } },
             { "@type": "Question", name: "Quanto uma influenciadora ganha de comissão?", acceptedAnswer: { "@type": "Answer", text: "Você recebe 1% de comissão sobre cada contrato fechado por sua indicação via cupom exclusivo. Exemplo: cliente fechou R$1.300 → você ganha comissão automática sobre a venda." } },
-            { "@type": "Question", name: `Quais os prêmios do ranking de influenciadoras ${tenantName}?`, acceptedAnswer: { "@type": "Answer", text: "As 3 influenciadoras com mais vendas no mês escolhem entre: 3 áreas de botox, protocolo para gordura localizada, criolipólise, ultrassom, hidrolipo, carboxiterapia ou preenchimento." } },
-            { "@type": "Question", name: "Por que o valor do contrato é diferente do valor real dos procedimentos?", acceptedAnswer: { "@type": "Answer", text: "O valor declarado no contrato é uma margem de referência. Como fazemos promoções frequentes, usamos um valor médio que reflete a realidade das promoções, mantendo tudo transparente e justo para ambas as partes." } },
+            { "@type": "Question", name: `Quais os prêmios do ranking de influenciadoras ${tenantName}?`, acceptedAnswer: { "@type": "Answer", text: "As 3 influenciadoras com mais vendas no mês ganham prêmios premium exclusivos." } },
+            { "@type": "Question", name: "Por que o valor do contrato é diferente do valor real dos serviços?", acceptedAnswer: { "@type": "Answer", text: "O valor declarado no contrato é uma margem de referência. Como fazemos promoções frequentes, usamos um valor médio que reflete a realidade das promoções, mantendo tudo transparente e justo para ambas as partes." } },
           ],
         },
         {
@@ -290,9 +290,9 @@ export default function LandingPageInfluenciadora({
   };
 
   const displayName = franchiseName || `${tenantName}${franchiseCity ? ` ${franchiseCity}` : ""}`;
-  const finalLogo = logoUrl || "/images/landing/depilacao-a-laser-em-praia-grande-yeslaser.png";
+  const finalLogo = logoUrl || "/images/landing/viniun-logo.png";
   const whatsappClean = franchisePhone?.replace(/\D/g, "") || "";
-  const igHandle = franchiseInstagram?.replace("@", "") || "yeslaser";
+  const igHandle = franchiseInstagram?.replace("@", "") || "viniun";
 
   return (
     <div className="w-full">
@@ -306,7 +306,7 @@ export default function LandingPageInfluenciadora({
           <div className="flex items-center justify-between h-[70px]">
             <img
               src={finalLogo}
-              alt={`${displayName} - Depilação a Laser e Estética`}
+              alt={`${displayName} - Programa de Influenciadoras`}
               className="h-10 md:h-12 w-auto cursor-pointer transition-transform hover:scale-105"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             />
@@ -448,11 +448,11 @@ export default function LandingPageInfluenciadora({
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <BenefitCard icon={<Gift className="h-8 w-8" />} title="3 Procedimentos/mês" description="Depilação a laser + procedimento facial/corporal. Tudo gratuito como permuta pela parceria." color="#7c3aed" />
+            <BenefitCard icon={<Gift className="h-8 w-8" />} title="3 Serviços/mês" description="Serviços exclusivos gratuitos como permuta pela parceria." color="#7c3aed" />
             <BenefitCard icon={<Percent className="h-8 w-8" />} title="1% de Comissão" description="Sobre cada contrato fechado por sua indicação. Ex: cliente fechou R$1.300 → você ganha comissão sobre a venda." color="#3b82f6" />
-            <BenefitCard icon={<Trophy className="h-8 w-8" />} title="Prêmios Top 3" description="As 3 melhores do ranking mensal ganham procedimentos premium: botox, criolipólise, preenchimento e mais." color="#f59e0b" />
+            <BenefitCard icon={<Trophy className="h-8 w-8" />} title="Prêmios Top 3" description="As 3 melhores do ranking mensal ganham prêmios premium exclusivos." color="#f59e0b" />
             <BenefitCard icon={<DollarSign className="h-8 w-8" />} title="Cupom Exclusivo" description="Cupom personalizado com seu nome (ex: JULIA10). Condição especial para seus seguidores." color="#ec4899" />
-            <BenefitCard icon={<Star className="h-8 w-8" />} title="Benefício p/ Seguidores" description="Quem vier pela sua indicação: 10 sessões área P + 2 sessões massagem/pump glúteo por R$79,90." color="#06b6d4" />
+            <BenefitCard icon={<Star className="h-8 w-8" />} title="Benefício p/ Seguidores" description="Quem vier pela sua indicação ganha condições exclusivas e benefícios especiais." color="#06b6d4" />
             <BenefitCard icon={<Heart className="h-8 w-8" />} title="Contrato Simples" description="Contrato digital de permuta sem burocracia. Assinatura 100% online com validade jurídica." color="#10b981" />
           </div>
         </div>
@@ -555,16 +555,16 @@ export default function LandingPageInfluenciadora({
 
           <Card className="border-2 border-purple-200 bg-purple-50/30">
             <CardContent className="pt-6">
-              <h3 className="font-bold text-center mb-4 text-purple-900">Procedimentos disponíveis como prêmio:</h3>
+              <h3 className="font-bold text-center mb-4 text-purple-900">Prêmios disponíveis para as Top 3:</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 {[
-                  { name: "3 áreas de Botox", icon: <Sparkles className="h-4 w-4" /> },
-                  { name: "Gordura Localizada", icon: <Scissors className="h-4 w-4" /> },
-                  { name: "Criolipólise", icon: <Zap className="h-4 w-4" /> },
-                  { name: "Ultrassom", icon: <Star className="h-4 w-4" /> },
-                  { name: "Hidrolipo", icon: <Heart className="h-4 w-4" /> },
-                  { name: "Carboxiterapia", icon: <TrendingUp className="h-4 w-4" /> },
-                  { name: "Preenchimento", icon: <Sparkles className="h-4 w-4" /> },
+                  { name: "Serviço Premium A", icon: <Sparkles className="h-4 w-4" /> },
+                  { name: "Serviço Premium B", icon: <Scissors className="h-4 w-4" /> },
+                  { name: "Serviço Premium C", icon: <Zap className="h-4 w-4" /> },
+                  { name: "Consultoria VIP", icon: <Star className="h-4 w-4" /> },
+                  { name: "Atendimento Exclusivo", icon: <Heart className="h-4 w-4" /> },
+                  { name: "Pacote Especial", icon: <TrendingUp className="h-4 w-4" /> },
+                  { name: "Benefício Premium", icon: <Sparkles className="h-4 w-4" /> },
                 ].map((proc) => (
                   <div key={proc.name} className="flex items-center gap-2 bg-white rounded-lg px-3 py-2 border border-purple-100">
                     <span className="text-purple-500">{proc.icon}</span>
@@ -820,14 +820,14 @@ export default function LandingPageInfluenciadora({
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8">Perguntas Frequentes</h2>
           <div className="space-y-4">
-            <FaqItem question="O que eu recebo como influenciadora?" answer="Você recebe 3 procedimentos gratuitos por mês (depilação a laser + facial/corporal) como permuta, além de 1% de comissão sobre vendas feitas com seu cupom." />
-            <FaqItem question="Como funciona a permuta?" answer="É um contrato simples: você recebe procedimentos gratuitos em troca de conteúdo estratégico nas redes sociais (stories, posts e reels seguindo nosso plano de conteúdo)." />
+            <FaqItem question="O que eu recebo como influenciadora?" answer="Você recebe 3 serviços gratuitos por mês como permuta, além de 1% de comissão sobre vendas feitas com seu cupom." />
+            <FaqItem question="Como funciona a permuta?" answer="É um contrato simples: você recebe serviços gratuitos em troca de conteúdo estratégico nas redes sociais (stories, posts e reels seguindo nosso plano de conteúdo)." />
             <FaqItem question="Como ganho comissão?" answer="Você recebe um cupom exclusivo com seu nome (ex: JULIA10). Cada venda feita com seu cupom gera 1% de comissão automática para você." />
-            <FaqItem question="O que meus seguidores ganham?" answer="Quem vier pela sua indicação ganha condição especial: 10 sessões em área P + 2 sessões de massagem/pump glúteo por apenas R$79,90." />
-            <FaqItem question="O que são os prêmios do ranking?" answer="As 3 influenciadoras com mais vendas indicadas podem escolher entre: 3 áreas de botox, protocolo para gordura localizada, criolipólise, ultrassom, hidrolipo, carboxiterapia ou preenchimento." />
+            <FaqItem question="O que meus seguidores ganham?" answer="Quem vier pela sua indicação ganha condições exclusivas e benefícios especiais." />
+            <FaqItem question="O que são os prêmios do ranking?" answer="As 3 influenciadoras com mais vendas indicadas ganham prêmios premium exclusivos." />
             <FaqItem question="Preciso ter muitos seguidores?" answer="A partir de 5.000 seguidores em qualquer rede social você já pode se candidatar. Valorizamos engajamento mais do que números." />
             <FaqItem question="Quanto tempo dura o contrato?" answer="O contrato de permuta é mensal e renovável. Você pode sair a qualquer momento sem multa." />
-            <FaqItem question="Por que o valor do contrato é diferente do valor real dos procedimentos?" answer="O valor declarado no contrato (ex: R$ 3.000,00) é uma margem de referência. Como fazemos promoções frequentes (ex: revitalização facial por R$ 69,90 em vez de R$ 150,00), não seria justo declarar o preço cheio de tabela. Por isso usamos um valor médio que reflete a realidade das promoções, mantendo tudo transparente e justo para ambas as partes." />
+            <FaqItem question="Por que o valor do contrato é diferente do valor real dos serviços?" answer="O valor declarado no contrato é uma margem de referência. Como fazemos promoções frequentes, usamos um valor médio que reflete a realidade das promoções, mantendo tudo transparente e justo para ambas as partes." />
           </div>
         </div>
       </section>
@@ -859,7 +859,7 @@ export default function LandingPageInfluenciadora({
                 {displayName}
                 {franchiseCity && ` — ${franchiseCity}`}
                 <br />
-                A maior rede de depilação a laser, estética e botox.
+                Plataforma completa de gestão imobiliária.
               </p>
             </div>
 

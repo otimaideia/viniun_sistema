@@ -1,4 +1,4 @@
-// Types para Sistema de Influenciadoras YESlaser
+// Types para Sistema de Influenciadoras Viniun
 
 import { FORMULARIO_INDICACAO_SLUG } from './indicacao';
 
@@ -742,7 +742,7 @@ export function getPagamentoStatusColor(status: PagamentoStatus): string {
  * @param baseUrl - URL base (default: window.location.origin)
  */
 export function gerarLinkIndicacao(codigoIndicacao: string, baseUrl?: string): string {
-  const url = baseUrl || (typeof window !== 'undefined' ? window.location.origin : 'https://www.yeslaserpraiagrande.com.br');
+  const url = baseUrl || (typeof window !== 'undefined' ? window.location.origin : 'https://www.viniun.com.br');
   return `${url}/form/${FORMULARIO_INDICACAO_SLUG}?influenciadores=${codigoIndicacao}`;
 }
 
@@ -758,7 +758,7 @@ export function gerarMensagemWhatsApp(
   linkFormulario?: string
 ): string {
   const link = linkFormulario || gerarLinkIndicacao(codigoIndicacao);
-  return `Olá! A ${nomeInfluenciadora} indica a YESlaser para você!\n\n` +
+  return `Olá! A ${nomeInfluenciadora} indica a Viniun para você!\n\n` +
     `Use o código *${codigoIndicacao}* ou acesse:\n${link}\n\n` +
     `Garanta seu desconto exclusivo!`;
 }

@@ -1,4 +1,4 @@
-// Card de Sessão WhatsApp - YESlaser
+// Card de Sessão WhatsApp - Viniun
 import React from 'react';
 import { MessageCircle, Phone, Plus, Building2, MessageSquare, CheckCheck, Clock, Download, Trash2, Loader2, StopCircle, Webhook, CheckCircle2, UserPlus } from 'lucide-react';
 import type { WhatsAppSession } from '@/types/whatsapp';

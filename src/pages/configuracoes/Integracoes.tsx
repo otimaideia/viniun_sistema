@@ -77,14 +77,14 @@ interface YouTubeStatus {
   message?: string;
 }
 
-interface YesLaserOfficeConfig {
+interface ViniunOfficeConfig {
   usuario: string;
   senha: string;
   agenciaId: string;
   enabled: boolean;
 }
 
-interface YesLaserOfficeStatus {
+interface ViniunOfficeStatus {
   status: 'connected' | 'disconnected' | 'error' | 'checking';
   message?: string;
 }
@@ -163,17 +163,17 @@ export function Integracoes() {
   const [isTestingYoutube, setIsTestingYoutube] = useState(false);
   const [youtubeStatus, setYoutubeStatus] = useState<YouTubeStatus>({ status: 'checking' });
 
-  // YesLaser Office State
-  const [yeslaserOfficeConfig, setYeslaserOfficeConfig] = useState<YesLaserOfficeConfig>({
+  // Viniun Office State
+  const [viniunOfficeConfig, setViniunOfficeConfig] = useState<ViniunOfficeConfig>({
     usuario: '',
     senha: '',
     agenciaId: '',
     enabled: true,
   });
-  const [showYeslaserKey, setShowYeslaserKey] = useState(false);
-  const [isSavingYeslaser, setIsSavingYeslaser] = useState(false);
-  const [isTestingYeslaser, setIsTestingYeslaser] = useState(false);
-  const [yeslaserOfficeStatus, setYeslaserOfficeStatus] = useState<YesLaserOfficeStatus>({ status: 'checking' });
+  const [showViniunKey, setShowViniunKey] = useState(false);
+  const [isSavingViniun, setIsSavingViniun] = useState(false);
+  const [isTestingViniun, setIsTestingViniun] = useState(false);
+  const [viniunOfficeStatus, setViniunOfficeStatus] = useState<ViniunOfficeStatus>({ status: 'checking' });
 
   // SMTP / OTP State
   const [smtpConfig, setSmtpConfig] = useState<SmtpConfig>({
@@ -205,7 +205,7 @@ export function Integracoes() {
     loadOpenAIConfigurations();
     loadGoogleDriveConfigurations();
     loadYouTubeConfigurations();
-    loadYesLaserOfficeConfigurations();
+    loadViniunOfficeConfigurations();
     loadSmtpAndOtpConfigurations();
     loadWhatsAppSessions();
   }, []);
@@ -317,7 +317,7 @@ export function Integracoes() {
       } else {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao testar WAHA:', error);
 
       if (error.name === 'AbortError') {
@@ -328,7 +328,7 @@ export function Integracoes() {
       } else {
         setWahaStatus({
           status: 'error',
-          message: error.message || 'Falha na conexão',
+          message: error instanceof Error ? error.message : 'Falha na conexão',
         });
       }
     } finally {
@@ -381,9 +381,9 @@ export function Integracoes() {
       toast.success('Configurações salvas com sucesso!');
       // Testar conexão com a nova URL diretamente (sem recarregar do banco)
       await testWahaConnection(newUrl, newKey);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao salvar configurações:', error);
-      toast.error(`Erro ao salvar: ${error.message}`);
+      toast.error(`Erro ao salvar: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
     } finally {
       setIsSaving(false);
     }
@@ -500,11 +500,11 @@ export function Integracoes() {
       } else {
         throw new Error(`HTTP ${response.status}`);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao testar OpenAI:', error);
       setOpenaiStatus({
         status: 'error',
-        message: error.message || 'Falha na conexão',
+        message: error instanceof Error ? error.message : 'Falha na conexão',
       });
       toast.error('Erro ao conectar com OpenAI');
     } finally {
@@ -556,9 +556,9 @@ export function Integracoes() {
 
       toast.success('Configurações da OpenAI salvas com sucesso!');
       await testOpenAIConnection();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao salvar configurações OpenAI:', error);
-      toast.error(`Erro ao salvar: ${error.message}`);
+      toast.error(`Erro ao salvar: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
     } finally {
       setIsSavingOpenai(false);
     }
@@ -696,11 +696,11 @@ export function Integracoes() {
       } else {
         throw new Error(`HTTP ${response.status}`);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao testar Google Drive:', error);
       setGoogleDriveStatus({
         status: 'error',
-        message: error.message || 'Falha na conexão',
+        message: error instanceof Error ? error.message : 'Falha na conexão',
       });
       toast.error('Erro ao conectar com Google Drive');
     } finally {
@@ -750,9 +750,9 @@ export function Integracoes() {
 
       toast.success('Configurações do Google Drive salvas com sucesso!');
       await testGoogleDriveConnection();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao salvar configurações Google Drive:', error);
-      toast.error(`Erro ao salvar: ${error.message}`);
+      toast.error(`Erro ao salvar: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
     } finally {
       setIsSavingGoogle(false);
     }
@@ -893,7 +893,7 @@ export function Integracoes() {
           throw new Error(errorMessage);
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao testar YouTube:', error);
 
       if (error.name === 'AbortError') {
@@ -905,7 +905,7 @@ export function Integracoes() {
       } else {
         setYoutubeStatus({
           status: 'error',
-          message: error.message || 'Falha na conexão',
+          message: error instanceof Error ? error.message : 'Falha na conexão',
         });
         toast.error('Erro ao conectar com YouTube API');
       }
@@ -951,9 +951,9 @@ export function Integracoes() {
 
       toast.success('Configurações do YouTube salvas com sucesso!');
       await testYouTubeConnection();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao salvar configurações YouTube:', error);
-      toast.error(`Erro ao salvar: ${error.message}`);
+      toast.error(`Erro ao salvar: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
     } finally {
       setIsSavingYoutube(false);
     }
@@ -992,8 +992,8 @@ export function Integracoes() {
     }
   };
 
-  // YesLaser Office Functions
-  const loadYesLaserOfficeConfigurations = async () => {
+  // Viniun Office Functions
+  const loadViniunOfficeConfigurations = async () => {
     try {
       const { data, error } = await supabase
         .from('mt_tenant_integrations')
@@ -1001,12 +1001,12 @@ export function Integracoes() {
         .single();
 
       if (error) {
-        setYeslaserOfficeStatus({ status: 'disconnected', message: 'Não configurado' });
+        setViniunOfficeStatus({ status: 'disconnected', message: 'Não configurado' });
         return;
       }
 
       if (data) {
-        setYeslaserOfficeConfig({
+        setViniunOfficeConfig({
           usuario: data.usuario || '',
           senha: data.senha || '',
           agenciaId: data.agencia_id || '',
@@ -1014,83 +1014,83 @@ export function Integracoes() {
         });
 
         if (data.usuario && data.senha) {
-          setYeslaserOfficeStatus({
+          setViniunOfficeStatus({
             status: 'connected',
             message: 'Configurado',
           });
         } else {
-          setYeslaserOfficeStatus({ status: 'disconnected', message: 'Credenciais não configuradas' });
+          setViniunOfficeStatus({ status: 'disconnected', message: 'Credenciais não configuradas' });
         }
       } else {
-        setYeslaserOfficeStatus({ status: 'disconnected', message: 'Não configurado' });
+        setViniunOfficeStatus({ status: 'disconnected', message: 'Não configurado' });
       }
     } catch (error) {
-      console.error('Erro ao carregar configurações YesLaser Office:', error);
-      setYeslaserOfficeStatus({ status: 'disconnected', message: 'Erro ao carregar' });
+      console.error('Erro ao carregar configurações Viniun Office:', error);
+      setViniunOfficeStatus({ status: 'disconnected', message: 'Erro ao carregar' });
     }
   };
 
-  const testYesLaserOfficeConnection = async () => {
-    if (!yeslaserOfficeConfig.usuario || !yeslaserOfficeConfig.senha) {
-      setYeslaserOfficeStatus({ status: 'disconnected', message: 'Credenciais não configuradas' });
+  const testViniunOfficeConnection = async () => {
+    if (!viniunOfficeConfig.usuario || !viniunOfficeConfig.senha) {
+      setViniunOfficeStatus({ status: 'disconnected', message: 'Credenciais não configuradas' });
       return;
     }
 
-    setIsTestingYeslaser(true);
-    setYeslaserOfficeStatus({ status: 'checking' });
+    setIsTestingViniun(true);
+    setViniunOfficeStatus({ status: 'checking' });
 
     try {
-      // Testar autenticação com a API do YesLaser Office
+      // DEPRECATED: API externa YESlaser Office - manter URL original
       const response = await fetch('https://apiaberta.yeslaseroffice.com.br/api/Account/Login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userName: yeslaserOfficeConfig.usuario,
-          password: yeslaserOfficeConfig.senha,
+          userName: viniunOfficeConfig.usuario,
+          password: viniunOfficeConfig.senha,
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
         if (data.success || data.token) {
-          setYeslaserOfficeStatus({
+          setViniunOfficeStatus({
             status: 'connected',
             message: 'Autenticado com sucesso',
           });
-          toast.success('Conexão com YesLaser Office estabelecida!');
+          toast.success('Conexão com Viniun Office estabelecida!');
         } else {
           throw new Error(data.message || 'Falha na autenticação');
         }
       } else if (response.status === 401) {
-        setYeslaserOfficeStatus({
+        setViniunOfficeStatus({
           status: 'error',
           message: 'Credenciais inválidas',
         });
-        toast.error('Credenciais do YesLaser Office inválidas');
+        toast.error('Credenciais do Viniun Office inválidas');
       } else {
         throw new Error(`HTTP ${response.status}`);
       }
-    } catch (error: any) {
-      console.error('Erro ao testar YesLaser Office:', error);
-      setYeslaserOfficeStatus({
+    } catch (error: unknown) {
+      console.error('Erro ao testar Viniun Office:', error);
+      setViniunOfficeStatus({
         status: 'error',
-        message: error.message || 'Falha na conexão',
+        message: error instanceof Error ? error.message : 'Falha na conexão',
       });
-      toast.error('Erro ao conectar com YesLaser Office');
+      toast.error('Erro ao conectar com Viniun Office');
     } finally {
-      setIsTestingYeslaser(false);
+      setIsTestingViniun(false);
     }
   };
 
-  const saveYesLaserOfficeConfig = async () => {
-    if (!yeslaserOfficeConfig.usuario.trim() || !yeslaserOfficeConfig.senha.trim()) {
+  const saveViniunOfficeConfig = async () => {
+    if (!viniunOfficeConfig.usuario.trim() || !viniunOfficeConfig.senha.trim()) {
       toast.error('Usuário e senha são obrigatórios');
       return;
     }
 
-    setIsSavingYeslaser(true);
+    setIsSavingViniun(true);
 
     try {
       const { data: existingConfig } = await supabase
@@ -1102,10 +1102,10 @@ export function Integracoes() {
         const { error } = await supabase
           .from('mt_tenant_integrations')
           .update({
-            usuario: yeslaserOfficeConfig.usuario.trim(),
-            senha: yeslaserOfficeConfig.senha.trim(),
-            agencia_id: yeslaserOfficeConfig.agenciaId.trim() || null,
-            enabled: yeslaserOfficeConfig.enabled,
+            usuario: viniunOfficeConfig.usuario.trim(),
+            senha: viniunOfficeConfig.senha.trim(),
+            agencia_id: viniunOfficeConfig.agenciaId.trim() || null,
+            enabled: viniunOfficeConfig.enabled,
             updated_at: new Date().toISOString(),
           })
           .eq('id', existingConfig.id);
@@ -1115,27 +1115,27 @@ export function Integracoes() {
         const { error } = await supabase
           .from('mt_tenant_integrations')
           .insert({
-            usuario: yeslaserOfficeConfig.usuario.trim(),
-            senha: yeslaserOfficeConfig.senha.trim(),
-            agencia_id: yeslaserOfficeConfig.agenciaId.trim() || null,
-            enabled: yeslaserOfficeConfig.enabled,
+            usuario: viniunOfficeConfig.usuario.trim(),
+            senha: viniunOfficeConfig.senha.trim(),
+            agencia_id: viniunOfficeConfig.agenciaId.trim() || null,
+            enabled: viniunOfficeConfig.enabled,
           });
 
         if (error) throw error;
       }
 
-      toast.success('Configurações do YesLaser Office salvas com sucesso!');
-      await testYesLaserOfficeConnection();
-    } catch (error: any) {
-      console.error('Erro ao salvar configurações YesLaser Office:', error);
-      toast.error(`Erro ao salvar: ${error.message}`);
+      toast.success('Configurações do Viniun Office salvas com sucesso!');
+      await testViniunOfficeConnection();
+    } catch (error: unknown) {
+      console.error('Erro ao salvar configurações Viniun Office:', error);
+      toast.error(`Erro ao salvar: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
     } finally {
-      setIsSavingYeslaser(false);
+      setIsSavingViniun(false);
     }
   };
 
-  const getYesLaserOfficeStatusBadge = () => {
-    switch (yeslaserOfficeStatus.status) {
+  const getViniunOfficeStatusBadge = () => {
+    switch (viniunOfficeStatus.status) {
       case 'connected':
         return (
           <Badge variant="default" className="bg-green-500">
@@ -1264,8 +1264,8 @@ export function Integracoes() {
 
       toast.success('Configurações SMTP salvas!');
       setSmtpStatus({ status: 'connected', message: 'Configurado' });
-    } catch (err: any) {
-      toast.error(`Erro ao salvar: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro ao salvar: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setIsSavingSmtp(false);
     }
@@ -1312,8 +1312,8 @@ export function Integracoes() {
         setSmtpStatus({ status: 'error', message: result.error || 'Falha no envio' });
         toast.error(`Falha: ${result.error}`);
       }
-    } catch (err: any) {
-      setSmtpStatus({ status: 'error', message: err.message });
+    } catch (err: unknown) {
+      setSmtpStatus({ status: 'error', message: err instanceof Error ? err.message : 'Erro desconhecido' });
       toast.error('Erro ao testar SMTP');
     } finally {
       setIsTestingSmtp(false);
@@ -1354,18 +1354,18 @@ export function Integracoes() {
       if (otpConfig.whatsappSession) {
         await supabase
           .from('mt_whatsapp_sessions')
-          .update({ is_default: false } as any)
+          .update({ is_default: false })
           .neq('session_name', otpConfig.whatsappSession);
 
         await supabase
           .from('mt_whatsapp_sessions')
-          .update({ is_default: true } as any)
+          .update({ is_default: true })
           .eq('session_name', otpConfig.whatsappSession);
       }
 
       toast.success('Configurações de envio salvas!');
-    } catch (err: any) {
-      toast.error(`Erro ao salvar: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro ao salvar: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setIsSavingOtp(false);
     }
@@ -1447,9 +1447,9 @@ export function Integracoes() {
             <Youtube className="h-4 w-4" />
             YouTube
           </TabsTrigger>
-          <TabsTrigger value="yeslaser" className="gap-2">
+          <TabsTrigger value="viniun" className="gap-2">
             <Building2 className="h-4 w-4" />
-            YesLaser Office
+            Viniun Office
           </TabsTrigger>
           <TabsTrigger value="envio" className="gap-2">
             <Bell className="h-4 w-4" />
@@ -2106,8 +2106,8 @@ export function Integracoes() {
           </Card>
         </TabsContent>
 
-        {/* YesLaser Office Tab */}
-        <TabsContent value="yeslaser" className="space-y-4">
+        {/* Viniun Office Tab */}
+        <TabsContent value="viniun" className="space-y-4">
           {/* Status Card */}
           <Card>
             <CardHeader className="pb-3">
@@ -2117,13 +2117,13 @@ export function Integracoes() {
                     <Building2 className="h-5 w-5 text-orange-500" />
                   </div>
                   <div>
-                    <CardTitle className="text-lg">YesLaser Office API</CardTitle>
+                    <CardTitle className="text-lg">Viniun Office API</CardTitle>
                     <CardDescription>
-                      Integração com o sistema de gestão YesLaser Office
+                      Integração com o sistema de gestão Viniun Office
                     </CardDescription>
                   </div>
                 </div>
-                {getYesLaserOfficeStatusBadge()}
+                {getViniunOfficeStatusBadge()}
               </div>
             </CardHeader>
           </Card>
@@ -2131,20 +2131,20 @@ export function Integracoes() {
           {/* Configuration Card */}
           <Card>
             <CardHeader>
-              <CardTitle>Configurações do YesLaser Office</CardTitle>
+              <CardTitle>Configurações do Viniun Office</CardTitle>
               <CardDescription>
-                Configure as credenciais de acesso à API do YesLaser Office
+                Configure as credenciais de acesso à API do Viniun Office
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="yeslaser-usuario">Usuário</Label>
+                <Label htmlFor="viniun-office-usuario">Usuário</Label>
                 <Input
-                  id="yeslaser-usuario"
-                  placeholder="AcessoApiYesLaser"
-                  value={yeslaserOfficeConfig.usuario}
+                  id="viniun-office-usuario"
+                  placeholder="AcessoApiViniun"
+                  value={viniunOfficeConfig.usuario}
                   onChange={(e) =>
-                    setYeslaserOfficeConfig((prev) => ({ ...prev, usuario: e.target.value }))
+                    setViniunOfficeConfig((prev) => ({ ...prev, usuario: e.target.value }))
                   }
                 />
                 <p className="text-xs text-muted-foreground">
@@ -2153,25 +2153,25 @@ export function Integracoes() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="yeslaser-senha">Senha/Token</Label>
+                <Label htmlFor="viniun-office-senha">Senha/Token</Label>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
                     <Input
-                      id="yeslaser-senha"
-                      type={showYeslaserKey ? 'text' : 'password'}
+                      id="viniun-office-senha"
+                      type={showViniunKey ? 'text' : 'password'}
                       placeholder="Token de acesso"
-                      value={yeslaserOfficeConfig.senha}
+                      value={viniunOfficeConfig.senha}
                       onChange={(e) =>
-                        setYeslaserOfficeConfig((prev) => ({ ...prev, senha: e.target.value }))
+                        setViniunOfficeConfig((prev) => ({ ...prev, senha: e.target.value }))
                       }
                     />
                   </div>
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => setShowYeslaserKey(!showYeslaserKey)}
+                    onClick={() => setShowViniunKey(!showViniunKey)}
                   >
-                    {showYeslaserKey ? (
+                    {showViniunKey ? (
                       <EyeOff className="h-4 w-4" />
                     ) : (
                       <Eye className="h-4 w-4" />
@@ -2184,13 +2184,13 @@ export function Integracoes() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="yeslaser-agencia">ID da Agência (Opcional)</Label>
+                <Label htmlFor="viniun-office-agencia">ID da Agência (Opcional)</Label>
                 <Input
-                  id="yeslaser-agencia"
+                  id="viniun-office-agencia"
                   placeholder="ID da agência de marketing"
-                  value={yeslaserOfficeConfig.agenciaId}
+                  value={viniunOfficeConfig.agenciaId}
                   onChange={(e) =>
-                    setYeslaserOfficeConfig((prev) => ({ ...prev, agenciaId: e.target.value }))
+                    setViniunOfficeConfig((prev) => ({ ...prev, agenciaId: e.target.value }))
                   }
                 />
                 <p className="text-xs text-muted-foreground">
@@ -2200,25 +2200,25 @@ export function Integracoes() {
 
               <div className="flex items-center justify-between rounded-lg border p-4">
                 <div className="space-y-0.5">
-                  <Label htmlFor="yeslaser-enabled" className="text-base">
+                  <Label htmlFor="viniun-office-enabled" className="text-base">
                     Integração Ativa
                   </Label>
                   <p className="text-sm text-muted-foreground">
-                    Habilitar sincronização de dados com YesLaser Office
+                    Habilitar sincronização de dados com Viniun Office
                   </p>
                 </div>
                 <Switch
-                  id="yeslaser-enabled"
-                  checked={yeslaserOfficeConfig.enabled}
+                  id="viniun-office-enabled"
+                  checked={viniunOfficeConfig.enabled}
                   onCheckedChange={(checked) =>
-                    setYeslaserOfficeConfig((prev) => ({ ...prev, enabled: checked }))
+                    setViniunOfficeConfig((prev) => ({ ...prev, enabled: checked }))
                   }
                 />
               </div>
 
               <div className="flex items-center gap-4 pt-4">
-                <Button onClick={saveYesLaserOfficeConfig} disabled={isSavingYeslaser}>
-                  {isSavingYeslaser ? (
+                <Button onClick={saveViniunOfficeConfig} disabled={isSavingViniun}>
+                  {isSavingViniun ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Salvando...
@@ -2232,10 +2232,10 @@ export function Integracoes() {
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={testYesLaserOfficeConnection}
-                  disabled={isTestingYeslaser || !yeslaserOfficeConfig.usuario || !yeslaserOfficeConfig.senha}
+                  onClick={testViniunOfficeConnection}
+                  disabled={isTestingViniun || !viniunOfficeConfig.usuario || !viniunOfficeConfig.senha}
                 >
-                  {isTestingYeslaser ? (
+                  {isTestingViniun ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Testando...
@@ -2261,7 +2261,7 @@ export function Integracoes() {
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
               <p>
-                <strong>YesLaser Office</strong> - A integração permite:
+                <strong>Viniun Office</strong> - A integração permite:
               </p>
               <ul className="list-disc list-inside space-y-1 text-muted-foreground">
                 <li>Sincronizar agendamentos com o sistema principal</li>

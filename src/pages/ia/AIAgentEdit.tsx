@@ -92,7 +92,7 @@ export default function AIAgentEdit() {
   // Load existing agent into form
   useEffect(() => {
     if (existingAgent) {
-      const extAgent = existingAgent as any;
+      const extAgent = existingAgent as Record<string, unknown>;
       reset({
         nome: existingAgent.nome || '',
         codigo: existingAgent.codigo || '',
@@ -147,7 +147,7 @@ export default function AIAgentEdit() {
   };
 
   const onSubmit = async (data: AgentFormValues) => {
-    const payload: any = {
+    const payload: Record<string, unknown> = {
       ...data,
       temperature: Number(data.temperature),
       max_tokens: Number(data.max_tokens),

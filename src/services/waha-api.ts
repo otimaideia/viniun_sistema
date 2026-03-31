@@ -42,8 +42,7 @@ export function generateDefaultAvatar(name?: string | null): string {
 // Credenciais de servidores WAHA para autenticação de mídia
 // Servidor legado mantido para mídias antigas que apontam para URL antiga
 const LEGACY_WAHA_CONFIGS: Record<string, string> = {
-  'waha.yeslaser.com.br': 'GY9SDuKPFnJ4_dr', // Servidor antigo (deprecated)
-  'waha.yeslaserpraiagrande.com.br': 'sitema-crm@2025', // Servidor atual
+  'waha.otimaideia.com.br': '', // Placeholder - configure via painel
 };
 
 /**
@@ -794,7 +793,6 @@ class WahaApiService {
         telefone = remoteJidAlt.split('@')[0];
         const clean = this.cleanPhoneNumber(telefone);
         if (clean) {
-          console.log(`[WAHA] Telefone extraído de remoteJidAlt: ${clean}`);
           return clean;
         }
       }
@@ -805,7 +803,6 @@ class WahaApiService {
         telefone = from.split('@')[0];
         const clean = this.cleanPhoneNumber(telefone);
         if (clean) {
-          console.log(`[WAHA] Telefone extraído de _data.from: ${clean}`);
           return clean;
         }
       }
@@ -816,7 +813,6 @@ class WahaApiService {
         telefone = to.split('@')[0];
         const clean = this.cleanPhoneNumber(telefone);
         if (clean) {
-          console.log(`[WAHA] Telefone extraído de _data.to: ${clean}`);
           return clean;
         }
       }
@@ -827,7 +823,6 @@ class WahaApiService {
         telefone = contactJid.split('@')[0];
         const clean = this.cleanPhoneNumber(telefone);
         if (clean) {
-          console.log(`[WAHA] Telefone extraído de contact.jid: ${clean}`);
           return clean;
         }
       }
@@ -838,7 +833,6 @@ class WahaApiService {
         telefone = participant.split('@')[0];
         const clean = this.cleanPhoneNumber(telefone);
         if (clean) {
-          console.log(`[WAHA] Telefone extraído de participant: ${clean}`);
           return clean;
         }
       }
@@ -848,7 +842,6 @@ class WahaApiService {
         const possiblePhone = chatData.name.replace(/\D/g, '');
         const cleanFromName = this.cleanPhoneNumber(possiblePhone);
         if (cleanFromName) {
-          console.log(`[WAHA] Telefone extraído de chat.name: ${cleanFromName}`);
           return cleanFromName;
         }
       }
@@ -860,7 +853,6 @@ class WahaApiService {
         // Primeiro tenta a API de LIDs
         const lidPhone = await this.resolveLidToPhone(sessionName, chatId);
         if (lidPhone) {
-          console.log(`[WAHA] Telefone resolvido via API LID: ${lidPhone}`);
           return lidPhone;
         }
 
@@ -869,7 +861,6 @@ class WahaApiService {
         if (contact.number) {
           const clean = this.cleanPhoneNumber(contact.number);
           if (clean) {
-            console.log(`[WAHA] Telefone resolvido via API Contact: ${clean}`);
             return clean;
           }
         }
@@ -878,7 +869,6 @@ class WahaApiService {
           const idPhone = contact.id.replace(/@.*$/, '');
           const clean = this.cleanPhoneNumber(idPhone);
           if (clean) {
-            console.log(`[WAHA] Telefone resolvido via contact.id: ${clean}`);
             return clean;
           }
         }
@@ -948,14 +938,13 @@ class WahaApiService {
 
   /**
    * Lista todos os chats de uma sessão com dados enriquecidos
-   * Abordagem híbrida (baseada no guiadepraiagrande e popdents):
+   * Abordagem híbrida (Viniun):
    * 1. Busca TODOS os chats via /chats com limit alto
    * 2. Busca dados formatados via /chats/overview
    * 3. Mescla os dados para ter TODAS as conversas com formatação correta
    * @param limit - Limite de chats (0 = usar limite padrão alto de 5000)
    */
   async getChats(sessionName: string, _limit: number = 0, _offset: number = 0): Promise<unknown[]> {
-    console.log("[WAHA] Iniciando busca de TODOS os chats...");
 
     // Limite alto para buscar todas as conversas (WAHA tem limite padrão baixo)
     const fetchLimit = 5000;
@@ -983,7 +972,6 @@ class WahaApiService {
         {},
         120000 // 120s timeout para operação pesada
       );
-      console.log(`[WAHA] /chats/overview retornou ${overviewChats.length} chats`);
     } catch (err) {
       console.warn("[WAHA] Erro ao buscar /chats/overview:", err);
     }
@@ -1028,7 +1016,6 @@ class WahaApiService {
         {},
         120000 // 120s timeout para operação pesada
       );
-      console.log(`[WAHA] /chats retornou ${allChats.length} chats (limit=${fetchLimit})`);
     } catch (err) {
       console.warn("[WAHA] Erro ao buscar /chats:", err);
       // Se /chats falhar, usar apenas o overview
@@ -1040,12 +1027,10 @@ class WahaApiService {
     // 3. FALLBACK: Se ambos endpoints retornaram vazio, buscar grupos diretamente
     // Isso contorna um bug no WAHA 2026.x com NOWEB onde /chats retorna vazio
     if (allChats.length === 0 && overviewChats.length === 0) {
-      console.log("[WAHA] ⚠️ Endpoints /chats vazios - usando fallback via /groups");
 
       try {
         // Buscar lista de IDs de grupos
         const groupIds = await this.request<string[]>(`/api/${sessionName}/groups`);
-        console.log(`[WAHA] Encontrados ${groupIds.length} grupos via fallback`);
 
         // Para cada grupo, criar uma entrada de chat básica
         const groupChats: typeof allChats = [];
@@ -1090,7 +1075,6 @@ class WahaApiService {
         }
 
         if (groupChats.length > 0) {
-          console.log(`[WAHA] Fallback retornou ${groupChats.length} grupos como chats`);
           return groupChats;
         }
       } catch (err) {
@@ -1120,8 +1104,6 @@ class WahaApiService {
       // Não tem no overview - usar dados raw
       return chat;
     });
-
-    console.log(`[WAHA] Total de chats enriquecidos: ${enrichedChats.length}`);
 
     // Ordenar por timestamp da última mensagem (mais recentes primeiro)
     enrichedChats.sort((a, b) => {

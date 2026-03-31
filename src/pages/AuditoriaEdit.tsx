@@ -137,7 +137,7 @@ export default function AuditoriaEdit() {
     }
   }, [isEditing, auditoria]);
 
-  const handleSelectLead = (lead: any) => {
+  const handleSelectLead = (lead: { id: string; nome: string; telefone?: string | null; email?: string | null }) => {
     setSelectedLead({
       id: lead.id,
       nome: lead.nome,
@@ -165,7 +165,7 @@ export default function AuditoriaEdit() {
   };
 
   const handleAuditorChange = (userId: string) => {
-    const user = users?.find((u: any) => u.id === userId);
+    const user = users?.find((u) => u.id === userId);
     setForm((f) => ({
       ...f,
       auditor_id: userId,
@@ -174,7 +174,7 @@ export default function AuditoriaEdit() {
   };
 
   const handleConsultoraChange = (userId: string) => {
-    const user = users?.find((u: any) => u.id === userId);
+    const user = users?.find((u) => u.id === userId);
     setForm((f) => ({
       ...f,
       consultora_id: userId,
@@ -211,16 +211,16 @@ export default function AuditoriaEdit() {
       };
 
       if (isEditing && id) {
-        await updateAuditoria(id, payload as any);
+        await updateAuditoria(id, payload as Record<string, unknown>);
         toast.success('Auditoria atualizada com sucesso');
         navigate(`/auditorias/${id}`);
       } else {
-        const created = await createAuditoria(payload as any);
+        const created = await createAuditoria(payload as Record<string, unknown>);
         toast.success('Auditoria criada com sucesso');
         navigate(`/auditorias/${created.id}`);
       }
-    } catch (err: any) {
-      toast.error(err.message || 'Erro ao salvar auditoria');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Erro ao salvar auditoria');
     } finally {
       setIsSaving(false);
     }
@@ -306,7 +306,7 @@ export default function AuditoriaEdit() {
                       {isLoadingLeads ? (
                         <div className="p-3 text-sm text-muted-foreground">Buscando...</div>
                       ) : allLeads && allLeads.length > 0 ? (
-                        allLeads.slice(0, 10).map((lead: any) => (
+                        allLeads.slice(0, 10).map((lead: { id: string; nome: string; telefone?: string | null; email?: string | null }) => (
                           <button
                             key={lead.id}
                             type="button"
@@ -387,7 +387,7 @@ export default function AuditoriaEdit() {
                     <SelectValue placeholder="Selecionar auditor" />
                   </SelectTrigger>
                   <SelectContent>
-                    {users?.map((u: any) => (
+                    {users?.map((u) => (
                       <SelectItem key={u.id} value={u.id}>
                         {u.nome_curto || u.nome}
                       </SelectItem>
@@ -405,7 +405,7 @@ export default function AuditoriaEdit() {
                     <SelectValue placeholder="Selecionar consultora" />
                   </SelectTrigger>
                   <SelectContent>
-                    {users?.map((u: any) => (
+                    {users?.map((u) => (
                       <SelectItem key={u.id} value={u.id}>
                         {u.nome_curto || u.nome}
                       </SelectItem>
@@ -427,7 +427,7 @@ export default function AuditoriaEdit() {
                     <SelectValue placeholder="Selecionar servico" />
                   </SelectTrigger>
                   <SelectContent>
-                    {servicos?.map((s: any) => (
+                    {servicos?.map((s) => (
                       <SelectItem key={s.id} value={s.nome || s.id}>
                         {s.nome}
                       </SelectItem>
@@ -466,7 +466,7 @@ export default function AuditoriaEdit() {
                   <SelectValue placeholder="Selecionar servico de interesse" />
                 </SelectTrigger>
                 <SelectContent>
-                  {servicos?.map((s: any) => (
+                  {servicos?.map((s) => (
                     <SelectItem key={s.id} value={s.nome || s.id}>
                       {s.nome}
                     </SelectItem>

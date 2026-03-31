@@ -2,8 +2,8 @@ import { MapPin, Phone, Instagram, Globe, Clock, ExternalLink } from "lucide-rea
 import { Button } from "@/components/ui/button";
 
 const PreInaugLocationSection = () => {
-  const googleMapsUrl = "https://www.google.com/maps/place/Depila%C3%A7%C3%A3o+a+Laser+e+Est%C3%A9tica+%7C+Yeslaser+Praia+Grande/@-24.0058,-46.4028,17z";
-  const googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3645.8!2d-46.4028!3d-24.0058!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce1f2a1b2c3d4e%3A0x6a850d78807e880e!2sDepila%C3%A7%C3%A3o%20a%20Laser%20e%20Est%C3%A9tica%20%7C%20Yeslaser%20Praia%20Grande!5e0!3m2!1spt-BR!2sbr!4v1704067200000!5m2!1spt-BR!2sbr";
+  const googleMapsUrl = "https://www.google.com/maps/place/Viniun+Praia+Grande/@-24.0058,-46.4028,17z";
+  const googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3645.8!2d-46.4028!3d-24.0058!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce1f2a1b2c3d4e%3A0x6a850d78807e880e!2sViniun%20Praia%20Grande!5e0!3m2!1spt-BR!2sbr!4v1704067200000!5m2!1spt-BR!2sbr";
 
   return (
     <section className="py-12 md:py-16 bg-card">
@@ -33,7 +33,7 @@ const PreInaugLocationSection = () => {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Localização Yeslaser Praia Grande - Rua Jaú 1281, Boqueirão"
+                title="Localização Viniun - Rua Jaú 1281, Boqueirão"
                 className="w-full h-full"
               />
             </div>
@@ -78,12 +78,12 @@ const PreInaugLocationSection = () => {
                 <div>
                   <h3 className="font-bold text-foreground mb-1 text-sm sm:text-base">Instagram</h3>
                   <a 
-                    href="https://instagram.com/yeslaserpraiagrande" 
+                    href="https://instagram.com/viniun" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-primary hover:underline font-medium text-sm sm:text-base"
                   >
-                    @yeslaserpraiagrande
+                    @viniun
                   </a>
                 </div>
               </div>
@@ -95,12 +95,12 @@ const PreInaugLocationSection = () => {
                 <div>
                   <h3 className="font-bold text-foreground mb-1 text-sm sm:text-base">Site</h3>
                   <a 
-                    href="https://yeslaserpraiagrande.com.br" 
+                    href="https://viniun.com.br" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-primary hover:underline font-medium text-sm sm:text-base"
                   >
-                    www.yeslaserpraiagrande.com.br
+                    www.viniun.com.br
                   </a>
                 </div>
               </div>

@@ -57,13 +57,13 @@ const roleOptions: RoleOption[] = [
   {
     value: "aplicadora",
     label: "Aplicadora",
-    description: "Profissional que aplica procedimentos (acesso à própria agenda)",
+    description: "Profissional que realiza serviços (acesso à própria agenda)",
     icon: <Sparkles className="h-4 w-4" />,
   },
   {
     value: "esteticista",
     label: "Esteticista",
-    description: "Profissional de estética (acesso à própria agenda)",
+    description: "Profissional especializado (acesso à própria agenda)",
     icon: <Scissors className="h-4 w-4" />,
   },
   {

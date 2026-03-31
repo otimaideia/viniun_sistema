@@ -1,4 +1,4 @@
-// Página de Gerenciamento de Sessões WhatsApp - Estilo POPdents
+// Página de Gerenciamento de Sessões WhatsApp
 // Usa wahaClient.createSessionWithSync() que inclui os delays críticos para sincronização
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
@@ -79,6 +79,7 @@ import { useUsersAdapter } from "@/hooks/useUsersAdapter";
 import { useDepartments } from "@/hooks/multitenant/useDepartments";
 import { useTeams } from "@/hooks/multitenant/useTeams";
 // Auto-preenchimento de departamento/equipe feito diretamente via supabase query
+import { useAuth } from "@/contexts/AuthContext";
 import { wahaClient, type WAHASessionInfo } from "@/services/waha/wahaDirectClient";
 import { supabase } from "@/integrations/supabase/client";
 import { ImportSessoesModal } from "@/components/whatsapp/ImportSessoesModal";
@@ -90,6 +91,30 @@ import { SessionProfileDialog } from "@/components/whatsapp/SessionProfileDialog
 import { sanitizeObjectForJSON } from "@/utils/unicodeSanitizer";
 import type { WhatsAppSessaoInput, WhatsAppSessaoStatus, WhatsAppSessaoTipo } from "@/types/whatsapp-sessao";
 import type { MTWhatsAppSession } from "@/types/whatsapp-mt";
+
+// Extended session type with properties not yet in MTWhatsAppSession
+interface SessionExtended extends MTWhatsAppSession {
+  round_robin_enabled?: boolean;
+  round_robin_mode?: string;
+  is_default?: boolean;
+  waha_url?: string;
+  profile_picture_url?: string;
+  team_id?: string | null;
+  department_id?: string | null;
+}
+
+// Type for team/department records
+interface TeamRecord {
+  id: string;
+  nome: string;
+  [key: string]: unknown;
+}
+
+interface DepartmentRecord {
+  id: string;
+  nome: string;
+  [key: string]: unknown;
+}
 
 // ============================================================
 // FUNÇÃO AUXILIAR PARA QR CODE (mantida para conversão de imagem)
@@ -105,7 +130,6 @@ async function fetchQRCodeDirect(
   sessionName: string
 ): Promise<string | null> {
   const url = `${apiUrl}/api/${sessionName}/auth/qr`;
-  console.log(`[WAHA-Direct] Buscando QR Code: ${url}`);
 
   try {
     const response = await fetch(url, {
@@ -173,7 +197,7 @@ interface SyncProgress {
   totalMessages: number; // reproposto: leads criados
 }
 
-// Card de Sessão estilo POPdents
+// Card de Sessão
 const SessionCard: React.FC<{
   session: MTWhatsAppSession;
   franqueadoName?: string;
@@ -364,10 +388,10 @@ const SessionCard: React.FC<{
               {teamName}
             </div>
           )}
-          {(session as any).round_robin_enabled && (
+          {(session as SessionExtended).round_robin_enabled && (
             <div className="flex items-center gap-1 text-xs text-green-600 font-medium">
               <Repeat2 className="h-3 w-3" />
-              Round Robin ativo ({(session as any).round_robin_mode === 'team' ? 'Equipe' : 'Departamento'})
+              Round Robin ativo ({(session as SessionExtended).round_robin_mode === 'team' ? 'Equipe' : 'Departamento'})
             </div>
           )}
         </div>
@@ -483,6 +507,7 @@ const SessionCard: React.FC<{
 
 export default function WhatsAppSessoes() {
   const navigate = useNavigate();
+  const { user: authUser } = useAuth();
   const { config: wahaConfig, isLoading: loadingConfig } = useWahaConfigAdapter();
   const { isUnidade, unidadeId, canViewAllLeads } = useUserProfileAdapter();
   // Adapter para suporte multi-tenant
@@ -535,8 +560,8 @@ export default function WhatsAppSessoes() {
     team_id: s.team_id,
     is_default: s.is_default ?? false,
     // Round Robin
-    round_robin_enabled: (s as any).round_robin_enabled ?? false,
-    round_robin_mode: (s as any).round_robin_mode || 'team',
+    round_robin_enabled: (s as SessionExtended).round_robin_enabled ?? false,
+    round_robin_mode: (s as SessionExtended).round_robin_mode || 'team',
     // Engine WAHA
     engine: s.engine || 'NOWEB',
     // Campos MT obrigatórios para sync de conversas
@@ -585,7 +610,7 @@ export default function WhatsAppSessoes() {
     if (input.ativo !== undefined) updates.is_active = input.ativo;
     if ('webhook_url' in input) updates.webhook_url = input.webhook_url;
 
-    updateSession.mutateAsync(updates as any).catch(console.error);
+    updateSession.mutateAsync(updates as Partial<MTWhatsAppSession>).catch(console.error);
   };
 
   const updateStatus = (input: { id: string; status: string; qr_code?: string | null }) => {
@@ -749,7 +774,6 @@ export default function WhatsAppSessoes() {
           data.forEach((row: { session_name: string; webhook_url: string | null }) => {
             statusMap[row.session_name] = !!row.webhook_url;
           });
-          console.log('[Webhook] Status carregado do banco (query explícita):', statusMap);
           setWebhookStatuses(prev => {
             const merged = { ...prev };
             for (const [name, status] of Object.entries(statusMap)) {
@@ -1004,8 +1028,8 @@ export default function WhatsAppSessoes() {
       }
 
       toast.success(active ? 'Chatbot IA ativado para esta sessão' : 'Chatbot IA desativado para esta sessão');
-    } catch (err: any) {
-      toast.error(`Erro ao alterar chatbot: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro ao alterar chatbot: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setTogglingBotSession(null);
     }
@@ -1019,7 +1043,7 @@ export default function WhatsAppSessoes() {
   const qrPollingRef = useRef<NodeJS.Timeout | null>(null);
 
   const isWahaConfigured = wahaConfig?.enabled && wahaConfig?.api_key;
-  const WEBHOOK_URL = "https://supabase-app.yeslaserpraiagrande.com.br/functions/v1/waha-webhook";
+  const WEBHOOK_URL = "https://supabase.viniun.com.br/functions/v1/waha-webhook";
 
   // Criar mapa de franqueados
   const franqueadosMap = useMemo(() => {
@@ -1057,7 +1081,7 @@ export default function WhatsAppSessoes() {
     return map;
   }, [teams]);
 
-  // Stats para MiniDashboard - igual ao POPdents
+  // Stats para MiniDashboard
   const stats = useMemo(() => {
     const total = sessoes.length;
     const connected = sessoes.filter((s) => s.status === 'working').length;
@@ -1102,7 +1126,6 @@ export default function WhatsAppSessoes() {
       }
 
       initialSyncDoneRef.current = true;
-      console.log('[WhatsAppSessoes] Sincronizando status inicial com WAHA...');
 
       try {
         // Verificar status real de cada sessão no WAHA
@@ -1117,17 +1140,13 @@ export default function WhatsAppSessoes() {
                              wahaStatus === 'STARTING' ? 'connecting' :
                              wahaStatus === 'FAILED' ? 'failed' : 'stopped';
 
-            console.log(`[WhatsAppSessoes] WAHA status para ${sessao.session_name}: ${wahaStatus} -> ${newStatus}`);
-
             // Só atualiza se o status for diferente
             if (sessao.status !== newStatus) {
-              console.log(`[WhatsAppSessoes] Atualizando status de ${sessao.session_name}: ${sessao.status} -> ${newStatus}`);
               await updateStatusAdapter.mutateAsync({ id: sessao.id, status: newStatus });
             }
           } catch (err) {
             // Sessão não existe no WAHA, manter como stopped
             if (sessao.status !== 'stopped') {
-              console.log(`[WhatsAppSessoes] Sessão ${sessao.session_name} não encontrada no WAHA, marcando como stopped`);
               await updateStatusAdapter.mutateAsync({ id: sessao.id, status: 'stopped' });
             }
           }
@@ -1149,8 +1168,7 @@ export default function WhatsAppSessoes() {
       startAutoCheck(120000); // 2 minutes interval
     }
     return () => stopAutoCheck();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isWahaConfigured]); // Only depend on isWahaConfigured, functions are stable refs
+  }, [isWahaConfigured, startAutoCheck, stopAutoCheck]);
 
   // Ref para evitar verificações repetidas de webhook
   const webhookCheckRef = useRef<{ checked: Set<string>; inProgress: boolean }>({
@@ -1194,7 +1212,6 @@ export default function WhatsAppSessoes() {
         return;
       }
 
-      console.log('[Webhook] Verificando status para', toCheck.length, 'sessões conectadas');
 
       // Process in batches of 2 with delay
       for (let i = 0; i < toCheck.length; i += 2) {
@@ -1214,7 +1231,6 @@ export default function WhatsAppSessoes() {
               );
 
               webhookCheckRef.current.checked.add(sessao.session_name);
-              console.log(`[Webhook] ${sessao.session_name}: ${hasWebhook ? '✓ Ativo' : '✗ Inativo'}`, webhooks.length ? `(${webhooks.length} webhooks)` : '');
               return { name: sessao.session_name, hasWebhook };
             } catch (err) {
               console.warn(`[Webhook] Erro ao verificar ${sessao.session_name}:`, err);
@@ -1291,7 +1307,6 @@ export default function WhatsAppSessoes() {
         if (existing) {
           const newStatus = mapWahaStatus(wahaSession.status);
           if (existing.status !== newStatus) {
-            console.log(`[Sync] Atualizando ${wahaSession.name}: ${existing.status} → ${newStatus}`);
             try {
               await updateStatusAdapter.mutateAsync({ id: existing.id, status: newStatus });
               synced++;
@@ -1308,7 +1323,6 @@ export default function WhatsAppSessoes() {
       for (const sessao of sessoes) {
         if (!wahaNames.includes(sessao.session_name)) {
           if (sessao.status !== 'stopped') {
-            console.log(`[Sync] Marcando ${sessao.session_name} como stopped (não existe no WAHA)`);
             try {
               await updateStatusAdapter.mutateAsync({ id: sessao.id, status: 'stopped' });
               synced++;
@@ -1356,8 +1370,6 @@ export default function WhatsAppSessoes() {
 
       // Engine definido nas Configurações WAHA (Integrações → Engine Padrão)
       const engine = (wahaConfig?.default_engine as 'NOWEB' | 'GOWS' | 'WEBJS') || 'NOWEB';
-      console.log(`[Sessão] Usando engine: ${engine} (configurado em Integrações → WAHA)`);
-
       // ========================================
       // Usar wrapper com delays críticos incluídos
       // ========================================
@@ -1366,11 +1378,6 @@ export default function WhatsAppSessoes() {
       if (!result.success) {
         throw new Error(result.error || 'Falha ao criar sessão');
       }
-
-      console.log(`[Sessão] Status final:`, {
-        name: result.data?.name,
-        status: result.data?.status,
-      });
 
       // Salvar no banco com campos organizacionais (auto-preenchidos do responsável)
       createSessao({
@@ -1390,7 +1397,6 @@ export default function WhatsAppSessoes() {
       setIsLoadingQR(true);
 
       // Buscar QR Code usando wahaClient (que carrega config direto do banco)
-      console.log('[QR Code] Buscando QR Code para sessão:', sessionName);
       const qrResult = await wahaClient.getQRCode(sessionName);
 
       if (qrResult.success && qrResult.data?.value) {
@@ -1399,7 +1405,6 @@ export default function WhatsAppSessoes() {
           ? qrValue
           : `data:image/png;base64,${qrValue}`;
         setQrCodeBase64(qrBase64);
-        console.log('[QR Code] QR Code carregado com sucesso');
       } else {
         console.error('[QR Code] Falha ao buscar QR:', qrResult.error);
         // Tentar novamente com delay (a sessão pode ainda estar inicializando)
@@ -1411,7 +1416,6 @@ export default function WhatsAppSessoes() {
             ? qrValue
             : `data:image/png;base64,${qrValue}`;
           setQrCodeBase64(qrBase64);
-          console.log('[QR Code] QR Code carregado após retry');
         } else {
           console.error('[QR Code] Falha após retry:', retryResult.error);
         }
@@ -1450,11 +1454,9 @@ export default function WhatsAppSessoes() {
         }
 
         const status = result.data?.status;
-        console.log(`[QR-Poll] Status: ${status}`);
 
         if (status === 'WORKING') {
           // Conectado com sucesso!
-          console.log(`[QR-Poll] ✅ Sessão conectada!`);
           setIsSessionConnected(true);
           clearInterval(qrPollingRef.current!);
           qrPollingRef.current = null;
@@ -1472,14 +1474,11 @@ export default function WhatsAppSessoes() {
               .single();
 
             if (sessaoDb?.id) {
-              console.log(`[QR-Poll] Atualizando status no banco para sessão ${sessaoDb.id}...`);
               await updateStatusAdapter.mutateAsync({ id: sessaoDb.id, status: 'working' });
-              console.log(`[QR-Poll] ✅ Status atualizado no banco`);
 
               // Webhook já foi configurado no createSession (incluído na config inicial)
               // NÃO chamar setWebhook aqui pois causa restart desnecessário
               setWebhookStatuses(prev => ({ ...prev, [sessionName]: true }));
-              console.log(`[Webhook] Já configurado na criação da sessão: ${sessionName}`);
             }
           } catch (dbErr) {
             console.error(`[QR-Poll] Erro ao atualizar status no banco:`, dbErr);
@@ -1505,7 +1504,6 @@ export default function WhatsAppSessoes() {
           // Ainda aguardando scan - atualizar QR periodicamente
           refreshCount++;
           if (refreshCount % 3 === 0 && refreshCount < MAX_REFRESHES) {
-            console.log(`[QR-Poll] Atualizando QR Code...`);
             // Buscar QR Code usando wahaClient
             const qrResult = await wahaClient.getQRCode(sessionName);
             if (qrResult.success && qrResult.data?.value) {
@@ -1517,7 +1515,6 @@ export default function WhatsAppSessoes() {
             }
           }
         } else if (status === 'FAILED' || status === 'STOPPED') {
-          console.log(`[QR-Poll] ❌ Sessão falhou: ${status}`);
           clearInterval(qrPollingRef.current!);
           qrPollingRef.current = null;
           toast.error("Sessão falhou. Tente novamente.");
@@ -1555,8 +1552,8 @@ export default function WhatsAppSessoes() {
       gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.5);
-    } catch (e) {
-      console.log("Não foi possível tocar som:", e);
+    } catch {
+      // Audio playback not supported
     }
   };
 
@@ -1632,8 +1629,8 @@ export default function WhatsAppSessoes() {
     setEditIsDefault(sessao.is_default ?? false);
     setEditDepartmentId(sessao.department_id || '');
     setEditTeamId(sessao.team_id || '');
-    setEditRoundRobinEnabled((sessao as any).round_robin_enabled ?? false);
-    setEditRoundRobinMode((sessao as any).round_robin_mode || 'team');
+    setEditRoundRobinEnabled((sessao as SessionExtended).round_robin_enabled ?? false);
+    setEditRoundRobinMode((sessao as SessionExtended).round_robin_mode || 'team');
 
     // Buscar nomes do departamento e equipe atuais
     if (sessao.department_id) {
@@ -1801,10 +1798,9 @@ export default function WhatsAppSessoes() {
       // Helper: gravar log de auditoria para ativação/desativação do webhook
       const logWebhookAudit = async (action: 'webhook_activated' | 'webhook_deactivated') => {
         try {
-          const { data: { user } } = await supabase.auth.getUser();
           await supabase.from('mt_audit_logs').insert({
             tenant_id: sessao.tenant_id,
-            user_id: user?.id ?? null,
+            user_id: authUser?.id ?? null,
             action,
             resource_type: 'whatsapp_session',
             resource_id: sessao.id,
@@ -1913,12 +1909,9 @@ export default function WhatsAppSessoes() {
 
   const handleSessaoConnected = async () => {
     if (selectedSessao) {
-      console.log(`[Status] Atualizando sessão ${selectedSessao.id} para "working"...`);
-
       try {
         // Aguardar a atualização do status antes de continuar
         await updateStatusAdapter.mutateAsync({ id: selectedSessao.id, status: "working" });
-        console.log(`[Status] ✅ Sessão ${selectedSessao.id} atualizada para "working"`);
       } catch (err) {
         console.error(`[Status] ❌ Erro ao atualizar status:`, err);
         toast.error("Erro ao atualizar status da sessão");
@@ -1933,9 +1926,7 @@ export default function WhatsAppSessoes() {
         const hasWebhook = webhooks.some((w: { url: string }) => w.url && w.url.includes('waha-webhook'));
         if (hasWebhook) {
           setWebhookStatuses(prev => ({ ...prev, [selectedSessao.session_name]: true }));
-          console.log(`[Webhook] Já configurado: ${selectedSessao.session_name}`);
         } else {
-          console.log(`[Webhook] Não encontrado para ${selectedSessao.session_name}, configurando...`);
           const webhookResult = await wahaClient.setWebhook(selectedSessao.session_name, WEBHOOK_URL);
           if (webhookResult.success) {
             setWebhookStatuses(prev => ({ ...prev, [selectedSessao.session_name]: true }));
@@ -2067,15 +2058,11 @@ export default function WhatsAppSessoes() {
     setClearingDataSessions(prev => ({ ...prev, [sessao.id]: true }));
 
     try {
-      console.log(`🗑️ Limpando dados da sessão ${sessao.session_name} (ID: ${sessao.id})`);
-
       // 1. Contar conversas para feedback
       const { count: totalConversas } = await supabase
         .from("mt_whatsapp_conversations")
         .select("*", { count: 'exact', head: true })
         .eq("session_id", sessao.id);
-
-      console.log(`  📋 Encontradas ${totalConversas || 0} conversas para deletar`);
 
       // 2. Deletar todas as mensagens diretamente por session_id (mais eficiente)
       const { error: msgError, count: msgCount } = await supabase
@@ -2088,8 +2075,6 @@ export default function WhatsAppSessoes() {
         throw new Error(`Erro ao deletar mensagens: ${msgError.message}`);
       }
 
-      console.log(`  📨 ${msgCount || 0} mensagens deletadas`);
-
       // 3. Deletar todas as conversas
       const { error: convError, count: convCount } = await supabase
         .from("mt_whatsapp_conversations")
@@ -2100,8 +2085,6 @@ export default function WhatsAppSessoes() {
         console.error("Erro ao deletar conversas:", convError);
         throw new Error(`Erro ao deletar conversas: ${convError.message}`);
       }
-
-      console.log(`  💬 ${convCount || 0} conversas deletadas`);
 
       toast.success(
         `Dados limpos com sucesso!\n${msgCount || 0} mensagens e ${convCount || 0} conversas deletadas.\n\nAgora você pode sincronizar novamente.`
@@ -2228,7 +2211,7 @@ export default function WhatsAppSessoes() {
               isBotActive={botConfigBySession[session.id]?.is_active || false}
               isTogglingBot={togglingBotSession === session.id}
               onToggleBot={(active) => handleToggleBot(session.id, active)}
-              isDefaultNumber={(session as any).is_default === true}
+              isDefaultNumber={(session as SessionExtended).is_default === true}
             />
           ))}
         </div>
@@ -2497,9 +2480,9 @@ export default function WhatsAppSessoes() {
           }}
           sessionId={profileDialogSession.id}
           sessionName={profileDialogSession.session_name}
-          wahaUrl={(profileDialogSession as any).waha_url || wahaConfig?.api_url}
+          wahaUrl={(profileDialogSession as SessionExtended).waha_url || wahaConfig?.api_url}
           currentDisplayName={profileDialogSession.display_name}
-          currentProfilePicture={(profileDialogSession as any).profile_picture_url}
+          currentProfilePicture={(profileDialogSession as SessionExtended).profile_picture_url}
         />
       )}
 
@@ -2668,15 +2651,15 @@ export default function WhatsAppSessoes() {
                       value={editTeamId}
                       onValueChange={(v) => {
                         setEditTeamId(v);
-                        const team = (teams || []).find((t: any) => t.id === v);
-                        if (team) setEditTeamName((team as any).nome || '');
+                        const team = (teams || []).find((t: TeamRecord) => t.id === v);
+                        if (team) setEditTeamName((team as TeamRecord).nome || '');
                       }}
                     >
                       <SelectTrigger className="h-9">
                         <SelectValue placeholder="Selecione uma equipe..." />
                       </SelectTrigger>
                       <SelectContent>
-                        {(teams || []).map((team: any) => (
+                        {(teams || []).map((team: TeamRecord) => (
                           <SelectItem key={team.id} value={team.id}>
                             <div className="flex items-center gap-2">
                               <UsersRound className="h-3.5 w-3.5" />
@@ -2706,15 +2689,15 @@ export default function WhatsAppSessoes() {
                       value={editDepartmentId}
                       onValueChange={(v) => {
                         setEditDepartmentId(v);
-                        const dept = (departments || []).find((d: any) => d.id === v);
-                        if (dept) setEditDepartmentName((dept as any).nome || '');
+                        const dept = (departments || []).find((d: DepartmentRecord) => d.id === v);
+                        if (dept) setEditDepartmentName((dept as DepartmentRecord).nome || '');
                       }}
                     >
                       <SelectTrigger className="h-9">
                         <SelectValue placeholder="Selecione um departamento..." />
                       </SelectTrigger>
                       <SelectContent>
-                        {(departments || []).map((dept: any) => (
+                        {(departments || []).map((dept: DepartmentRecord) => (
                           <SelectItem key={dept.id} value={dept.id}>
                             <div className="flex items-center gap-2">
                               <FolderTree className="h-3.5 w-3.5" />

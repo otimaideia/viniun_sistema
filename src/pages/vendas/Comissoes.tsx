@@ -176,8 +176,8 @@ export default function Comissoes() {
     }
     try {
       await updateCommission(editingId, { valor: parsed });
-    } catch (err: any) {
-      toast.error(err.message || 'Erro ao atualizar');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Erro ao atualizar');
     }
     setEditingId(null);
   };

@@ -110,8 +110,8 @@ export default function EstoqueEntrada() {
       });
 
       navigate("/estoque/movimentacoes");
-    } catch (err: any) {
-      toast.error(err.message || "Erro ao registrar entrada");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Erro ao registrar entrada");
     } finally {
       setSaving(false);
     }

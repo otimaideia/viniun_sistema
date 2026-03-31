@@ -89,7 +89,7 @@ function CategoryFormDialog({ open, onOpenChange, category, onSave, isSaving }: 
                 id="cat-nome"
                 value={formData.nome}
                 onChange={(e) => handleNomeChange(e.target.value)}
-                placeholder="Ex: Estética Facial"
+                placeholder="Ex: Serviços Premium"
                 required
               />
             </div>
@@ -99,7 +99,7 @@ function CategoryFormDialog({ open, onOpenChange, category, onSave, isSaving }: 
                 id="cat-codigo"
                 value={formData.codigo}
                 onChange={(e) => setFormData(prev => ({ ...prev, codigo: slugify(e.target.value) }))}
-                placeholder="estetica_facial"
+                placeholder="servicos_premium"
                 required
               />
             </div>

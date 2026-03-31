@@ -40,9 +40,9 @@ export default function LessonPlayer() {
   const { prevLesson, nextLesson } = useMemo(() => {
     if (!moduleDetail?.lessons || !lessonId) return { prevLesson: null, nextLesson: null };
     const lessons = moduleDetail.lessons
-      .filter((l: any) => l.is_published)
-      .sort((a: any, b: any) => a.ordem - b.ordem);
-    const currentIndex = lessons.findIndex((l: any) => l.id === lessonId);
+      .filter((l: { is_published?: boolean; id?: string; ordem?: number }) => l.is_published)
+      .sort((a: { ordem: number }, b: { ordem: number }) => a.ordem - b.ordem);
+    const currentIndex = lessons.findIndex((l: { id: string }) => l.id === lessonId);
     return {
       prevLesson: currentIndex > 0 ? lessons[currentIndex - 1] : null,
       nextLesson: currentIndex < lessons.length - 1 ? lessons[currentIndex + 1] : null,
@@ -259,7 +259,7 @@ export default function LessonPlayer() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {lesson.materials.map((mat: any) => (
+              {lesson.materials.map((mat: Record<string, unknown>) => (
                 <div
                   key={mat.id}
                   className="flex items-center justify-between p-2 rounded border text-sm"

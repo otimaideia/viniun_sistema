@@ -181,7 +181,7 @@ export default function FranqueadoEdit() {
     }
   };
 
-  const updateField = (field: keyof Franqueado, value: any) => {
+  const updateField = (field: keyof Franqueado, value: unknown) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 

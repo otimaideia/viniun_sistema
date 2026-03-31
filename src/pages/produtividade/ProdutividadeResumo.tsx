@@ -50,8 +50,8 @@ export default function ProdutividadeResumo() {
         count++;
       }
       toast.success(`Resumo gerado para ${count} profissionais`);
-    } catch (err: any) {
-      toast.error(`Erro: ${err.message}`);
+    } catch (err: unknown) {
+      toast.error(`Erro: ${err instanceof Error ? err.message : 'Erro desconhecido'}`);
     } finally {
       setGenerating(false);
     }
@@ -155,7 +155,7 @@ export default function ProdutividadeResumo() {
               <TableBody>
                 {monthlySummaries.map(s => (
                   <TableRow key={s.id}>
-                    <TableCell className="font-medium">{(s.user as any)?.nome || '—'}</TableCell>
+                    <TableCell className="font-medium">{(s.user as Record<string, unknown> | undefined)?.nome as string || '—'}</TableCell>
                     <TableCell className="text-center">{s.dias_trabalhados}</TableCell>
                     <TableCell className="text-center">{s.dias_diaria}</TableCell>
                     <TableCell className="text-center">{s.dias_comissao}</TableCell>

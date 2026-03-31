@@ -61,7 +61,7 @@ export function EngagementFunnel({ data, total }: Props) {
                 d.level === "sem_resposta" || d.level === "resposta_unica"
               );
               const totalDead = dead.reduce((sum, d) => sum + d.percentage, 0);
-              return `${totalDead.toFixed(1)}% das conversas morrem com 0 ou 1 resposta da clínica`;
+              return `${totalDead.toFixed(1)}% das conversas morrem com 0 ou 1 resposta da empresa`;
             })()}
           </p>
         </div>

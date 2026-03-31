@@ -125,12 +125,10 @@ export function useWhatsAppConversationsMT(sessionId?: string, filters?: Convers
           filter: tenant ? `tenant_id=eq.${tenant.id}` : undefined,
         },
         (payload) => {
-          console.log('Conversa atualizada:', payload);
           queryClient.invalidateQueries({ queryKey: ['mt-whatsapp-conversations'] });
         }
       )
       .subscribe((status, err) => {
-        console.log('[RT] mt-whatsapp-conversations-changes status:', status);
         if (err) console.error('[RT] mt-whatsapp-conversations-changes error:', err);
       });
 
@@ -416,14 +414,6 @@ export function useWhatsAppConversationsMT(sessionId?: string, filters?: Convers
       if (!contactPhone && contactData.phoneNumber) {
         contactPhone = contactData.phoneNumber;
       }
-
-      console.log('[V3] Conversa criada com extração V3:', {
-        chatId,
-        identifier_type,
-        has_phone_number,
-        contactName,
-        contactPhone,
-      });
     }
 
     const { data: created, error } = await supabase
@@ -483,7 +473,6 @@ export function useWhatsAppConversationsMT(sessionId?: string, filters?: Convers
     if (error) {
       console.error('Erro ao atualizar conversa V3:', error);
     } else {
-      console.log('[V3] Conversa atualizada:', conversationId, updates);
       queryClient.invalidateQueries({ queryKey: ['mt-whatsapp-conversations'] });
     }
   };

@@ -67,7 +67,7 @@ const PRESET_COLORS = [
 ];
 
 function IconPreview({ iconName, className }: { iconName: string; className?: string }) {
-  const Icon = (LucideIcons as any)[iconName] || Building2;
+  const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName] || Building2;
   return <Icon className={className} />;
 }
 
@@ -151,9 +151,9 @@ export default function DepartamentoEdit() {
       }
 
       navigate("/configuracoes/departamentos");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      if (err.message?.includes("duplicate")) {
+      if (err instanceof Error && err.message?.includes("duplicate")) {
         toast.error("Já existe um departamento com este código");
       } else {
         toast.error(isEditing ? "Erro ao atualizar departamento" : "Erro ao criar departamento");
@@ -421,7 +421,7 @@ export default function DepartamentoEdit() {
                               <IconPreview
                                 iconName={field.value}
                                 className="h-5 w-5"
-                                style={{ color: form.watch('cor') } as any}
+                                style={{ color: form.watch('cor') }}
                               />
                             </div>
                             <span className="text-sm font-medium">{field.value}</span>

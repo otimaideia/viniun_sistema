@@ -155,7 +155,7 @@ export default function WhatsAppBroadcastEdit() {
         message_text: campaign.message_text || '',
         media_url: campaign.media_url || '',
         template_name: campaign.template_name || '',
-        message_template_language: (campaign.template_components as any)?.language || 'pt_BR',
+        message_template_language: (campaign.template_components as Record<string, string> | null)?.language || 'pt_BR',
         template_components: campaign.template_components
           ? JSON.stringify(campaign.template_components, null, 2)
           : '{}',
@@ -1280,8 +1280,8 @@ export default function WhatsAppBroadcastEdit() {
                               const err = await res.text();
                               toast.error(`Erro: ${err}`, { id: 'test-send' });
                             }
-                          } catch (err: any) {
-                            toast.error(`Falha: ${err.message}`, { id: 'test-send' });
+                          } catch (err: unknown) {
+                            toast.error(`Falha: ${err instanceof Error ? err.message : 'Erro desconhecido'}`, { id: 'test-send' });
                           }
                         }}
                       >

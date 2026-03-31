@@ -39,7 +39,7 @@ import * as LucideIcons from "lucide-react";
 import type { Team, TeamMember } from "@/types/multitenant";
 
 function TeamIcon({ iconName, className, style }: { iconName: string; className?: string; style?: React.CSSProperties }) {
-  const Icon = (LucideIcons as any)[iconName] || Users;
+  const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName] || Users;
   return <Icon className={className} style={style} />;
 }
 
@@ -91,7 +91,7 @@ export default function EquipeDetail() {
       await deleteTeam(team.id);
       toast.success("Equipe excluída com sucesso");
       navigate("/configuracoes/equipes");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       toast.error("Erro ao excluir equipe");
     }

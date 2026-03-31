@@ -7,7 +7,7 @@ const BenefitsSection = () => {
   const benefits = [
     {
       icon: Building2,
-      title: "Clínicas Premium",
+      title: "Unidades Premium",
       description: "Ambientes modernos, climatizados e com padrão de excelência",
     },
     {
@@ -18,7 +18,7 @@ const BenefitsSection = () => {
     {
       icon: Sparkles,
       title: "Resultados Reais",
-      description: "Redução de até 95% dos pelos em poucas sessões",
+      description: "Resultados comprovados com as melhores soluções do mercado",
     },
     {
       icon: Users,
@@ -33,7 +33,7 @@ const BenefitsSection = () => {
     {
       icon: Shield,
       title: "Segurança Total",
-      description: "Protocolos rigorosos de higiene e biossegurança",
+      description: "Protocolos rigorosos de qualidade e segurança",
     },
   ];
 
@@ -47,7 +47,7 @@ const BenefitsSection = () => {
           }`}
         >
           <h2 className="text-3xl md:text-5xl font-bold mb-6 text-foreground">
-            Por que escolher a Yeslaser?
+            Por que escolher a Viniun?
           </h2>
         </div>
 
@@ -86,7 +86,7 @@ const BenefitsSection = () => {
             className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 shadow-xl hover:scale-105 transition-transform"
           >
             <Gift className="w-5 h-5 mr-2" />
-            QUERO MINHAS 10 SESSÕES GRÁTIS
+            QUERO MEU BENEFÍCIO EXCLUSIVO
             <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
         </div>

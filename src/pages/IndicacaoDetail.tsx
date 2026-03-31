@@ -52,10 +52,10 @@ export default function IndicacaoDetail() {
 
   const handleWhatsApp = () => {
     const cleanPhone = cleanPhoneNumber(indicacao.telefone);
-    const codigoPais = (indicacao as any).telefone_codigo_pais || '55';
+    const codigoPais = (indicacao as Record<string, unknown>).telefone_codigo_pais as string || '55';
     const primeiroNome = indicacao.nome.split(" ")[0];
     const mensagem = encodeURIComponent(
-      `Olá ${primeiroNome}! 😊 Tudo bem? Aqui é da YESlaser! Você foi indicado(a) por um amigo.`
+      `Olá ${primeiroNome}! 😊 Tudo bem? Aqui é da Viniun! Você foi indicado(a) por um amigo.`
     );
     window.open(`https://wa.me/${codigoPais}${cleanPhone}?text=${mensagem}`, "_blank");
   };
@@ -104,7 +104,7 @@ export default function IndicacaoDetail() {
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="h-4 w-4 text-muted-foreground" />
-                  <span>{formatPhoneDisplay(indicacao.telefone, (indicacao as any).telefone_codigo_pais || '55')}</span>
+                  <span>{formatPhoneDisplay(indicacao.telefone, (indicacao as Record<string, unknown>).telefone_codigo_pais as string || '55')}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="h-4 w-4 text-muted-foreground" />
@@ -143,7 +143,7 @@ export default function IndicacaoDetail() {
                   <div className="space-y-3">
                     <div className="p-3 bg-muted rounded-lg">
                       <p className="font-medium">{indicacao.cadastro.nome}</p>
-                      <p className="text-sm text-muted-foreground">{formatPhoneDisplay(indicacao.cadastro.telefone, (indicacao.cadastro as any).telefone_codigo_pais || '55')}</p>
+                      <p className="text-sm text-muted-foreground">{formatPhoneDisplay(indicacao.cadastro.telefone, (indicacao.cadastro as Record<string, unknown>).telefone_codigo_pais as string || '55')}</p>
                       <p className="text-sm text-muted-foreground">{indicacao.cadastro.email}</p>
                     </div>
                     <Button variant="outline" size="sm" asChild className="w-full">

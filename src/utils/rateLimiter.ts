@@ -102,7 +102,6 @@ class RateLimiter {
   async waitForSlot(): Promise<void> {
     const waitTime = this.timeUntilNextRequest();
     if (waitTime > 0) {
-      console.log(`[RateLimiter] Aguardando ${waitTime}ms antes do próximo request...`);
       await new Promise(resolve => setTimeout(resolve, waitTime));
     }
   }

@@ -80,7 +80,7 @@ async function enviarWhatsAppBoasVindas(
     const withCountry = cleaned.startsWith("55") ? cleaned : `55${cleaned}`;
     const chatId = `${withCountry}@c.us`;
 
-    const mensagem = `🌟 *Bem-vinda ao Portal YESlaser!*
+    const mensagem = `🌟 *Bem-vinda ao Portal Viniun!*
 
 Olá, *${nome}*! 🎉
 
@@ -97,7 +97,7 @@ No portal você encontra:
 
 Use seu WhatsApp ou email para fazer login e completar seu cadastro.
 
-_Equipe YESlaser_ ✨`;
+_Equipe Viniun_ ✨`;
 
     const sendResp = await fetch(`${wahaConfig.api_url}/api/sendText`, {
       method: "POST",
@@ -231,7 +231,7 @@ async function enviarEmailBoasVindas(
           user: m.smtp_user,
           pass: m.smtp_pass,
           from_email: m.smtp_from_email || m.smtp_user,
-          from_name: m.smtp_from_name || "YESlaser",
+          from_name: m.smtp_from_name || "Viniun",
         };
       }
     }
@@ -247,7 +247,7 @@ async function enviarEmailBoasVindas(
           secure: Deno.env.get("SMTP_SECURE") === "true",
           user, pass,
           from_email: Deno.env.get("SMTP_FROM_EMAIL") || user,
-          from_name: Deno.env.get("SMTP_FROM_NAME") || "YESlaser",
+          from_name: Deno.env.get("SMTP_FROM_NAME") || "Viniun",
         };
       }
     }
@@ -262,7 +262,7 @@ async function enviarEmailBoasVindas(
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bem-vinda ao Portal YESlaser</title>
+  <title>Bem-vinda ao Portal Viniun</title>
 </head>
 <body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;padding:40px 0">
@@ -272,7 +272,7 @@ async function enviarEmailBoasVindas(
           <!-- Header -->
           <tr>
             <td style="background:linear-gradient(135deg,#662E8E,#F2B705);padding:40px 32px;text-align:center">
-              <h1 style="color:#fff;margin:0;font-size:28px;font-weight:bold">✨ YESlaser</h1>
+              <h1 style="color:#fff;margin:0;font-size:28px;font-weight:bold">✨ Viniun</h1>
               <p style="color:rgba(255,255,255,0.9);margin:8px 0 0;font-size:16px">Portal da Influenciadora</p>
             </td>
           </tr>
@@ -281,7 +281,7 @@ async function enviarEmailBoasVindas(
             <td style="padding:40px 32px">
               <h2 style="color:#662E8E;margin:0 0 16px;font-size:22px">Bem-vinda, ${nome}! 🎉</h2>
               <p style="color:#555;line-height:1.6;margin:0 0 24px">
-                Sua conta de influenciadora YESlaser foi ativada! Estamos muito felizes em ter você como parte da nossa família.
+                Sua conta de influenciadora foi ativada! Estamos muito felizes em ter você como parte da nossa família.
               </p>
 
               <div style="background:#f8f4ff;border-radius:8px;padding:24px;margin:0 0 24px;border-left:4px solid #662E8E">
@@ -311,8 +311,8 @@ async function enviarEmailBoasVindas(
           <tr>
             <td style="background:#f8f4ff;padding:24px 32px;text-align:center;border-top:1px solid #e8d5f5">
               <p style="color:#888;font-size:12px;margin:0">
-                © 2025 YESlaser. Todos os direitos reservados.<br>
-                Este email foi enviado porque você foi cadastrada como influenciadora YESlaser.
+                © ${new Date().getFullYear()} Viniun. Todos os direitos reservados.<br>
+                Este email foi enviado porque você foi cadastrada como influenciadora.
               </p>
             </td>
           </tr>
@@ -335,7 +335,7 @@ async function enviarEmailBoasVindas(
     await transporter.sendMail({
       from: `"${smtpConfig.from_name}" <${smtpConfig.from_email}>`,
       to: email,
-      subject: `🌟 Bem-vinda ao Portal YESlaser, ${nome}!`,
+      subject: `🌟 Bem-vinda ao Portal Viniun, ${nome}!`,
       html: htmlBody,
     });
 
@@ -388,7 +388,7 @@ Deno.serve(async (req: Request) => {
     const nome = influenciadora.nome || "Influenciadora";
     const telefone = influenciadora.whatsapp || influenciadora.telefone;
     const email = influenciadora.email;
-    const loginUrl = portalUrl || `${req.headers.get("origin") || "https://www.yeslaserpraiagrande.com.br"}/influenciadora/login`;
+    const loginUrl = portalUrl || `${req.headers.get("origin") || "https://www.viniun.com.br"}/influenciadora/login`;
 
     // Enviar em paralelo
     const [whatsappResult, emailResult] = await Promise.allSettled([

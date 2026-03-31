@@ -29,7 +29,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import logoYeslaser from "@/assets/logo-yeslaser.png";
+import logoViniun from "@/assets/logo-viniun.png";
 import { YESiaWidget } from "@/components/ai-assistant/YESiaWidget";
 
 // Sub-components
@@ -139,7 +139,7 @@ export function DashboardLayout({ children, defaultCollapsed = false }: Dashboar
 
   // Logo dinâmico baseado no tenant ou fallback para logo padrão
   const isLoadingBranding = tenantLoading || brandingLoading;
-  const currentLogo = isLoadingBranding ? logoYeslaser : (logoUrl || logoYeslaser);
+  const currentLogo = isLoadingBranding ? logoViniun : (logoUrl || logoViniun);
   const currentFavicon = isLoadingBranding ? "/favicon.png" : (logoWhiteUrl || "/favicon.png");
 
   // Encontra o slug da franquia do usuário

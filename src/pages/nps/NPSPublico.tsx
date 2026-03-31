@@ -74,7 +74,7 @@ export default function NPSPublico() {
 
       try {
         const { data, error } = await supabase
-          .from('mt_nps_responses' as any)
+          .from('mt_nps_responses' as never)
           .select(`
             *,
             survey:mt_nps_surveys(
@@ -91,9 +91,9 @@ export default function NPSPublico() {
           return;
         }
 
-        const npsResponse = data as any;
-        setResponse(npsResponse as NPSResponse);
-        setSurvey(npsResponse.survey as NPSSurvey);
+        const npsResponse = data as NPSResponse & { survey: NPSSurvey };
+        setResponse(npsResponse);
+        setSurvey(npsResponse.survey);
 
         // Ja respondido
         if (npsResponse.respondido_em) {
@@ -119,7 +119,7 @@ export default function NPSPublico() {
     setIsSubmitting(true);
     try {
       const { error } = await supabase
-        .from('mt_nps_responses' as any)
+        .from('mt_nps_responses' as never)
         .update({
           score,
           rating_profissional: ratingProfissional || null,
@@ -134,7 +134,7 @@ export default function NPSPublico() {
       if (error) throw error;
       setSubmitted(true);
       toast.success('Obrigado pela sua avaliacao!');
-    } catch (err: any) {
+    } catch {
       toast.error('Erro ao enviar avaliacao. Tente novamente.');
     } finally {
       setIsSubmitting(false);

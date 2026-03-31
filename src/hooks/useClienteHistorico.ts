@@ -21,7 +21,7 @@ function getCurrentTenantSlug(): string {
     if (param) return param.toLowerCase();
   }
 
-  return 'yeslaser';
+  return 'viniun';
 }
 
 async function resolveTenantId(slug: string): Promise<string | null> {
@@ -44,14 +44,14 @@ async function resolveTenantId(slug: string): Promise<string | null> {
 
   if (domainData) return (domainData as { id: string }).id;
 
-  if (hostname.includes('yeslaser')) {
-    const { data: yeslaser } = await supabase
+  if (hostname.includes('viniun')) {
+    const { data: viniunTenant } = await supabase
       .from('mt_tenants')
       .select('id')
-      .eq('slug', 'yeslaser')
+      .eq('slug', 'viniun')
       .eq('is_active', true)
       .maybeSingle();
-    if (yeslaser) return (yeslaser as { id: string }).id;
+    if (viniunTenant) return (viniunTenant as { id: string }).id;
   }
 
   return null;

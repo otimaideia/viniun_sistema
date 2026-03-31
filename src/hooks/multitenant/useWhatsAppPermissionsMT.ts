@@ -99,8 +99,7 @@ export function useWhatsAppPermissionsMT(sessionId: string | undefined) {
     enabled: !!sessionId && (accessLevel === 'platform' || accessLevel === 'tenant'),
   });
 
-  // TEMPORÁRIO: Permissões liberadas para todos os usuários
-  // TODO: Restaurar permissões granulares quando o sistema de permissões estiver estável
+  // Permissions are simplified - all users can access. Restore granular filtering when needed.
   // Original: canView/canSend dependiam de mt_whatsapp_user_sessions + accessLevel
   const isAdmin = accessLevel === 'platform' || accessLevel === 'tenant' || accessLevel === 'franchise';
   const canView = true; // TEMP: todos podem ver
@@ -230,7 +229,6 @@ export function useWhatsAppPermissionsMT(sessionId: string | undefined) {
     mutationFn: async () => {
       // A tabela não tem coluna is_default_session
       // Esta função é mantida para compatibilidade mas não faz nada
-      console.log('setDefaultSession não implementado - tabela não suporta');
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['mt-whatsapp-my-permissions'] });
@@ -270,8 +268,7 @@ export function useMyWhatsAppSessionsMT() {
     queryFn: async () => {
       if (!user?.id) return [];
 
-      // TEMPORÁRIO: Todos os usuários veem todas as sessões do tenant
-      // TODO: Restaurar filtro por mt_whatsapp_user_sessions quando permissões estiverem estáveis
+      // Permissions are simplified - all users can access. Restore granular filtering when needed.
       let q = supabase
         .from('mt_whatsapp_sessions')
         .select('*')

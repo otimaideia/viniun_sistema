@@ -81,7 +81,7 @@ export default function BannerEdit() {
     queryKey: ['mt-site-banner', id],
     queryFn: async () => {
       if (!id) return null;
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('mt_site_banners')
         .select('*')
         .eq('id', id)
@@ -166,8 +166,8 @@ export default function BannerEdit() {
       }
 
       navigate("/configuracoes/banners");
-    } catch (err: any) {
-      toast.error(err.message || "Erro ao salvar banner");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Erro ao salvar banner");
     } finally {
       setIsSaving(false);
     }

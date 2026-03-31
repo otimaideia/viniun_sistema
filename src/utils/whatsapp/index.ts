@@ -1,4 +1,4 @@
-// Utilitários WhatsApp - YESlaser
+// Utilitários WhatsApp - Viniun
 // Exportação centralizada de funções utilitárias
 
 export {

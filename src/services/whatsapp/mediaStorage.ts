@@ -1,6 +1,6 @@
 // Serviço para upload de mídia WhatsApp para Supabase Storage
 // Resolve problema de URLs expiradas do WAHA salvando no nosso bucket
-// Adaptado do POPdents para YESlaser
+// Viniun Sistema
 
 import { supabase } from '@/integrations/supabase/client';
 import { wahaClient } from '@/services/waha/wahaDirectClient';
@@ -33,8 +33,6 @@ export async function uploadMediaToStorage(media: MediaInfo): Promise<UploadResu
       return { success: false, error: 'URL de mídia não fornecida' };
     }
 
-    console.log(`[MediaStorage] Baixando mídia: ${media.url.substring(0, 100)}...`);
-
     // 1. Fazer download da mídia do WAHA (com autenticação se for URL do WAHA)
     const isWahaUrl = media.url.includes('waha') || media.url.includes('/api/files/');
     const fetchOptions: RequestInit = {};
@@ -43,7 +41,6 @@ export async function uploadMediaToStorage(media: MediaInfo): Promise<UploadResu
       // Obter headers de autenticação do WAHA
       const authHeaders = await wahaClient.getAuthHeaders();
       fetchOptions.headers = authHeaders;
-      console.log(`[MediaStorage] Usando autenticação WAHA`);
     }
 
     const response = await fetch(media.url, fetchOptions);
@@ -72,8 +69,6 @@ export async function uploadMediaToStorage(media: MediaInfo): Promise<UploadResu
     const timestamp = Date.now();
     const storagePath = `${media.franqueadoId}/${media.conversationId}/${media.messageId}_${timestamp}.${extension}`;
 
-    console.log(`[MediaStorage] Fazendo upload: ${storagePath}`);
-
     // 4. Fazer upload para o Supabase Storage
     const { data, error } = await supabase.storage
       .from(BUCKET_NAME)
@@ -100,8 +95,6 @@ export async function uploadMediaToStorage(media: MediaInfo): Promise<UploadResu
       return { success: false, error: 'Não foi possível gerar URL pública' };
     }
 
-    console.log(`[MediaStorage] Upload concluído: ${publicUrl}`);
-
     return {
       success: true,
       url: publicUrl,
@@ -126,7 +119,6 @@ export async function updateMessageMediaUrl(
   storagePath: string
 ): Promise<boolean> {
   try {
-    console.log(`[MediaStorage] Atualizando mensagem ${messageId} com storage_path: ${storageUrl}`);
 
     const { error } = await supabase
       .from('mt_whatsapp_messages')
@@ -143,7 +135,6 @@ export async function updateMessageMediaUrl(
       return false;
     }
 
-    console.log(`[MediaStorage] Mensagem ${messageId} atualizada com sucesso`);
     return true;
   } catch (error) {
     console.error(`[MediaStorage] Erro ao atualizar mensagem:`, error);
@@ -164,7 +155,6 @@ export async function processMessageMedia(
 ): Promise<string | null> {
   // Verificar se a URL já é do nosso storage
   if (wahaMediaUrl.includes('supabase') || wahaMediaUrl.includes(BUCKET_NAME)) {
-    console.log(`[MediaStorage] URL já é do storage, pulando upload`);
     return wahaMediaUrl;
   }
 
@@ -268,7 +258,6 @@ export async function ensureBucketExists(): Promise<boolean> {
     const bucketExists = buckets?.some(b => b.name === BUCKET_NAME);
 
     if (!bucketExists) {
-      console.log(`[MediaStorage] Criando bucket: ${BUCKET_NAME}`);
       const { error: createError } = await supabase.storage.createBucket(BUCKET_NAME, {
         public: true, // Acesso público para exibir imagens
         fileSizeLimit: MAX_FILE_SIZE,
@@ -288,7 +277,6 @@ export async function ensureBucketExists(): Promise<boolean> {
         return false;
       }
 
-      console.log(`[MediaStorage] Bucket criado com sucesso`);
     }
 
     return true;

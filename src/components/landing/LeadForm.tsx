@@ -8,8 +8,8 @@ import { toast } from "sonner";
 import { Sparkles, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
-// YESlaser Praia Grande - IDs fixos para landing page pública
-const YESLASER_TENANT_ID = "ebf87fe2-093a-4fba-bb56-c6835cbc1465";
+// Viniun - IDs fixos para landing page pública
+const VINIUN_TENANT_ID = "ebf87fe2-093a-4fba-bb56-c6835cbc1465";
 const PRAIA_GRANDE_FRANCHISE_ID = "529bac26-008c-473b-ad30-305e17e95e53";
 
 interface ViaCEPResponse {
@@ -199,7 +199,7 @@ const LeadForm = ({ compact = false }: LeadFormProps) => {
       const { error } = await supabase
         .from('mt_leads')
         .insert([{
-          tenant_id: YESLASER_TENANT_ID,
+          tenant_id: VINIUN_TENANT_ID,
           franchise_id: PRAIA_GRANDE_FRANCHISE_ID,
           nome: formData.name,
           email: formData.email,
@@ -251,7 +251,7 @@ const LeadForm = ({ compact = false }: LeadFormProps) => {
 
       // Preparar mensagem do WhatsApp
       const message = `
-🎉 *NOVO CADASTRO - YESLASER*
+🎉 *NOVO CADASTRO - VINIUN*
 
 *Dados do Cliente:*
 👤 Nome: ${formData.name}

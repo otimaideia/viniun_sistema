@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-O sistema YESlaser já implementa a **mesma lógica robusta** do Guia de Praia Grande para extrair números de telefone de conversas do WhatsApp, especialmente para lidar com o formato `@lid` do WAHA NOWEB engine.
+O sistema Viniun já implementa a **mesma lógica robusta** do Guia de Praia Grande para extrair números de telefone de conversas do WhatsApp, especialmente para lidar com o formato `@lid` do WAHA NOWEB engine.
 
 ## Implementação
 
@@ -153,7 +153,7 @@ O método gera logs console para rastreamento:
 
 ## Comparação com Guia de Praia Grande
 
-| Feature | Guia de Praia Grande | YESlaser | Status |
+| Feature | Guia de Praia Grande | Viniun | Status |
 |---------|---------------------|----------|--------|
 | Extração de @c.us | ✅ | ✅ | ✅ Implementado |
 | Extração de @lid | ✅ | ✅ | ✅ Implementado |

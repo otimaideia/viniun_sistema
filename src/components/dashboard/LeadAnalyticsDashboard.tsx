@@ -43,7 +43,7 @@ export function LeadAnalyticsDashboard({ leads, responsibleUsers = [] }: LeadAna
     });
     
     return Object.entries(counts)
-      .map(([name, value]) => ({ name: name.replace("YESlaser ", ""), value }))
+      .map(([name, value]) => ({ name: name.replace("Viniun ", ""), value }))
       .sort((a, b) => b.value - a.value)
       .slice(0, 8);
   }, [leads]);
@@ -95,7 +95,7 @@ export function LeadAnalyticsDashboard({ leads, responsibleUsers = [] }: LeadAna
     
     return Object.entries(stats)
       .map(([name, { total, converted }]) => ({
-        name: name.replace("YESlaser ", ""),
+        name: name.replace("Viniun ", ""),
         total,
         converted,
         taxa: total > 0 ? Math.round((converted / total) * 100) : 0,

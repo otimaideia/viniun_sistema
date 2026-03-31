@@ -9,7 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, Crown, MessageCircle, Loader2, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
-const YESLASER_TENANT_ID = "ebf87fe2-093a-4fba-bb56-c6835cbc1465";
+const VINIUN_TENANT_ID = "ebf87fe2-093a-4fba-bb56-c6835cbc1465";
 const PRAIA_GRANDE_FRANCHISE_ID = "529bac26-008c-473b-ad30-305e17e95e53";
 const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/CfyRi14Gjth5SPpfiTkr0k?mode=gi_t";
 
@@ -110,7 +110,7 @@ const VIPRegistrationForm = ({ variant = "a", compact = false }: VIPRegistration
       const generoFormatted = genero === "feminino" ? "Feminino" : genero === "masculino" ? "Masculino" : "Outro";
 
       const leadData = {
-        tenant_id: YESLASER_TENANT_ID,
+        tenant_id: VINIUN_TENANT_ID,
         franchise_id: PRAIA_GRANDE_FRANCHISE_ID,
         nome,
         email: email || null,
@@ -146,7 +146,6 @@ const VIPRegistrationForm = ({ variant = "a", compact = false }: VIPRegistration
       if (error) {
         // Duplicate phone (unique constraint) - update existing lead and continue
         if (error.code === "23505") {
-          console.log("Lead já existe, atualizando dados...");
           const { error: updateError } = await supabase
             .from("mt_leads")
             .update({
@@ -174,7 +173,7 @@ const VIPRegistrationForm = ({ variant = "a", compact = false }: VIPRegistration
               },
               updated_at: new Date().toISOString(),
             })
-            .eq("tenant_id", YESLASER_TENANT_ID)
+            .eq("tenant_id", VINIUN_TENANT_ID)
             .eq("telefone", cleanPhone);
 
           if (updateError) {
@@ -362,11 +361,11 @@ const VIPRegistrationForm = ({ variant = "a", compact = false }: VIPRegistration
                 htmlFor="vip-consent"
                 className="text-sm text-gray-800 cursor-pointer leading-relaxed font-medium"
               >
-                <strong className="text-blue-700">Autorizo o contato</strong> da Yeslaser comigo via WhatsApp, e-mail ou telefone para agendar minhas sessões, enviar lembretes e informar sobre promoções exclusivas. *
+                <strong className="text-blue-700">Autorizo o contato</strong> da Viniun comigo via WhatsApp, e-mail ou telefone para agendar minhas sessões, enviar lembretes e informar sobre promoções exclusivas. *
               </Label>
             </div>
             <p className="text-xs text-gray-600 ml-8 mt-1 leading-relaxed">
-              Seus dados serão utilizados apenas para comunicação relacionada aos serviços da Yeslaser e você pode cancelar o recebimento de mensagens a qualquer momento.
+              Seus dados serão utilizados apenas para comunicação relacionada aos serviços da Viniun e você pode cancelar o recebimento de mensagens a qualquer momento.
             </p>
           </div>
 

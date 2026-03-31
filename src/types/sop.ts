@@ -1,4 +1,4 @@
-// Tipos para o módulo de Processos e Procedimentos (SOPs)
+// Tipos para o módulo de Processos e Operações (SOPs)
 
 export interface MTSOPCategory {
   id: string;

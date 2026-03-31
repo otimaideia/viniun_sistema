@@ -311,8 +311,8 @@ export default function TrainingTrackDetail() {
                       ) : (
                         <div className="space-y-2">
                           {lessons
-                            .sort((a: any, b: any) => a.ordem - b.ordem)
-                            .map((lesson: any, lIndex: number) => {
+                            .sort((a: { ordem: number }, b: { ordem: number }) => a.ordem - b.ordem)
+                            .map((lesson: Record<string, unknown>, lIndex: number) => {
                               const tipoConfig =
                                 LESSON_TIPO_CONFIG[lesson.tipo as keyof typeof LESSON_TIPO_CONFIG];
                               return (

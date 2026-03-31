@@ -15,8 +15,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { User, UserPlus, CheckCircle, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
-// YESlaser Praia Grande - IDs fixos para landing page pública
-const YESLASER_TENANT_ID = "ebf87fe2-093a-4fba-bb56-c6835cbc1465";
+// Viniun - IDs fixos para landing page pública
+const VINIUN_TENANT_ID = "ebf87fe2-093a-4fba-bb56-c6835cbc1465";
 const PRAIA_GRANDE_FRANCHISE_ID = "529bac26-008c-473b-ad30-305e17e95e53";
 
 interface Friend {
@@ -147,7 +147,7 @@ const ReferralForm = () => {
         const { data: leadData, error: leadError } = await supabase
           .from('mt_leads')
           .insert([{
-            tenant_id: YESLASER_TENANT_ID,
+            tenant_id: VINIUN_TENANT_ID,
             franchise_id: PRAIA_GRANDE_FRANCHISE_ID,
             nome: personalData.name,
             email: personalData.email,
@@ -204,13 +204,10 @@ const ReferralForm = () => {
           (friend) => friend.name && friend.whatsapp
         );
 
-        console.log('Lead ID:', leadId);
-        console.log('Complete friends:', completeFriends);
-
         // Salvar indicações como novos leads vinculados ao lead principal
         if (completeFriends.length > 0) {
           const referralsData = completeFriends.map(friend => ({
-            tenant_id: YESLASER_TENANT_ID,
+            tenant_id: VINIUN_TENANT_ID,
             franchise_id: PRAIA_GRANDE_FRANCHISE_ID,
             nome: friend.name,
             email: friend.email || null,
@@ -237,18 +234,16 @@ const ReferralForm = () => {
             console.error('Error saving referrals:', referralsError);
             sonnerToast.error("Erro ao salvar indicações. Entre em contato conosco.");
           } else {
-            console.log('Referrals saved successfully:', savedReferrals);
             sonnerToast.success(`${completeFriends.length} indicação(ões) registrada(s) com sucesso.`);
           }
         } else {
-          console.log('No referrals to save');
         }
 
         // Aguardar um momento para garantir que tudo foi salvo
         await new Promise(resolve => setTimeout(resolve, 500));
 
         // Mensagem simplificada do WhatsApp
-        const message = `✅ *Novo Cadastro Yeslaser Praia Grande*
+        const message = `✅ *Novo Cadastro Viniun*
 
 👤 Nome: ${personalData.name}
 📧 Email: ${personalData.email}
@@ -256,7 +251,7 @@ const ReferralForm = () => {
 
 🎉 Em breve vamos inaugurar nossa unidade em Praia Grande!
 
-Você está na lista VIP e será um dos primeiros a conhecer nossa clínica e garantir suas sessões grátis de depilação a laser.
+Você está na lista VIP e será um dos primeiros a conhecer nossa unidade e garantir seus benefícios exclusivos.
 
 Entraremos em contato em breve com mais novidades! 🚀`;
 
@@ -289,14 +284,14 @@ Entraremos em contato em breve com mais novidades! 🚀`;
     const whatsappGroupLink = "https://chat.whatsapp.com/CfyRi14Gjth5SPpfiTkr0k?mode=gi_t";
 
     return (
-      <Card className="w-full max-w-2xl mx-auto border-2 border-yeslaser-purple shadow-xl">
+      <Card className="w-full max-w-2xl mx-auto border-2 border-viniun-navy shadow-xl">
         <CardContent className="pt-12 pb-8 text-center">
           <CheckCircle className="w-24 h-24 mx-auto mb-6 text-green-500" />
-          <h3 className="text-3xl font-bold mb-4 text-yeslaser-purple">
+          <h3 className="text-3xl font-bold mb-4 text-viniun-navy">
             Parabéns! Cadastro Realizado!
           </h3>
           <p className="text-lg text-gray-600 mb-6">
-            Você ganhou 10 sessões grátis de depilação a laser!
+            Você ganhou benefícios exclusivos!
           </p>
 
           {/* WhatsApp VIP Group CTA */}
@@ -329,8 +324,8 @@ Entraremos em contato em breve com mais novidades! 🚀`;
             </Button>
           </div>
 
-          <div className="bg-yeslaser-lightBlue/10 rounded-lg p-6 mb-6">
-            <p className="text-md font-semibold text-yeslaser-purple mb-2">
+          <div className="bg-viniun-lightBlue/10 rounded-lg p-6 mb-6">
+            <p className="text-md font-semibold text-viniun-navy mb-2">
               📱 Próximos passos:
             </p>
             <ul className="text-left text-gray-700 space-y-2 max-w-md mx-auto">
@@ -342,7 +337,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
           </div>
           <Button
             onClick={() => window.location.reload()}
-            className="bg-yeslaser-purple hover:bg-yeslaser-darkPurple text-white px-8 py-3 text-lg"
+            className="bg-viniun-navy hover:bg-viniun-dark text-white px-8 py-3 text-lg"
           >
             Fazer Novo Cadastro
           </Button>
@@ -352,10 +347,10 @@ Entraremos em contato em breve com mais novidades! 🚀`;
   }
 
   return (
-    <Card className="w-full max-w-4xl mx-auto border-2 border-yeslaser-purple shadow-xl">
-      <CardHeader className="bg-gradient-to-r from-yeslaser-purple to-yeslaser-lightBlue text-white p-4 sm:p-6">
+    <Card className="w-full max-w-4xl mx-auto border-2 border-viniun-navy shadow-xl">
+      <CardHeader className="bg-gradient-to-r from-viniun-navy to-viniun-lightBlue text-white p-4 sm:p-6">
         <CardTitle className="text-xl sm:text-2xl md:text-3xl text-center leading-tight">
-          🎁 Ganhe 10 Sessões Grátis de Depilação a Laser!
+          🎁 Ganhe Benefícios Exclusivos!
         </CardTitle>
         <CardDescription className="text-white/90 text-center text-sm sm:text-base md:text-lg mt-2">
           Cadastre-se e indique 5 amigos para garantir seu benefício exclusivo
@@ -367,13 +362,13 @@ Entraremos em contato em breve com mais novidades! 🚀`;
         <div className="flex items-center justify-center mb-6 sm:mb-8">
           <div className="flex items-center space-x-2 sm:space-x-4">
             <div className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full text-sm sm:text-base ${
-              step >= 1 ? "bg-yeslaser-purple text-white" : "bg-gray-200 text-gray-400"
+              step >= 1 ? "bg-viniun-navy text-white" : "bg-gray-200 text-gray-400"
             }`}>
               1
             </div>
-            <div className={`w-12 sm:w-24 h-1 ${step >= 2 ? "bg-yeslaser-purple" : "bg-gray-200"}`} />
+            <div className={`w-12 sm:w-24 h-1 ${step >= 2 ? "bg-viniun-navy" : "bg-gray-200"}`} />
             <div className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full text-sm sm:text-base ${
-              step >= 2 ? "bg-yeslaser-purple text-white" : "bg-gray-200 text-gray-400"
+              step >= 2 ? "bg-viniun-navy text-white" : "bg-gray-200 text-gray-400"
             }`}>
               2
             </div>
@@ -383,7 +378,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
         <form onSubmit={handleSubmit}>
           {step === 1 ? (
             <div className="space-y-6">
-              <h3 className="text-lg sm:text-xl font-bold text-yeslaser-purple mb-4 flex items-center">
+              <h3 className="text-lg sm:text-xl font-bold text-viniun-navy mb-4 flex items-center">
                 <User className="mr-2 flex-shrink-0" size={20} />
                 <span>Seus Dados Pessoais</span>
               </h3>
@@ -399,7 +394,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
                     value={personalData.name}
                     onChange={(e) => handlePersonalDataChange("name", e.target.value)}
                     placeholder="Digite seu nome completo"
-                    className="mt-1 border-gray-300 focus:border-yeslaser-purple"
+                    className="mt-1 border-gray-300 focus:border-viniun-navy"
                     required
                   />
                 </div>
@@ -414,7 +409,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
                     value={personalData.email}
                     onChange={(e) => handlePersonalDataChange("email", e.target.value)}
                     placeholder="seu@email.com"
-                    className="mt-1 border-gray-300 focus:border-yeslaser-purple"
+                    className="mt-1 border-gray-300 focus:border-viniun-navy"
                     required
                   />
                 </div>
@@ -429,7 +424,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
                     value={personalData.whatsapp}
                     onChange={(e) => handlePersonalDataChange("whatsapp", e.target.value)}
                     placeholder="(13) 99999-9999"
-                    className="mt-1 border-gray-300 focus:border-yeslaser-purple"
+                    className="mt-1 border-gray-300 focus:border-viniun-navy"
                     required
                   />
                 </div>
@@ -442,7 +437,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
                     value={personalData.genero}
                     onValueChange={(value) => handlePersonalDataChange("genero", value)}
                   >
-                    <SelectTrigger className="mt-1 border-gray-300 focus:border-yeslaser-purple">
+                    <SelectTrigger className="mt-1 border-gray-300 focus:border-viniun-navy">
                       <SelectValue placeholder="Selecione seu gênero" />
                     </SelectTrigger>
                     <SelectContent>
@@ -463,7 +458,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
                     type="date"
                     value={personalData.data_nascimento}
                     onChange={(e) => handlePersonalDataChange("data_nascimento", e.target.value)}
-                    className="mt-1 border-gray-300 focus:border-yeslaser-purple"
+                    className="mt-1 border-gray-300 focus:border-viniun-navy"
                     max={new Date().toISOString().split('T')[0]}
                   />
                 </div>
@@ -480,7 +475,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
                     onChange={(e) => handleCepChange(e.target.value)}
                     placeholder="00000-000"
                     maxLength={9}
-                    className="mt-1 border-gray-300 focus:border-yeslaser-purple"
+                    className="mt-1 border-gray-300 focus:border-viniun-navy"
                     disabled={isLoadingCep}
                   />
                   {isLoadingCep && (
@@ -512,11 +507,11 @@ Entraremos em contato em breve com mais novidades! 🚀`;
                     htmlFor="consent"
                     className="text-sm text-gray-800 cursor-pointer leading-relaxed font-medium"
                   >
-                    <strong className="text-blue-700">Autorizo o contato</strong> da Yeslaser comigo via WhatsApp, e-mail ou telefone para agendar minhas sessões, enviar lembretes e informar sobre promoções exclusivas. *
+                    <strong className="text-blue-700">Autorizo o contato</strong> da Viniun comigo via WhatsApp, e-mail ou telefone para agendar minhas sessões, enviar lembretes e informar sobre promoções exclusivas. *
                   </Label>
                 </div>
                 <p className="text-xs text-gray-600 ml-8 leading-relaxed">
-                  ℹ️ Seus dados serão utilizados apenas para comunicação relacionada aos serviços da Yeslaser e você pode cancelar o recebimento de mensagens a qualquer momento.
+                  ℹ️ Seus dados serão utilizados apenas para comunicação relacionada aos serviços da Viniun e você pode cancelar o recebimento de mensagens a qualquer momento.
                 </p>
               </div>
 
@@ -524,14 +519,14 @@ Entraremos em contato em breve com mais novidades! 🚀`;
                 <p className="text-sm text-yellow-800 flex items-start">
                   <AlertCircle className="mr-2 mt-0.5 flex-shrink-0" size={16} />
                   <span>
-                    No próximo passo, você poderá indicar até 5 amigos. Ao indicar 5 amigos, você ganha 10 sessões grátis de depilação a laser!
+                    No próximo passo, você poderá indicar até 5 amigos. Ao indicar 5 amigos, você ganha benefícios exclusivos!
                   </span>
                 </p>
               </div>
             </div>
           ) : (
             <div className="space-y-6">
-              <h3 className="text-lg sm:text-xl font-bold text-yeslaser-purple mb-4 flex items-center">
+              <h3 className="text-lg sm:text-xl font-bold text-viniun-navy mb-4 flex items-center">
                 <UserPlus className="mr-2 flex-shrink-0" size={20} />
                 <span>Indique 5 Amigos e Ganhe!</span>
               </h3>
@@ -539,7 +534,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
               <div className="space-y-4">
                 {friends.map((friend, index) => (
                   <div key={`friend-${index}`} className="border border-gray-200 rounded-lg p-3 sm:p-4 bg-gray-50">
-                    <h4 className="font-semibold text-yeslaser-purple mb-3 text-sm sm:text-base">
+                    <h4 className="font-semibold text-viniun-navy mb-3 text-sm sm:text-base">
                       Amigo(a) {index + 1}
                     </h4>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -550,7 +545,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
                           value={friend.name}
                           onChange={(e) => handleFriendChange(index, "name", e.target.value)}
                           placeholder="Nome completo"
-                          className="mt-1 text-sm border-gray-300 focus:border-yeslaser-purple"
+                          className="mt-1 text-sm border-gray-300 focus:border-viniun-navy"
                         />
                       </div>
                       <div>
@@ -560,7 +555,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
                           value={friend.email}
                           onChange={(e) => handleFriendChange(index, "email", e.target.value)}
                           placeholder="email@exemplo.com"
-                          className="mt-1 text-sm border-gray-300 focus:border-yeslaser-purple"
+                          className="mt-1 text-sm border-gray-300 focus:border-viniun-navy"
                         />
                       </div>
                       <div>
@@ -570,7 +565,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
                           value={friend.whatsapp}
                           onChange={(e) => handleFriendChange(index, "whatsapp", e.target.value)}
                           placeholder="(13) 99999-9999"
-                          className="mt-1 text-sm border-gray-300 focus:border-yeslaser-purple"
+                          className="mt-1 text-sm border-gray-300 focus:border-viniun-navy"
                         />
                       </div>
                     </div>
@@ -593,7 +588,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
                   <p className="text-sm text-green-800 flex items-start">
                     <CheckCircle className="mr-2 mt-0.5 flex-shrink-0" size={16} />
                     <span>
-                      Indique 5 amigos e ganhe 10 sessões grátis de depilação a laser em área pequena!
+                      Indique 5 amigos e ganhe benefícios exclusivos!
                     </span>
                   </p>
                 </div>
@@ -607,7 +602,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
                 type="button"
                 variant="outline"
                 onClick={() => setStep(1)}
-                className="border-yeslaser-purple text-yeslaser-purple hover:bg-yeslaser-purple hover:text-white w-full sm:w-auto order-2 sm:order-1"
+                className="border-viniun-navy text-viniun-navy hover:bg-viniun-navy hover:text-white w-full sm:w-auto order-2 sm:order-1"
               >
                 Voltar
               </Button>
@@ -616,7 +611,7 @@ Entraremos em contato em breve com mais novidades! 🚀`;
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="bg-gradient-to-r from-yeslaser-purple to-yeslaser-lightBlue hover:from-yeslaser-darkPurple hover:to-yeslaser-lightBlue text-white px-6 sm:px-8 py-3 text-base sm:text-lg w-full sm:w-auto sm:ml-auto order-1 sm:order-2"
+              className="bg-gradient-to-r from-viniun-navy to-viniun-lightBlue hover:from-viniun-dark hover:to-viniun-lightBlue text-white px-6 sm:px-8 py-3 text-base sm:text-lg w-full sm:w-auto sm:ml-auto order-1 sm:order-2"
             >
               {isSubmitting ? (
                 "Enviando..."

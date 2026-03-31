@@ -127,8 +127,8 @@ export default function AutoAgendamento() {
 
       try {
         // Load franchise by slug or ID
-        let franchiseQuery = (supabase
-          .from('mt_franchises') as any)
+        let franchiseQuery = supabase
+          .from('mt_franchises' as never)
           .select('id, tenant_id, nome, slug')
           .eq('is_active', true);
 
@@ -140,8 +140,8 @@ export default function AutoAgendamento() {
         let fData = franchiseData;
         if (!fData) {
           // Try by id
-          const { data: byId } = await (supabase
-            .from('mt_franchises') as any)
+          const { data: byId } = await supabase
+            .from('mt_franchises' as never)
             .select('id, tenant_id, nome, slug')
             .eq('id', franchiseSlug)
             .eq('is_active', true)
@@ -158,8 +158,8 @@ export default function AutoAgendamento() {
         setFranchise(fData);
 
         // Load config
-        const { data: configData } = await (supabase
-          .from('mt_self_scheduling_config') as any)
+        const { data: configData } = await supabase
+          .from('mt_self_scheduling_config' as never)
           .select('*')
           .eq('franchise_id', fData.id)
           .eq('is_active', true)
@@ -174,8 +174,8 @@ export default function AutoAgendamento() {
         setConfig(configData);
 
         // Load available services
-        let servicesQuery = (supabase
-          .from('mt_services') as any)
+        let servicesQuery = supabase
+          .from('mt_services' as never)
           .select('id, nome, descricao, duracao_minutos, preco')
           .eq('tenant_id', fData.tenant_id)
           .eq('is_active', true)
@@ -204,7 +204,7 @@ export default function AutoAgendamento() {
             setClienteEmail(leadData.email || '');
           }
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Erro ao carregar dados:', err);
         setInitError('Erro ao carregar dados. Tente novamente.');
       } finally {
@@ -273,7 +273,7 @@ export default function AutoAgendamento() {
       });
 
       setIsSuccess(true);
-    } catch (err: any) {
+    } catch {
       // Error handled in hook
     }
   };

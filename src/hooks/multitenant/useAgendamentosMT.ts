@@ -616,7 +616,6 @@ export function useAgendamentosMT(options: UseAgendamentosMTOptions = {}) {
                 total_sessoes: apt.total_sessoes,
                 servico_atual: apt.servico_nome,
               });
-              console.log(`[Auditoria] Auto-criada para lead ${apt.lead_id}, sessão ${apt.sessao_numero}`);
             }
           }
         } catch (err) {

@@ -34,7 +34,7 @@ const HeroSection = () => {
         <div
           className="absolute inset-0 z-0"
           style={{
-            backgroundImage: 'url("/images/landing/depilacao-a-laser-em-praia-grande-banner-logo-fundo.png")',
+            backgroundImage: 'url("/images/landing/viniun-banner-logo-fundo.png")',
             backgroundSize: 'cover',
             backgroundPosition: `center ${parallaxOffset}px`,
             backgroundRepeat: 'no-repeat',
@@ -46,7 +46,7 @@ const HeroSection = () => {
         <div
           className="hidden lg:block absolute left-0 top-0 h-screen w-7/12 z-0"
           style={{
-            backgroundImage: 'url("/images/landing/depilacao-a-laser-em-praia-grande-banner.png")',
+            backgroundImage: 'url("/images/landing/viniun-banner.png")',
             backgroundSize: 'contain',
             backgroundPosition: 'left bottom',
             backgroundRepeat: 'no-repeat',
@@ -74,7 +74,7 @@ const HeroSection = () => {
                   <div className="text-center text-white">
                     <span className="text-3xl sm:text-4xl md:text-5xl font-extrabold block leading-none">10</span>
                     <span className="text-sm sm:text-base md:text-lg font-bold block mt-1">SESSÕES</span>
-                    <span className="text-xs sm:text-xs md:text-sm block mt-0.5">DE DEPILAÇÃO A LASER EM ÁREA P</span>
+                    <span className="text-xs sm:text-xs md:text-sm block mt-0.5">BENEFÍCIOS EXCLUSIVOS</span>
                   </div>
                 </div>
                 <Badge className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-secondary text-secondary-foreground px-2.5 py-1 text-xs sm:text-sm md:text-base font-bold shadow-lg animate-bounce whitespace-nowrap">
@@ -137,7 +137,7 @@ const HeroSection = () => {
             ⏰ Promoção por tempo limitado!
           </h2>
           <p className="text-lg text-primary-foreground/90 mb-6 max-w-2xl mx-auto">
-            Não perca a chance de ganhar 10 sessões grátis de depilação a laser. 
+            Não perca a chance de ganhar benefícios exclusivos.
             Vagas limitadas para a inauguração em Praia Grande!
           </p>
           <Button
@@ -146,7 +146,7 @@ const HeroSection = () => {
             className="bg-card text-primary hover:bg-card/90 font-bold text-lg px-10 py-6 shadow-xl hover:scale-105 transition-transform"
           >
             <Gift className="w-5 h-5 mr-2" />
-            GARANTIR MINHAS 10 SESSÕES GRÁTIS
+            GARANTIR MEU BENEFÍCIO EXCLUSIVO
             <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
         </div>

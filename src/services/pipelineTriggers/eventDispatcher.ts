@@ -115,11 +115,6 @@ export async function dispatchPipelineEvent(event: PipelineEvent): Promise<Workf
       return evaluateTriggerConditions(w.trigger_config, event);
     });
 
-    console.log(
-      `[PipelineTrigger] Evento ${event.type} na etapa ${event.stageId}: ` +
-      `${matchedWorkflows.length} workflow(s) encontrado(s)`
-    );
-
     return matchedWorkflows as WorkflowMatch[];
   } catch (err) {
     console.error('[PipelineTrigger] Erro no dispatch:', err);

@@ -26,6 +26,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { wahaClient } from '@/services/waha/wahaDirectClient';
 import { useToast } from '@/hooks/use-toast';
+import { useAdminManageAuthUser } from '@/hooks/multitenant/useAdminAuthUserMT';
 import { useTenantContext } from '@/contexts/TenantContext';
 import { TransferRecordsModal } from '@/components/configuracoes/TransferRecordsModal';
 import { Button } from '@/components/ui/button';
@@ -108,6 +109,7 @@ export default function Usuarios() {
   const { toast } = useToast();
   const [searchParams, setSearchParams] = useSearchParams();
   const { tenant, franchise, accessLevel, isLoading: isTenantLoading } = useTenantContext();
+  const adminManageAuthUser = useAdminManageAuthUser();
 
   const [users, setUsers] = useState<UserWithRelations[]>([]);
   const [tenants, setTenants] = useState<Tenant[]>([]);
@@ -288,11 +290,11 @@ export default function Usuarios() {
       });
 
       loadUsers();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao deletar usuário:', error);
       toast({
         title: 'Erro ao remover usuário',
-        description: error.message || 'Não foi possível remover o usuário.',
+        description: error instanceof Error ? error.message : 'Não foi possível remover o usuário.',
         variant: 'destructive',
       });
     } finally {
@@ -376,11 +378,11 @@ export default function Usuarios() {
       });
 
       loadUsers();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao aprovar:', error);
       toast({
         title: 'Erro ao aprovar usuário',
-        description: error.message || 'Não foi possível aprovar o usuário.',
+        description: error instanceof Error ? error.message : 'Não foi possível aprovar o usuário.',
         variant: 'destructive',
       });
     }
@@ -402,11 +404,11 @@ export default function Usuarios() {
       });
 
       loadUsers();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao rejeitar:', error);
       toast({
         title: 'Erro ao rejeitar usuário',
-        description: error.message || 'Não foi possível rejeitar o usuário.',
+        description: error instanceof Error ? error.message : 'Não foi possível rejeitar o usuário.',
         variant: 'destructive',
       });
     }
@@ -436,15 +438,12 @@ export default function Usuarios() {
     try {
       const password = generatePassword();
 
-      // Usar função SECURITY DEFINER no banco (não precisa de service key no frontend)
-      const { data: result, error: rpcError } = await supabase.rpc('admin_manage_auth_user', {
-        p_mt_user_id: user.id,
-        p_password: password,
-        p_email: user.email,
+      // Definir senha no Auth via hook useAdminManageAuthUser
+      await adminManageAuthUser.mutateAsync({
+        mtUserId: user.id,
+        password,
+        email: user.email,
       });
-
-      if (rpcError) throw new Error(rpcError.message);
-      if (result && !result.success) throw new Error(result.error || 'Erro ao definir senha');
 
       const { data: sessions } = await supabase
         .from('mt_whatsapp_sessions')
@@ -473,7 +472,7 @@ export default function Usuarios() {
       }
 
       const chatId = `${phone}@c.us`;
-      const loginUrl = 'https://app.yeslaserpraiagrande.com.br';
+      const loginUrl = 'https://app.viniun.com.br';
       const message = `🔐 *Credenciais de Acesso*\n\nOlá, *${user.nome_curto || user.nome}*!\n\nSeguem suas credenciais para acessar o sistema:\n\n📧 *E-mail:* ${user.email}\n🔑 *Senha:* ${password}\n🌐 *Link:* ${loginUrl}\n\n⚠️ _Por segurança, recomendamos alterar sua senha no primeiro acesso._`;
 
       const sendResult = await wahaClient.sendText(sessions[0].session_name, chatId, message);
@@ -485,11 +484,11 @@ export default function Usuarios() {
         title: 'Credenciais enviadas!',
         description: `Senha gerada e enviada via WhatsApp para ${rawPhone}.`,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao enviar credenciais:', error);
       toast({
         title: 'Erro ao enviar credenciais',
-        description: error.message,
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
         variant: 'destructive',
       });
     } finally {

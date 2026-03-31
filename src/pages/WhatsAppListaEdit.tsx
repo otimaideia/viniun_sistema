@@ -234,8 +234,8 @@ export default function WhatsAppListaEdit() {
       const { count, error } = await q;
       if (error) throw error;
       setLeadsCount(count || 0);
-    } catch (err: any) {
-      toast.error('Erro ao contar leads: ' + (err.message || 'Erro desconhecido'));
+    } catch (err: unknown) {
+      toast.error('Erro ao contar leads: ' + (err instanceof Error ? err.message : 'Erro desconhecido'));
     } finally {
       setIsCountingLeads(false);
     }
@@ -264,15 +264,15 @@ export default function WhatsAppListaEdit() {
         return;
       }
 
-      const recipients = data.map((lead: any) => ({
+      const recipients = data.map((lead: Record<string, unknown>) => ({
         phone: lead.telefone,
         nome: lead.nome || undefined,
         lead_id: lead.id,
       }));
 
       await addRecipients.mutateAsync({ listId: createdListId, recipients });
-    } catch (err: any) {
-      toast.error('Erro ao importar leads: ' + (err.message || 'Erro desconhecido'));
+    } catch (err: unknown) {
+      toast.error('Erro ao importar leads: ' + (err instanceof Error ? err.message : 'Erro desconhecido'));
     } finally {
       setIsImportingLeads(false);
     }

@@ -18,12 +18,12 @@ const WhatsAppVIPSection = () => {
     {
       icon: <Star className="w-6 h-6" />,
       title: "Descontos VIP",
-      description: "Até 50% OFF em tratamentos selecionados"
+      description: "Até 50% OFF em serviços selecionados"
     },
     {
       icon: <Crown className="w-6 h-6" />,
       title: "Prioridade no Agendamento",
-      description: "Seja atendido com prioridade na clínica"
+      description: "Seja atendido com prioridade na unidade"
     },
     {
       icon: <Sparkles className="w-6 h-6" />,
@@ -37,7 +37,7 @@ const WhatsAppVIPSection = () => {
   };
 
   const handleWhatsAppContact = () => {
-    const message = "Olá! Gostaria de mais informações sobre o Grupo VIP da Yeslaser!";
+    const message = "Olá! Gostaria de mais informações sobre o Grupo VIP da Viniun!";
     window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, "_blank");
   };
 

@@ -1005,7 +1005,7 @@ async function processBatch(
                   const baseUrl = wahaGet.toString().includes('waha') ? '' : '';
                   // Buscar config WAHA para a URL base
                   const { data: wCfg } = await supabase.from("mt_waha_config").select("api_url, api_key").eq("tenant_id", tenantId).maybeSingle();
-                  const apiUrl = wCfg?.api_url || "https://waha.yeslaserpraiagrande.com.br";
+                  const apiUrl = wCfg?.api_url || "https://waha.otimaideia.com.br";
                   const apiKey = wCfg?.api_key || "";
                   fullUrl = `${apiUrl}${fullUrl.startsWith('/') ? '' : '/'}${fullUrl}`;
 
@@ -1036,7 +1036,7 @@ async function processBatch(
 
                   if (!upErr) {
                     // Use external URL directly (edge runtime resolves to internal supabase-kong hostname)
-                    const EXTERNAL_URL = "https://supabase-app.yeslaserpraiagrande.com.br";
+                    const EXTERNAL_URL = "https://supabase.viniun.com.br";
                     const pubUrl = `${EXTERNAL_URL}/storage/v1/object/public/${MEDIA_BUCKET}/${storagePath}`;
                     await supabase.from("mt_whatsapp_messages")
                       .update({ storage_path: pubUrl, media_url: pubUrl })
@@ -1181,8 +1181,8 @@ Deno.serve(async (req: Request) => {
       .select("api_url, api_key")
       .maybeSingle();
 
-    const wahaUrl: string = wahaConfig?.api_url || "https://waha.yeslaser.com.br";
-    const wahaKey: string = wahaConfig?.api_key || "GY9SDuKPFnJ4_dr";
+    const wahaUrl: string = wahaConfig?.api_url || "https://waha.otimaideia.com.br";
+    const wahaKey: string = wahaConfig?.api_key || Deno.env.get("WAHA_API_KEY") || "";
     const wahaGet = makeWahaGet(wahaUrl, wahaKey);
     const wahaPost = makeWahaPost(wahaUrl, wahaKey);
 

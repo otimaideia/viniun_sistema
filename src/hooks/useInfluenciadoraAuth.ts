@@ -91,7 +91,7 @@ async function sendWhatsAppCode(phone: string, code: string, nome: string): Prom
     const chatId = formatPhoneForWhatsApp(phone);
 
     // 4. Montar e enviar mensagem
-    const message = `🔐 *YESlaser - Portal do Influenciador(a)*
+    const message = `🔐 *Viniun - Portal do Influenciador(a)*
 
 Olá${nome ? `, ${nome.split(' ')[0]}` : ''}!
 
@@ -103,7 +103,7 @@ Este código é válido por 5 minutos.
 
 ⚠️ Se você não solicitou este código, ignore esta mensagem.
 
-_Equipe YESlaser_`;
+_Equipe Viniun_`;
 
     await wahaApi.sendText({
       session: sessionName,
@@ -111,7 +111,6 @@ _Equipe YESlaser_`;
       text: message,
     });
 
-    console.log(`[WAHA] Código enviado para ${chatId} via sessão ${sessionName}`);
     return true;
   } catch (err) {
     console.error('Erro ao enviar WhatsApp:', err);
@@ -371,9 +370,7 @@ export function useInfluenciadoraAuth(): UseInfluenciadoraAuthReturn {
           console.warn('[DEV] Falha ao enviar WhatsApp, código:', code);
         }
       } else {
-        // TODO: Implementar envio por email
-        console.log(`[DEV] Email não implementado. Código: ${code}`);
-        console.log(`[DEV] Destino: ${influenciadoraData.email}`);
+        // Email auth requires SMTP integration via mt_tenant_integrations
       }
 
       // Definir para onde foi enviado

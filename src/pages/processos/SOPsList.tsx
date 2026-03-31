@@ -139,7 +139,7 @@ export default function SOPsList() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos departamentos</SelectItem>
-                {departments?.map((dep: any) => (
+                {departments?.map((dep: { id: string; nome: string }) => (
                   <SelectItem key={dep.id} value={dep.id}>
                     {dep.nome}
                   </SelectItem>

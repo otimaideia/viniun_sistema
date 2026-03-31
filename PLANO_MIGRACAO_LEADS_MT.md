@@ -10,7 +10,7 @@
 
 ## Sumário Executivo
 
-O módulo de leads é o **componente mais crítico** do sistema YESlaser, responsável por toda a gestão comercial. Atualmente está 100% acoplado às tabelas legacy (`sistema_leads_yeslaser`) e precisa ser migrado para a arquitetura multi-tenant (`mt_leads`).
+O módulo de leads é o **componente mais crítico** do sistema Viniun, responsável por toda a gestão comercial. Atualmente está 100% acoplado às tabelas legacy (`sistema_leads_viniun`) e precisa ser migrado para a arquitetura multi-tenant (`mt_leads`).
 
 ### Métricas do Projeto
 
@@ -50,12 +50,12 @@ O módulo de leads é o **componente mais crítico** do sistema YESlaser, respon
 ┌─────────────────────────────────────────────────────────────┐
 │                    TABELAS LEGACY                            │
 ├─────────────────────────────────────────────────────────────┤
-│ sistema_leads_yeslaser          │ Principal (80+ campos)    │
-│ yeslaser_promocao_cadastros     │ Leads de promoção         │
-│ yeslaser_lead_activities        │ Histórico de atividades   │
-│ yeslaser_indicacoes_historico   │ Indicações                │
-│ yeslaser_funil_leads            │ Posição no funil          │
-│ yeslaser_funil_etapas           │ Etapas do funil           │
+│ sistema_leads_viniun          │ Principal (80+ campos)    │
+│ viniun_promocao_cadastros     │ Leads de promoção         │
+│ viniun_lead_activities        │ Histórico de atividades   │
+│ viniun_indicacoes_historico   │ Indicações                │
+│ viniun_funil_leads            │ Posição no funil          │
+│ viniun_funil_etapas           │ Etapas do funil           │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -173,7 +173,7 @@ O módulo de leads é o **componente mais crítico** do sistema YESlaser, respon
 ```typescript
 // ANTES (Legacy)
 const { data } = await supabase
-  .from("sistema_leads_yeslaser")
+  .from("sistema_leads_viniun")
   .select("*");
 
 // DEPOIS (Multi-Tenant)
@@ -198,7 +198,7 @@ const { data } = await supabase
 ### Checklist
 
 #### 1.1 Documentação do Estado Atual
-- [ ] Mapear todos os 80+ campos de `sistema_leads_yeslaser`
+- [ ] Mapear todos os 80+ campos de `sistema_leads_viniun`
 - [ ] Documentar relacionamentos entre tabelas
 - [ ] Identificar campos deprecated/não utilizados
 - [ ] Mapear todas as fontes de leads (formulários, API, manual)
@@ -241,7 +241,7 @@ const { data } = await supabase
 ### Checklist
 
 #### 2.1 Validar/Ajustar Schema `mt_leads`
-- [ ] Comparar schema `mt_leads` vs `sistema_leads_yeslaser`
+- [ ] Comparar schema `mt_leads` vs `sistema_leads_viniun`
 - [ ] Adicionar campos faltantes em `mt_leads`
 - [ ] Criar índices para performance
 - [ ] Adicionar constraints e foreign keys
@@ -251,7 +251,7 @@ const { data } = await supabase
 -- Exemplo: Verificar campos faltantes
 SELECT column_name
 FROM information_schema.columns
-WHERE table_name = 'sistema_leads_yeslaser'
+WHERE table_name = 'sistema_leads_viniun'
   AND column_name NOT IN (
     SELECT column_name
     FROM information_schema.columns
@@ -268,7 +268,7 @@ WHERE table_name = 'sistema_leads_yeslaser'
 ```sql
 -- Adicionar campo para rastrear origem legacy
 ALTER TABLE mt_leads
-ADD COLUMN IF NOT EXISTS legacy_id uuid REFERENCES sistema_leads_yeslaser(id);
+ADD COLUMN IF NOT EXISTS legacy_id uuid REFERENCES sistema_leads_viniun(id);
 
 ALTER TABLE mt_leads
 ADD COLUMN IF NOT EXISTS legacy_source text; -- 'sistema_leads' ou 'promocao_cadastros'
@@ -355,13 +355,13 @@ BEGIN
   -- Buscar tenant via franchise
   SELECT f.tenant_id INTO v_tenant_id
   FROM mt_franchises f
-  JOIN yeslaser_franqueados yf ON yf.id = p_franqueado_id
+  JOIN viniun_franqueados yf ON yf.id = p_franqueado_id
   WHERE f.legacy_id = p_franqueado_id
      OR f.nome = yf.nome_fantasia;
 
-  -- Se não encontrou, usar tenant padrão (yeslaser)
+  -- Se não encontrou, usar tenant padrão (viniun)
   IF v_tenant_id IS NULL THEN
-    SELECT id INTO v_tenant_id FROM mt_tenants WHERE slug = 'yeslaser';
+    SELECT id INTO v_tenant_id FROM mt_tenants WHERE slug = 'viniun';
   END IF;
 
   RETURN v_tenant_id;
@@ -370,8 +370,8 @@ $$ LANGUAGE plpgsql;
 ```
 
 #### 3.3 Script de Migração Principal
-- [ ] Migrar `sistema_leads_yeslaser` → `mt_leads`
-- [ ] Migrar `yeslaser_promocao_cadastros` → `mt_leads`
+- [ ] Migrar `sistema_leads_viniun` → `mt_leads`
+- [ ] Migrar `viniun_promocao_cadastros` → `mt_leads`
 - [ ] Deduplicar leads (mesmo telefone/email)
 - [ ] Preservar `legacy_id` para rastreabilidade
 - [ ] Log de cada migração na tabela de controle
@@ -389,9 +389,9 @@ BEGIN
       SELECT
         sl.*,
         resolve_tenant_for_lead(sl.franqueado_id) as resolved_tenant_id
-      FROM sistema_leads_yeslaser sl
+      FROM sistema_leads_viniun sl
       LEFT JOIN migration_leads_control mlc
-        ON mlc.legacy_table = 'sistema_leads_yeslaser'
+        ON mlc.legacy_table = 'sistema_leads_viniun'
         AND mlc.legacy_id = sl.id
       WHERE mlc.id IS NULL -- Ainda não migrado
       ORDER BY sl.created_at
@@ -426,8 +426,8 @@ BEGIN
 
     -- Registrar migração
     INSERT INTO migration_leads_control (legacy_table, legacy_id, mt_lead_id, status)
-    SELECT 'sistema_leads_yeslaser', id,
-      (SELECT id FROM mt_leads WHERE legacy_id = sistema_leads_yeslaser.id),
+    SELECT 'sistema_leads_viniun', id,
+      (SELECT id FROM mt_leads WHERE legacy_id = sistema_leads_viniun.id),
       'migrated'
     FROM leads_to_migrate;
 
@@ -441,8 +441,8 @@ END $$;
 ```
 
 #### 3.4 Migração de Dados Relacionados
-- [ ] Migrar `yeslaser_lead_activities` → `mt_lead_activities`
-- [ ] Migrar `yeslaser_funil_leads` → `mt_funnel_leads`
+- [ ] Migrar `viniun_lead_activities` → `mt_lead_activities`
+- [ ] Migrar `viniun_funil_leads` → `mt_funnel_leads`
 - [ ] Atualizar referências (lead_id → mt_lead_id)
 - [ ] Migrar indicações e histórico
 
@@ -470,7 +470,7 @@ WHERE tenant_id IS NULL;
 
 -- Validação: Comparar com legacy
 SELECT
-  (SELECT COUNT(*) FROM sistema_leads_yeslaser) as legacy_count,
+  (SELECT COUNT(*) FROM sistema_leads_viniun) as legacy_count,
   (SELECT COUNT(*) FROM mt_leads WHERE legacy_source = 'sistema_leads') as migrated_count;
 ```
 
@@ -832,8 +832,8 @@ export function useLeadsAdapter(filters?: any) {
 // Exemplo de teste de RLS
 describe('RLS Tests', () => {
   test('tenant admin cannot access other tenant leads', async () => {
-    // Login como admin do tenant YESlaser
-    await loginAs('admin@yeslaser.com.br');
+    // Login como admin do tenant Viniun
+    await loginAs('admin@viniun.com.br');
 
     // Tentar acessar lead do PopDents
     const { data, error } = await supabase
@@ -922,7 +922,7 @@ describe('RLS Tests', () => {
 
 ## Mapeamento de Campos
 
-### Tabela Principal: `sistema_leads_yeslaser` → `mt_leads`
+### Tabela Principal: `sistema_leads_viniun` → `mt_leads`
 
 | Campo Legacy | Campo MT | Tipo | Notas |
 |--------------|----------|------|-------|
@@ -956,7 +956,7 @@ describe('RLS Tests', () => {
 | - | `legacy_id` | uuid | **NOVO** - Rastreabilidade |
 | - | `legacy_source` | text | **NOVO** - Origem |
 
-### Campos Específicos de Promoção (`yeslaser_promocao_cadastros`)
+### Campos Específicos de Promoção (`viniun_promocao_cadastros`)
 
 | Campo Promoção | Campo MT | Notas |
 |----------------|----------|-------|
@@ -1091,10 +1091,10 @@ mkdir -p $BACKUP_DIR
 
 # Backup tabela principal
 pg_dump -h $DB_HOST -U $DB_USER -d $DB_NAME \
-  -t sistema_leads_yeslaser \
-  -t yeslaser_promocao_cadastros \
-  -t yeslaser_lead_activities \
-  -t yeslaser_funil_leads \
+  -t sistema_leads_viniun \
+  -t viniun_promocao_cadastros \
+  -t viniun_lead_activities \
+  -t viniun_funil_leads \
   > "$BACKUP_DIR/leads_backup_$DATE.sql"
 
 echo "Backup criado: $BACKUP_DIR/leads_backup_$DATE.sql"
@@ -1124,7 +1124,7 @@ COMMIT;
 
 -- Verificar
 SELECT COUNT(*) as remaining_mt_leads FROM mt_leads;
-SELECT COUNT(*) as legacy_leads FROM sistema_leads_yeslaser;
+SELECT COUNT(*) as legacy_leads FROM sistema_leads_viniun;
 ```
 
 ### A3: Queries de Validação
@@ -1136,7 +1136,7 @@ SELECT COUNT(*) as legacy_leads FROM sistema_leads_yeslaser;
 SELECT
   'Legacy' as source,
   COUNT(*) as total
-FROM sistema_leads_yeslaser
+FROM sistema_leads_viniun
 UNION ALL
 SELECT
   'MT Migrated' as source,

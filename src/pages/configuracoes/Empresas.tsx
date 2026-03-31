@@ -148,11 +148,11 @@ export default function Empresas() {
       });
 
       loadTenants();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao deletar empresa:', error);
       toast({
         title: 'Erro ao remover empresa',
-        description: error.message || 'Não foi possível remover a empresa.',
+        description: error instanceof Error ? error.message : 'Não foi possível remover a empresa.',
         variant: 'destructive',
       });
     } finally {

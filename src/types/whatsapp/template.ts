@@ -81,12 +81,12 @@ export const TEMPLATE_VARIABLES = [
   { variable: 'primeiro_nome', label: 'Primeiro Nome', example: 'João' },
   { variable: 'telefone', label: 'Telefone', example: '(11) 99999-9999' },
   { variable: 'email', label: 'E-mail', example: 'joao@email.com' },
-  { variable: 'servico', label: 'Serviço', example: 'Depilação a Laser' },
+  { variable: 'servico', label: 'Serviço', example: 'Consultoria Imobiliária' },
   { variable: 'valor', label: 'Valor', example: 'R$ 500,00' },
   { variable: 'data', label: 'Data', example: '15/01/2025' },
   { variable: 'horario', label: 'Horário', example: '14:00' },
   { variable: 'endereco', label: 'Endereço', example: 'Rua das Flores, 123' },
-  { variable: 'franquia', label: 'Nome da Franquia', example: 'YESlaser Centro' },
+  { variable: 'franquia', label: 'Nome da Franquia', example: 'Viniun Centro' },
   { variable: 'atendente', label: 'Nome do Atendente', example: 'Maria' },
 ];
 

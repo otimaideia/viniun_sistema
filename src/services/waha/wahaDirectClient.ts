@@ -1,6 +1,6 @@
 // Cliente WAHA Direto - chamadas diretas ao servidor WAHA Plus (NOWEB)
 // Documentação: https://waha.devlike.pro/docs/
-// Adaptado para YESlaser
+// Viniun Sistema
 
 import { supabase } from '@/integrations/supabase/client';
 import { wahaRateLimiter, wahaMessageRateLimiter } from '@/utils/rateLimiter';
@@ -152,10 +152,10 @@ class WAHADirectClient {
           this.apiKey = existingConfig.apiKey;
           if (DEBUG) console.warn('[WAHA] URL fallback:', this.baseUrl);
         } else {
-          // Fallback 2: Valores padrão conhecidos para YESlaser
+          // Fallback 2: Valores padrão conhecidos para Viniun
           if (DEBUG) console.warn('[WAHA] Tentando fallback com valores conhecidos...');
           if (!this.baseUrl) {
-            this.baseUrl = 'https://waha.yeslaserpraiagrande.com.br';
+            this.baseUrl = 'https://waha.otimaideia.com.br';
             if (DEBUG) console.warn('[WAHA] URL fallback:', this.baseUrl);
           }
           console.warn('[WAHA] Configure WAHA em Configurações > WhatsApp');
@@ -1133,8 +1133,7 @@ class WAHADirectClient {
     chatId: string,
     labelId: string
   ): Promise<ProxyResponse<void>> {
-    // TODO: Otimizar - esta operação faz 2 requests ao WAHA (GET + PUT)
-    // Para operações em lote, usar setChatLabelsAtomic diretamente
+    // WAHA API requires full label set on PUT, making GET+PUT necessary. Use setChatLabelsAtomic for optimized path.
     const current = await this.getChatLabels(sessionName, chatId);
     const currentIds = current.data?.map((l) => l.id) || [];
     if (!currentIds.includes(labelId)) {
@@ -1148,8 +1147,7 @@ class WAHADirectClient {
     chatId: string,
     labelId: string
   ): Promise<ProxyResponse<void>> {
-    // TODO: Otimizar - esta operação faz 2 requests ao WAHA (GET + PUT)
-    // Para operações em lote, usar setChatLabelsAtomic diretamente
+    // WAHA API requires full label set on PUT, making GET+PUT necessary. Use setChatLabelsAtomic for optimized path.
     const current = await this.getChatLabels(sessionName, chatId);
     const currentIds = current.data?.map((l) => l.id).filter((id) => id !== labelId) || [];
     return this.setChatLabels(sessionName, chatId, currentIds);

@@ -112,7 +112,7 @@ export default function PacoteEdit() {
           service_id: item.service_id,
           nome: item.service?.nome || 'Serviço',
           preco: item.service?.preco || null,
-          tipo: (item.service as any)?.tipo || 'servico',
+          tipo: (item.service as Record<string, unknown> | undefined)?.tipo as string || 'servico',
           quantidade: item.quantidade,
           preco_unitario: item.preco_unitario,
         })));
@@ -320,7 +320,7 @@ export default function PacoteEdit() {
                     id="categoria"
                     value={formData.categoria}
                     onChange={(e) => handleChange('categoria', e.target.value)}
-                    placeholder="Ex: Estética Corporal"
+                    placeholder="Ex: Serviços Premium"
                   />
                 </div>
                 <div className="space-y-2">

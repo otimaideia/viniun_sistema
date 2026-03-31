@@ -783,7 +783,6 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
             routingCost = routingWindowOpen ? 0 : 0.25; // SERVICE=free, MARKETING=R$0.25
           }
 
-          console.log(`[Hybrid] Decisão: ${routingProvider} (${routingReason}) - Janela: ${routingWindowOpen ? 'aberta' : 'fechada'} - Custo: R$${routingCost}`);
         } catch (routingErr) {
           console.warn('[Hybrid] Erro no roteamento, usando WAHA:', routingErr);
           routingProvider = 'waha';
@@ -847,7 +846,6 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
           .select('id', { count: 'exact', head: true });
 
         if (assignCount === 0) {
-          console.log('[WhatsApp] Conversa já atribuída a outro agente — auto-assign ignorado');
         }
       }
 
@@ -1056,7 +1054,6 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
           .select('id', { count: 'exact', head: true });
 
         if (assignCount === 0) {
-          console.log('[WhatsApp] Conversa já atribuída a outro agente — auto-assign ignorado');
         }
       }
 
@@ -1475,7 +1472,7 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
         }
 
         // Helper: validar se nome NÃO é o nome da própria sessão (business name)
-        const KNOWN_SESSION_NAMES = ['yeslaser praia grande', 'yeslaser praia grande boqueirão', 'yeslaser', 'popdents', 'novalaser', 'intimacenter'];
+        const KNOWN_SESSION_NAMES = ['viniun', 'viniun boqueirão', 'novalaser', 'intimacenter'];
         const isValidContactName = (name: string | null): boolean => {
           if (!name || isPhoneNumber(name)) return false;
           const lower = name.trim().toLowerCase();
@@ -1768,7 +1765,6 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
                 }
               } else {
                 leadId = newLead?.id || null;
-                console.log('[Sync] Lead criado via WhatsApp sync. Data primeiro contato:', firstContactDate || 'N/A');
               }
             } else {
               leadId = existingLead.id;
@@ -1777,7 +1773,6 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
               // Atualizar nome se o lead tem nome de telefone e agora temos nome real
               if (contactName && !isPhoneNumber(contactName) && existingLead.nome && isPhoneNumber(existingLead.nome)) {
                 updates.nome = contactName;
-                console.log(`[Sync] Atualizando nome do lead ${existingLead.id}: "${existingLead.nome}" → "${contactName}"`);
               }
 
               // Atualizar foto se necessário
@@ -1880,7 +1875,6 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
                     if (funnelError) {
                       console.error('[SYNC] Erro ao adicionar lead ao funil:', funnelError.message);
                     } else {
-                      console.log('[SYNC] ✅ Lead auto-adicionado ao funil');
                     }
                   }
                 }
@@ -2148,7 +2142,6 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
         }
       )
       .subscribe((status, err) => {
-        console.log(`[RT] mt-mensagens-${selectedConversaId} status:`, status);
         if (err) console.error(`[RT] mt-mensagens-${selectedConversaId} error:`, err);
         // Reconectar automaticamente se canal fechar/errar
         if ((status === 'CLOSED' || status === 'CHANNEL_ERROR') && isMountedRef.current) {
@@ -2242,7 +2235,6 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
         }
       )
       .subscribe((status, err) => {
-        console.log(`[RT] mt-conversations-${sessaoId} status:`, status);
         if (err) console.error(`[RT] mt-conversations-${sessaoId} error:`, err);
         // Reconectar automaticamente se canal fechar/errar + buscar dados frescos
         if ((status === 'CLOSED' || status === 'CHANNEL_ERROR') && isMountedRef.current) {

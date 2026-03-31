@@ -1,4 +1,4 @@
-// Dashboard de Analytics para Formularios YESlaser
+// Dashboard de Analytics para Formularios Viniun
 // Exibe estatisticas de conversao, abandono e metricas de performance
 
 import React, { useEffect, useState } from 'react';

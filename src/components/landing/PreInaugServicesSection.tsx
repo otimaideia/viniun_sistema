@@ -3,28 +3,28 @@ import { Zap, Sparkles, Heart, Syringe, Dumbbell, Crown } from "lucide-react";
 const services = [
   {
     icon: Zap,
-    title: "Depilação a Laser",
-    description: "Tecnologia de ponta para remoção definitiva dos pelos com conforto e segurança.",
+    title: "Consultoria",
+    description: "Atendimento especializado e personalizado para suas necessidades.",
   },
   {
     icon: Sparkles,
-    title: "Limpeza de Pele",
-    description: "Tratamento profundo para uma pele renovada, limpa e saudável.",
+    title: "Assessoria",
+    description: "Suporte completo para garantir os melhores resultados.",
   },
   {
     icon: Heart,
-    title: "Estética Facial",
-    description: "Procedimentos modernos para realçar sua beleza natural.",
+    title: "Atendimento Premium",
+    description: "Serviços modernos com padrão de excelência.",
   },
   {
     icon: Syringe,
-    title: "Injetáveis",
-    description: "Preenchimento e botox para resultados naturais e rejuvenescimento.",
+    title: "Serviços Especializados",
+    description: "Soluções avançadas para resultados superiores.",
   },
   {
     icon: Dumbbell,
-    title: "Corporal",
-    description: "Tratamentos para modelar, tonificar e cuidar do seu corpo.",
+    title: "Soluções Corporativas",
+    description: "Serviços completos para empresas e parceiros.",
   },
   {
     icon: Crown,
@@ -43,11 +43,11 @@ const PreInaugServicesSection = () => {
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             Conheça nossos{" "}
-            <span className="text-primary">tratamentos</span>
+            <span className="text-primary">serviços</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Oferecemos uma variedade de procedimentos estéticos com tecnologia de ponta
-            para cuidar da sua beleza e bem-estar.
+            Oferecemos uma variedade de soluções com tecnologia de ponta
+            para atender suas necessidades.
           </p>
         </div>
 

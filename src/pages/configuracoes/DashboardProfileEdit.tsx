@@ -137,13 +137,13 @@ export default function DashboardProfileEdit() {
       if (isEditing) {
         await updateProfile.mutateAsync({ id: id!, ...profileData });
       } else {
-        await createProfile.mutateAsync(profileData as any);
+        await createProfile.mutateAsync(profileData as Record<string, unknown>);
       }
 
       navigate("/configuracoes/dashboard-profiles");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      if (err.message?.includes("duplicate")) {
+      if (err instanceof Error && err.message?.includes("duplicate")) {
         toast.error("Ja existe um perfil com este codigo");
       } else {
         toast.error(

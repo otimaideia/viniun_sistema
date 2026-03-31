@@ -55,8 +55,8 @@ import type { Franchise, Tenant } from '@/types/multitenant';
 
 interface FranchiseWithDetails extends Franchise {
   tenant?: Tenant;
-  users?: any[];
-  modules?: any[];
+  users?: Record<string, unknown>[];
+  modules?: Record<string, unknown>[];
 }
 
 export default function FranquiaDetail() {
@@ -162,11 +162,11 @@ export default function FranquiaDetail() {
       });
 
       navigate('/configuracoes/franquias');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao deletar franquia:', error);
       toast({
         title: 'Erro ao remover franquia',
-        description: error.message || 'Não foi possível remover a franquia.',
+        description: error instanceof Error ? error.message : 'Não foi possível remover a franquia.',
         variant: 'destructive',
       });
     } finally {
