@@ -105,6 +105,9 @@ import NotFound from "./pages/NotFound";
 const LandingPreInauguracao = lazy(() => import("./pages/landing/LandingPreInauguracao"));
 const LandingIndicacoes = lazy(() => import("./pages/landing/LandingIndicacoes"));
 const LandingGrupoVIP = lazy(() => import("./pages/landing/LandingGrupoVIP"));
+const LandingViniun = lazy(() => import("./pages/landing/LandingViniun"));
+const SignupEmpresa = lazy(() => import("./pages/landing/SignupEmpresa"));
+const SignupSucesso = lazy(() => import("./pages/landing/SignupSucesso"));
 
 // Influenciadoras (Admin)
 import Influenciadoras from "./pages/Influenciadoras";
@@ -461,9 +464,11 @@ const App = () => (
             <Route path="/registro" element={<Register />} />
             <Route path="/esqueci-senha" element={<ForgotPassword />} />
             <Route path="/aguardando-aprovacao" element={<PendingApproval />} />
+            <Route path="/cadastro" element={<Suspense fallback={null}><SignupEmpresa /></Suspense>} />
+            <Route path="/cadastro/sucesso" element={<Suspense fallback={null}><SignupSucesso /></Suspense>} />
             <Route path="/" element={
               isLandingDomain()
-                ? <Suspense fallback={null}><LandingPreInauguracao /></Suspense>
+                ? <Suspense fallback={null}><LandingViniun /></Suspense>
                 : <ProtectedRoute><DashboardLayout><Index /></DashboardLayout></ProtectedRoute>
             } />
             {/* Leads */}

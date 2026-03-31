@@ -68,12 +68,21 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Landing page YESlaser colors
+        // Landing page YESlaser colors (legacy)
         yeslaser: {
           purple: "#6B3AA3",
           lightBlue: "#5DC4DA",
           darkPurple: "#5A2B8A",
           violet: "#8C52FF",
+        },
+        // Viniun brand colors
+        viniun: {
+          navy: "#1E3A5F",
+          blue: "#2E86C1",
+          lightBlue: "#5AC9EF",
+          gold: "#D4A843",
+          dark: "#0F2035",
+          light: "#F0F4F8",
         },
         whatsapp: "#25D366",
       },
@@ -113,8 +122,8 @@ export default {
           "100%": { backgroundPosition: "200% 0" },
         },
         glow: {
-          "0%, 100%": { boxShadow: "0 0 5px rgba(107, 58, 163, 0.3)" },
-          "50%": { boxShadow: "0 0 20px rgba(107, 58, 163, 0.6)" },
+          "0%, 100%": { boxShadow: "0 0 5px rgba(30, 58, 95, 0.3)" },
+          "50%": { boxShadow: "0 0 20px rgba(30, 58, 95, 0.6)" },
         },
         "bounce-gentle": {
           "0%, 100%": { transform: "translateY(0)" },
