@@ -137,7 +137,7 @@ export function useSignupEmpresa() {
         nome: data.nome,
         email: data.email,
         telefone: data.telefone_admin,
-        access_level: 'tenant',
+        access_level: 'tenant_admin',
         status: 'ativo',
       }).select('id').single();
 
