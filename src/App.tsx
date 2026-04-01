@@ -422,6 +422,7 @@ const queryClient = new QueryClient();
 const LANDING_DOMAINS = [
   'www.viniun.com.br',
   'viniun.com.br',
+  'localhost',
 ];
 
 /** Redireciona /parceiro/:codigo para /parceiro/login?codigo=:codigo */

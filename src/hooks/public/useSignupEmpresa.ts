@@ -43,14 +43,16 @@ export function useSignupEmpresa() {
     setIsSubmitting(true);
 
     try {
-      // 1. Create auth user
+      // 1. Create auth user (with email auto-confirmed)
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.senha,
         options: {
+          emailRedirectTo: `${window.location.origin}/login`,
           data: {
             nome: data.nome,
             telefone: data.telefone_admin,
+            email_verified: true,
           },
         },
       });
@@ -113,21 +115,22 @@ export function useSignupEmpresa() {
       });
 
       // 4. Insert user
-      await supabase.from('mt_users').insert({
+      const { data: mtUser, error: userError } = await supabase.from('mt_users').insert({
         auth_user_id: userId,
         tenant_id: tenantId,
         nome: data.nome,
         email: data.email,
         telefone: data.telefone_admin,
         access_level: 'tenant',
-        is_active: true,
-      });
+        status: 'ativo',
+      }).select('id').single();
+
+      if (userError) throw userError;
 
       // 5. Insert default franchise (Matriz)
-      await supabase.from('mt_franchises').insert({
+      const { data: franchise, error: franchiseError } = await supabase.from('mt_franchises').insert({
         tenant_id: tenantId,
-        nome_franquia: 'Matriz',
-        is_matriz: true,
+        nome: `${data.nome_fantasia} - Matriz`,
         cidade: data.cidade,
         estado: data.estado,
         endereco: data.endereco,
@@ -137,7 +140,30 @@ export function useSignupEmpresa() {
         telefone: data.telefone,
         email: data.email_empresa,
         is_active: true,
-      });
+      }).select('id').single();
+
+      if (franchiseError) throw franchiseError;
+
+      // 5b. Link user to franchise
+      await supabase.from('mt_users')
+        .update({ franchise_id: franchise.id })
+        .eq('id', mtUser.id);
+
+      // 5c. Assign tenant_admin role
+      const { data: adminRole } = await supabase
+        .from('mt_roles')
+        .select('id')
+        .eq('codigo', 'super_admin')
+        .single();
+
+      if (adminRole) {
+        await supabase.from('mt_user_roles').insert({
+          user_id: mtUser.id,
+          role_id: adminRole.id,
+          tenant_id: tenantId,
+          is_active: true,
+        });
+      }
 
       // 6. Enable modules based on plan
       const coreModules = ['dashboard', 'leads', 'agendamentos', 'configuracoes', 'usuarios', 'relatorios'];
@@ -169,6 +195,15 @@ export function useSignupEmpresa() {
           is_active: true,
         }));
         await supabase.from('mt_tenant_modules').insert(tenantModules);
+
+        // Also enable modules for the franchise
+        const franchiseModules = modules.map((m) => ({
+          franchise_id: franchise.id,
+          module_id: m.id,
+          tenant_id: tenantId,
+          is_active: true,
+        }));
+        await supabase.from('mt_franchise_modules').insert(franchiseModules);
       }
 
       return { success: true };
