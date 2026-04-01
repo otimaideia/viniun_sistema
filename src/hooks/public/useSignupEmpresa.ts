@@ -43,17 +43,12 @@ export function useSignupEmpresa() {
     setIsSubmitting(true);
 
     try {
-      // 1. Create auth user (with email auto-confirmed)
+      // 1. Create auth user
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.senha,
         options: {
-          emailRedirectTo: `${window.location.origin}/login`,
-          data: {
-            nome: data.nome,
-            telefone: data.telefone_admin,
-            email_verified: true,
-          },
+          data: { nome: data.nome, telefone: data.telefone_admin },
         },
       });
 
@@ -61,6 +56,27 @@ export function useSignupEmpresa() {
       if (!authData.user) throw new Error('Erro ao criar usuario');
 
       const userId = authData.user.id;
+
+      // 1b. Confirm email via admin API (service role key from env)
+      const serviceKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
+      if (serviceKey) {
+        await fetch(`${import.meta.env.VITE_SUPABASE_URL}/auth/v1/admin/users/${userId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': serviceKey,
+            'Authorization': `Bearer ${serviceKey}`,
+          },
+          body: JSON.stringify({ email_confirm: true }),
+        });
+      }
+
+      // 1c. Sign in to get authenticated session
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.senha,
+      });
+      if (signInError) throw signInError;
       const slug = generateSlug(data.nome_fantasia);
 
       // 2. Insert tenant
