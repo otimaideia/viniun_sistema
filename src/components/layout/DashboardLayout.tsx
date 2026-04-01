@@ -29,7 +29,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import logoViniun from "@/assets/logo-viniun.png";
+const logoViniun = "/images/logo-viniun.svg";
 import { YESiaWidget } from "@/components/ai-assistant/YESiaWidget";
 
 // Sub-components

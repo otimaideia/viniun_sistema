@@ -40,6 +40,14 @@ interface ConfigCard {
 
 const configSections: ConfigCard[] = [
   {
+    title: "Minha Empresa",
+    description: "Logo, cores e dados da sua empresa",
+    icon: <Building2 className="h-8 w-8 text-viniun-navy" />,
+    href: "/configuracoes/minha-empresa",
+    available: true,
+    minAccessLevel: "franchise",
+  },
+  {
     title: "Integrações",
     description: "Configure APIs externas, WhatsApp e OpenAI",
     icon: <Link2 className="h-8 w-8 text-blue-600" />,

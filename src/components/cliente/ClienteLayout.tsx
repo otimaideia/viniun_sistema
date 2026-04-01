@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useClienteAuthContext } from '@/contexts/ClienteAuthContext';
 import { Calendar, User, LogOut, Home, Menu, Sparkles, History } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import logoViniun from '@/assets/logo-viniun.png';
+const logoViniun = "/images/logo-viniun.svg";
 import { useState } from 'react';
 import {
   Sheet,

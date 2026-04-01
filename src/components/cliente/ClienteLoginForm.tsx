@@ -9,7 +9,7 @@ import { VerificationMethod } from '@/hooks/useClienteAuthAdapter';
 import { applyCPFMask, cleanCPF, validateCPF } from '@/utils/cpf';
 import { applyPhoneMask, cleanPhone, validatePhone, detectInputType } from '@/utils/phone';
 import { MessageSquare, Mail, Loader2 } from 'lucide-react';
-import logoViniun from '@/assets/logo-viniun.png';
+const logoViniun = "/images/logo-viniun.svg";
 
 interface ClienteLoginFormProps {
   onCodeSent: () => void;

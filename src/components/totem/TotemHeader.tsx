@@ -1,5 +1,5 @@
 import { MapPin } from 'lucide-react';
-import logoViniun from '@/assets/logo-viniun.png';
+const logoViniun = "/images/logo-viniun.svg";
 
 interface TotemHeaderProps {
   nomeUnidade: string;

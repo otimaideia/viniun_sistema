@@ -184,6 +184,7 @@ import Permissoes from "./pages/configuracoes/Permissoes";
 import Modulos from "./pages/configuracoes/Modulos";
 import ModulosCrud from "./pages/configuracoes/ModulosCrud";
 import Integracoes from "./pages/configuracoes/Integracoes";
+import MinhaEmpresa from "./pages/configuracoes/MinhaEmpresa";
 
 // Onboarding
 import TenantOnboarding from "./pages/onboarding/TenantOnboarding";
@@ -621,6 +622,7 @@ const App = () => (
             <Route path="/usuarios/:id" element={<ProtectedRoute module="usuarios"><DashboardLayout><MTUsuarioDetail /></DashboardLayout></ProtectedRoute>} />
             <Route path="/usuarios/:id/editar" element={<ProtectedRoute module="usuarios"><DashboardLayout><MTUsuarioEdit /></DashboardLayout></ProtectedRoute>} />
             <Route path="/configuracoes" element={<ProtectedRoute module="configuracoes" requireFranchiseAdmin><DashboardLayout><ConfiguracoesIndex /></DashboardLayout></ProtectedRoute>} />
+            <Route path="/configuracoes/minha-empresa" element={<ProtectedRoute module="configuracoes" requireFranchiseAdmin><DashboardLayout><MinhaEmpresa /></DashboardLayout></ProtectedRoute>} />
             <Route path="/configuracoes/diretorias" element={<ProtectedRoute module="diretorias" requireFranchiseAdmin><DashboardLayout><Diretorias /></DashboardLayout></ProtectedRoute>} />
             {/* Metas */}
             <Route path="/metas" element={<ProtectedRoute module="metas"><DashboardLayout><Metas /></DashboardLayout></ProtectedRoute>} />

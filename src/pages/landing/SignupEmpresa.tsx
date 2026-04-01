@@ -27,6 +27,8 @@ import {
   ArrowLeft,
   ArrowRight,
   Loader2,
+  Upload,
+  X,
 } from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
@@ -38,6 +40,7 @@ interface FormData {
   nome_fantasia: string;
   cnpj: string;
   tipo_empresa: string;
+  logo_file: File | null;
   // Step 2 - Endereço
   cep: string;
   endereco: string;
@@ -65,6 +68,7 @@ const INITIAL_DATA: FormData = {
   nome_fantasia: '',
   cnpj: '',
   tipo_empresa: '',
+  logo_file: null,
   cep: '',
   endereco: '',
   numero: '',
@@ -166,6 +170,7 @@ export default function SignupEmpresa() {
   const [showPassword, setShowPassword] = useState(false);
   const { signup, isSubmitting } = useSignupEmpresa();
   const [cepLoading, setCepLoading] = useState(false);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
 
   // Pre-select plan from URL
   useEffect(() => {
@@ -280,7 +285,7 @@ export default function SignupEmpresa() {
   const handleSubmit = async () => {
     if (!validateStep()) return;
 
-    const result = await signup(formData);
+    const result = await signup(formData, formData.logo_file);
 
     if (result.success) {
       toast.success('Conta criada com sucesso!');
@@ -401,6 +406,54 @@ export default function SignupEmpresa() {
                         <SelectItem value="outra">Outra</SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+
+                  <div>
+                    <Label>Logo da Empresa (opcional)</Label>
+                    <p className="text-xs text-gray-500 mb-2">PNG, JPG ou SVG. Máximo 2MB.</p>
+                    {logoPreview ? (
+                      <div className="flex items-center gap-4">
+                        <img
+                          src={logoPreview}
+                          alt="Preview do logo"
+                          className="h-16 w-16 object-contain rounded border bg-white p-1"
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setLogoPreview(null);
+                            setFormData((prev) => ({ ...prev, logo_file: null }));
+                          }}
+                        >
+                          <X className="h-4 w-4 mr-1" />
+                          Remover
+                        </Button>
+                      </div>
+                    ) : (
+                      <label className="flex items-center gap-2 cursor-pointer border border-dashed rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                        <Upload className="h-5 w-5 text-gray-400" />
+                        <span className="text-sm text-gray-500">Clique para enviar o logo</span>
+                        <input
+                          type="file"
+                          className="hidden"
+                          accept="image/png,image/jpeg,image/svg+xml"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            if (file.size > 2 * 1024 * 1024) {
+                              toast.error('O arquivo deve ter no máximo 2MB');
+                              return;
+                            }
+                            setFormData((prev) => ({ ...prev, logo_file: file }));
+                            const reader = new FileReader();
+                            reader.onloadend = () => setLogoPreview(reader.result as string);
+                            reader.readAsDataURL(file);
+                          }}
+                        />
+                      </label>
+                    )}
                   </div>
                 </div>
               </div>

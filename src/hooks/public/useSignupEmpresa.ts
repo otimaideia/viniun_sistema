@@ -39,7 +39,7 @@ function generateSlug(name: string): string {
 export function useSignupEmpresa() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const signup = async (data: SignupData): Promise<{ success: boolean; error?: string }> => {
+  const signup = async (data: SignupData, logoFile?: File | null): Promise<{ success: boolean; error?: string }> => {
     setIsSubmitting(true);
 
     try {
@@ -129,6 +129,38 @@ export function useSignupEmpresa() {
         fonte_secundaria: 'Inter',
         border_radius: '0.5rem',
       });
+
+      // 3b. Upload logo if provided
+      if (logoFile) {
+        try {
+          const ext = logoFile.name.split('.').pop()?.toLowerCase() || 'png';
+          const logoPath = `${tenantId}/logo.${ext}`;
+
+          const { error: uploadError } = await supabase.storage
+            .from('logos')
+            .upload(logoPath, logoFile, {
+              contentType: logoFile.type,
+              upsert: true,
+            });
+
+          if (!uploadError) {
+            const { data: urlData } = supabase.storage
+              .from('logos')
+              .getPublicUrl(logoPath);
+
+            if (urlData?.publicUrl) {
+              await supabase
+                .from('mt_tenant_branding')
+                .update({ logo_url: urlData.publicUrl })
+                .eq('tenant_id', tenantId);
+            }
+          } else {
+            console.warn('Logo upload failed (non-critical):', uploadError.message);
+          }
+        } catch (logoErr) {
+          console.warn('Logo upload error (non-critical):', logoErr);
+        }
+      }
 
       // 4. Insert user
       const { data: mtUser, error: userError } = await supabase.from('mt_users').insert({
