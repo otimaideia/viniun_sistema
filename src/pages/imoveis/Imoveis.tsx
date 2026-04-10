@@ -39,7 +39,7 @@ export default function Imoveis() {
     queryFn: async () => {
       let q = supabase
         .from("mt_properties" as any)
-        .select("*")
+        .select("*, mt_property_types!property_type_id(id, nome), mt_property_purposes!purpose_id(id, nome), location_cidade:mt_locations!location_cidade_id(id, nome), location_bairro:mt_locations!location_bairro_id(id, nome)")
         .is("deleted_at", null)
         .order("created_at", { ascending: false })
         .range(page * pageSize, (page + 1) * pageSize - 1);
@@ -51,10 +51,10 @@ export default function Imoveis() {
       }
 
       if (filters.search) {
-        q = q.or(`titulo.ilike.%${filters.search}%,referencia.ilike.%${filters.search}%,endereco.ilike.%${filters.search}%`);
+        q = q.or(`titulo.ilike.%${filters.search}%,ref_code.ilike.%${filters.search}%,endereco.ilike.%${filters.search}%`);
       }
-      if (filters.tipo !== "all") q = q.eq("tipo_id", filters.tipo);
-      if (filters.finalidade !== "all") q = q.eq("finalidade_id", filters.finalidade);
+      if (filters.tipo !== "all") q = q.eq("property_type_id", filters.tipo);
+      if (filters.finalidade !== "all") q = q.eq("purpose_id", filters.finalidade);
       if (filters.destaque) q = q.eq("destaque", true);
       if (filters.lancamento) q = q.eq("lancamento", true);
       if (filters.financiamento) q = q.eq("aceita_financiamento", true);
@@ -179,13 +179,13 @@ export default function Imoveis() {
                       className="cursor-pointer hover:bg-muted/50"
                       onClick={() => navigate(`/imoveis/${imovel.id}`)}
                     >
-                      <TableCell className="font-mono text-xs">{imovel.referencia || "-"}</TableCell>
+                      <TableCell className="font-mono text-xs">{imovel.ref_code || "-"}</TableCell>
                       <TableCell className="font-medium max-w-[250px] truncate">
-                        {imovel.titulo}
+                        {imovel.titulo || "-"}
                       </TableCell>
-                      <TableCell>{imovel.tipo_nome || "-"}</TableCell>
-                      <TableCell>{imovel.finalidade_nome || "-"}</TableCell>
-                      <TableCell>{imovel.cidade || "-"}</TableCell>
+                      <TableCell>{imovel.mt_property_types?.nome || "-"}</TableCell>
+                      <TableCell>{imovel.mt_property_purposes?.nome || "-"}</TableCell>
+                      <TableCell>{imovel.location_cidade?.nome || "-"}</TableCell>
                       <TableCell className="text-right">
                         {formatCurrency(imovel.valor_venda || imovel.valor_locacao)}
                       </TableCell>
