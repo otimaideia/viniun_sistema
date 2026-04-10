@@ -36,11 +36,32 @@ export default function ImovelDetail() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("mt_properties" as any)
-        .select("*")
+        .select(`
+          *,
+          tipo:mt_property_types!property_type_id(id, nome),
+          finalidade:mt_property_purposes!purpose_id(id, nome),
+          proprietario:mt_property_owners!owner_id(id, nome, telefone, email),
+          cidade:mt_locations!location_cidade_id(id, nome),
+          bairro:mt_locations!location_bairro_id(id, nome),
+          estado:mt_locations!location_estado_id(id, nome, uf)
+        `)
         .eq("id", id!)
         .single();
       if (error) throw error;
       return data as any;
+    },
+    enabled: !!id,
+  });
+
+  const { data: fotos = [] } = useQuery({
+    queryKey: ["mt-imovel-fotos", id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("mt_property_photos" as any)
+        .select("*")
+        .eq("property_id", id!)
+        .order("ordem", { ascending: true });
+      return data || [];
     },
     enabled: !!id,
   });
@@ -51,7 +72,7 @@ export default function ImovelDetail() {
       const { data } = await supabase
         .from("mt_property_inquiries" as any)
         .select("*")
-        .eq("imovel_id", id!)
+        .eq("property_id", id!)
         .order("created_at", { ascending: false })
         .limit(20);
       return data || [];
@@ -112,8 +133,10 @@ export default function ImovelDetail() {
               )}
             </div>
             <p className="text-muted-foreground">
-              {imovel.referencia && `Ref: ${imovel.referencia} - `}
-              {imovel.tipo_nome} - {imovel.finalidade_nome}
+              {imovel.ref_code && `Ref: ${imovel.ref_code} - `}
+              {imovel.tipo?.nome || "-"} - {imovel.finalidade?.nome || "-"}
+              {imovel.bairro?.nome && ` - ${imovel.bairro.nome}`}
+              {imovel.cidade?.nome && `, ${imovel.cidade.nome}`}
             </p>
           </div>
         </div>
@@ -145,10 +168,40 @@ export default function ImovelDetail() {
         </div>
       </div>
 
-      {/* Photo gallery placeholder */}
-      {imovel.foto_principal_url ? (
-        <div className="rounded-lg overflow-hidden h-64 bg-muted">
-          <img src={imovel.foto_principal_url} alt={imovel.titulo} className="w-full h-full object-cover" />
+      {/* Photo gallery */}
+      {fotos.length > 0 ? (
+        <div className="space-y-2">
+          <div className="rounded-lg overflow-hidden h-72 bg-muted">
+            <img
+              src={fotos[0].url}
+              alt={imovel.titulo}
+              className="w-full h-full object-cover"
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+            />
+          </div>
+          {fotos.length > 1 && (
+            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+              {fotos.slice(1, 9).map((foto: any) => (
+                <div key={foto.id} className="rounded overflow-hidden h-20 bg-muted cursor-pointer">
+                  <img
+                    src={foto.thumbnail_url || foto.url}
+                    alt={foto.descricao || ""}
+                    className="w-full h-full object-cover"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                  />
+                </div>
+              ))}
+              {fotos.length > 9 && (
+                <div className="rounded h-20 bg-muted flex items-center justify-center text-sm text-muted-foreground">
+                  +{fotos.length - 9} fotos
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      ) : imovel.foto_destaque_url ? (
+        <div className="rounded-lg overflow-hidden h-72 bg-muted">
+          <img src={imovel.foto_destaque_url} alt={imovel.titulo} className="w-full h-full object-cover" />
         </div>
       ) : (
         <div className="rounded-lg h-48 bg-muted flex items-center justify-center">
@@ -210,18 +263,18 @@ export default function ImovelDetail() {
           <Card>
             <CardContent className="pt-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <InfoRow label="Referência" value={imovel.referencia} />
-                <InfoRow label="Tipo" value={imovel.tipo_nome} />
-                <InfoRow label="Finalidade" value={imovel.finalidade_nome} />
+                <InfoRow label="Referência" value={imovel.ref_code} />
+                <InfoRow label="Tipo" value={imovel.tipo?.nome} />
+                <InfoRow label="Finalidade" value={imovel.finalidade?.nome} />
                 <InfoRow label="Situação" value={imovel.situacao} />
                 <InfoRow label="Dormitórios" value={imovel.dormitorios} />
                 <InfoRow label="Suítes" value={imovel.suites} />
                 <InfoRow label="Banheiros" value={imovel.banheiros} />
-                <InfoRow label="Vagas Garagem" value={imovel.vagas_garagem} />
+                <InfoRow label="Vagas Garagem" value={imovel.garagens} />
                 <InfoRow label="Área Total" value={imovel.area_total ? `${imovel.area_total}m²` : null} />
                 <InfoRow label="Área Útil" value={imovel.area_util ? `${imovel.area_util}m²` : null} />
-                <InfoRow label="Ano Construção" value={imovel.ano_construcao} />
-                <InfoRow label="Andar" value={imovel.andar} />
+                <InfoRow label="Mobiliado" value={imovel.mobiliado ? "Sim" : imovel.semimobiliado ? "Semi" : "Não"} />
+                <InfoRow label="Proprietário" value={imovel.proprietario?.nome} />
               </div>
               {imovel.descricao && (
                 <>
@@ -244,11 +297,10 @@ export default function ImovelDetail() {
                 <InfoRow label="Endereço" value={imovel.endereco} />
                 <InfoRow label="Número" value={imovel.numero} />
                 <InfoRow label="Complemento" value={imovel.complemento} />
-                <InfoRow label="Bairro" value={imovel.bairro} />
-                <InfoRow label="Cidade" value={imovel.cidade} />
-                <InfoRow label="Estado" value={imovel.estado} />
-                <InfoRow label="Latitude" value={imovel.latitude} />
-                <InfoRow label="Longitude" value={imovel.longitude} />
+                <InfoRow label="Bairro" value={imovel.bairro?.nome} />
+                <InfoRow label="Cidade" value={imovel.cidade?.nome} />
+                <InfoRow label="Estado" value={imovel.estado?.nome || imovel.estado?.uf} />
+                <InfoRow label="Ponto de Referência" value={imovel.ponto_referencia} />
               </div>
             </CardContent>
           </Card>
