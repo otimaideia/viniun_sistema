@@ -14,7 +14,12 @@ const faqs: FAQItem[] = [
   {
     question: 'Preciso instalar algum software?',
     answer:
-      'Não! O Viniun é 100% na nuvem. Basta acessar pelo navegador do computador, tablet ou celular. Não precisa instalar nada.',
+      'Não! O Viniun é 100% na nuvem. Basta acessar pelo navegador do computador, tablet ou celular. Não precisa instalar nada. E em breve você também poderá acessar pelo nosso aplicativo nativo para Android e iOS.',
+  },
+  {
+    question: 'Vocês têm aplicativo para celular?',
+    answer:
+      'Sim! Estamos desenvolvendo o aplicativo Viniun para Android (Google Play) e iOS (App Store), com previsão de lançamento em 2026. O app terá todas as funcionalidades da plataforma web adaptadas para mobile: gestão de leads, agendamentos, chat WhatsApp, notificações em tempo real, geolocalização de imóveis e muito mais. Cadastre-se para ser um dos primeiros a testar!',
   },
   {
     question: 'Posso testar antes de contratar?',

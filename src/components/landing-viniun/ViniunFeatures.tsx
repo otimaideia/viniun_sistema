@@ -19,9 +19,9 @@ interface Feature {
 const features: Feature[] = [
   {
     icon: Users,
-    title: 'CRM Imobiliario',
+    title: 'CRM Imobiliário',
     description:
-      'Gerencie leads, proprietarios e inquilinos em um so lugar com historico completo de interacoes.',
+      'Gerencie leads, proprietários e inquilinos em um só lugar com histórico completo de interações.',
     color: 'text-viniun-blue',
     bgColor: 'bg-viniun-blue/10',
   },
@@ -29,7 +29,7 @@ const features: Feature[] = [
     icon: TrendingUp,
     title: 'Funil de Vendas',
     description:
-      'Pipeline visual para venda e locacao de imoveis com etapas personalizaveis.',
+      'Pipeline visual para venda e locação de imóveis com etapas personalizáveis.',
     color: 'text-viniun-navy',
     bgColor: 'bg-viniun-navy/10',
   },
@@ -37,7 +37,7 @@ const features: Feature[] = [
     icon: MessageSquare,
     title: 'WhatsApp Integrado',
     description:
-      'Atendimento multicanal com chatbot inteligente, templates e respostas rapidas.',
+      'Atendimento multicanal com chatbot inteligente, templates e respostas rápidas.',
     color: 'text-emerald-600',
     bgColor: 'bg-emerald-50',
   },
@@ -45,7 +45,7 @@ const features: Feature[] = [
     icon: Calendar,
     title: 'Agendamentos',
     description:
-      'Agende visitas a imoveis e reunioes com clientes de forma simples e organizada.',
+      'Agende visitas a imóveis e reuniões com clientes de forma simples e organizada.',
     color: 'text-viniun-lightBlue',
     bgColor: 'bg-viniun-lightBlue/10',
   },
@@ -53,7 +53,7 @@ const features: Feature[] = [
     icon: DollarSign,
     title: 'Financeiro',
     description:
-      'Controle comissoes, recebimentos e fluxo de caixa com relatorios detalhados.',
+      'Controle comissões, recebimentos e fluxo de caixa com relatórios detalhados.',
     color: 'text-viniun-gold',
     bgColor: 'bg-viniun-gold/10',
   },
@@ -74,10 +74,10 @@ export default function ViniunFeatures() {
         {/* Section header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-viniun-dark mb-4">
-            Tudo que sua imobiliaria precisa
+            Tudo que sua imobiliária precisa
           </h2>
           <p className="text-lg text-gray-600">
-            Modulos integrados para cada area do seu negocio
+            Módulos integrados para cada área do seu negócio
           </p>
         </div>
 

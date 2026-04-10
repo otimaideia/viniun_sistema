@@ -97,6 +97,7 @@ import {
   Scale,
   Bell,
   CalendarClock,
+  Network,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -343,6 +344,7 @@ export function DashboardLayout({ children, defaultCollapsed = false }: Dashboar
         { href: "/clientes-imoveis", label: "Clientes", icon: UsersRound, module: "clientes_imoveis" },
         { href: "/imoveis/consultas", label: "Consultas", icon: MessageCircle, module: "consultas_imoveis" },
         { href: "/imoveis/tabelas-preco", label: "Tabelas de Preço", icon: DollarSign, module: "tabelas_preco" },
+        { href: "/imoveis/rede", label: "Rede Colaborativa", icon: Network, module: "tabelas_rede" },
         { href: "/imoveis/portais", label: "Portais", icon: Globe, module: "portais_imoveis" },
         { href: "/imoveis/pedidos", label: "Pedidos", icon: ClipboardList, module: "pedidos_imoveis" },
         { href: "/imoveis/email-marketing", label: "Email Marketing", icon: Megaphone, module: "email_marketing_imoveis" },
@@ -468,6 +470,7 @@ export function DashboardLayout({ children, defaultCollapsed = false }: Dashboar
     'construtoras': ['construtoras'],
     'imoveis': ['imoveis'],
     'tabelas_preco': ['tabelas_preco'],
+    'tabelas_rede': ['tabelas_rede'],
     'proprietarios_imoveis': ['proprietarios_imoveis'],
     'captacao': ['captacao'],
     'corretores': ['corretores'],

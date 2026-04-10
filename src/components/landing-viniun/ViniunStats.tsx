@@ -4,10 +4,10 @@ interface Stat {
 }
 
 const stats: Stat[] = [
-  { value: '500+', label: 'Imoveis Gerenciados' },
-  { value: '50+', label: 'Imobiliarias' },
+  { value: '500+', label: 'Imóveis Gerenciados' },
+  { value: '50+', label: 'Imobiliárias' },
   { value: '10.000+', label: 'Leads Captados' },
-  { value: '98%', label: 'Satisfacao dos Clientes' },
+  { value: '98%', label: 'Satisfação dos Clientes' },
 ];
 
 export default function ViniunStats() {

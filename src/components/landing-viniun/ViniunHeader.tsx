@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
+import { Menu, LogIn } from 'lucide-react';
 
 const navLinks = [
   { label: 'Funcionalidades', href: '#features' },
+  { label: 'App Mobile', href: '#app-mobile' },
   { label: 'Planos', href: '#pricing' },
   { label: 'FAQ', href: '#faq' },
 ];
@@ -64,6 +65,12 @@ export default function ViniunHeader() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
+            <Button variant="ghost" size="sm" asChild>
+              <Link to="/login" className="gap-2">
+                <LogIn className="h-4 w-4" />
+                Entrar
+              </Link>
+            </Button>
             <Button variant="outline" size="sm" asChild>
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
                 Falar com Consultor
@@ -74,7 +81,7 @@ export default function ViniunHeader() {
               className="bg-viniun-navy hover:bg-viniun-dark text-white"
               asChild
             >
-              <Link to="/cadastro">Teste Gratis</Link>
+              <Link to="/cadastro">Teste Grátis</Link>
             </Button>
           </div>
 
@@ -106,6 +113,12 @@ export default function ViniunHeader() {
 
                   <div className="flex flex-col gap-3 pt-4 border-t">
                     <Button variant="outline" asChild>
+                      <Link to="/login" className="gap-2">
+                        <LogIn className="h-4 w-4" />
+                        Entrar na Plataforma
+                      </Link>
+                    </Button>
+                    <Button variant="outline" asChild>
                       <a
                         href={WHATSAPP_URL}
                         target="_blank"
@@ -118,7 +131,7 @@ export default function ViniunHeader() {
                       className="bg-viniun-navy hover:bg-viniun-dark text-white"
                       asChild
                     >
-                      <Link to="/cadastro">Teste Gratis</Link>
+                      <Link to="/cadastro">Teste Grátis</Link>
                     </Button>
                   </div>
                 </div>

@@ -5,6 +5,7 @@ import {
   ViniunStats,
   ViniunFeatures,
   ViniunModules,
+  ViniunAppMobile,
   ViniunPricing,
   ViniunTestimonials,
   ViniunFAQ,
@@ -19,13 +20,13 @@ export default function LandingViniun() {
 
   return (
     <>
-
       <ViniunHeader />
       <main>
         <ViniunHero />
         <ViniunStats />
         <ViniunFeatures />
         <ViniunModules />
+        <ViniunAppMobile />
         <ViniunPricing />
         <ViniunTestimonials />
         <ViniunFAQ />

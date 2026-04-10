@@ -433,6 +433,10 @@ const ConsultasImoveisLista = lazy(() => import("./pages/imoveis/ConsultasImovei
 const ConsultaImovelDetail = lazy(() => import("./pages/imoveis/ConsultaDetail"));
 const TabelasPrecoLista = lazy(() => import("./pages/imoveis/TabelasPreco"));
 const TabelaPrecoImovelEdit = lazy(() => import("./pages/imoveis/TabelaPrecoEdit"));
+const RedeTabelasPage = lazy(() => import("./pages/imoveis/RedeTabelas"));
+const RedeTabelaEditPage = lazy(() => import("./pages/imoveis/RedeTabelaEdit"));
+const RedeTabelaDetailPage = lazy(() => import("./pages/imoveis/RedeTabelaDetail"));
+const RedeParceriasPage = lazy(() => import("./pages/imoveis/RedeParcerias"));
 const PortaisImoveisPage = lazy(() => import("./pages/imoveis/PortaisImoveis"));
 const PedidosImoveisLista = lazy(() => import("./pages/imoveis/Pedidos"));
 const PedidoImovelDetail = lazy(() => import("./pages/imoveis/PedidoDetail"));
@@ -1013,6 +1017,13 @@ const App = () => (
             <Route path="/imoveis/tabelas-preco" element={<ProtectedRoute module="tabelas_preco"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><TabelasPrecoLista /></Suspense></DashboardLayout></ProtectedRoute>} />
             <Route path="/imoveis/tabelas-preco/novo" element={<ProtectedRoute module="tabelas_preco"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><TabelaPrecoImovelEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
             <Route path="/imoveis/tabelas-preco/:id/editar" element={<ProtectedRoute module="tabelas_preco"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><TabelaPrecoImovelEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Rede Colaborativa */}
+            <Route path="/imoveis/rede" element={<ProtectedRoute module="tabelas_rede"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><RedeTabelasPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/rede/novo" element={<ProtectedRoute module="tabelas_rede"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><RedeTabelaEditPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/rede/:id" element={<ProtectedRoute module="tabelas_rede"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><RedeTabelaDetailPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/rede/:id/editar" element={<ProtectedRoute module="tabelas_rede"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><RedeTabelaEditPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/rede/parcerias" element={<ProtectedRoute module="tabelas_rede"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><RedeParceriasPage /></Suspense></DashboardLayout></ProtectedRoute>} />
 
             {/* Portais Imobiliários */}
             <Route path="/imoveis/portais" element={<ProtectedRoute module="portais_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PortaisImoveisPage /></Suspense></DashboardLayout></ProtectedRoute>} />
