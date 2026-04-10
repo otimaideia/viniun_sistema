@@ -403,6 +403,48 @@ import FranquiaPerfil from "./pages/franquia/FranquiaPerfil";
 import LojaPublica from "./pages/LojaPublica";
 import LojaProdutoPublico from "./pages/LojaProdutoPublico";
 
+// ═══════════════════════════════════════════════════
+// IMOBILIÁRIO - Lazy imports (15 módulos)
+// ═══════════════════════════════════════════════════
+const ImoveisDashboard = lazy(() => import("./pages/imoveis/ImoveisDashboard"));
+const ImoveisLista = lazy(() => import("./pages/imoveis/Imoveis"));
+const ImovelDetail = lazy(() => import("./pages/imoveis/ImovelDetail"));
+const ImovelEdit = lazy(() => import("./pages/imoveis/ImovelEdit"));
+const ImovelConfiguracoes = lazy(() => import("./pages/imoveis/ImovelConfiguracoes"));
+const EdificiosLista = lazy(() => import("./pages/imoveis/Edificios"));
+const EdificioDetail = lazy(() => import("./pages/imoveis/EdificioDetail"));
+const EdificioEdit = lazy(() => import("./pages/imoveis/EdificioEdit"));
+const ConstrutorasLista = lazy(() => import("./pages/imoveis/Construtoras"));
+const ConstrutoraDetail = lazy(() => import("./pages/imoveis/ConstrutoraDetail"));
+const ConstrutoraEdit = lazy(() => import("./pages/imoveis/ConstrutoraEdit"));
+const ProprietariosLista = lazy(() => import("./pages/imoveis/Proprietarios"));
+const ProprietarioDetail = lazy(() => import("./pages/imoveis/ProprietarioDetail"));
+const ProprietarioEdit = lazy(() => import("./pages/imoveis/ProprietarioEdit"));
+const CaptadoresLista = lazy(() => import("./pages/imoveis/Captadores"));
+const CaptadorDetail = lazy(() => import("./pages/imoveis/CaptadorDetail"));
+const CaptadorEdit = lazy(() => import("./pages/imoveis/CaptadorEdit"));
+const CorretoresLista = lazy(() => import("./pages/imoveis/Corretores"));
+const CorretorDetail = lazy(() => import("./pages/imoveis/CorretorDetail"));
+const CorretorEdit = lazy(() => import("./pages/imoveis/CorretorEdit"));
+const ClientesImoveisLista = lazy(() => import("./pages/imoveis/ClientesImoveis"));
+const ClienteImovelDetail = lazy(() => import("./pages/imoveis/ClienteDetail"));
+const ClienteImovelEdit = lazy(() => import("./pages/imoveis/ClienteEdit"));
+const ConsultasImoveisLista = lazy(() => import("./pages/imoveis/ConsultasImoveis"));
+const ConsultaImovelDetail = lazy(() => import("./pages/imoveis/ConsultaDetail"));
+const TabelasPrecoLista = lazy(() => import("./pages/imoveis/TabelasPreco"));
+const TabelaPrecoImovelEdit = lazy(() => import("./pages/imoveis/TabelaPrecoEdit"));
+const PortaisImoveisPage = lazy(() => import("./pages/imoveis/PortaisImoveis"));
+const PedidosImoveisLista = lazy(() => import("./pages/imoveis/Pedidos"));
+const PedidoImovelDetail = lazy(() => import("./pages/imoveis/PedidoDetail"));
+const EmailCampaignsPage = lazy(() => import("./pages/imoveis/EmailCampaigns"));
+const CampaignEditPage = lazy(() => import("./pages/imoveis/CampaignEdit"));
+const NoticiasImoveisPage = lazy(() => import("./pages/imoveis/Noticias"));
+const NoticiaEditPage = lazy(() => import("./pages/imoveis/NoticiaEdit"));
+const PaginasImoveisPage = lazy(() => import("./pages/imoveis/Paginas"));
+const PaginaEditPage = lazy(() => import("./pages/imoveis/PaginaEdit"));
+const RelatoriosImoveisPage = lazy(() => import("./pages/imoveis/RelatoriosImoveis"));
+const LocalizacoesPage = lazy(() => import("./pages/imoveis/Localizacoes"));
+
 // Totem e Portal do Cliente (Público)
 import Totem from "./pages/Totem";
 const TotemPonto = lazy(() => import("./pages/TotemPonto"));
@@ -914,6 +956,89 @@ const App = () => (
             <Route path="/portal-franquia/usuarios" element={<ProtectedRoute module="usuarios"><DashboardLayout><FranquiaUsuarios /></DashboardLayout></ProtectedRoute>} />
             <Route path="/portal-franquia/campanhas" element={<ProtectedRoute module="campanhas"><DashboardLayout><FranquiaCampanhas /></DashboardLayout></ProtectedRoute>} />
             <Route path="/portal-franquia/perfil" element={<ProtectedRoute module="franqueados"><DashboardLayout><FranquiaPerfil /></DashboardLayout></ProtectedRoute>} />
+
+            {/* ═══════════════════════════════════════════ */}
+            {/* IMOBILIÁRIO - 15 módulos                  */}
+            {/* ═══════════════════════════════════════════ */}
+
+            {/* Imóveis (CORE) */}
+            <Route path="/imoveis/dashboard" element={<ProtectedRoute module="imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ImoveisDashboard /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis" element={<ProtectedRoute module="imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ImoveisLista /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/novo" element={<ProtectedRoute module="imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ImovelEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/:id" element={<ProtectedRoute module="imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ImovelDetail /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/:id/editar" element={<ProtectedRoute module="imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ImovelEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/configuracoes" element={<ProtectedRoute module="imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ImovelConfiguracoes /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Edifícios */}
+            <Route path="/edificios" element={<ProtectedRoute module="edificios"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><EdificiosLista /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/edificios/novo" element={<ProtectedRoute module="edificios"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><EdificioEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/edificios/:id" element={<ProtectedRoute module="edificios"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><EdificioDetail /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/edificios/:id/editar" element={<ProtectedRoute module="edificios"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><EdificioEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Construtoras */}
+            <Route path="/construtoras" element={<ProtectedRoute module="construtoras"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ConstrutorasLista /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/construtoras/novo" element={<ProtectedRoute module="construtoras"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ConstrutoraEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/construtoras/:id" element={<ProtectedRoute module="construtoras"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ConstrutoraDetail /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/construtoras/:id/editar" element={<ProtectedRoute module="construtoras"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ConstrutoraEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Proprietários */}
+            <Route path="/proprietarios" element={<ProtectedRoute module="proprietarios_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ProprietariosLista /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/proprietarios/novo" element={<ProtectedRoute module="proprietarios_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ProprietarioEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/proprietarios/:id" element={<ProtectedRoute module="proprietarios_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ProprietarioDetail /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/proprietarios/:id/editar" element={<ProtectedRoute module="proprietarios_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ProprietarioEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Captação */}
+            <Route path="/captacao" element={<ProtectedRoute module="captacao"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CaptadoresLista /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/captacao/novo" element={<ProtectedRoute module="captacao"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CaptadorEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/captacao/:id" element={<ProtectedRoute module="captacao"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CaptadorDetail /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/captacao/:id/editar" element={<ProtectedRoute module="captacao"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CaptadorEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Corretores */}
+            <Route path="/corretores" element={<ProtectedRoute module="corretores"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CorretoresLista /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/corretores/novo" element={<ProtectedRoute module="corretores"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CorretorEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/corretores/:id" element={<ProtectedRoute module="corretores"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CorretorDetail /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/corretores/:id/editar" element={<ProtectedRoute module="corretores"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CorretorEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Clientes Imobiliários */}
+            <Route path="/clientes-imoveis" element={<ProtectedRoute module="clientes_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClientesImoveisLista /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/clientes-imoveis/novo" element={<ProtectedRoute module="clientes_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClienteImovelEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/clientes-imoveis/:id" element={<ProtectedRoute module="clientes_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClienteImovelDetail /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/clientes-imoveis/:id/editar" element={<ProtectedRoute module="clientes_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClienteImovelEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Consultas de Imóveis */}
+            <Route path="/imoveis/consultas" element={<ProtectedRoute module="consultas_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ConsultasImoveisLista /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/consultas/:id" element={<ProtectedRoute module="consultas_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ConsultaImovelDetail /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Tabelas de Preço */}
+            <Route path="/imoveis/tabelas-preco" element={<ProtectedRoute module="tabelas_preco"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><TabelasPrecoLista /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/tabelas-preco/novo" element={<ProtectedRoute module="tabelas_preco"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><TabelaPrecoImovelEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/tabelas-preco/:id/editar" element={<ProtectedRoute module="tabelas_preco"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><TabelaPrecoImovelEdit /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Portais Imobiliários */}
+            <Route path="/imoveis/portais" element={<ProtectedRoute module="portais_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PortaisImoveisPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Pedidos */}
+            <Route path="/imoveis/pedidos" element={<ProtectedRoute module="pedidos_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PedidosImoveisLista /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/pedidos/:id" element={<ProtectedRoute module="pedidos_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PedidoImovelDetail /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Email Marketing Imobiliário */}
+            <Route path="/imoveis/email-marketing" element={<ProtectedRoute module="email_marketing_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><EmailCampaignsPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/email-marketing/novo" element={<ProtectedRoute module="email_marketing_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CampaignEditPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/email-marketing/:id/editar" element={<ProtectedRoute module="email_marketing_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CampaignEditPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Conteúdo Imobiliário */}
+            <Route path="/imoveis/conteudo" element={<ProtectedRoute module="conteudo_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><NoticiasImoveisPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/conteudo/noticias/novo" element={<ProtectedRoute module="conteudo_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><NoticiaEditPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/conteudo/noticias/:id/editar" element={<ProtectedRoute module="conteudo_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><NoticiaEditPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/conteudo/paginas" element={<ProtectedRoute module="conteudo_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PaginasImoveisPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/conteudo/paginas/novo" element={<ProtectedRoute module="conteudo_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PaginaEditPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/conteudo/paginas/:id/editar" element={<ProtectedRoute module="conteudo_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PaginaEditPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Relatórios Imobiliários */}
+            <Route path="/imoveis/relatorios" element={<ProtectedRoute module="relatorios_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><RelatoriosImoveisPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Localizações */}
+            <Route path="/configuracoes/localizacoes" element={<ProtectedRoute module="localizacoes"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><LocalizacoesPage /></Suspense></DashboardLayout></ProtectedRoute>} />
 
             {/* Totem de Check-in (Público) */}
             <Route path="/totem" element={<Totem />} />

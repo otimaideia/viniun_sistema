@@ -77,7 +77,23 @@ export type ModuloCodigo =
   | 'recrutamento'
   | 'treinamentos'
   // RELATÓRIOS
-  | 'ranking';
+  | 'ranking'
+  // IMOBILIÁRIO
+  | 'localizacoes'
+  | 'edificios'
+  | 'construtoras'
+  | 'imoveis'
+  | 'tabelas_preco'
+  | 'proprietarios_imoveis'
+  | 'captacao'
+  | 'corretores'
+  | 'clientes_imoveis'
+  | 'consultas_imoveis'
+  | 'portais_imoveis'
+  | 'pedidos_imoveis'
+  | 'email_marketing_imoveis'
+  | 'conteudo_imoveis'
+  | 'relatorios_imoveis';
 
 // Categorias de módulos
 export type ModuloCategoria =
@@ -89,7 +105,8 @@ export type ModuloCategoria =
   | 'comunicacao'
   | 'operacao'
   | 'rh'
-  | 'relatorios';
+  | 'relatorios'
+  | 'imobiliario';
 
 // Mapeamento de rotas por módulo (sincronizado com mt_modules + App.tsx)
 export const MODULO_ROUTES: Record<ModuloCodigo, string[]> = {
@@ -144,6 +161,22 @@ export const MODULO_ROUTES: Record<ModuloCodigo, string[]> = {
   treinamentos: ['/treinamentos', '/treinamentos/trilhas', '/aprender', '/gamificacao', '/gamificacao/ranking', '/gamificacao/conquistas'],
   // RELATÓRIOS
   ranking: ['/ranking'],
+  // IMOBILIÁRIO
+  localizacoes: ['/configuracoes/localizacoes'],
+  edificios: ['/edificios'],
+  construtoras: ['/construtoras'],
+  imoveis: ['/imoveis', '/imoveis/dashboard', '/imoveis/configuracoes'],
+  tabelas_preco: ['/imoveis/tabelas-preco'],
+  proprietarios_imoveis: ['/proprietarios'],
+  captacao: ['/captacao'],
+  corretores: ['/corretores'],
+  clientes_imoveis: ['/clientes-imoveis'],
+  consultas_imoveis: ['/imoveis/consultas'],
+  portais_imoveis: ['/imoveis/portais'],
+  pedidos_imoveis: ['/imoveis/pedidos'],
+  email_marketing_imoveis: ['/imoveis/email-marketing'],
+  conteudo_imoveis: ['/imoveis/conteudo'],
+  relatorios_imoveis: ['/imoveis/relatorios'],
 };
 
 // Labels para categorias
@@ -157,4 +190,5 @@ export const CATEGORIA_LABELS: Record<ModuloCategoria, string> = {
   operacao: 'Operação',
   rh: 'Recursos Humanos',
   relatorios: 'Relatórios',
+  imobiliario: 'Imobiliário',
 };

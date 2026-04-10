@@ -331,6 +331,28 @@ export function DashboardLayout({ children, defaultCollapsed = false }: Dashboar
       ],
     },
     {
+      title: "IMOBILIÁRIO",
+      items: [
+        { href: "/imoveis/dashboard", label: "Dashboard Imóveis", icon: BarChart3, module: "imoveis" },
+        { href: "/imoveis", label: "Imóveis", icon: Building2, module: "imoveis" },
+        { href: "/proprietarios", label: "Proprietários", icon: UserPlus, module: "proprietarios_imoveis" },
+        { href: "/captacao", label: "Captação", icon: Target, module: "captacao" },
+        { href: "/corretores", label: "Corretores", icon: Briefcase, module: "corretores" },
+        { href: "/edificios", label: "Edifícios", icon: Landmark, module: "edificios" },
+        { href: "/construtoras", label: "Construtoras", icon: Package, module: "construtoras" },
+        { href: "/clientes-imoveis", label: "Clientes", icon: UsersRound, module: "clientes_imoveis" },
+        { href: "/imoveis/consultas", label: "Consultas", icon: MessageCircle, module: "consultas_imoveis" },
+        { href: "/imoveis/tabelas-preco", label: "Tabelas de Preço", icon: DollarSign, module: "tabelas_preco" },
+        { href: "/imoveis/portais", label: "Portais", icon: Globe, module: "portais_imoveis" },
+        { href: "/imoveis/pedidos", label: "Pedidos", icon: ClipboardList, module: "pedidos_imoveis" },
+        { href: "/imoveis/email-marketing", label: "Email Marketing", icon: Megaphone, module: "email_marketing_imoveis" },
+        { href: "/imoveis/conteudo", label: "Conteúdo", icon: FileText, module: "conteudo_imoveis" },
+        { href: "/imoveis/relatorios", label: "Relatórios", icon: TrendingUp, module: "relatorios_imoveis" },
+        { href: "/imoveis/configuracoes", label: "Configurações", icon: Settings, module: "imoveis", minAccessLevel: "tenant" as const },
+        { href: "/configuracoes/localizacoes", label: "Localizações", icon: Globe, module: "localizacoes", minAccessLevel: "tenant" as const },
+      ],
+    },
+    {
       title: "ADMINISTRAÇÃO",
       items: [
         { href: "/documentos", label: "Documentos", icon: FolderOpen, module: "documentos", minAccessLevel: "franchise" as const },
@@ -440,6 +462,22 @@ export function DashboardLayout({ children, defaultCollapsed = false }: Dashboar
     'precificacao': ['precificacao'],
     'auditorias': ['auditorias'],
     'tablet_atendimento': ['tablet_atendimento'],
+    // IMOBILIÁRIO
+    'localizacoes': ['localizacoes'],
+    'edificios': ['edificios'],
+    'construtoras': ['construtoras'],
+    'imoveis': ['imoveis'],
+    'tabelas_preco': ['tabelas_preco'],
+    'proprietarios_imoveis': ['proprietarios_imoveis'],
+    'captacao': ['captacao'],
+    'corretores': ['corretores'],
+    'clientes_imoveis': ['clientes_imoveis'],
+    'consultas_imoveis': ['consultas_imoveis'],
+    'portais_imoveis': ['portais_imoveis'],
+    'pedidos_imoveis': ['pedidos_imoveis'],
+    'email_marketing_imoveis': ['email_marketing_imoveis'],
+    'conteudo_imoveis': ['conteudo_imoveis'],
+    'relatorios_imoveis': ['relatorios_imoveis'],
   };
 
   const isModuleEnabled = (moduleName: string): boolean => {
