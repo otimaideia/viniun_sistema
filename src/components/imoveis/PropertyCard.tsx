@@ -2,25 +2,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { PropertyStatusBadge } from "./PropertyStatusBadge";
 import { BedDouble, Maximize2, MapPin, Home } from "lucide-react";
 
-export interface MTProperty {
-  id: string;
-  referencia?: string | null;
-  titulo: string;
-  tipo_nome?: string | null;
-  finalidade_nome?: string | null;
-  situacao: string;
-  valor_venda?: number | null;
-  valor_locacao?: number | null;
-  area_total?: number | null;
-  dormitorios?: number | null;
-  cidade?: string | null;
-  bairro?: string | null;
-  foto_principal_url?: string | null;
-  destaque?: boolean;
-}
-
 interface PropertyCardProps {
-  property: MTProperty;
+  property: any;
   onClick?: () => void;
 }
 
@@ -31,6 +14,13 @@ function formatCurrency(value: number | null | undefined): string {
 
 export function PropertyCard({ property, onClick }: PropertyCardProps) {
   const price = property.valor_venda || property.valor_locacao;
+  const tipo = property.mt_property_types?.nome || "";
+  const cidade = property.location_cidade?.nome || "";
+  const bairro = property.location_bairro?.nome || "";
+  // Foto: usa foto_destaque_url ou primeira foto da relação
+  const foto = property.foto_destaque_url
+    || property.mt_property_photos?.[0]?.url
+    || null;
 
   return (
     <Card
@@ -38,11 +28,12 @@ export function PropertyCard({ property, onClick }: PropertyCardProps) {
       onClick={onClick}
     >
       <div className="relative h-48 bg-muted">
-        {property.foto_principal_url ? (
+        {foto ? (
           <img
-            src={property.foto_principal_url}
-            alt={property.titulo}
+            src={foto}
+            alt={property.titulo || "Imóvel"}
             className="w-full h-full object-cover"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
@@ -50,7 +41,7 @@ export function PropertyCard({ property, onClick }: PropertyCardProps) {
           </div>
         )}
         <div className="absolute top-2 right-2">
-          <PropertyStatusBadge situacao={property.situacao} />
+          <PropertyStatusBadge situacao={property.situacao || "disponivel"} />
         </div>
         {property.destaque && (
           <div className="absolute top-2 left-2 bg-yellow-500 text-white text-xs px-2 py-0.5 rounded">
@@ -60,18 +51,16 @@ export function PropertyCard({ property, onClick }: PropertyCardProps) {
       </div>
       <CardContent className="p-4 space-y-2">
         <div className="flex items-center justify-between">
-          {property.referencia && (
-            <span className="text-xs text-muted-foreground">Ref: {property.referencia}</span>
+          {property.ref_code && (
+            <span className="text-xs text-muted-foreground">Ref: {property.ref_code}</span>
           )}
-          <span className="text-xs text-muted-foreground">{property.tipo_nome}</span>
+          <span className="text-xs text-muted-foreground">{tipo}</span>
         </div>
-        <h3 className="font-semibold text-sm line-clamp-2">{property.titulo}</h3>
-        {(property.cidade || property.bairro) && (
+        <h3 className="font-semibold text-sm line-clamp-2">{property.titulo || "-"}</h3>
+        {(cidade || bairro) && (
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <MapPin className="h-3 w-3" />
-            <span>
-              {[property.bairro, property.cidade].filter(Boolean).join(", ")}
-            </span>
+            <span>{[bairro, cidade].filter(Boolean).join(", ")}</span>
           </div>
         )}
         <div className="flex items-center gap-3 text-xs text-muted-foreground">

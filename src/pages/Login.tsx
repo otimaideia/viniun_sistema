@@ -55,7 +55,7 @@ const Login = () => {
   // Redirecionar se já autenticado
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/");
+      navigate("/leads/dashboard");
     }
   }, [isAuthenticated, navigate]);
 
@@ -84,7 +84,7 @@ const Login = () => {
 
       if (result.success) {
         toast.success("Login realizado com sucesso!");
-        navigate("/");
+        navigate("/leads/dashboard");
       } else {
         toast.error(result.error || "Erro ao fazer login");
       }
@@ -96,7 +96,7 @@ const Login = () => {
 
     if (result.success) {
       toast.success("Login realizado com sucesso!");
-      navigate("/");
+      navigate("/leads/dashboard");
     } else if (result.requiresTenantSelection && result.availableTenants) {
       // Usuário tem acesso a múltiplos tenants
       setAvailableTenants(result.availableTenants);

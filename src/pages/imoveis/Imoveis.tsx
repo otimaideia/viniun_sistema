@@ -39,7 +39,7 @@ export default function Imoveis() {
     queryFn: async () => {
       let q = supabase
         .from("mt_properties" as any)
-        .select("*, mt_property_types!property_type_id(id, nome), mt_property_purposes!purpose_id(id, nome), location_cidade:mt_locations!location_cidade_id(id, nome), location_bairro:mt_locations!location_bairro_id(id, nome)")
+        .select("*, mt_property_types!property_type_id(id, nome), mt_property_purposes!purpose_id(id, nome), location_cidade:mt_locations!location_cidade_id(id, nome), location_bairro:mt_locations!location_bairro_id(id, nome), mt_property_photos(url)")
         .is("deleted_at", null)
         .order("created_at", { ascending: false })
         .range(page * pageSize, (page + 1) * pageSize - 1);
