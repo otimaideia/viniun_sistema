@@ -315,7 +315,6 @@ export default function ImovelDetail() {
                 <InfoRow label="Condomínio" value={formatCurrency(imovel.valor_condominio)} />
                 <InfoRow label="IPTU" value={formatCurrency(imovel.valor_iptu)} />
                 <InfoRow label="Aceita Financiamento" value={imovel.aceita_financiamento ? "Sim" : "Não"} />
-                <InfoRow label="Aceita Permuta" value={imovel.aceita_permuta ? "Sim" : "Não"} />
               </div>
             </CardContent>
           </Card>

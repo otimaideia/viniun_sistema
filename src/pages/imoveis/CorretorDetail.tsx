@@ -14,7 +14,7 @@ import { toast } from "sonner";
 export default function CorretorDetail() {
   const { id } = useParams<{ id: string }>(); const navigate = useNavigate();
   const { data: item, isLoading } = useQuery({ queryKey: ["mt-corretor", id], queryFn: async () => { const { data, error } = await supabase.from("mt_corretores" as any).select("*").eq("id", id!).single(); if (error) throw error; return data as any; }, enabled: !!id });
-  const { data: imoveis = [] } = useQuery({ queryKey: ["mt-corretor-imoveis", id], queryFn: async () => { const { data } = await supabase.from("mt_properties" as any).select("id, titulo, referencia, situacao, tipo_nome, valor_venda").eq("corretor_id", id!).is("deleted_at", null).order("created_at", { ascending: false }); return data || []; }, enabled: !!id });
+  const { data: imoveis = [] } = useQuery({ queryKey: ["mt-corretor-imoveis", id], queryFn: async () => { const { data } = await supabase.from("mt_properties" as any).select("id, titulo, ref_code, situacao, valor_venda, mt_property_types!property_type_id(nome)").eq("corretor_id", id!).is("deleted_at", null).order("created_at", { ascending: false }); return data || []; }, enabled: !!id });
 
   const handleDelete = async () => { const { error } = await supabase.from("mt_corretores" as any).update({ deleted_at: new Date().toISOString() }).eq("id", id!); if (error) { toast.error(`Erro: ${error.message}`); return; } toast.success("Removido"); navigate("/corretores"); };
 
@@ -44,7 +44,7 @@ export default function CorretorDetail() {
       <Card><CardHeader><CardTitle className="text-base">Imoveis Atribuidos ({imoveis.length})</CardTitle></CardHeader><CardContent className="p-0">
         <Table><TableHeader><TableRow><TableHead>Ref</TableHead><TableHead>Titulo</TableHead><TableHead>Tipo</TableHead><TableHead>Valor</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
         <TableBody>{imoveis.length === 0 ? (<TableRow><TableCell colSpan={5} className="text-center py-4 text-muted-foreground">Nenhum imovel.</TableCell></TableRow>
-        ) : imoveis.map((im: any) => (<TableRow key={im.id} className="cursor-pointer" onClick={() => navigate(`/imoveis/${im.id}`)}><TableCell className="font-mono text-xs">{im.referencia || "-"}</TableCell><TableCell>{im.titulo}</TableCell><TableCell>{im.tipo_nome || "-"}</TableCell><TableCell>{im.valor_venda ? new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(im.valor_venda) : "-"}</TableCell><TableCell><PropertyStatusBadge situacao={im.situacao || "disponivel"} /></TableCell></TableRow>
+        ) : imoveis.map((im: any) => (<TableRow key={im.id} className="cursor-pointer" onClick={() => navigate(`/imoveis/${im.id}`)}><TableCell className="font-mono text-xs">{im.ref_code || "-"}</TableCell><TableCell>{im.titulo}</TableCell><TableCell>{im.mt_property_types?.nome || "-"}</TableCell><TableCell>{im.valor_venda ? new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(im.valor_venda) : "-"}</TableCell><TableCell><PropertyStatusBadge situacao={im.situacao || "disponivel"} /></TableCell></TableRow>
         ))}</TableBody></Table>
       </CardContent></Card>
     </div>

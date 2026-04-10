@@ -45,26 +45,48 @@ const imovelSchema = z.object({
   suites: z.coerce.number().min(0).default(0),
   banheiros: z.coerce.number().min(0).default(0),
   vagas_garagem: z.coerce.number().min(0).default(0),
+  salas: z.coerce.number().min(0).default(0),
+  cozinhas: z.coerce.number().min(0).default(0),
+  dep_empregada: z.coerce.number().min(0).default(0),
   area_total: z.coerce.number().min(0).optional(),
   area_util: z.coerce.number().min(0).optional(),
+  area_construida: z.coerce.number().min(0).optional(),
+  area_privada: z.coerce.number().min(0).optional(),
   area_terreno: z.coerce.number().min(0).optional(),
-  andar: z.coerce.number().min(0).optional(),
-  ano_construcao: z.coerce.number().min(1900).max(2100).optional(),
   // Prices
   valor_venda: z.coerce.number().min(0).optional(),
   valor_locacao: z.coerce.number().min(0).optional(),
   valor_condominio: z.coerce.number().min(0).optional(),
   valor_iptu: z.coerce.number().min(0).optional(),
+  valor_temporada: z.coerce.number().min(0).optional(),
+  valor_promocao: z.coerce.number().min(0).optional(),
   aceita_financiamento: z.boolean().default(false),
-  aceita_permuta: z.boolean().default(false),
+  // Financing - Caixa
+  financiamento_caixa: z.boolean().default(false),
+  financ_caixa_valor_entrada: z.coerce.number().min(0).optional(),
+  financ_caixa_valor_parcela: z.coerce.number().min(0).optional(),
+  financ_caixa_qtd_parcelas: z.coerce.number().min(0).optional(),
+  financ_caixa_observacoes: z.string().max(1000).optional(),
+  // Financing - Construtora
+  financiamento_construtora: z.boolean().default(false),
+  financ_const_valor_entrada: z.coerce.number().min(0).optional(),
+  financ_const_valor_parcela: z.coerce.number().min(0).optional(),
+  financ_const_qtd_parcelas: z.coerce.number().min(0).optional(),
+  financ_const_observacoes: z.string().max(1000).optional(),
+  // People / Relations
+  owner_id: z.string().optional(),
+  captador_id: z.string().optional(),
+  corretor_id: z.string().optional(),
+  building_id: z.string().optional(),
   // Flags
   destaque: z.boolean().default(false),
   lancamento: z.boolean().default(false),
-  exclusividade: z.boolean().default(false),
   // SEO
   meta_title: z.string().max(100).optional(),
   meta_description: z.string().max(300).optional(),
   slug: z.string().max(200).optional(),
+  video_youtube_url: z.string().max(500).optional(),
+  tour_virtual_url: z.string().max(500).optional(),
   foto_principal_url: z.string().url().optional().or(z.literal("")),
 });
 
@@ -88,11 +110,14 @@ export default function ImovelEdit() {
       suites: 0,
       banheiros: 0,
       vagas_garagem: 0,
+      salas: 0,
+      cozinhas: 0,
+      dep_empregada: 0,
       aceita_financiamento: false,
-      aceita_permuta: false,
+      financiamento_caixa: false,
+      financiamento_construtora: false,
       destaque: false,
       lancamento: false,
-      exclusividade: false,
     },
   });
 
@@ -114,42 +139,61 @@ export default function ImovelEdit() {
     if (imovel) {
       form.reset({
         titulo: imovel.titulo || "",
-        referencia: imovel.referencia || "",
-        tipo_id: imovel.tipo_id || "",
-        finalidade_id: imovel.finalidade_id || "",
+        referencia: imovel.ref_code || "",
+        tipo_id: imovel.property_type_id || "",
+        finalidade_id: imovel.purpose_id || "",
         situacao: imovel.situacao || "disponivel",
         descricao: imovel.descricao || "",
         cep: imovel.cep || "",
         endereco: imovel.endereco || "",
         numero: imovel.numero || "",
         complemento: imovel.complemento || "",
-        estado_id: imovel.estado_id || "",
-        cidade_id: imovel.cidade_id || "",
-        bairro_id: imovel.bairro_id || "",
+        estado_id: imovel.location_estado_id || "",
+        cidade_id: imovel.location_cidade_id || "",
+        bairro_id: imovel.location_bairro_id || "",
         latitude: imovel.latitude?.toString() || "",
         longitude: imovel.longitude?.toString() || "",
         dormitorios: imovel.dormitorios || 0,
         suites: imovel.suites || 0,
         banheiros: imovel.banheiros || 0,
-        vagas_garagem: imovel.vagas_garagem || 0,
+        vagas_garagem: imovel.garagens || 0,
+        salas: imovel.salas || 0,
+        cozinhas: imovel.cozinhas || 0,
+        dep_empregada: imovel.dep_empregada || 0,
         area_total: imovel.area_total || undefined,
         area_util: imovel.area_util || undefined,
+        area_construida: imovel.area_construida || undefined,
+        area_privada: imovel.area_privada || undefined,
         area_terreno: imovel.area_terreno || undefined,
-        andar: imovel.andar || undefined,
-        ano_construcao: imovel.ano_construcao || undefined,
         valor_venda: imovel.valor_venda || undefined,
         valor_locacao: imovel.valor_locacao || undefined,
         valor_condominio: imovel.valor_condominio || undefined,
         valor_iptu: imovel.valor_iptu || undefined,
+        valor_temporada: imovel.valor_temporada || undefined,
+        valor_promocao: imovel.valor_promocao || undefined,
         aceita_financiamento: imovel.aceita_financiamento || false,
-        aceita_permuta: imovel.aceita_permuta || false,
+        financiamento_caixa: imovel.financiamento_caixa || false,
+        financ_caixa_valor_entrada: imovel.financ_caixa_valor_entrada || undefined,
+        financ_caixa_valor_parcela: imovel.financ_caixa_valor_parcela || undefined,
+        financ_caixa_qtd_parcelas: imovel.financ_caixa_qtd_parcelas || undefined,
+        financ_caixa_observacoes: imovel.financ_caixa_observacoes || "",
+        financiamento_construtora: imovel.financiamento_construtora || false,
+        financ_const_valor_entrada: imovel.financ_const_valor_entrada || undefined,
+        financ_const_valor_parcela: imovel.financ_const_valor_parcela || undefined,
+        financ_const_qtd_parcelas: imovel.financ_const_qtd_parcelas || undefined,
+        financ_const_observacoes: imovel.financ_const_observacoes || "",
+        owner_id: imovel.owner_id || "",
+        captador_id: imovel.captador_id || "",
+        corretor_id: imovel.corretor_id || "",
+        building_id: imovel.building_id || "",
         destaque: imovel.destaque || false,
         lancamento: imovel.lancamento || false,
-        exclusividade: imovel.exclusividade || false,
-        meta_title: imovel.meta_title || "",
-        meta_description: imovel.meta_description || "",
+        meta_title: imovel.seo_title || "",
+        meta_description: imovel.seo_descricao || "",
         slug: imovel.slug || "",
-        foto_principal_url: imovel.foto_principal_url || "",
+        video_youtube_url: imovel.video_youtube_url || "",
+        tour_virtual_url: imovel.tour_virtual_url || "",
+        foto_principal_url: imovel.foto_destaque_url || "",
       });
     }
   }, [imovel, form]);
@@ -182,6 +226,62 @@ export default function ImovelEdit() {
     enabled: !!tenant,
   });
 
+  const { data: owners = [] } = useQuery({
+    queryKey: ["mt-property-owners", tenant?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("mt_property_owners" as any)
+        .select("id, nome")
+        .eq("tenant_id", tenant!.id)
+        .is("deleted_at", null)
+        .order("nome");
+      return data || [];
+    },
+    enabled: !!tenant,
+  });
+
+  const { data: captadores = [] } = useQuery({
+    queryKey: ["mt-captadores", tenant?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("mt_captadores" as any)
+        .select("id, nome")
+        .eq("tenant_id", tenant!.id)
+        .is("deleted_at", null)
+        .order("nome");
+      return data || [];
+    },
+    enabled: !!tenant,
+  });
+
+  const { data: corretores = [] } = useQuery({
+    queryKey: ["mt-corretores", tenant?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("mt_corretores" as any)
+        .select("id, nome")
+        .eq("tenant_id", tenant!.id)
+        .is("deleted_at", null)
+        .order("nome");
+      return data || [];
+    },
+    enabled: !!tenant,
+  });
+
+  const { data: buildings = [] } = useQuery({
+    queryKey: ["mt-buildings", tenant?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("mt_buildings" as any)
+        .select("id, nome")
+        .eq("tenant_id", tenant!.id)
+        .is("deleted_at", null)
+        .order("nome");
+      return data || [];
+    },
+    enabled: !!tenant,
+  });
+
   const saveMutation = useMutation({
     mutationFn: async (values: ImovelFormValues) => {
       // Mapear nomes do form → nomes da tabela mt_properties
@@ -205,19 +305,42 @@ export default function ImovelEdit() {
         suites: values.suites || 0,
         banheiros: values.banheiros || 0,
         garagens: values.vagas_garagem || 0,
+        salas: values.salas || 0,
+        cozinhas: values.cozinhas || 0,
+        dep_empregada: values.dep_empregada || 0,
         area_total: values.area_total || null,
         area_util: values.area_util || null,
+        area_construida: values.area_construida || null,
+        area_privada: values.area_privada || null,
         area_terreno: values.area_terreno || null,
         valor_venda: values.valor_venda || null,
         valor_locacao: values.valor_locacao || null,
         valor_condominio: values.valor_condominio || null,
         valor_iptu: values.valor_iptu || null,
+        valor_temporada: values.valor_temporada || null,
+        valor_promocao: values.valor_promocao || null,
         aceita_financiamento: values.aceita_financiamento || false,
+        financiamento_caixa: values.financiamento_caixa || false,
+        financ_caixa_valor_entrada: values.financ_caixa_valor_entrada || null,
+        financ_caixa_valor_parcela: values.financ_caixa_valor_parcela || null,
+        financ_caixa_qtd_parcelas: values.financ_caixa_qtd_parcelas || null,
+        financ_caixa_observacoes: values.financ_caixa_observacoes || null,
+        financiamento_construtora: values.financiamento_construtora || false,
+        financ_const_valor_entrada: values.financ_const_valor_entrada || null,
+        financ_const_valor_parcela: values.financ_const_valor_parcela || null,
+        financ_const_qtd_parcelas: values.financ_const_qtd_parcelas || null,
+        financ_const_observacoes: values.financ_const_observacoes || null,
+        owner_id: values.owner_id || null,
+        captador_id: values.captador_id || null,
+        corretor_id: values.corretor_id || null,
+        building_id: values.building_id || null,
         destaque: values.destaque || false,
         lancamento: values.lancamento || false,
         seo_title: values.meta_title || null,
         seo_descricao: values.meta_description || null,
         slug: values.slug || null,
+        video_youtube_url: values.video_youtube_url || null,
+        tour_virtual_url: values.tour_virtual_url || null,
         foto_destaque_url: values.foto_principal_url || null,
         tenant_id: tenant?.id,
         franchise_id: franchise?.id,
@@ -482,6 +605,27 @@ export default function ImovelEdit() {
                         <FormMessage />
                       </FormItem>
                     )} />
+                    <FormField control={form.control} name="salas" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Salas</FormLabel>
+                        <FormControl><Input type="number" min="0" {...field} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+                    <FormField control={form.control} name="cozinhas" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Cozinhas</FormLabel>
+                        <FormControl><Input type="number" min="0" {...field} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+                    <FormField control={form.control} name="dep_empregada" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Dep. Empregada</FormLabel>
+                        <FormControl><Input type="number" min="0" {...field} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <FormField control={form.control} name="area_total" render={({ field }) => (
@@ -498,6 +642,20 @@ export default function ImovelEdit() {
                         <FormMessage />
                       </FormItem>
                     )} />
+                    <FormField control={form.control} name="area_construida" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Área Construída (m²)</FormLabel>
+                        <FormControl><Input type="number" min="0" step="0.01" {...field} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+                    <FormField control={form.control} name="area_privada" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Área Privada (m²)</FormLabel>
+                        <FormControl><Input type="number" min="0" step="0.01" {...field} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
                     <FormField control={form.control} name="area_terreno" render={({ field }) => (
                       <FormItem>
                         <FormLabel>Área Terreno (m²)</FormLabel>
@@ -505,21 +663,7 @@ export default function ImovelEdit() {
                         <FormMessage />
                       </FormItem>
                     )} />
-                    <FormField control={form.control} name="andar" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Andar</FormLabel>
-                        <FormControl><Input type="number" min="0" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
                   </div>
-                  <FormField control={form.control} name="ano_construcao" render={({ field }) => (
-                    <FormItem className="max-w-[200px]">
-                      <FormLabel>Ano de Construção</FormLabel>
-                      <FormControl><Input type="number" min="1900" max="2100" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
                 </CardContent>
               </Card>
             </TabsContent>
@@ -559,6 +703,20 @@ export default function ImovelEdit() {
                         <FormMessage />
                       </FormItem>
                     )} />
+                    <FormField control={form.control} name="valor_temporada" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Temporada (R$/dia)</FormLabel>
+                        <FormControl><Input type="number" min="0" step="0.01" placeholder="0.00" {...field} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+                    <FormField control={form.control} name="valor_promocao" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Promoção (R$)</FormLabel>
+                        <FormControl><Input type="number" min="0" step="0.01" placeholder="0.00" {...field} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
                   </div>
                 </CardContent>
               </Card>
@@ -569,7 +727,7 @@ export default function ImovelEdit() {
                 <CardHeader>
                   <CardTitle>Financiamento e Permuta</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-6">
                   <FormField control={form.control} name="aceita_financiamento" render={({ field }) => (
                     <FormItem className="flex items-center gap-3">
                       <FormControl>
@@ -578,14 +736,88 @@ export default function ImovelEdit() {
                       <FormLabel className="!mt-0">Aceita Financiamento</FormLabel>
                     </FormItem>
                   )} />
-                  <FormField control={form.control} name="aceita_permuta" render={({ field }) => (
-                    <FormItem className="flex items-center gap-3">
-                      <FormControl>
-                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                      </FormControl>
-                      <FormLabel className="!mt-0">Aceita Permuta</FormLabel>
-                    </FormItem>
-                  )} />
+
+                  <div className="border rounded-lg p-4 space-y-4">
+                    <FormField control={form.control} name="financiamento_caixa" render={({ field }) => (
+                      <FormItem className="flex items-center gap-3">
+                        <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+                        <FormLabel className="!mt-0 font-semibold">Financiamento Caixa</FormLabel>
+                      </FormItem>
+                    )} />
+                    {form.watch("financiamento_caixa") && (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <FormField control={form.control} name="financ_caixa_valor_entrada" render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Valor Entrada (R$)</FormLabel>
+                            <FormControl><Input type="number" min="0" step="0.01" placeholder="0.00" {...field} /></FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )} />
+                        <FormField control={form.control} name="financ_caixa_valor_parcela" render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Valor Parcela (R$)</FormLabel>
+                            <FormControl><Input type="number" min="0" step="0.01" placeholder="0.00" {...field} /></FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )} />
+                        <FormField control={form.control} name="financ_caixa_qtd_parcelas" render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Qtd. Parcelas</FormLabel>
+                            <FormControl><Input type="number" min="0" placeholder="0" {...field} /></FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )} />
+                        <FormField control={form.control} name="financ_caixa_observacoes" render={({ field }) => (
+                          <FormItem className="md:col-span-3">
+                            <FormLabel>Observacoes Caixa</FormLabel>
+                            <FormControl><Textarea rows={2} placeholder="Observacoes sobre financiamento Caixa..." {...field} /></FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )} />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="border rounded-lg p-4 space-y-4">
+                    <FormField control={form.control} name="financiamento_construtora" render={({ field }) => (
+                      <FormItem className="flex items-center gap-3">
+                        <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+                        <FormLabel className="!mt-0 font-semibold">Financiamento Construtora</FormLabel>
+                      </FormItem>
+                    )} />
+                    {form.watch("financiamento_construtora") && (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <FormField control={form.control} name="financ_const_valor_entrada" render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Valor Entrada (R$)</FormLabel>
+                            <FormControl><Input type="number" min="0" step="0.01" placeholder="0.00" {...field} /></FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )} />
+                        <FormField control={form.control} name="financ_const_valor_parcela" render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Valor Parcela (R$)</FormLabel>
+                            <FormControl><Input type="number" min="0" step="0.01" placeholder="0.00" {...field} /></FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )} />
+                        <FormField control={form.control} name="financ_const_qtd_parcelas" render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Qtd. Parcelas</FormLabel>
+                            <FormControl><Input type="number" min="0" placeholder="0" {...field} /></FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )} />
+                        <FormField control={form.control} name="financ_const_observacoes" render={({ field }) => (
+                          <FormItem className="md:col-span-3">
+                            <FormLabel>Observacoes Construtora</FormLabel>
+                            <FormControl><Textarea rows={2} placeholder="Observacoes sobre financiamento Construtora..." {...field} /></FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )} />
+                      </div>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -618,17 +850,68 @@ export default function ImovelEdit() {
                       </div>
                     </FormItem>
                   )} />
-                  <FormField control={form.control} name="exclusividade" render={({ field }) => (
-                    <FormItem className="flex items-center gap-3">
-                      <FormControl>
-                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                      </FormControl>
-                      <div>
-                        <FormLabel className="!mt-0">Exclusividade</FormLabel>
-                        <FormDescription>Imóvel com exclusividade de venda/locação</FormDescription>
-                      </div>
-                    </FormItem>
-                  )} />
+
+                  <div className="border-t pt-4 mt-4">
+                    <h4 className="text-sm font-semibold mb-4">Responsáveis e Vínculo</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField control={form.control} name="owner_id" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Proprietário</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || ""}>
+                            <FormControl><SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger></FormControl>
+                            <SelectContent>
+                              {(owners as any[]).map((o) => (
+                                <SelectItem key={o.id} value={o.id}>{o.nome}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <FormField control={form.control} name="captador_id" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Captador</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || ""}>
+                            <FormControl><SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger></FormControl>
+                            <SelectContent>
+                              {(captadores as any[]).map((c) => (
+                                <SelectItem key={c.id} value={c.id}>{c.nome}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <FormField control={form.control} name="corretor_id" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Corretor</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || ""}>
+                            <FormControl><SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger></FormControl>
+                            <SelectContent>
+                              {(corretores as any[]).map((c) => (
+                                <SelectItem key={c.id} value={c.id}>{c.nome}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <FormField control={form.control} name="building_id" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Edifício</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || ""}>
+                            <FormControl><SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger></FormControl>
+                            <SelectContent>
+                              {(buildings as any[]).map((b) => (
+                                <SelectItem key={b.id} value={b.id}>{b.nome}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -662,6 +945,25 @@ export default function ImovelEdit() {
                       <FormMessage />
                     </FormItem>
                   )} />
+                  <div className="border-t pt-4 mt-4">
+                    <h4 className="text-sm font-semibold mb-4">Mídia</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField control={form.control} name="video_youtube_url" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>URL YouTube</FormLabel>
+                          <FormControl><Input placeholder="https://youtube.com/watch?v=..." {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <FormField control={form.control} name="tour_virtual_url" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>URL Tour Virtual</FormLabel>
+                          <FormControl><Input placeholder="https://..." {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>

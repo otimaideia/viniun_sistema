@@ -27,7 +27,7 @@ export default function ProprietarioDetail() {
   const { data: imoveis = [] } = useQuery({
     queryKey: ["mt-proprietario-imoveis", id],
     queryFn: async () => {
-      const { data } = await supabase.from("mt_properties" as any).select("id, titulo, referencia, situacao, tipo_nome, valor_venda").eq("proprietario_id", id!).is("deleted_at", null).order("created_at", { ascending: false });
+      const { data } = await supabase.from("mt_properties" as any).select("id, titulo, ref_code, situacao, valor_venda, mt_property_types!property_type_id(nome)").eq("proprietario_id", id!).is("deleted_at", null).order("created_at", { ascending: false });
       return data || [];
     },
     enabled: !!id,
@@ -77,9 +77,9 @@ export default function ProprietarioDetail() {
                 <TableRow><TableCell colSpan={5} className="text-center py-4 text-muted-foreground">Nenhum imovel vinculado.</TableCell></TableRow>
               ) : imoveis.map((im: any) => (
                 <TableRow key={im.id} className="cursor-pointer" onClick={() => navigate(`/imoveis/${im.id}`)}>
-                  <TableCell className="font-mono text-xs">{im.referencia || "-"}</TableCell>
+                  <TableCell className="font-mono text-xs">{im.ref_code || "-"}</TableCell>
                   <TableCell>{im.titulo}</TableCell>
-                  <TableCell>{im.tipo_nome || "-"}</TableCell>
+                  <TableCell>{im.mt_property_types?.nome || "-"}</TableCell>
                   <TableCell>{im.valor_venda ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(im.valor_venda) : "-"}</TableCell>
                   <TableCell><PropertyStatusBadge situacao={im.situacao || "disponivel"} /></TableCell>
                 </TableRow>

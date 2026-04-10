@@ -14,7 +14,7 @@ export default function RelatoriosImoveis() {
   const { data: metrics, isLoading } = useQuery({
     queryKey: ["mt-imovel-report-metrics", tenant?.id],
     queryFn: async () => {
-      const { data: all } = await supabase.from("mt_properties" as any).select("id, situacao, tipo_nome, finalidade_nome, valor_venda, valor_locacao, created_at").eq("tenant_id", tenant!.id).is("deleted_at", null);
+      const { data: all } = await supabase.from("mt_properties" as any).select("id, situacao, valor_venda, valor_locacao, created_at, mt_property_types!property_type_id(nome), mt_property_purposes!purpose_id(nome)").eq("tenant_id", tenant!.id).is("deleted_at", null);
       const items = all || [];
       const total = items.length;
       const disponiveis = items.filter((i: any) => i.situacao === "disponivel").length;
@@ -25,8 +25,10 @@ export default function RelatoriosImoveis() {
       const finalidadeStats: Record<string, number> = {};
       const situacaoStats: Record<string, number> = {};
       items.forEach((i: any) => {
-        tipoStats[i.tipo_nome || "Sem tipo"] = (tipoStats[i.tipo_nome || "Sem tipo"] || 0) + 1;
-        finalidadeStats[i.finalidade_nome || "Sem finalidade"] = (finalidadeStats[i.finalidade_nome || "Sem finalidade"] || 0) + 1;
+        const tipoNome = i.mt_property_types?.nome || "Sem tipo";
+        const finalidadeNome = i.mt_property_purposes?.nome || "Sem finalidade";
+        tipoStats[tipoNome] = (tipoStats[tipoNome] || 0) + 1;
+        finalidadeStats[finalidadeNome] = (finalidadeStats[finalidadeNome] || 0) + 1;
         situacaoStats[i.situacao || "disponivel"] = (situacaoStats[i.situacao || "disponivel"] || 0) + 1;
       });
 

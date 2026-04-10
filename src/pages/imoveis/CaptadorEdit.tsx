@@ -10,41 +10,322 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
+} from "@/components/ui/form";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Save, Loader2 } from "lucide-react";
+import { ArrowLeft, Save, Loader2, User, MapPin, Briefcase } from "lucide-react";
 import { toast } from "sonner";
 
-const schema = z.object({ nome: z.string().min(2), email: z.string().email().optional().or(z.literal("")), telefone: z.string().optional(), creci: z.string().optional(), cpf_cnpj: z.string().optional(), comissao_percentual: z.coerce.number().min(0).max(100).optional(), observacoes: z.string().optional() });
-type FV = z.infer<typeof schema>;
+const schema = z.object({
+  nome: z.string().min(2, "Mínimo 2 caracteres"),
+  email: z.string().email("Email inválido").optional().or(z.literal("")),
+  telefone: z.string().optional().or(z.literal("")),
+  celular: z.string().optional().or(z.literal("")),
+  foto_url: z.string().url("URL inválida").optional().or(z.literal("")),
+  data_nascimento: z.string().optional().or(z.literal("")),
+  creci: z.string().optional().or(z.literal("")),
+  especialidade: z.string().optional().or(z.literal("")),
+  comissao_percentual: z.coerce.number().min(0).max(100).optional().or(z.literal("" as any)),
+  // Endereço
+  endereco: z.string().optional().or(z.literal("")),
+  numero: z.string().optional().or(z.literal("")),
+  complemento: z.string().optional().or(z.literal("")),
+  cep: z.string().optional().or(z.literal("")),
+  // Extra
+  observacao: z.string().optional().or(z.literal("")),
+});
+
+type FormValues = z.infer<typeof schema>;
 
 export default function CaptadorEdit() {
-  const { id } = useParams<{ id: string }>(); const navigate = useNavigate(); const { tenant, franchise } = useTenantContext(); const qc = useQueryClient(); const isEditing = !!id;
-  const form = useForm<FV>({ resolver: zodResolver(schema), defaultValues: { nome: "" } });
-  const { data: item, isLoading } = useQuery({ queryKey: ["mt-captador", id], queryFn: async () => { const { data, error } = await supabase.from("mt_captadores" as any).select("*").eq("id", id!).single(); if (error) throw error; return data as any; }, enabled: isEditing });
-  useEffect(() => { if (item) form.reset(item); }, [item, form]);
-  const saveMut = useMutation({
-    mutationFn: async (v: FV) => { const p = { ...v, tenant_id: tenant?.id, franchise_id: franchise?.id, updated_at: new Date().toISOString() }; if (isEditing) { const { data, error } = await supabase.from("mt_captadores" as any).update(p).eq("id", id!).select().single(); if (error) throw error; return data; } const { data, error } = await supabase.from("mt_captadores" as any).insert(p).select().single(); if (error) throw error; return data; },
-    onSuccess: (d: any) => { qc.invalidateQueries({ queryKey: ["mt-captadores"] }); toast.success(isEditing ? "Atualizado" : "Criado"); navigate(`/captacao/${d.id}`); },
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { tenant, franchise } = useTenantContext();
+  const queryClient = useQueryClient();
+  const isEditing = !!id;
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      nome: "",
+      email: "",
+      telefone: "",
+      celular: "",
+      foto_url: "",
+      data_nascimento: "",
+      creci: "",
+      especialidade: "",
+      comissao_percentual: "" as any,
+      endereco: "",
+      numero: "",
+      complemento: "",
+      cep: "",
+      observacao: "",
+    },
+  });
+
+  const { data: item, isLoading } = useQuery({
+    queryKey: ["mt-captador", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("mt_captadores" as any)
+        .select("*")
+        .eq("id", id!)
+        .single();
+      if (error) throw error;
+      return data as any;
+    },
+    enabled: isEditing,
+  });
+
+  useEffect(() => {
+    if (item) {
+      form.reset({
+        nome: item.nome ?? "",
+        email: item.email ?? "",
+        telefone: item.telefone ?? "",
+        celular: item.celular ?? "",
+        foto_url: item.foto_url ?? "",
+        data_nascimento: item.data_nascimento ? item.data_nascimento.split("T")[0] : "",
+        creci: item.creci ?? "",
+        especialidade: item.especialidade ?? "",
+        comissao_percentual: item.comissao_percentual ?? ("" as any),
+        endereco: item.endereco ?? "",
+        numero: item.numero ?? "",
+        complemento: item.complemento ?? "",
+        cep: item.cep ?? "",
+        observacao: item.observacao ?? "",
+      });
+    }
+  }, [item, form]);
+
+  const saveMutation = useMutation({
+    mutationFn: async (values: FormValues) => {
+      const cleaned: Record<string, unknown> = {};
+      for (const [key, val] of Object.entries(values)) {
+        cleaned[key] = val === "" || val === undefined ? null : val;
+      }
+      cleaned.nome = values.nome;
+
+      const payload = {
+        ...cleaned,
+        tenant_id: tenant?.id,
+        franchise_id: franchise?.id,
+        updated_at: new Date().toISOString(),
+      };
+
+      if (isEditing) {
+        const { data, error } = await supabase
+          .from("mt_captadores" as any)
+          .update(payload)
+          .eq("id", id!)
+          .select()
+          .single();
+        if (error) throw error;
+        return data;
+      }
+      const { data, error } = await supabase
+        .from("mt_captadores" as any)
+        .insert(payload)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: ["mt-captadores"] });
+      toast.success(isEditing ? "Captador atualizado" : "Captador criado");
+      navigate(`/captacao/${data.id}`);
+    },
     onError: (err: any) => toast.error(`Erro: ${err.message}`),
   });
-  if (isEditing && isLoading) return <div className="space-y-4"><Skeleton className="h-10 w-48" /><Skeleton className="h-96 w-full" /></div>;
+
+  if (isEditing && isLoading) {
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-10 w-48" />
+        <Skeleton className="h-96 w-full" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4"><Button variant="ghost" size="icon" onClick={() => navigate(-1)}><ArrowLeft className="h-4 w-4" /></Button><h1 className="text-2xl font-bold">{isEditing ? "Editar Captador" : "Novo Captador"}</h1></div>
-      <Form {...form}><form onSubmit={form.handleSubmit((v) => saveMut.mutate(v))} className="space-y-6">
-        <Card><CardHeader><CardTitle className="text-base">Dados</CardTitle></CardHeader><CardContent className="space-y-4"><div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField control={form.control} name="nome" render={({ field }) => (<FormItem><FormLabel>Nome *</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-          <FormField control={form.control} name="email" render={({ field }) => (<FormItem><FormLabel>Email</FormLabel><FormControl><Input type="email" {...field} /></FormControl><FormMessage /></FormItem>)} />
-          <FormField control={form.control} name="telefone" render={({ field }) => (<FormItem><FormLabel>Telefone</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-          <FormField control={form.control} name="creci" render={({ field }) => (<FormItem><FormLabel>CRECI</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-          <FormField control={form.control} name="cpf_cnpj" render={({ field }) => (<FormItem><FormLabel>CPF/CNPJ</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>)} />
-          <FormField control={form.control} name="comissao_percentual" render={({ field }) => (<FormItem><FormLabel>Comissao (%)</FormLabel><FormControl><Input type="number" min="0" max="100" step="0.1" {...field} /></FormControl><FormMessage /></FormItem>)} />
-        </div>
-        <FormField control={form.control} name="observacoes" render={({ field }) => (<FormItem><FormLabel>Observacoes</FormLabel><FormControl><Textarea rows={4} {...field} /></FormControl><FormMessage /></FormItem>)} />
-        </CardContent></Card>
-        <div className="flex justify-end gap-3"><Button type="button" variant="outline" onClick={() => navigate(-1)}>Cancelar</Button><Button type="submit" disabled={saveMut.isPending}>{saveMut.isPending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}{isEditing ? "Salvar" : "Criar"}</Button></div>
-      </form></Form>
+      <div className="flex items-center gap-4">
+        <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
+        <h1 className="text-2xl font-bold">
+          {isEditing ? "Editar Captador" : "Novo Captador"}
+        </h1>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit((v) => saveMutation.mutate(v))} className="space-y-6">
+          {/* Dados Pessoais */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <User className="h-4 w-4" /> Dados Pessoais
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <FormField control={form.control} name="nome" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nome *</FormLabel>
+                    <FormControl><Input {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={form.control} name="email" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl><Input type="email" {...field} value={field.value ?? ""} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={form.control} name="telefone" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Telefone</FormLabel>
+                    <FormControl><Input {...field} value={field.value ?? ""} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={form.control} name="celular" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Celular</FormLabel>
+                    <FormControl><Input {...field} value={field.value ?? ""} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={form.control} name="data_nascimento" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data de Nascimento</FormLabel>
+                    <FormControl><Input type="date" {...field} value={field.value ?? ""} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={form.control} name="foto_url" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>URL da Foto</FormLabel>
+                    <FormControl><Input type="url" placeholder="https://..." {...field} value={field.value ?? ""} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Profissional */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Briefcase className="h-4 w-4" /> Dados Profissionais
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <FormField control={form.control} name="creci" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>CRECI</FormLabel>
+                    <FormControl><Input {...field} value={field.value ?? ""} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={form.control} name="especialidade" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Especialidade</FormLabel>
+                    <FormControl><Input placeholder="Ex: Residencial, Comercial" {...field} value={field.value ?? ""} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={form.control} name="comissao_percentual" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Comissão (%)</FormLabel>
+                    <FormControl><Input type="number" min={0} max={100} step={0.1} {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Endereço */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <MapPin className="h-4 w-4" /> Endereço
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="md:col-span-2">
+                  <FormField control={form.control} name="endereco" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Endereço</FormLabel>
+                      <FormControl><Input {...field} value={field.value ?? ""} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                </div>
+                <FormField control={form.control} name="numero" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Número</FormLabel>
+                    <FormControl><Input {...field} value={field.value ?? ""} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={form.control} name="complemento" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Complemento</FormLabel>
+                    <FormControl><Input {...field} value={field.value ?? ""} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={form.control} name="cep" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>CEP</FormLabel>
+                    <FormControl><Input {...field} value={field.value ?? ""} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Observação */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Observações</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <FormField control={form.control} name="observacao" render={({ field }) => (
+                <FormItem>
+                  <FormControl><Textarea rows={4} placeholder="Observações sobre o captador..." {...field} value={field.value ?? ""} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+            </CardContent>
+          </Card>
+
+          {/* Actions */}
+          <div className="flex justify-end gap-3">
+            <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+              Cancelar
+            </Button>
+            <Button type="submit" disabled={saveMutation.isPending}>
+              {saveMutation.isPending ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Save className="h-4 w-4 mr-2" />
+              )}
+              {isEditing ? "Salvar" : "Criar"}
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }
