@@ -68,6 +68,18 @@ export default function ImovelDetail() {
     enabled: !!id,
   });
 
+  const { data: features = [] } = useQuery({
+    queryKey: ["mt-imovel-features", id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("mt_property_feature_links" as any)
+        .select("*, mt_property_features!feature_id(id, nome, categoria, icone)")
+        .eq("property_id", id!);
+      return data || [];
+    },
+    enabled: !!id,
+  });
+
   const { data: consultas = [] } = useQuery({
     queryKey: ["mt-imovel-consultas", id],
     queryFn: async () => {
@@ -286,15 +298,35 @@ export default function ImovelDetail() {
 
         <TabsContent value="caracteristicas">
           <Card>
-            <CardContent className="pt-6">
-              {imovel.caracteristicas && typeof imovel.caracteristicas === "object" ? (
-                <div className="flex flex-wrap gap-2">
-                  {Object.entries(imovel.caracteristicas).map(([key, val]) => (
-                    val ? <Badge key={key} variant="secondary">{key}</Badge> : null
-                  ))}
-                </div>
-              ) : (
+            <CardContent className="pt-6 space-y-6">
+              {features.length === 0 ? (
                 <p className="text-sm text-muted-foreground">Nenhuma característica cadastrada.</p>
+              ) : (
+                <>
+                  {/* Características */}
+                  {(() => {
+                    const byCategory: Record<string, string[]> = {};
+                    features.forEach((f: any) => {
+                      const cat = f.mt_property_features?.categoria || "outro";
+                      const nome = f.mt_property_features?.nome;
+                      if (nome) {
+                        if (!byCategory[cat]) byCategory[cat] = [];
+                        byCategory[cat].push(nome);
+                      }
+                    });
+                    const labels: Record<string, string> = { caracteristica: "Características", proximidade: "Proximidades", acabamento: "Acabamentos" };
+                    return Object.entries(byCategory).map(([cat, items]) => (
+                      <div key={cat}>
+                        <h4 className="text-sm font-semibold mb-2">{labels[cat] || cat}</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {items.map((nome) => (
+                            <Badge key={nome} variant="secondary">{nome}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                    ));
+                  })()}
+                </>
               )}
             </CardContent>
           </Card>
