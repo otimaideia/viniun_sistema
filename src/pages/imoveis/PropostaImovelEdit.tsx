@@ -26,7 +26,7 @@ const itemPagamentoSchema = z.object({
 
 const formSchema = z.object({
   property_id: z.string().min(1, "Selecione o imovel"),
-  lead_id: z.string().optional(),
+  lead_id: z.string().min(1, "Selecione o cliente/lead"),
   corretor_id: z.string().optional(),
   valor_proposta: z.coerce.number().min(0.01, "Informe o valor da proposta"),
   valor_entrada: z.coerce.number().optional(),
