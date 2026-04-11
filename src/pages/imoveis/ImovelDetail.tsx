@@ -1,3 +1,4 @@
+import { useState, useCallback, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTenantContext } from "@/contexts/TenantContext";
 import { useQuery } from "@tanstack/react-query";
@@ -16,6 +17,7 @@ import {
 import {
   ArrowLeft, Pencil, Trash2, Loader2, MapPin, BedDouble, Bath, Car,
   Maximize2, DollarSign, Home, Building2, Star, Calendar,
+  ChevronLeft, ChevronRight, X, ZoomIn, Camera,
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -168,46 +170,8 @@ export default function ImovelDetail() {
         </div>
       </div>
 
-      {/* Photo gallery */}
-      {fotos.length > 0 ? (
-        <div className="space-y-2">
-          <div className="rounded-lg overflow-hidden h-72 bg-muted">
-            <img
-              src={fotos[0].url}
-              alt={imovel.titulo}
-              className="w-full h-full object-cover"
-              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-            />
-          </div>
-          {fotos.length > 1 && (
-            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
-              {fotos.slice(1, 9).map((foto: any) => (
-                <div key={foto.id} className="rounded overflow-hidden h-20 bg-muted cursor-pointer">
-                  <img
-                    src={foto.thumbnail_url || foto.url}
-                    alt={foto.descricao || ""}
-                    className="w-full h-full object-cover"
-                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                  />
-                </div>
-              ))}
-              {fotos.length > 9 && (
-                <div className="rounded h-20 bg-muted flex items-center justify-center text-sm text-muted-foreground">
-                  +{fotos.length - 9} fotos
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      ) : imovel.foto_destaque_url ? (
-        <div className="rounded-lg overflow-hidden h-72 bg-muted">
-          <img src={imovel.foto_destaque_url} alt={imovel.titulo} className="w-full h-full object-cover" />
-        </div>
-      ) : (
-        <div className="rounded-lg h-48 bg-muted flex items-center justify-center">
-          <Home className="h-16 w-16 text-muted-foreground/30" />
-        </div>
-      )}
+      {/* Photo gallery with lightbox */}
+      <PhotoGallery fotos={fotos} titulo={imovel.titulo} fotoDestaque={imovel.foto_destaque_url} />
 
       {/* Quick info cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -374,5 +338,180 @@ function InfoRow({ label, value }: { label: string; value: any }) {
       <p className="text-xs text-muted-foreground">{label}</p>
       <p className="text-sm font-medium">{value || "-"}</p>
     </div>
+  );
+}
+
+function PhotoGallery({ fotos, titulo, fotoDestaque }: { fotos: any[]; titulo: string; fotoDestaque?: string | null }) {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  const goNext = useCallback(() => {
+    setSelectedIndex((i) => (i + 1) % fotos.length);
+  }, [fotos.length]);
+
+  const goPrev = useCallback(() => {
+    setSelectedIndex((i) => (i - 1 + fotos.length) % fotos.length);
+  }, [fotos.length]);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") goNext();
+      else if (e.key === "ArrowLeft") goPrev();
+      else if (e.key === "Escape") setLightboxOpen(false);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [lightboxOpen, goNext, goPrev]);
+
+  if (fotos.length === 0 && !fotoDestaque) {
+    return (
+      <div className="rounded-lg h-48 bg-muted flex items-center justify-center">
+        <Home className="h-16 w-16 text-muted-foreground/30" />
+      </div>
+    );
+  }
+
+  if (fotos.length === 0 && fotoDestaque) {
+    return (
+      <div className="rounded-lg overflow-hidden h-72 bg-muted cursor-pointer" onClick={() => setLightboxOpen(true)}>
+        <img src={fotoDestaque} alt={titulo} className="w-full h-full object-cover" />
+      </div>
+    );
+  }
+
+  const currentFoto = fotos[selectedIndex];
+
+  return (
+    <>
+      <div className="space-y-2">
+        {/* Foto principal - clicável para abrir lightbox */}
+        <div
+          className="relative rounded-lg overflow-hidden h-80 bg-muted cursor-pointer group"
+          onClick={() => setLightboxOpen(true)}
+        >
+          <img
+            src={currentFoto.url}
+            alt={currentFoto.descricao || titulo}
+            className="w-full h-full object-cover transition-transform group-hover:scale-105"
+            onError={(e) => { (e.target as HTMLImageElement).src = ""; (e.target as HTMLImageElement).style.display = "none"; }}
+          />
+          {/* Overlay com ícone de zoom */}
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+            <ZoomIn className="h-10 w-10 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+          </div>
+          {/* Contador */}
+          <div className="absolute bottom-3 right-3 bg-black/60 text-white text-xs px-3 py-1 rounded-full flex items-center gap-1">
+            <Camera className="h-3 w-3" />
+            {selectedIndex + 1} / {fotos.length}
+          </div>
+          {/* Setas de navegação na foto principal */}
+          {fotos.length > 1 && (
+            <>
+              <button
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-colors"
+                onClick={(e) => { e.stopPropagation(); goPrev(); }}
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-colors"
+                onClick={(e) => { e.stopPropagation(); goNext(); }}
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Thumbnails */}
+        {fotos.length > 1 && (
+          <div className="flex gap-2 overflow-x-auto pb-2">
+            {fotos.map((foto: any, index: number) => (
+              <div
+                key={foto.id}
+                className={`flex-shrink-0 rounded overflow-hidden h-16 w-24 cursor-pointer border-2 transition-all ${
+                  index === selectedIndex ? "border-primary ring-2 ring-primary/30" : "border-transparent hover:border-muted-foreground/30"
+                }`}
+                onClick={() => setSelectedIndex(index)}
+              >
+                <img
+                  src={foto.thumbnail_url || foto.url}
+                  alt={foto.descricao || `Foto ${index + 1}`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Lightbox fullscreen */}
+      {lightboxOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
+          onClick={() => setLightboxOpen(false)}
+        >
+          {/* Fechar */}
+          <button
+            className="absolute top-4 right-4 text-white hover:text-gray-300 z-10"
+            onClick={() => setLightboxOpen(false)}
+          >
+            <X className="h-8 w-8" />
+          </button>
+
+          {/* Contador */}
+          <div className="absolute top-4 left-4 text-white text-sm z-10">
+            {selectedIndex + 1} / {fotos.length}
+          </div>
+
+          {/* Imagem */}
+          <img
+            src={currentFoto.url}
+            alt={currentFoto.descricao || titulo}
+            className="max-h-[90vh] max-w-[90vw] object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+
+          {/* Setas */}
+          {fotos.length > 1 && (
+            <>
+              <button
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/30 text-white rounded-full p-3 transition-colors"
+                onClick={(e) => { e.stopPropagation(); goPrev(); }}
+              >
+                <ChevronLeft className="h-8 w-8" />
+              </button>
+              <button
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/30 text-white rounded-full p-3 transition-colors"
+                onClick={(e) => { e.stopPropagation(); goNext(); }}
+              >
+                <ChevronRight className="h-8 w-8" />
+              </button>
+            </>
+          )}
+
+          {/* Thumbnails no lightbox */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 max-w-[90vw] overflow-x-auto pb-2">
+            {fotos.slice(0, 20).map((foto: any, index: number) => (
+              <div
+                key={foto.id}
+                className={`flex-shrink-0 rounded overflow-hidden h-12 w-16 cursor-pointer border-2 transition-all ${
+                  index === selectedIndex ? "border-white" : "border-transparent opacity-50 hover:opacity-100"
+                }`}
+                onClick={(e) => { e.stopPropagation(); setSelectedIndex(index); }}
+              >
+                <img
+                  src={foto.thumbnail_url || foto.url}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
