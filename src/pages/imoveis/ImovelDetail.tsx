@@ -94,6 +94,21 @@ export default function ImovelDetail() {
     enabled: !!id,
   });
 
+  const { data: leads = [] } = useQuery({
+    queryKey: ["mt-imovel-leads", id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("mt_leads" as any)
+        .select("id, nome, email, telefone, status, created_at")
+        .eq("property_id", id!)
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false })
+        .limit(50);
+      return data || [];
+    },
+    enabled: !!id,
+  });
+
   const handleDelete = async () => {
     try {
       const { error } = await supabase
@@ -233,6 +248,7 @@ export default function ImovelDetail() {
           <TabsTrigger value="precos">Preços</TabsTrigger>
           <TabsTrigger value="caracteristicas">Características</TabsTrigger>
           <TabsTrigger value="consultas">Consultas ({consultas.length})</TabsTrigger>
+          <TabsTrigger value="leads">Leads ({leads.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dados">
@@ -352,6 +368,42 @@ export default function ImovelDetail() {
                       <p className="text-xs text-muted-foreground">
                         {c.created_at && format(new Date(c.created_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}
                       </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="leads">
+          <Card>
+            <CardContent className="pt-6">
+              {leads.length === 0 ? (
+                <p className="text-sm text-muted-foreground">Nenhum lead vinculado a este imovel.</p>
+              ) : (
+                <div className="space-y-3">
+                  {leads.map((lead: any) => (
+                    <div
+                      key={lead.id}
+                      className="border rounded-lg p-4 flex items-center justify-between cursor-pointer hover:bg-muted/50"
+                      onClick={() => navigate(`/leads/${lead.id}`)}
+                    >
+                      <div className="space-y-1">
+                        <p className="font-medium text-sm">{lead.nome || "-"}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {lead.email && `${lead.email} `}
+                          {lead.telefone && `- ${lead.telefone}`}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge variant={lead.status === "novo" ? "default" : "secondary"}>
+                          {lead.status || "novo"}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">
+                          {lead.created_at && format(new Date(lead.created_at), "dd/MM/yyyy", { locale: ptBR })}
+                        </span>
+                      </div>
                     </div>
                   ))}
                 </div>

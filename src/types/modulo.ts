@@ -93,7 +93,9 @@ export type ModuloCodigo =
   | 'pedidos_imoveis'
   | 'email_marketing_imoveis'
   | 'conteudo_imoveis'
-  | 'relatorios_imoveis';
+  | 'relatorios_imoveis'
+  | 'propostas_imoveis'
+  | 'contratos_imoveis';
 
 // Categorias de módulos
 export type ModuloCategoria =
@@ -177,6 +179,8 @@ export const MODULO_ROUTES: Record<ModuloCodigo, string[]> = {
   email_marketing_imoveis: ['/imoveis/email-marketing'],
   conteudo_imoveis: ['/imoveis/conteudo'],
   relatorios_imoveis: ['/imoveis/relatorios'],
+  propostas_imoveis: ['/imoveis/propostas'],
+  contratos_imoveis: ['/imoveis/contratos'],
 };
 
 // Labels para categorias

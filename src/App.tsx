@@ -448,6 +448,14 @@ const PaginasImoveisPage = lazy(() => import("./pages/imoveis/Paginas"));
 const PaginaEditPage = lazy(() => import("./pages/imoveis/PaginaEdit"));
 const RelatoriosImoveisPage = lazy(() => import("./pages/imoveis/RelatoriosImoveis"));
 const LocalizacoesPage = lazy(() => import("./pages/imoveis/Localizacoes"));
+const PropostasImoveisPage = lazy(() => import("./pages/imoveis/PropostasImoveis"));
+const PropostaImovelEditPage = lazy(() => import("./pages/imoveis/PropostaImovelEdit"));
+const PropostaImovelDetailPage = lazy(() => import("./pages/imoveis/PropostaImovelDetail"));
+const PropostaPublicaPage = lazy(() => import("./pages/imoveis/PropostaPublica"));
+const ContratosImoveisPage = lazy(() => import("./pages/imoveis/ContratosImoveis"));
+const ContratoImovelEditPage = lazy(() => import("./pages/imoveis/ContratoImovelEdit"));
+const ContratoImovelDetailPage = lazy(() => import("./pages/imoveis/ContratoImovelDetail"));
+const ContratoAssinaturaPage = lazy(() => import("./pages/imoveis/ContratoAssinatura"));
 
 // Totem e Portal do Cliente (Público)
 import Totem from "./pages/Totem";
@@ -1048,6 +1056,18 @@ const App = () => (
             {/* Relatórios Imobiliários */}
             <Route path="/imoveis/relatorios" element={<ProtectedRoute module="relatorios_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><RelatoriosImoveisPage /></Suspense></DashboardLayout></ProtectedRoute>} />
 
+            {/* Propostas de Imóveis */}
+            <Route path="/imoveis/propostas" element={<ProtectedRoute module="propostas_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PropostasImoveisPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/propostas/novo" element={<ProtectedRoute module="propostas_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PropostaImovelEditPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/propostas/:id" element={<ProtectedRoute module="propostas_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PropostaImovelDetailPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/propostas/:id/editar" element={<ProtectedRoute module="propostas_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PropostaImovelEditPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+
+            {/* Contratos de Imóveis */}
+            <Route path="/imoveis/contratos" element={<ProtectedRoute module="contratos_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ContratosImoveisPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/contratos/novo" element={<ProtectedRoute module="contratos_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ContratoImovelEditPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/contratos/:id" element={<ProtectedRoute module="contratos_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ContratoImovelDetailPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+            <Route path="/imoveis/contratos/:id/editar" element={<ProtectedRoute module="contratos_imoveis"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ContratoImovelEditPage /></Suspense></DashboardLayout></ProtectedRoute>} />
+
             {/* Localizações */}
             <Route path="/configuracoes/localizacoes" element={<ProtectedRoute module="localizacoes"><DashboardLayout><Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><LocalizacoesPage /></Suspense></DashboardLayout></ProtectedRoute>} />
 
@@ -1181,6 +1201,12 @@ const App = () => (
             <Route path="/nps/:token" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><NPSPublico /></Suspense>} />
             <Route path="/trabalhe-conosco" element={<VagasPublicas />} />
             <Route path="/vagas" element={<VagasPublicas />} />
+
+            {/* Proposta Pública (Sem autenticação) */}
+            <Route path="/proposta/:token" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PropostaPublicaPage /></Suspense>} />
+
+            {/* Assinatura de Contrato (Sem autenticação) */}
+            <Route path="/contrato-imovel/:token/assinar" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ContratoAssinaturaPage /></Suspense>} />
 
 
             {/* Loja Pública (Sem autenticação) */}

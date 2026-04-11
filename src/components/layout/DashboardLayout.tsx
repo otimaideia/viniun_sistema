@@ -343,6 +343,8 @@ export function DashboardLayout({ children, defaultCollapsed = false }: Dashboar
         { href: "/construtoras", label: "Construtoras", icon: Package, module: "construtoras" },
         { href: "/clientes-imoveis", label: "Clientes", icon: UsersRound, module: "clientes_imoveis" },
         { href: "/imoveis/consultas", label: "Consultas", icon: MessageCircle, module: "consultas_imoveis" },
+        { href: "/imoveis/propostas", label: "Propostas", icon: FileText, module: "propostas_imoveis" },
+        { href: "/imoveis/contratos", label: "Contratos", icon: ClipboardCheck, module: "contratos_imoveis" },
         { href: "/imoveis/tabelas-preco", label: "Tabelas de Preço", icon: DollarSign, module: "tabelas_preco" },
         { href: "/imoveis/rede", label: "Rede Colaborativa", icon: Network, module: "tabelas_rede" },
         { href: "/imoveis/portais", label: "Portais", icon: Globe, module: "portais_imoveis" },
@@ -481,6 +483,8 @@ export function DashboardLayout({ children, defaultCollapsed = false }: Dashboar
     'email_marketing_imoveis': ['email_marketing_imoveis'],
     'conteudo_imoveis': ['conteudo_imoveis'],
     'relatorios_imoveis': ['relatorios_imoveis'],
+    'propostas_imoveis': ['propostas_imoveis'],
+    'contratos_imoveis': ['contratos_imoveis'],
   };
 
   const isModuleEnabled = (moduleName: string): boolean => {
