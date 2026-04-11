@@ -457,6 +457,11 @@ const ContratoImovelEditPage = lazy(() => import("./pages/imoveis/ContratoImovel
 const ContratoImovelDetailPage = lazy(() => import("./pages/imoveis/ContratoImovelDetail"));
 const ContratoAssinaturaPage = lazy(() => import("./pages/imoveis/ContratoAssinatura"));
 
+// Site Público - Imóveis (sem autenticação)
+const SiteHomePage = lazy(() => import("./pages/site-publico/HomePage"));
+const BuscaImoveis = lazy(() => import("./pages/site-publico/BuscaImoveis"));
+const DetalheImovelPublico = lazy(() => import("./pages/site-publico/DetalheImovelPublico"));
+
 // Totem e Portal do Cliente (Público)
 import Totem from "./pages/Totem";
 const TotemPonto = lazy(() => import("./pages/TotemPonto"));
@@ -1201,6 +1206,11 @@ const App = () => (
             <Route path="/nps/:token" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><NPSPublico /></Suspense>} />
             <Route path="/trabalhe-conosco" element={<VagasPublicas />} />
             <Route path="/vagas" element={<VagasPublicas />} />
+
+            {/* Site Público - Imóveis (Sem autenticação, para subdomínios de tenant) */}
+            <Route path="/site" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><SiteHomePage /></Suspense>} />
+            <Route path="/busca" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><BuscaImoveis /></Suspense>} />
+            <Route path="/imovel/:slug" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><DetalheImovelPublico /></Suspense>} />
 
             {/* Proposta Pública (Sem autenticação) */}
             <Route path="/proposta/:token" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PropostaPublicaPage /></Suspense>} />
