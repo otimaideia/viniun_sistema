@@ -258,6 +258,243 @@ function ConfigCrudTable({
   );
 }
 
+interface FeatureItem {
+  id: string;
+  nome: string;
+  icone?: string;
+  categoria: string;
+  is_active: boolean;
+}
+
+function FeatureSection({
+  categoria,
+  title,
+  description,
+}: {
+  categoria: string;
+  title: string;
+  description: string;
+}) {
+  const { tenant } = useTenantContext();
+  const queryClient = useQueryClient();
+  const [newName, setNewName] = useState("");
+  const [editItem, setEditItem] = useState<FeatureItem | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editIcone, setEditIcone] = useState("");
+  const [deleteItem, setDeleteItem] = useState<FeatureItem | null>(null);
+
+  const { data: items = [], isLoading } = useQuery({
+    queryKey: ["mt_property_features", tenant?.id, categoria],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("mt_property_features" as any)
+        .select("*")
+        .eq("tenant_id", tenant!.id)
+        .eq("categoria", categoria)
+        .is("deleted_at", null)
+        .order("nome");
+      if (error) throw error;
+      return (data || []) as FeatureItem[];
+    },
+    enabled: !!tenant,
+  });
+
+  const addMutation = useMutation({
+    mutationFn: async (nome: string) => {
+      const codigo = nome
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "_")
+        .replace(/^_|_$/g, "");
+      const { error } = await supabase
+        .from("mt_property_features" as any)
+        .insert({
+          tenant_id: tenant?.id,
+          codigo,
+          nome,
+          categoria,
+          is_active: true,
+        });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["mt_property_features", tenant?.id, categoria] });
+      setNewName("");
+      toast.success("Adicionado com sucesso");
+    },
+    onError: (err: any) => toast.error(`Erro: ${err.message}`),
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, nome, icone }: { id: string; nome: string; icone?: string }) => {
+      const { error } = await supabase
+        .from("mt_property_features" as any)
+        .update({ nome, icone, updated_at: new Date().toISOString() })
+        .eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["mt_property_features", tenant?.id, categoria] });
+      setEditItem(null);
+      toast.success("Atualizado com sucesso");
+    },
+    onError: (err: any) => toast.error(`Erro: ${err.message}`),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("mt_property_features" as any)
+        .update({ deleted_at: new Date().toISOString() })
+        .eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["mt_property_features", tenant?.id, categoria] });
+      setDeleteItem(null);
+      toast.success("Removido com sucesso");
+    },
+    onError: (err: any) => toast.error(`Erro: ${err.message}`),
+  });
+
+  const handleAdd = () => {
+    const trimmed = newName.trim();
+    if (!trimmed) return;
+    addMutation.mutate(trimmed);
+  };
+
+  const openEdit = (item: FeatureItem) => {
+    setEditItem(item);
+    setEditName(item.nome);
+    setEditIcone(item.icone || "");
+  };
+
+  const handleSaveEdit = () => {
+    if (!editItem || !editName.trim()) return;
+    updateMutation.mutate({ id: editItem.id, nome: editName.trim(), icone: editIcone.trim() || undefined });
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <div>
+          <CardTitle className="text-base">{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Quick add */}
+        <div className="flex gap-2">
+          <Input
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            placeholder={`Adicionar ${title.toLowerCase().replace(/s$/, "")}...`}
+            onKeyDown={(e) => e.key === "Enter" && handleAdd()}
+            className="max-w-xs"
+          />
+          <Button size="sm" onClick={handleAdd} disabled={addMutation.isPending || !newName.trim()}>
+            {addMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4 mr-1" />}
+            Adicionar
+          </Button>
+        </div>
+
+        {isLoading ? (
+          <div className="flex items-center justify-center py-6">
+            <Loader2 className="h-5 w-5 animate-spin" />
+          </div>
+        ) : items.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-4">
+            Nenhum item cadastrado nesta categoria.
+          </p>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nome</TableHead>
+                <TableHead>Ícone</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="w-[100px]">Ações</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>{item.nome}</TableCell>
+                  <TableCell className="text-muted-foreground text-sm">{item.icone || "-"}</TableCell>
+                  <TableCell>
+                    <Badge variant={item.is_active ? "default" : "secondary"}>
+                      {item.is_active ? "Ativo" : "Inativo"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      <Button variant="ghost" size="icon" onClick={() => openEdit(item)}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={() => setDeleteItem(item)}>
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </CardContent>
+
+      {/* Edit Dialog */}
+      <Dialog open={!!editItem} onOpenChange={(open) => !open && setEditItem(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar {title.replace(/s$/, "")}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Nome</Label>
+              <Input value={editName} onChange={(e) => setEditName(e.target.value)} />
+            </div>
+            <div>
+              <Label>Ícone (nome Lucide, opcional)</Label>
+              <Input
+                value={editIcone}
+                onChange={(e) => setEditIcone(e.target.value)}
+                placeholder="Ex: Waves, Shield, Trees"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditItem(null)}>Cancelar</Button>
+            <Button onClick={handleSaveEdit} disabled={updateMutation.isPending}>
+              {updateMutation.isPending && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}
+              <Save className="h-4 w-4 mr-1" /> Salvar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete confirmation */}
+      <AlertDialog open={!!deleteItem} onOpenChange={() => setDeleteItem(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
+            <AlertDialogDescription>
+              Deseja remover "{deleteItem?.nome}"?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={() => deleteItem && deleteMutation.mutate(deleteItem.id)}>
+              Confirmar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </Card>
+  );
+}
+
 export default function ImovelConfiguracoes() {
   return (
     <div className="space-y-6">
@@ -290,12 +527,23 @@ export default function ImovelConfiguracoes() {
         </TabsContent>
 
         <TabsContent value="caracteristicas">
-          <ConfigCrudTable
-            tableName="mt_property_features"
-            title="Características"
-            description="Piscina, Churrasqueira, Elevador, Portaria 24h, etc."
-            hasCategoria
-          />
+          <div className="space-y-6">
+            <FeatureSection
+              categoria="caracteristica"
+              title="Características"
+              description="Piscina, Churrasqueira, Elevador, Portaria 24h, etc."
+            />
+            <FeatureSection
+              categoria="proximidade"
+              title="Proximidades"
+              description="Escola, Hospital, Supermercado, Shopping, etc."
+            />
+            <FeatureSection
+              categoria="acabamento"
+              title="Acabamentos"
+              description="Piso Porcelanato, Granito, Gesso, Mármore, etc."
+            />
+          </div>
         </TabsContent>
       </Tabs>
     </div>

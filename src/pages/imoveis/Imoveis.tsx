@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTenantContext } from "@/contexts/TenantContext";
 import { useQuery } from "@tanstack/react-query";
@@ -55,6 +55,8 @@ export default function Imoveis() {
       }
       if (filters.tipo !== "all") q = q.eq("property_type_id", filters.tipo);
       if (filters.finalidade !== "all") q = q.eq("purpose_id", filters.finalidade);
+      if (filters.cidade !== "all") q = q.eq("location_cidade_id", filters.cidade);
+      if (filters.bairro !== "all") q = q.eq("location_bairro_id", filters.bairro);
       if (filters.destaque) q = q.eq("destaque", true);
       if (filters.lancamento) q = q.eq("lancamento", true);
       if (filters.financiamento) q = q.eq("aceita_financiamento", true);
@@ -97,6 +99,61 @@ export default function Imoveis() {
     enabled: !!tenant,
   });
 
+  const { data: cidades = [] } = useQuery({
+    queryKey: ["mt-imovel-cidades-filter", tenant?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("mt_locations" as any)
+        .select("id, nome")
+        .eq("tenant_id", tenant!.id)
+        .eq("tipo", "cidade")
+        .is("deleted_at", null)
+        .order("nome");
+      return (data || []).map((c: any) => ({ value: c.id, label: c.nome }));
+    },
+    enabled: !!tenant,
+  });
+
+  const { data: bairros = [] } = useQuery({
+    queryKey: ["mt-imovel-bairros-filter", tenant?.id, filters.cidade],
+    queryFn: async () => {
+      let q = supabase
+        .from("mt_locations" as any)
+        .select("id, nome")
+        .eq("tenant_id", tenant!.id)
+        .eq("tipo", "bairro")
+        .is("deleted_at", null)
+        .order("nome");
+      if (filters.cidade !== "all") {
+        q = q.eq("parent_id", filters.cidade);
+      }
+      const { data } = await q;
+      return (data || []).map((b: any) => ({ value: b.id, label: b.nome }));
+    },
+    enabled: !!tenant,
+  });
+
+  const exportCSV = () => {
+    if (!imoveis.length) {
+      toast.error("Nenhum imóvel para exportar");
+      return;
+    }
+    const headers = ["Ref", "Título", "Tipo", "Finalidade", "Cidade", "Bairro", "Preço Venda", "Preço Locação", "Dormitórios", "Status"];
+    const rows = imoveis.map((i: any) => [
+      i.ref_code || "", i.titulo || "", i.mt_property_types?.nome || "", i.mt_property_purposes?.nome || "",
+      i.location_cidade?.nome || "", i.location_bairro?.nome || "",
+      i.valor_venda || "", i.valor_locacao || "", i.dormitorios || "", i.situacao || "",
+    ]);
+    const csv = [headers, ...rows].map((r) => r.map((c: any) => `"${c}"`).join(",")).join("\n");
+    const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "imoveis-export.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -122,7 +179,7 @@ export default function Imoveis() {
           >
             <LayoutGrid className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={exportCSV}>
             <Download className="h-4 w-4 mr-2" /> Exportar
           </Button>
           <Button asChild>
@@ -140,6 +197,8 @@ export default function Imoveis() {
             onFiltersChange={setFilters}
             tipos={tipos}
             finalidades={finalidades}
+            cidades={cidades}
+            bairros={bairros}
           />
         </CardContent>
       </Card>

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -282,6 +282,41 @@ export default function ImovelEdit() {
     enabled: !!tenant,
   });
 
+  // Features (características, proximidades, acabamentos)
+  const { data: features = [] } = useQuery({
+    queryKey: ["mt-property-features", tenant?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("mt_property_features" as any)
+        .select("id, nome, categoria")
+        .eq("tenant_id", tenant!.id)
+        .is("deleted_at", null)
+        .order("nome");
+      return (data || []) as Array<{ id: string; nome: string; categoria: string }>;
+    },
+    enabled: !!tenant,
+  });
+
+  const { data: existingFeatureLinks = [] } = useQuery({
+    queryKey: ["mt-property-feature-links", id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("mt_property_feature_links" as any)
+        .select("feature_id")
+        .eq("property_id", id!);
+      return (data || []) as Array<{ feature_id: string }>;
+    },
+    enabled: isEditing,
+  });
+
+  const [selectedFeatures, setSelectedFeatures] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (existingFeatureLinks.length > 0) {
+      setSelectedFeatures(new Set(existingFeatureLinks.map((l) => l.feature_id)));
+    }
+  }, [existingFeatureLinks]);
+
   const saveMutation = useMutation({
     mutationFn: async (values: ImovelFormValues) => {
       // Mapear nomes do form → nomes da tabela mt_properties
@@ -366,9 +401,32 @@ export default function ImovelEdit() {
         return data;
       }
     },
-    onSuccess: (data: any) => {
+    onSuccess: async (data: any) => {
+      // Sync feature links
+      const propertyId = data.id;
+      try {
+        await supabase
+          .from("mt_property_feature_links" as any)
+          .delete()
+          .eq("property_id", propertyId);
+
+        const featureIds = Array.from(selectedFeatures);
+        if (featureIds.length > 0) {
+          await supabase.from("mt_property_feature_links" as any).insert(
+            featureIds.map((fid) => ({
+              tenant_id: tenant?.id,
+              property_id: propertyId,
+              feature_id: fid,
+            }))
+          );
+        }
+      } catch (err) {
+        console.error("Erro ao salvar características:", err);
+      }
+
       queryClient.invalidateQueries({ queryKey: ["mt-imoveis"] });
       queryClient.invalidateQueries({ queryKey: ["mt-imovel", id] });
+      queryClient.invalidateQueries({ queryKey: ["mt-property-feature-links", id] });
       toast.success(isEditing ? "Imóvel atualizado com sucesso" : "Imóvel criado com sucesso");
       navigate(`/imoveis/${data.id}`);
     },
@@ -409,13 +467,14 @@ export default function ImovelEdit() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <Tabs defaultValue="basico">
-            <TabsList className="grid grid-cols-4 lg:grid-cols-7 w-full">
+            <TabsList className="grid grid-cols-4 lg:grid-cols-8 w-full">
               <TabsTrigger value="basico">Básico</TabsTrigger>
               <TabsTrigger value="localizacao">Localização</TabsTrigger>
               <TabsTrigger value="comodos">Cômodos</TabsTrigger>
               <TabsTrigger value="precos">Preços</TabsTrigger>
               <TabsTrigger value="financiamento">Financ.</TabsTrigger>
               <TabsTrigger value="flags">Opções</TabsTrigger>
+              <TabsTrigger value="caracteristicas">Caract.</TabsTrigger>
               <TabsTrigger value="seo">SEO</TabsTrigger>
             </TabsList>
 
@@ -912,6 +971,100 @@ export default function ImovelEdit() {
                       )} />
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="caracteristicas">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Características</CardTitle>
+                  <CardDescription>Selecione as características, proximidades e acabamentos do imóvel</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {features.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">Nenhuma característica cadastrada para este tenant.</p>
+                  ) : (
+                    <>
+                      {features.some((f) => f.categoria === "caracteristica") && (
+                        <div>
+                          <h4 className="text-sm font-semibold mb-3">Características do Imóvel</h4>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            {features
+                              .filter((f) => f.categoria === "caracteristica")
+                              .map((f) => (
+                                <label key={f.id} className="flex items-center gap-2 text-sm cursor-pointer">
+                                  <Checkbox
+                                    checked={selectedFeatures.has(f.id)}
+                                    onCheckedChange={() => {
+                                      setSelectedFeatures((prev) => {
+                                        const next = new Set(prev);
+                                        if (next.has(f.id)) next.delete(f.id);
+                                        else next.add(f.id);
+                                        return next;
+                                      });
+                                    }}
+                                  />
+                                  {f.nome}
+                                </label>
+                              ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {features.some((f) => f.categoria === "proximidade") && (
+                        <div>
+                          <h4 className="text-sm font-semibold mb-3">Proximidades</h4>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            {features
+                              .filter((f) => f.categoria === "proximidade")
+                              .map((f) => (
+                                <label key={f.id} className="flex items-center gap-2 text-sm cursor-pointer">
+                                  <Checkbox
+                                    checked={selectedFeatures.has(f.id)}
+                                    onCheckedChange={() => {
+                                      setSelectedFeatures((prev) => {
+                                        const next = new Set(prev);
+                                        if (next.has(f.id)) next.delete(f.id);
+                                        else next.add(f.id);
+                                        return next;
+                                      });
+                                    }}
+                                  />
+                                  {f.nome}
+                                </label>
+                              ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {features.some((f) => f.categoria === "acabamento") && (
+                        <div>
+                          <h4 className="text-sm font-semibold mb-3">Acabamentos</h4>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            {features
+                              .filter((f) => f.categoria === "acabamento")
+                              .map((f) => (
+                                <label key={f.id} className="flex items-center gap-2 text-sm cursor-pointer">
+                                  <Checkbox
+                                    checked={selectedFeatures.has(f.id)}
+                                    onCheckedChange={() => {
+                                      setSelectedFeatures((prev) => {
+                                        const next = new Set(prev);
+                                        if (next.has(f.id)) next.delete(f.id);
+                                        else next.add(f.id);
+                                        return next;
+                                      });
+                                    }}
+                                  />
+                                  {f.nome}
+                                </label>
+                              ))}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
