@@ -189,7 +189,7 @@ export default function PropostaImovelEdit() {
         forma_pagamento: proposta.forma_pagamento || "a_vista",
         prazo_validade_dias: proposta.prazo_validade_dias || 15,
         observacoes: proposta.observacoes || "",
-        condicoes_especiais: proposta.condicoes_especiais || "",
+        condicoes_especiais: proposta.condicoes_pagamento?.especiais || "",
         itens: [],
       });
     }
@@ -227,13 +227,11 @@ export default function PropostaImovelEdit() {
         valor_proposta: data.valor_proposta,
         valor_entrada: data.valor_entrada || null,
         valor_financiamento: data.valor_financiamento || null,
-        numero_parcelas: data.numero_parcelas || null,
-        valor_parcela: data.valor_parcela || null,
+        parcelas: data.numero_parcelas || null,
         forma_pagamento: data.forma_pagamento || null,
-        condicoes_pagamento: data.condicoes_pagamento || null,
+        condicoes_pagamento: data.condicoes_especiais ? { especiais: data.condicoes_especiais } : {},
         prazo_validade_dias: data.prazo_validade_dias,
         observacoes: data.observacoes || null,
-        condicoes_especiais: data.condicoes_especiais || null,
         status: sendAfterSave ? "enviada" : "rascunho",
         updated_at: new Date().toISOString(),
       };
