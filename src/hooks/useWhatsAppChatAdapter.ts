@@ -2278,12 +2278,12 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
   useEffect(() => {
     if (!sessaoId) return;
 
-    // Polling silencioso a cada 45 segundos (sem spinner)
+    // Polling silencioso a cada 90 segundos (sem spinner) - real-time subscription cobre o gap
     const interval = setInterval(() => {
       if (isMountedRef.current) {
         fetchChatsRef.current({ silent: true });
       }
-    }, 45_000);
+    }, 90_000);
 
     // Ao voltar à aba (visibilitychange), forçar refresh imediato
     const handleVisibility = () => {

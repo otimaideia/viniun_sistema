@@ -61,7 +61,7 @@ interface UseMessagesHybridOptions {
 
 const MESSAGES_KEY = 'whatsapp-messages-hybrid';
 const PAGE_SIZE = 100;
-const SYNC_INTERVAL = 30000; // 30 segundos
+const SYNC_INTERVAL = 60000; // 60 segundos
 
 /**
  * @deprecated Use useWhatsAppMessagesMT instead. This hook lacks tenant isolation.
@@ -112,9 +112,9 @@ export function useMessagesHybrid(options: UseMessagesHybridOptions) {
       return messages.reverse();
     },
     enabled: !!sessionName && !!chatId,
-    staleTime: 3000, // Considerar fresh por 3 segundos
+    staleTime: 10000, // Considerar fresh por 10 segundos
     retry: 1,
-    refetchInterval: 5000, // Atualizar a cada 5 segundos para maior responsividade
+    refetchInterval: 30000, // Atualizar a cada 30 segundos (real-time via Supabase cobre o gap)
   });
 
   // ========================================

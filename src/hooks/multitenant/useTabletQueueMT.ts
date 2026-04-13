@@ -89,7 +89,7 @@ export function useTabletQueueMT() {
       return (data || []) as QueueAppointment[];
     },
     enabled: !isTenantLoading && !!user?.id,
-    refetchInterval: 30000, // Refetch every 30s for real-time feel
+    refetchInterval: 60000, // Refetch every 60s (real-time subscription handles instant updates)
   });
 
   // Real-time subscription for appointment changes

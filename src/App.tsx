@@ -462,6 +462,19 @@ const SiteHomePage = lazy(() => import("./pages/site-publico/HomePage"));
 const BuscaImoveis = lazy(() => import("./pages/site-publico/BuscaImoveis"));
 const DetalheImovelPublico = lazy(() => import("./pages/site-publico/DetalheImovelPublico"));
 
+// Portal Corretor
+const LoginCorretor = lazy(() => import("./pages/portal-corretor/LoginCorretor"));
+const PortalCorretor = lazy(() => import("./pages/portal-corretor/PortalCorretor"));
+const CorretorImoveis = lazy(() => import("./pages/portal-corretor/CorretorImoveis"));
+const CorretorPropostasPage = lazy(() => import("./pages/portal-corretor/CorretorPropostas"));
+const CorretorPerfilPage = lazy(() => import("./pages/portal-corretor/CorretorPerfil"));
+
+// Portal Cliente Imobiliário
+const ClienteImoveisDashboard = lazy(() => import("./pages/portal-cliente-imovel/ClienteImoveisDashboard"));
+const ClientePropostasPage = lazy(() => import("./pages/portal-cliente-imovel/ClientePropostas"));
+const ClienteContratosPage = lazy(() => import("./pages/portal-cliente-imovel/ClienteContratos"));
+const ClienteFaturasPage = lazy(() => import("./pages/portal-cliente-imovel/ClienteFaturas"));
+
 // Totem e Portal do Cliente (Público)
 import Totem from "./pages/Totem";
 const TotemPonto = lazy(() => import("./pages/TotemPonto"));
@@ -1218,6 +1231,19 @@ const App = () => (
             {/* Assinatura de Contrato (Sem autenticação) */}
             <Route path="/contrato-imovel/:token/assinar" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ContratoAssinaturaPage /></Suspense>} />
 
+
+            {/* Portal do Corretor */}
+            <Route path="/corretor/login" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><LoginCorretor /></Suspense>} />
+            <Route path="/corretor/portal" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PortalCorretor /></Suspense>} />
+            <Route path="/corretor/imoveis" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CorretorImoveis /></Suspense>} />
+            <Route path="/corretor/propostas" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CorretorPropostasPage /></Suspense>} />
+            <Route path="/corretor/perfil" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CorretorPerfilPage /></Suspense>} />
+
+            {/* Portal Cliente Imobiliário */}
+            <Route path="/cliente-imovel" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClienteImoveisDashboard /></Suspense>} />
+            <Route path="/cliente-imovel/propostas" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClientePropostasPage /></Suspense>} />
+            <Route path="/cliente-imovel/contratos" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClienteContratosPage /></Suspense>} />
+            <Route path="/cliente-imovel/faturas" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClienteFaturasPage /></Suspense>} />
 
             {/* Loja Pública (Sem autenticação) */}
             <Route path="/loja" element={<LojaPublica />} />

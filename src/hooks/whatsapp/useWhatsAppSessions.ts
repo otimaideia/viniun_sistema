@@ -222,7 +222,7 @@ export function useWhatsAppSessions(franqueadoId?: string) {
       return syncedSessions;
     },
     enabled: true,
-    refetchInterval: 30000, // Atualizar a cada 30 segundos
+    refetchInterval: 60000, // Atualizar a cada 60 segundos (evitar rate limit)
   });
 
   // Criar sessão
