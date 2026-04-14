@@ -86,6 +86,8 @@ function mapLegacyRoleToMT(legacyRole: AppRole): MTRole {
     avaliadora: 'user',
     aplicadora: 'user',
     esteticista: 'user',
+    corretor: 'user',
+    captador: 'user',
   };
   return roleMap[legacyRole] || 'user';
 }

@@ -461,6 +461,7 @@ const ContratoAssinaturaPage = lazy(() => import("./pages/imoveis/ContratoAssina
 const SiteHomePage = lazy(() => import("./pages/site-publico/HomePage"));
 const BuscaImoveis = lazy(() => import("./pages/site-publico/BuscaImoveis"));
 const DetalheImovelPublico = lazy(() => import("./pages/site-publico/DetalheImovelPublico"));
+const SitemapXml = lazy(() => import("./pages/site-publico/SitemapXml"));
 
 // Portal Corretor
 const LoginCorretor = lazy(() => import("./pages/portal-corretor/LoginCorretor"));
@@ -1224,6 +1225,7 @@ const App = () => (
             <Route path="/site" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><SiteHomePage /></Suspense>} />
             <Route path="/busca" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><BuscaImoveis /></Suspense>} />
             <Route path="/imovel/:slug" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><DetalheImovelPublico /></Suspense>} />
+            <Route path="/sitemap.xml" element={<Suspense fallback={<div>Gerando sitemap...</div>}><SitemapXml /></Suspense>} />
 
             {/* Proposta Pública (Sem autenticação) */}
             <Route path="/proposta/:token" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PropostaPublicaPage /></Suspense>} />

@@ -49,7 +49,9 @@ export type AppRole =
   | 'avaliadora'
   | 'aplicadora'
   | 'esteticista'
-  | 'unidade';
+  | 'unidade'
+  | 'corretor'
+  | 'captador';
 
 // Labels para papéis
 export const ROLE_LABELS: Record<AppRole, string> = {
@@ -66,6 +68,8 @@ export const ROLE_LABELS: Record<AppRole, string> = {
   aplicadora: 'Aplicadora',
   esteticista: 'Esteticista',
   unidade: 'Unidade',
+  corretor: 'Corretor',
+  captador: 'Captador',
 };
 
 // Papéis disponíveis para seleção (excluindo super_admin que é fixo)
@@ -83,6 +87,8 @@ export const AVAILABLE_ROLES: { value: AppRole; label: string; locked?: boolean 
   { value: 'aplicadora', label: 'Aplicadora' },
   { value: 'esteticista', label: 'Esteticista' },
   { value: 'unidade', label: 'Unidade' },
+  { value: 'corretor', label: 'Corretor' },
+  { value: 'captador', label: 'Captador' },
 ];
 
 // Módulos agrupados por categoria para exibição

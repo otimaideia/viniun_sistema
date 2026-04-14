@@ -26,7 +26,9 @@ export type AppRole =
   | 'avaliadora'
   | 'aplicadora'
   | 'esteticista'
-  | 'unidade';
+  | 'unidade'
+  | 'corretor'
+  | 'captador';
 
 export interface UserProfile {
   id: string;

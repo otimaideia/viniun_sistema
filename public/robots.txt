@@ -12,3 +12,14 @@ Allow: /
 
 User-agent: *
 Allow: /
+Allow: /busca
+Allow: /imovel/
+Allow: /site
+Disallow: /admin/
+Disallow: /configuracoes/
+Disallow: /leads/
+Disallow: /whatsapp/
+Disallow: /login
+Disallow: /register
+
+Sitemap: /sitemap.xml
