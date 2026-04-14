@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useTenantContext } from "@/contexts/TenantContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -176,26 +177,24 @@ export default function BuscaImoveis() {
   );
   const [filtersOpen, setFiltersOpen] = useState(true);
 
-  // Detect tenant from URL or default
+  // Detect tenant from context (auto-detected by subdomain/domain/param)
+  const { tenant } = useTenantContext();
+  const tenantId = tenant?.id || null;
+  // Fallback: allow ?tenant=slug in URL for dev
   const tenantSlug = searchParams.get("tenant") || null;
 
   // ---- Lookup options (public, no auth) ----
 
   const { data: tipos = [] } = useQuery({
-    queryKey: ["pub-property-types", tenantSlug],
+    queryKey: ["pub-property-types", tenantId],
     queryFn: async () => {
       let q = supabase
         .from("mt_property_types" as any)
         .select("id, nome")
         .is("deleted_at", null)
         .order("nome");
-      if (tenantSlug) {
-        const { data: t } = await supabase
-          .from("mt_tenants" as any)
-          .select("id")
-          .eq("slug", tenantSlug)
-          .single();
-        if (t) q = q.eq("tenant_id", t.id);
+      if (tenantId) {
+        q = q.eq("tenant_id", tenantId);
       }
       const { data } = await q;
       return (data || []) as { id: string; nome: string }[];
@@ -204,20 +203,15 @@ export default function BuscaImoveis() {
   });
 
   const { data: finalidades = [] } = useQuery({
-    queryKey: ["pub-property-purposes", tenantSlug],
+    queryKey: ["pub-property-purposes", tenantId],
     queryFn: async () => {
       let q = supabase
         .from("mt_property_purposes" as any)
         .select("id, nome")
         .is("deleted_at", null)
         .order("nome");
-      if (tenantSlug) {
-        const { data: t } = await supabase
-          .from("mt_tenants" as any)
-          .select("id")
-          .eq("slug", tenantSlug)
-          .single();
-        if (t) q = q.eq("tenant_id", t.id);
+      if (tenantId) {
+        q = q.eq("tenant_id", tenantId);
       }
       const { data } = await q;
       return (data || []) as { id: string; nome: string }[];
@@ -226,7 +220,7 @@ export default function BuscaImoveis() {
   });
 
   const { data: cidades = [] } = useQuery({
-    queryKey: ["pub-locations-cidades", tenantSlug],
+    queryKey: ["pub-locations-cidades", tenantId],
     queryFn: async () => {
       let q = supabase
         .from("mt_locations" as any)
@@ -234,13 +228,8 @@ export default function BuscaImoveis() {
         .eq("tipo", "cidade")
         .is("deleted_at", null)
         .order("nome");
-      if (tenantSlug) {
-        const { data: t } = await supabase
-          .from("mt_tenants" as any)
-          .select("id")
-          .eq("slug", tenantSlug)
-          .single();
-        if (t) q = q.eq("tenant_id", t.id);
+      if (tenantId) {
+        q = q.eq("tenant_id", tenantId);
       }
       const { data } = await q;
       return (data || []) as { id: string; nome: string }[];
@@ -249,7 +238,7 @@ export default function BuscaImoveis() {
   });
 
   const { data: bairros = [] } = useQuery({
-    queryKey: ["pub-locations-bairros", tenantSlug, cidade],
+    queryKey: ["pub-locations-bairros", tenantId, cidade],
     queryFn: async () => {
       let q = supabase
         .from("mt_locations" as any)
@@ -260,13 +249,8 @@ export default function BuscaImoveis() {
       if (cidade !== "all") {
         q = q.eq("parent_id", cidade);
       }
-      if (tenantSlug) {
-        const { data: t } = await supabase
-          .from("mt_tenants" as any)
-          .select("id")
-          .eq("slug", tenantSlug)
-          .single();
-        if (t) q = q.eq("tenant_id", t.id);
+      if (tenantId) {
+        q = q.eq("tenant_id", tenantId);
       }
       const { data } = await q;
       return (data || []) as { id: string; nome: string }[];
@@ -291,7 +275,7 @@ export default function BuscaImoveis() {
       valorMax,
       sort,
       page,
-      tenantSlug,
+      tenantId,
     ],
     queryFn: async () => {
       let q = supabase
@@ -304,13 +288,8 @@ export default function BuscaImoveis() {
         .eq("situacao", "disponivel");
 
       // Tenant filter
-      if (tenantSlug) {
-        const { data: t } = await supabase
-          .from("mt_tenants" as any)
-          .select("id")
-          .eq("slug", tenantSlug)
-          .single();
-        if (t) q = q.eq("tenant_id", t.id);
+      if (tenantId) {
+        q = q.eq("tenant_id", tenantId);
       }
 
       // Apply filters
@@ -369,7 +348,7 @@ export default function BuscaImoveis() {
     valorMax,
     sort,
     page,
-    tenantSlug,
+    tenantId,
     setSearchParams,
   ]);
 
