@@ -502,8 +502,8 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
         propertyCount={ctx.propertyCount}
       />
 
-      {/* Spacer for fixed header */}
-      <div className="h-[72px] md:h-[104px]" />
+      {/* Spacer for fixed header: mobile=nav only (64px), desktop=topbar+nav (96px) */}
+      <div className="h-16 md:h-24" />
 
       <main className="flex-1">{children}</main>
 

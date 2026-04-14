@@ -45,7 +45,7 @@ export default function ClienteImoveisDashboard() {
 
   const handleLogout = () => {
     sessionStorage.removeItem("cliente_auth");
-    navigate("/cliente/login");
+    navigate("/cliente-imovel/login");
   };
 
   const formatCurrency = (v: number | null) => v ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v) : "-";

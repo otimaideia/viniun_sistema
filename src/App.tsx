@@ -472,6 +472,7 @@ const CorretorPropostasPage = lazy(() => import("./pages/portal-corretor/Correto
 const CorretorPerfilPage = lazy(() => import("./pages/portal-corretor/CorretorPerfil"));
 
 // Portal Cliente Imobiliário
+const LoginClienteImovel = lazy(() => import("./pages/portal-cliente-imovel/LoginClienteImovel"));
 const ClienteImoveisDashboard = lazy(() => import("./pages/portal-cliente-imovel/ClienteImoveisDashboard"));
 const ClientePropostasPage = lazy(() => import("./pages/portal-cliente-imovel/ClientePropostas"));
 const ClienteContratosPage = lazy(() => import("./pages/portal-cliente-imovel/ClienteContratos"));
@@ -492,6 +493,46 @@ import { ClienteAuthProvider } from "@/contexts/ClienteAuthContext";
 import { ClienteProtectedRoute } from "@/components/cliente";
 
 const queryClient = new QueryClient();
+
+// Guard: redireciona para login se não autenticado no portal cliente imobiliário
+function ClienteImovelGuard({ children }: { children: React.ReactNode }) {
+  const stored = sessionStorage.getItem('cliente_auth');
+  if (!stored) {
+    window.location.href = '/cliente-imovel/login';
+    return null;
+  }
+  try {
+    const data = JSON.parse(stored);
+    if (!data?.id) {
+      window.location.href = '/cliente-imovel/login';
+      return null;
+    }
+  } catch {
+    window.location.href = '/cliente-imovel/login';
+    return null;
+  }
+  return <>{children}</>;
+}
+
+// Guard: redireciona para login se não autenticado no portal do corretor
+function CorretorGuard({ children }: { children: React.ReactNode }) {
+  const stored = sessionStorage.getItem('corretor_auth');
+  if (!stored) {
+    window.location.href = '/corretor/login';
+    return null;
+  }
+  try {
+    const data = JSON.parse(stored);
+    if (!data?.id) {
+      window.location.href = '/corretor/login';
+      return null;
+    }
+  } catch {
+    window.location.href = '/corretor/login';
+    return null;
+  }
+  return <>{children}</>;
+}
 
 // Domínios que devem exibir a landing page na raiz "/"
 const LANDING_DOMAINS = [
@@ -1238,16 +1279,17 @@ const App = () => (
 
             {/* Portal do Corretor */}
             <Route path="/corretor/login" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><LoginCorretor /></Suspense>} />
-            <Route path="/corretor/portal" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PortalCorretor /></Suspense>} />
-            <Route path="/corretor/imoveis" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CorretorImoveis /></Suspense>} />
-            <Route path="/corretor/propostas" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CorretorPropostasPage /></Suspense>} />
-            <Route path="/corretor/perfil" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CorretorPerfilPage /></Suspense>} />
+            <Route path="/corretor/portal" element={<CorretorGuard><Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><PortalCorretor /></Suspense></CorretorGuard>} />
+            <Route path="/corretor/imoveis" element={<CorretorGuard><Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CorretorImoveis /></Suspense></CorretorGuard>} />
+            <Route path="/corretor/propostas" element={<CorretorGuard><Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CorretorPropostasPage /></Suspense></CorretorGuard>} />
+            <Route path="/corretor/perfil" element={<CorretorGuard><Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><CorretorPerfilPage /></Suspense></CorretorGuard>} />
 
             {/* Portal Cliente Imobiliário */}
-            <Route path="/cliente-imovel" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClienteImoveisDashboard /></Suspense>} />
-            <Route path="/cliente-imovel/propostas" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClientePropostasPage /></Suspense>} />
-            <Route path="/cliente-imovel/contratos" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClienteContratosPage /></Suspense>} />
-            <Route path="/cliente-imovel/faturas" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClienteFaturasPage /></Suspense>} />
+            <Route path="/cliente-imovel/login" element={<Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><LoginClienteImovel /></Suspense>} />
+            <Route path="/cliente-imovel" element={<ClienteImovelGuard><Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClienteImoveisDashboard /></Suspense></ClienteImovelGuard>} />
+            <Route path="/cliente-imovel/propostas" element={<ClienteImovelGuard><Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClientePropostasPage /></Suspense></ClienteImovelGuard>} />
+            <Route path="/cliente-imovel/contratos" element={<ClienteImovelGuard><Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClienteContratosPage /></Suspense></ClienteImovelGuard>} />
+            <Route path="/cliente-imovel/faturas" element={<ClienteImovelGuard><Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}><ClienteFaturasPage /></Suspense></ClienteImovelGuard>} />
 
             {/* Loja Pública (Sem autenticação) */}
             <Route path="/loja" element={<LojaPublica />} />

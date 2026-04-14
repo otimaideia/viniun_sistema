@@ -994,7 +994,7 @@ export default function DetalheImovelPublico() {
           fotos={fotos}
           titulo={imovel.titulo || tipoNome}
           fotoDestaque={imovel.foto_destaque_url}
-          videoUrl={imovel.video_url}
+          videoUrl={imovel.video_youtube_url}
         />
 
         {/* Main content + Sidebar */}
