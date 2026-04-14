@@ -9,7 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
-import { Globe, RefreshCw, Loader2 } from "lucide-react";
+import { Globe, RefreshCw, Loader2, FileDown } from "lucide-react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -37,7 +38,10 @@ export default function PortaisImoveis() {
 
   return (
     <div className="space-y-6">
-      <div><h1 className="text-2xl font-bold">Portais Imobiliarios</h1><p className="text-muted-foreground">Integracao com portais de anuncios (ZAP, OLX, VivaReal, etc.)</p></div>
+      <div className="flex items-center justify-between">
+        <div><h1 className="text-2xl font-bold">Portais Imobiliários</h1><p className="text-muted-foreground">Integração com portais de anúncios (ZAP, OLX, VivaReal, etc.)</p></div>
+        <Button asChild><Link to="/imoveis/portais/exportar"><FileDown className="h-4 w-4 mr-2" />Exportar XML</Link></Button>
+      </div>
 
       {isLoading ? <Skeleton className="h-64 w-full" /> : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -98,6 +98,7 @@ import {
   Bell,
   CalendarClock,
   Network,
+  FileDown,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -348,6 +349,7 @@ export function DashboardLayout({ children, defaultCollapsed = false }: Dashboar
         { href: "/imoveis/tabelas-preco", label: "Tabelas de Preço", icon: DollarSign, module: "tabelas_preco" },
         { href: "/imoveis/rede", label: "Rede Colaborativa", icon: Network, module: "tabelas_rede" },
         { href: "/imoveis/portais", label: "Portais", icon: Globe, module: "portais_imoveis" },
+        { href: "/imoveis/portais/exportar", label: "Exportar XML", icon: FileDown, module: "portais_imoveis" },
         { href: "/imoveis/pedidos", label: "Pedidos", icon: ClipboardList, module: "pedidos_imoveis" },
         { href: "/imoveis/email-marketing", label: "Email Marketing", icon: Megaphone, module: "email_marketing_imoveis" },
         { href: "/imoveis/conteudo", label: "Conteúdo", icon: FileText, module: "conteudo_imoveis" },
