@@ -689,16 +689,47 @@ export default function DetalheImovelPublico() {
       canonical.setAttribute("rel", "canonical");
       document.head.appendChild(canonical);
     }
-    canonical.setAttribute(
-      "href",
-      `${window.location.origin}/imovel/${imovel.slug || imovel.id}`
-    );
+    const pageUrl = `${window.location.origin}/imovel/${imovel.slug || imovel.id}`;
+    canonical.setAttribute("href", pageUrl);
+
+    // OG Meta Tags
+    const ogTags: Record<string, string> = {
+      "og:title": document.title,
+      "og:description": metaDesc.getAttribute("content") || "",
+      "og:url": pageUrl,
+      "og:type": "website",
+      "og:site_name": "Viniun Imóveis",
+      "twitter:card": "summary_large_image",
+      "twitter:title": document.title,
+      "twitter:description": metaDesc.getAttribute("content") || "",
+    };
+
+    // Add image if available
+    const firstPhoto = fotos?.[0]?.url || imovel.foto_destaque_url;
+    if (firstPhoto) {
+      ogTags["og:image"] = firstPhoto;
+      ogTags["twitter:image"] = firstPhoto;
+    }
+
+    const createdOgTags: Element[] = [];
+    for (const [property, content] of Object.entries(ogTags)) {
+      const attr = property.startsWith("twitter:") ? "name" : "property";
+      let tag = document.querySelector(`meta[${attr}="${property}"]`);
+      if (!tag) {
+        tag = document.createElement("meta");
+        tag.setAttribute(attr, property);
+        document.head.appendChild(tag);
+        createdOgTags.push(tag);
+      }
+      tag.setAttribute("content", content);
+    }
 
     return () => {
       document.title = "Viniun";
       canonical?.remove();
+      createdOgTags.forEach((t) => t.remove());
     };
-  }, [imovel]);
+  }, [imovel, fotos]);
 
   // ---- JSON-LD ----
 

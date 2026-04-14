@@ -679,18 +679,32 @@ function AboutSection({
   const primaryColor = branding?.cor_primaria || '#1E3A5F';
   const secondaryColor = branding?.cor_secundaria || '#D4A853';
 
+  // Load dynamic stats from DB
+  const { data: leadCount } = useQuery({
+    queryKey: ['public-lead-count', tenant?.id],
+    queryFn: async () => {
+      const { count } = await supabase
+        .from('mt_leads')
+        .select('id', { count: 'exact', head: true })
+        .eq('tenant_id', tenant!.id)
+        .is('deleted_at', null);
+      return count || 0;
+    },
+    enabled: !!tenant,
+  });
+
   const stats = useMemo(
     () => [
       {
         icon: Building2,
-        value: propertyCount > 0 ? `${propertyCount}+` : '100+',
-        label: 'Imoveis Disponiveis',
+        value: propertyCount > 0 ? `${propertyCount.toLocaleString('pt-BR')}+` : '100+',
+        label: 'Imóveis Disponíveis',
       },
-      { icon: Users, value: '500+', label: 'Clientes Atendidos' },
-      { icon: Award, value: '10+', label: 'Anos de Mercado' },
-      { icon: Star, value: '98%', label: 'Satisfacao' },
+      { icon: Users, value: leadCount && leadCount > 0 ? `${leadCount.toLocaleString('pt-BR')}+` : '500+', label: 'Clientes Atendidos' },
+      { icon: Award, value: '15+', label: 'Anos de Mercado' },
+      { icon: Star, value: '98%', label: 'Satisfação' },
     ],
-    [propertyCount]
+    [propertyCount, leadCount]
   );
 
   return (
@@ -845,6 +859,183 @@ function ServicesSection({ branding }: { branding: Branding | null }) {
 // CTA SECTION
 // -----------------------------------------------------------------------------
 
+// -----------------------------------------------------------------------------
+// CONTACT SECTION
+// -----------------------------------------------------------------------------
+
+function ContactSection({
+  tenant,
+  branding,
+}: {
+  tenant: Tenant | null;
+  branding: Branding | null;
+}) {
+  const primaryColor = branding?.cor_primaria || '#1E3A5F';
+  const [formData, setFormData] = useState({ nome: '', email: '', telefone: '', mensagem: '' });
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!tenant || sending) return;
+    setSending(true);
+    try {
+      await (supabase as any).from('mt_property_inquiries').insert({
+        tenant_id: tenant.id,
+        tipo: 'contato_site',
+        nome_interessado: formData.nome,
+        email_interessado: formData.email,
+        telefone_interessado: formData.telefone,
+        mensagem: formData.mensagem,
+        origem: 'site_publico',
+        status: 'novo',
+      });
+      setSent(true);
+      setFormData({ nome: '', email: '', telefone: '', mensagem: '' });
+    } catch {
+      alert('Erro ao enviar. Tente novamente.');
+    } finally {
+      setSending(false);
+    }
+  }
+
+  return (
+    <section id="contato" className="py-16 md:py-24">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-3" style={{ color: primaryColor }}>
+            Entre em Contato
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Preencha o formulário abaixo e nossa equipe entrará em contato o mais breve possível.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Formulário */}
+          <Card className="shadow-lg">
+            <CardContent className="p-6 md:p-8">
+              {sent ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+                    <TrendingUp className="h-8 w-8 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-green-700 mb-2">Mensagem Enviada!</h3>
+                  <p className="text-gray-600">Entraremos em contato em breve.</p>
+                  <Button variant="outline" className="mt-4" onClick={() => setSent(false)}>
+                    Enviar outra mensagem
+                  </Button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.nome}
+                      onChange={(e) => setFormData(d => ({ ...d, nome: e.target.value }))}
+                      className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:outline-none"
+                      style={{ '--tw-ring-color': primaryColor } as any}
+                      placeholder="Seu nome completo"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                      <input
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData(d => ({ ...d, email: e.target.value }))}
+                        className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:outline-none"
+                        placeholder="seu@email.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
+                      <input
+                        type="tel"
+                        value={formData.telefone}
+                        onChange={(e) => setFormData(d => ({ ...d, telefone: e.target.value }))}
+                        className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:outline-none"
+                        placeholder="(13) 99999-9999"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Mensagem</label>
+                    <textarea
+                      required
+                      rows={4}
+                      value={formData.mensagem}
+                      onChange={(e) => setFormData(d => ({ ...d, mensagem: e.target.value }))}
+                      className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:outline-none resize-none"
+                      placeholder="Como podemos ajudar?"
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full text-white rounded-lg py-3"
+                    style={{ backgroundColor: primaryColor }}
+                    disabled={sending}
+                  >
+                    {sending ? 'Enviando...' : 'Enviar Mensagem'}
+                  </Button>
+                </form>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Info lado direito */}
+          <div className="space-y-6">
+            {(tenant?.endereco_logradouro || tenant?.endereco_cidade) && (
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${primaryColor}15` }}>
+                  <MapPin className="h-5 w-5" style={{ color: primaryColor }} />
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-1">Endereço</h4>
+                  <p className="text-gray-600 text-sm">
+                    {[tenant?.endereco_logradouro, tenant?.endereco_numero, tenant?.endereco_bairro].filter(Boolean).join(', ')}
+                    <br />
+                    {[tenant?.endereco_cidade, tenant?.endereco_estado].filter(Boolean).join(' - ')}
+                  </p>
+                </div>
+              </div>
+            )}
+            {tenant?.telefone && (
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${primaryColor}15` }}>
+                  <Phone className="h-5 w-5" style={{ color: primaryColor }} />
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-1">Telefone / WhatsApp</h4>
+                  <p className="text-gray-600 text-sm">{tenant.telefone}</p>
+                </div>
+              </div>
+            )}
+            {tenant?.email && (
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${primaryColor}15` }}>
+                  <Home className="h-5 w-5" style={{ color: primaryColor }} />
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-1">Email</h4>
+                  <p className="text-gray-600 text-sm">{tenant.email}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// CTA SECTION
+// -----------------------------------------------------------------------------
+
 function CTASection({
   tenant,
   branding,
@@ -956,6 +1147,8 @@ export default function HomePage() {
         branding={branding}
         propertyCount={propertyCount}
       />
+
+      <ContactSection tenant={tenant} branding={branding} />
 
       <CTASection tenant={tenant} branding={branding} />
     </PublicLayout>
