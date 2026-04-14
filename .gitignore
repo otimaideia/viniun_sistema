@@ -64,3 +64,5 @@ start-local.sh
 
 # Secrets (hardcoded fallback keys)
 supabase/functions/_shared/secrets.ts
+*.jpg
+*.png
