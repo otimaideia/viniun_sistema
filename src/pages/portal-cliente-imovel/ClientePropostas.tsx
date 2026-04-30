@@ -18,16 +18,18 @@ export default function ClientePropostas() {
   const navigate = useNavigate();
   const clienteData = JSON.parse(sessionStorage.getItem("cliente_auth") || "{}");
   const leadId = clienteData?.id;
+  const tenantId = clienteData?.tenant_id;
 
   const { data: propostas = [], isLoading } = useQuery({
-    queryKey: ["cliente-propostas-all", leadId],
+    queryKey: ["cliente-propostas-all", leadId, tenantId],
     queryFn: async () => {
-      const { data } = await (supabase as any)
+      let q = (supabase as any)
         .from("mt_property_proposals")
         .select("*, mt_properties!property_id(titulo, ref_code, valor_venda)")
         .eq("lead_id", leadId)
-        .is("deleted_at", null)
-        .order("created_at", { ascending: false });
+        .is("deleted_at", null);
+      if (tenantId) q = q.eq("tenant_id", tenantId);
+      const { data } = await q.order("created_at", { ascending: false });
       return data || [];
     },
     enabled: !!leadId,

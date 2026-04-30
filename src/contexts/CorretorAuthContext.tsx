@@ -91,12 +91,15 @@ _Viniun Imóveis_`;
   }
 }
 
+const MAX_VERIFY_ATTEMPTS = 5;
+
 export function CorretorAuthProvider({ children }: { children: ReactNode }) {
   const [corretor, setCorretor] = useState<Corretor | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [pendingIdentifier, setPendingIdentifier] = useState<string | null>(null);
   const [pendingCorretor, setPendingCorretor] = useState<Corretor | null>(null);
+  const [verifyAttempts, setVerifyAttempts] = useState(0);
 
   useEffect(() => {
     const stored = sessionStorage.getItem('corretor_auth');
@@ -111,14 +114,31 @@ export function CorretorAuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     try {
       const identifier = emailOrPhone.trim().toLowerCase();
-      const { data, error: err } = await (supabase as any)
-        .from('mt_corretores')
-        .select('*')
-        .or(`email.eq.${identifier},telefone.eq.${identifier},celular.eq.${identifier}`)
-        .is('deleted_at', null)
-        .single();
 
-      if (err || !data) {
+      // Reject identifiers containing PostgREST filter operators to prevent injection
+      if (/[(),"]/.test(identifier)) {
+        setError('Email ou telefone inválido.');
+        setIsLoading(false);
+        return false;
+      }
+
+      // Use 3 separate .eq() queries instead of .or() with interpolation (prevents filter injection)
+      const tryFind = async (column: 'email' | 'telefone' | 'celular') => {
+        const { data } = await (supabase as any)
+          .from('mt_corretores')
+          .select('*')
+          .eq(column, identifier)
+          .is('deleted_at', null)
+          .maybeSingle();
+        return data;
+      };
+
+      const data =
+        (await tryFind('email')) ||
+        (await tryFind('telefone')) ||
+        (await tryFind('celular'));
+
+      if (!data) {
         setError('Corretor não encontrado. Verifique seu email ou telefone.');
         setIsLoading(false);
         return false;
@@ -139,16 +159,22 @@ export function CorretorAuthProvider({ children }: { children: ReactNode }) {
         })
         .eq('id', corretorData.id);
 
-      // Send via WhatsApp
+      // Send via WhatsApp — block login if delivery fails (no insecure fallback)
       const phone = corretorData.celular || corretorData.telefone;
-      if (phone) {
-        const sent = await sendWhatsAppOTP(phone, code, corretorData.nome || '');
-        if (!sent) {
-          // Fallback: allow login anyway but log warning
-          console.warn('[CorretorAuth] WhatsApp não enviado, código salvo no banco para verificação manual');
-        }
+      if (!phone) {
+        setError('Corretor sem telefone cadastrado. Contate o administrador.');
+        setIsLoading(false);
+        return false;
       }
 
+      const sent = await sendWhatsAppOTP(phone, code, corretorData.nome || '');
+      if (!sent) {
+        setError('Não foi possível enviar o código por WhatsApp. Tente novamente em instantes.');
+        setIsLoading(false);
+        return false;
+      }
+
+      setVerifyAttempts(0);
       setPendingCorretor(corretorData);
       setPendingIdentifier(identifier);
       setIsLoading(false);
@@ -165,8 +191,12 @@ export function CorretorAuthProvider({ children }: { children: ReactNode }) {
       setError('Sessão expirada. Tente novamente.');
       return false;
     }
-    if (code.length !== 6) {
-      setError('Código deve ter 6 dígitos.');
+    if (code.length !== 6 || !/^\d{6}$/.test(code)) {
+      setError('Código deve ter 6 dígitos numéricos.');
+      return false;
+    }
+    if (verifyAttempts >= MAX_VERIFY_ATTEMPTS) {
+      setError('Muitas tentativas. Solicite um novo código.');
       return false;
     }
 
@@ -183,15 +213,28 @@ export function CorretorAuthProvider({ children }: { children: ReactNode }) {
         return false;
       }
 
-      // Check code match
-      if (data.codigo_verificacao !== code) {
-        setError('Código inválido. Verifique e tente novamente.');
+      // Check expiry first to avoid leaking validity of stored code via timing
+      if (data.codigo_expira_em && new Date(data.codigo_expira_em) < new Date()) {
+        setError('Código expirado. Solicite um novo código.');
         return false;
       }
 
-      // Check expiry
-      if (data.codigo_expira_em && new Date(data.codigo_expira_em) < new Date()) {
-        setError('Código expirado. Solicite um novo código.');
+      // Check code match
+      if (data.codigo_verificacao !== code) {
+        const next = verifyAttempts + 1;
+        setVerifyAttempts(next);
+        if (next >= MAX_VERIFY_ATTEMPTS) {
+          // Invalidate the code on server after too many attempts
+          await (supabase as any)
+            .from('mt_corretores')
+            .update({ codigo_verificacao: null, codigo_expira_em: null })
+            .eq('id', pendingCorretor.id);
+          setPendingCorretor(null);
+          setPendingIdentifier(null);
+          setError('Muitas tentativas. Solicite um novo código.');
+        } else {
+          setError(`Código inválido. ${MAX_VERIFY_ATTEMPTS - next} tentativa(s) restante(s).`);
+        }
         return false;
       }
 
@@ -206,12 +249,13 @@ export function CorretorAuthProvider({ children }: { children: ReactNode }) {
       sessionStorage.setItem('corretor_auth', JSON.stringify(pendingCorretor));
       setPendingCorretor(null);
       setPendingIdentifier(null);
+      setVerifyAttempts(0);
       return true;
     } catch (e: any) {
       setError(e.message || 'Erro ao verificar código');
       return false;
     }
-  }, [pendingCorretor]);
+  }, [pendingCorretor, verifyAttempts]);
 
   const logout = useCallback(() => {
     setCorretor(null);

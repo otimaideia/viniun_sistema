@@ -11,16 +11,19 @@ export default function ClienteImoveisDashboard() {
   // For now, get lead_id from sessionStorage (set by ClienteAuthContext)
   const clienteData = JSON.parse(sessionStorage.getItem("cliente_auth") || "{}");
   const leadId = clienteData?.id;
+  const tenantId = clienteData?.tenant_id;
   const nome = clienteData?.nome || "Cliente";
 
   const { data: propostas = [] } = useQuery({
-    queryKey: ["cliente-propostas", leadId],
+    queryKey: ["cliente-propostas", leadId, tenantId],
     queryFn: async () => {
-      const { data } = await (supabase as any)
+      let q = (supabase as any)
         .from("mt_property_proposals")
         .select("id, numero_proposta, valor_proposta, status, created_at, mt_properties!property_id(titulo, ref_code)")
         .eq("lead_id", leadId)
-        .is("deleted_at", null)
+        .is("deleted_at", null);
+      if (tenantId) q = q.eq("tenant_id", tenantId);
+      const { data } = await q
         .order("created_at", { ascending: false })
         .limit(5);
       return data || [];
@@ -29,13 +32,15 @@ export default function ClienteImoveisDashboard() {
   });
 
   const { data: contratos = [] } = useQuery({
-    queryKey: ["cliente-contratos", leadId],
+    queryKey: ["cliente-contratos", leadId, tenantId],
     queryFn: async () => {
-      const { data } = await (supabase as any)
+      let q = (supabase as any)
         .from("mt_property_contracts")
         .select("id, numero_contrato, tipo, valor_contrato, status, data_inicio, mt_properties!property_id(titulo)")
         .eq("lead_id", leadId)
-        .is("deleted_at", null)
+        .is("deleted_at", null);
+      if (tenantId) q = q.eq("tenant_id", tenantId);
+      const { data } = await q
         .order("created_at", { ascending: false })
         .limit(5);
       return data || [];

@@ -186,6 +186,8 @@ _Atendimento Viniun_`;
   }
 }
 
+const MAX_CLIENTE_VERIFY_ATTEMPTS = 5;
+
 export function useClienteAuth(): UseClienteAuthReturn {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [lead, setLead] = useState<Lead | null>(null);
@@ -196,6 +198,7 @@ export function useClienteAuth(): UseClienteAuthReturn {
   const [codeSentTo, setCodeSentTo] = useState<string | null>(null);
   const [codeSentMethod, setCodeSentMethod] = useState<VerificationMethod | null>(null);
   const [pendingCpfOrPhone, setPendingCpfOrPhone] = useState<string | null>(null);
+  const [verifyAttempts, setVerifyAttempts] = useState(0);
 
   const clearError = useCallback(() => setError(null), []);
 
@@ -267,6 +270,7 @@ export function useClienteAuth(): UseClienteAuthReturn {
     setError(null);
     setCodeSentTo(null);
     setCodeSentMethod(null);
+    setVerifyAttempts(0);
 
     try {
       const cleaned = cpfOrPhone.replace(/\D/g, '');
@@ -302,13 +306,23 @@ export function useClienteAuth(): UseClienteAuthReturn {
         query = query.eq('tenant_id', tenantId);
       }
 
+      // cleaned and cleanCPF() return digits-only by construction; assert defensively
+      if (!/^\d+$/.test(cleaned)) {
+        setError('Entrada inválida');
+        return false;
+      }
+
       if (isCPF) {
-        query = query.or(`cpf.eq.${cleaned},cpf.eq.${cleanCPF(cpfOrPhone)}`);
+        const cpfVariants = Array.from(new Set([cleaned, cleanCPF(cpfOrPhone)].filter(Boolean)));
+        query = query.in('cpf', cpfVariants);
       } else {
-        // Buscar por telefone - múltiplos formatos (+55, 55, sem prefixo)
         const withCountry = `55${cleaned}`;
         const withPlus = `+55${cleaned}`;
-        query = query.or(`telefone.eq.${cleaned},telefone.eq.${withCountry},telefone.eq.${withPlus},telefone.ilike.%${cleaned}`);
+        // Use .in() for exact matches (safe), then a separate filtered query for partial match if needed.
+        // The ilike trailing wildcard is preserved but cleaned is provably digits-only above.
+        query = query.or(
+          `telefone.eq.${cleaned},telefone.eq.${withCountry},telefone.eq.${withPlus},telefone.ilike.%${cleaned}`
+        );
       }
 
       const { data: leads, error: leadError } = await query;
@@ -359,8 +373,14 @@ export function useClienteAuth(): UseClienteAuthReturn {
         const enviado = await sendWhatsAppCode(telefoneDestino, code, leadData.nome || '');
 
         if (!enviado) {
-          // Fallback: mostrar código no console (apenas dev)
-          console.warn('[DEV] Falha ao enviar WhatsApp, código:', code);
+          // Block flow: do not allow login when delivery fails
+          setError('Não foi possível enviar o código por WhatsApp. Tente novamente em instantes.');
+          // Invalidate stored code so it can't be guessed offline
+          await supabase
+            .from('mt_leads')
+            .update({ codigo_verificacao: null, codigo_expira_em: null })
+            .eq('id', leadData.id);
+          return false;
         }
       } else {
         // Email auth requires SMTP integration via mt_tenant_integrations
@@ -393,6 +413,10 @@ export function useClienteAuth(): UseClienteAuthReturn {
       setError('Solicite um novo código');
       return false;
     }
+    if (verifyAttempts >= MAX_CLIENTE_VERIFY_ATTEMPTS) {
+      setError('Muitas tentativas. Solicite um novo código.');
+      return false;
+    }
 
     setIsVerifying(true);
     setError(null);
@@ -414,13 +438,26 @@ export function useClienteAuth(): UseClienteAuthReturn {
         query = query.eq('tenant_id', tenantId);
       }
 
+      // cleaned is digits-only by construction; assert defensively
+      if (!/^\d+$/.test(cleaned)) {
+        setError('Entrada inválida');
+        return false;
+      }
+      // Validate code format before using in query (prevents filter injection)
+      if (!/^\d{6}$/.test(codigo)) {
+        setError('Código inválido');
+        return false;
+      }
+
       if (isCPF) {
-        query = query.or(`cpf.eq.${cleaned},cpf.eq.${cleanCPF(pendingCpfOrPhone)}`);
+        const cpfVariants = Array.from(new Set([cleaned, cleanCPF(pendingCpfOrPhone)].filter(Boolean)));
+        query = query.in('cpf', cpfVariants);
       } else {
-        // Buscar por telefone - múltiplos formatos (+55, 55, sem prefixo)
         const withCountry = `55${cleaned}`;
         const withPlus = `+55${cleaned}`;
-        query = query.or(`telefone.eq.${cleaned},telefone.eq.${withCountry},telefone.eq.${withPlus},telefone.ilike.%${cleaned}`);
+        query = query.or(
+          `telefone.eq.${cleaned},telefone.eq.${withCountry},telefone.eq.${withPlus},telefone.ilike.%${cleaned}`
+        );
       }
 
       const { data: leads, error: leadError } = await query.eq('codigo_verificacao', codigo);
@@ -430,7 +467,16 @@ export function useClienteAuth(): UseClienteAuthReturn {
       }
 
       if (!leads || leads.length === 0) {
-        setError('Código inválido');
+        const next = verifyAttempts + 1;
+        setVerifyAttempts(next);
+        if (next >= MAX_CLIENTE_VERIFY_ATTEMPTS) {
+          setError('Muitas tentativas. Solicite um novo código.');
+          setPendingCpfOrPhone(null);
+          setCodeSentTo(null);
+          setCodeSentMethod(null);
+        } else {
+          setError(`Código inválido. ${MAX_CLIENTE_VERIFY_ATTEMPTS - next} tentativa(s) restante(s).`);
+        }
         return false;
       }
 
@@ -480,7 +526,7 @@ export function useClienteAuth(): UseClienteAuthReturn {
     } finally {
       setIsVerifying(false);
     }
-  }, [pendingCpfOrPhone]);
+  }, [pendingCpfOrPhone, verifyAttempts]);
 
   /**
    * Encerra a sessão do cliente

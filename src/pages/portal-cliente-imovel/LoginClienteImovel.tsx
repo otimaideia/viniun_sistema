@@ -52,6 +52,8 @@ async function sendWhatsAppOTP(phone: string, code: string, nome: string): Promi
 
 type Step = "identify" | "verify";
 
+const MAX_VERIFY_ATTEMPTS = 5;
+
 export default function LoginClienteImovel() {
   const navigate = useNavigate();
   const [step, setStep] = useState<Step>("identify");
@@ -60,6 +62,7 @@ export default function LoginClienteImovel() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [pendingLead, setPendingLead] = useState<any>(null);
+  const [verifyAttempts, setVerifyAttempts] = useState(0);
 
   async function handleIdentify(e: React.FormEvent) {
     e.preventDefault();
@@ -70,16 +73,44 @@ export default function LoginClienteImovel() {
       const cleaned = identifier.trim().toLowerCase();
       const cleanedDigits = cleaned.replace(/\D/g, '');
 
-      let query = (supabase as any).from('mt_leads').select('id, nome, email, telefone, whatsapp').is('deleted_at', null);
-
-      // Detect if email or phone
+      // Reject identifiers containing PostgREST filter operators
       if (cleaned.includes('@')) {
-        query = query.eq('email', cleaned);
-      } else {
-        query = query.or(`telefone.eq.${cleanedDigits},telefone.ilike.%${cleanedDigits},whatsapp.eq.${cleanedDigits},cpf.eq.${cleanedDigits}`);
+        if (/[(),"]/.test(cleaned)) {
+          setError('Email inválido.');
+          setLoading(false);
+          return;
+        }
+      } else if (!/^\d+$/.test(cleanedDigits) || cleanedDigits.length < 6) {
+        setError('Telefone ou CPF inválido.');
+        setLoading(false);
+        return;
       }
 
-      const { data: leads } = await query.limit(1);
+      const baseQuery = () =>
+        (supabase as any).from('mt_leads').select('id, nome, email, telefone, whatsapp, tenant_id').is('deleted_at', null);
+
+      let leads: any[] | null = null;
+      if (cleaned.includes('@')) {
+        const { data } = await baseQuery().eq('email', cleaned).limit(1);
+        leads = data;
+      } else {
+        // Run separate exact-match queries to avoid .or() with interpolation
+        const tryColumn = async (column: 'telefone' | 'whatsapp' | 'cpf') => {
+          const { data } = await baseQuery().eq(column, cleanedDigits).limit(1);
+          return data?.[0] || null;
+        };
+        const found =
+          (await tryColumn('telefone')) ||
+          (await tryColumn('whatsapp')) ||
+          (await tryColumn('cpf'));
+        if (!found) {
+          // Fallback: trailing-match on telefone (cleanedDigits is digits-only by construction)
+          const { data } = await baseQuery().ilike('telefone', `%${cleanedDigits}`).limit(1);
+          leads = data;
+        } else {
+          leads = [found];
+        }
+      }
 
       if (!leads?.length) {
         setError('Cadastro não encontrado. Verifique seus dados ou entre em contato com a imobiliária.');
@@ -100,12 +131,26 @@ export default function LoginClienteImovel() {
         .update({ codigo_verificacao: otp, codigo_expira_em: expiry.toISOString() })
         .eq('id', lead.id);
 
-      // Send via WhatsApp
+      // Send via WhatsApp — block flow if delivery fails
       const phone = lead.telefone || lead.whatsapp;
-      if (phone) {
-        await sendWhatsAppOTP(phone, otp, lead.nome || '');
+      if (!phone) {
+        setError('Cadastro sem telefone. Atualize seus dados na imobiliária.');
+        setLoading(false);
+        return;
+      }
+      const sent = await sendWhatsAppOTP(phone, otp, lead.nome || '');
+      if (!sent) {
+        // Invalidate the stored code so it can't be guessed
+        await (supabase as any)
+          .from('mt_leads')
+          .update({ codigo_verificacao: null, codigo_expira_em: null })
+          .eq('id', lead.id);
+        setError('Não foi possível enviar o código por WhatsApp. Tente novamente em instantes.');
+        setLoading(false);
+        return;
       }
 
+      setVerifyAttempts(0);
       setStep("verify");
     } catch (err: any) {
       setError(err.message || 'Erro ao buscar cadastro');
@@ -139,14 +184,35 @@ export default function LoginClienteImovel() {
         return;
       }
 
-      if (data.codigo_verificacao !== code) {
-        setError('Código inválido.');
+      // Check expiry first
+      if (data.codigo_expira_em && new Date(data.codigo_expira_em) < new Date()) {
+        setError('Código expirado. Solicite um novo.');
         setLoading(false);
         return;
       }
 
-      if (data.codigo_expira_em && new Date(data.codigo_expira_em) < new Date()) {
-        setError('Código expirado. Solicite um novo.');
+      if (verifyAttempts >= MAX_VERIFY_ATTEMPTS) {
+        setError('Muitas tentativas. Solicite um novo código.');
+        setStep('identify');
+        setPendingLead(null);
+        setLoading(false);
+        return;
+      }
+
+      if (data.codigo_verificacao !== code) {
+        const next = verifyAttempts + 1;
+        setVerifyAttempts(next);
+        if (next >= MAX_VERIFY_ATTEMPTS) {
+          await (supabase as any)
+            .from('mt_leads')
+            .update({ codigo_verificacao: null, codigo_expira_em: null })
+            .eq('id', pendingLead.id);
+          setStep('identify');
+          setPendingLead(null);
+          setError('Muitas tentativas. Solicite um novo código.');
+        } else {
+          setError(`Código inválido. ${MAX_VERIFY_ATTEMPTS - next} tentativa(s) restante(s).`);
+        }
         setLoading(false);
         return;
       }

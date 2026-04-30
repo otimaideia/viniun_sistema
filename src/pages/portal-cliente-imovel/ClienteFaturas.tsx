@@ -30,16 +30,18 @@ export default function ClienteFaturas() {
   const navigate = useNavigate();
   const clienteData = JSON.parse(sessionStorage.getItem("cliente_auth") || "{}");
   const leadId = clienteData?.id;
+  const tenantId = clienteData?.tenant_id;
 
   const { data: faturas = [], isLoading } = useQuery({
-    queryKey: ["cliente-faturas", leadId],
+    queryKey: ["cliente-faturas", leadId, tenantId],
     queryFn: async () => {
-      const { data } = await (supabase as any)
+      let q = (supabase as any)
         .from("mt_property_invoices")
         .select("*, mt_properties!property_id(titulo, ref_code), mt_property_contracts!contract_id(numero_contrato, tipo)")
         .eq("lead_id", leadId)
-        .is("deleted_at", null)
-        .order("data_vencimento", { ascending: false });
+        .is("deleted_at", null);
+      if (tenantId) q = q.eq("tenant_id", tenantId);
+      const { data } = await q.order("data_vencimento", { ascending: false });
       return data || [];
     },
     enabled: !!leadId,

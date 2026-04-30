@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 import {
   ArrowLeft, ArrowRight, CheckCircle2, Loader2, BookOpen,
   Play, FileText, ExternalLink, Code, Download,
@@ -171,11 +172,17 @@ export default function LessonPlayer() {
             </div>
           )}
 
-          {/* Text content */}
+          {/* Text content (sanitized to prevent XSS) */}
           {lesson.tipo === 'texto' && lesson.conteudo_html && (
             <div
               className="prose prose-sm max-w-none dark:prose-invert"
-              dangerouslySetInnerHTML={{ __html: lesson.conteudo_html }}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(lesson.conteudo_html, {
+                  USE_PROFILES: { html: true },
+                  FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'form'],
+                  FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur'],
+                }),
+              }}
             />
           )}
 
@@ -227,11 +234,18 @@ export default function LessonPlayer() {
             </div>
           )}
 
-          {/* Embed */}
+          {/* Embed (sanitized; iframes allowed but scripts/inline events stripped) */}
           {lesson.tipo === 'embed' && lesson.embed_code && (
             <div
               className="w-full"
-              dangerouslySetInnerHTML={{ __html: lesson.embed_code }}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(lesson.embed_code, {
+                  ADD_TAGS: ['iframe'],
+                  ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+                  FORBID_TAGS: ['script', 'object', 'embed', 'form'],
+                  FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur'],
+                }),
+              }}
             />
           )}
 

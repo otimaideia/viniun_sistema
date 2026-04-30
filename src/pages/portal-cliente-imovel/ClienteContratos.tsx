@@ -16,16 +16,18 @@ export default function ClienteContratos() {
   const navigate = useNavigate();
   const clienteData = JSON.parse(sessionStorage.getItem("cliente_auth") || "{}");
   const leadId = clienteData?.id;
+  const tenantId = clienteData?.tenant_id;
 
   const { data: contratos = [], isLoading } = useQuery({
-    queryKey: ["cliente-contratos-all", leadId],
+    queryKey: ["cliente-contratos-all", leadId, tenantId],
     queryFn: async () => {
-      const { data } = await (supabase as any)
+      let q = (supabase as any)
         .from("mt_property_contracts")
         .select("*, mt_properties!property_id(titulo, ref_code), mt_property_contract_signatories(id, tipo, nome, assinado, token_assinatura)")
         .eq("lead_id", leadId)
-        .is("deleted_at", null)
-        .order("created_at", { ascending: false });
+        .is("deleted_at", null);
+      if (tenantId) q = q.eq("tenant_id", tenantId);
+      const { data } = await q.order("created_at", { ascending: false });
       return data || [];
     },
     enabled: !!leadId,

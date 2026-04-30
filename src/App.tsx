@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -495,42 +495,133 @@ import { ClienteProtectedRoute } from "@/components/cliente";
 const queryClient = new QueryClient();
 
 // Guard: redireciona para login se não autenticado no portal cliente imobiliário
+// Valida contra o backend para impedir bypass por manipulação de sessionStorage
 function ClienteImovelGuard({ children }: { children: React.ReactNode }) {
-  const stored = sessionStorage.getItem('cliente_auth');
-  if (!stored) {
-    window.location.href = '/cliente-imovel/login';
-    return null;
-  }
-  try {
-    const data = JSON.parse(stored);
-    if (!data?.id) {
-      window.location.href = '/cliente-imovel/login';
-      return null;
+  const [validated, setValidated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function validate() {
+      const stored = sessionStorage.getItem('cliente_auth');
+      if (!stored) {
+        if (!cancelled) {
+          window.location.href = '/cliente-imovel/login';
+          setValidated(false);
+        }
+        return;
+      }
+      let data: { id?: string; tenant_id?: string } | null = null;
+      try {
+        data = JSON.parse(stored);
+      } catch {
+        // invalid JSON
+      }
+      if (!data?.id || !/^[0-9a-f-]{36}$/i.test(data.id)) {
+        sessionStorage.removeItem('cliente_auth');
+        if (!cancelled) {
+          window.location.href = '/cliente-imovel/login';
+          setValidated(false);
+        }
+        return;
+      }
+      // Verify the lead exists in the backend (cannot be forged via DevTools)
+      const { supabase } = await import('@/integrations/supabase/client');
+      let q = (supabase as any)
+        .from('mt_leads')
+        .select('id, tenant_id')
+        .eq('id', data.id)
+        .is('deleted_at', null);
+      if (data.tenant_id) q = q.eq('tenant_id', data.tenant_id);
+      const { data: row } = await q.maybeSingle();
+      if (!row) {
+        sessionStorage.removeItem('cliente_auth');
+        if (!cancelled) {
+          window.location.href = '/cliente-imovel/login';
+          setValidated(false);
+        }
+        return;
+      }
+      if (!cancelled) setValidated(true);
     }
-  } catch {
-    window.location.href = '/cliente-imovel/login';
-    return null;
+    validate();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (validated === null) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="animate-spin h-8 w-8 rounded-full border-b-2 border-primary" />
+      </div>
+    );
   }
+  if (validated === false) return null;
   return <>{children}</>;
 }
 
 // Guard: redireciona para login se não autenticado no portal do corretor
+// Valida contra o backend para impedir bypass por manipulação de sessionStorage
 function CorretorGuard({ children }: { children: React.ReactNode }) {
-  const stored = sessionStorage.getItem('corretor_auth');
-  if (!stored) {
-    window.location.href = '/corretor/login';
-    return null;
-  }
-  try {
-    const data = JSON.parse(stored);
-    if (!data?.id) {
-      window.location.href = '/corretor/login';
-      return null;
+  const [validated, setValidated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function validate() {
+      const stored = sessionStorage.getItem('corretor_auth');
+      if (!stored) {
+        if (!cancelled) {
+          window.location.href = '/corretor/login';
+          setValidated(false);
+        }
+        return;
+      }
+      let data: { id?: string; tenant_id?: string } | null = null;
+      try {
+        data = JSON.parse(stored);
+      } catch {
+        // invalid JSON
+      }
+      if (!data?.id || !/^[0-9a-f-]{36}$/i.test(data.id)) {
+        sessionStorage.removeItem('corretor_auth');
+        if (!cancelled) {
+          window.location.href = '/corretor/login';
+          setValidated(false);
+        }
+        return;
+      }
+      const { supabase } = await import('@/integrations/supabase/client');
+      let q = (supabase as any)
+        .from('mt_corretores')
+        .select('id, tenant_id')
+        .eq('id', data.id)
+        .is('deleted_at', null);
+      if (data.tenant_id) q = q.eq('tenant_id', data.tenant_id);
+      const { data: row } = await q.maybeSingle();
+      if (!row) {
+        sessionStorage.removeItem('corretor_auth');
+        if (!cancelled) {
+          window.location.href = '/corretor/login';
+          setValidated(false);
+        }
+        return;
+      }
+      if (!cancelled) setValidated(true);
     }
-  } catch {
-    window.location.href = '/corretor/login';
-    return null;
+    validate();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (validated === null) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="animate-spin h-8 w-8 rounded-full border-b-2 border-primary" />
+      </div>
+    );
   }
+  if (validated === false) return null;
   return <>{children}</>;
 }
 
