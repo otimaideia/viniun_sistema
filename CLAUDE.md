@@ -1241,11 +1241,19 @@ PASSWORD=Marketing@Otimaideia@2025
 
 # Projeto Supabase no Coolify
 PROJECT_URL=https://coolify.viniun.com.br/project/ps4sk44kkcowcc08g48cg4cg/environment/cck0kw448oowss080oco8wsk
-SERVICE_ID=tk0sw4gskkwgc8gw08swoccc
+SERVICE_ID=wtdv6rh2ue3kfdbqge6au12a
 
-# Edge Functions - Volume Persistente
-HOST_PATH=/data/coolify/services/tk0sw4gskkwgc8gw08swoccc/volumes/functions
+# Edge Functions - Volume Persistente (viniun)
+HOST_PATH=/data/coolify/services/wtdv6rh2ue3kfdbqge6au12a/volumes/functions
 CONTAINER_PATH=/home/deno/functions
+EDGE_RUNTIME_CONTAINER=supabase-edge-functions-wtdv6rh2ue3kfdbqge6au12a
+
+# IMPORTANTE: o servidor hospeda múltiplos tenants. Antes de deployar, confirmar
+# com `docker exec <container> env | grep SUPABASE_URL` se aponta para viniun.
+# Caminhos de outros tenants (NÃO USAR para viniun):
+#   tk0sw4gskkwgc8gw08swoccc → yeslaserpraiagrande
+#   fgk4cco0gssk4sggo848kggo → yeslaserpraiagrande (app)
+#   bc0o48sss8wco8kcgo8s4ocg → escolaotimaideia
 ```
 
 ### Servidor de Desenvolvimento
@@ -1897,14 +1905,22 @@ GROUP BY t.slug ORDER BY t.slug;
 ### Edge Functions (Supabase/Deno)
 - **Método**: SCP via SSH para o servidor
 - **Servidor**: `root@5.189.153.222` (senha: `Mkt@310809`)
-- **Caminho**: `/data/coolify/services/fgk4cco0gssk4sggo848kggo/volumes/functions/`
+- **Caminho viniun**: `/data/coolify/services/wtdv6rh2ue3kfdbqge6au12a/volumes/functions/`
+- **Container**: `supabase-edge-functions-wtdv6rh2ue3kfdbqge6au12a`
+- **Permissões**: `chown 501:staff` no diretório/arquivos após upload (uid do user `deno` no container)
 - **Este é o ÚNICO caso** onde SSH/SCP é permitido
+
+> ⚠️ **CONFIRMAR ANTES DO DEPLOY**: o servidor hospeda múltiplos tenants. Validar com:
+> ```bash
+> ssh root@5.189.153.222 "docker exec supabase-edge-functions-wtdv6rh2ue3kfdbqge6au12a env | grep SUPABASE_URL"
+> # deve retornar: SUPABASE_URL=https://supabase.viniun.com.br
+> ```
 
 ### Resumo
 | Componente | Método de Deploy | Comando |
 |------------|-----------------|---------|
 | Frontend | Git push | `git push origin main` |
-| Edge Functions | SCP via SSH | `scp arquivo root@5.189.153.222:/data/coolify/.../functions/` |
+| Edge Functions | SCP via SSH | `scp index.ts root@5.189.153.222:/data/coolify/services/wtdv6rh2ue3kfdbqge6au12a/volumes/functions/<nome>/` |
 
 ---
 

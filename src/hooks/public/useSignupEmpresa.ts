@@ -57,18 +57,20 @@ export function useSignupEmpresa() {
 
       const userId = authData.user.id;
 
-      // 1b. Confirm email via admin API (service role key from env)
-      const serviceKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
-      if (serviceKey) {
-        await fetch(`${import.meta.env.VITE_SUPABASE_URL}/auth/v1/admin/users/${userId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': serviceKey,
-            'Authorization': `Bearer ${serviceKey}`,
-          },
-          body: JSON.stringify({ email_confirm: true }),
-        });
+      // 1b. Confirm email via Edge Function (server-side; service_role stays on server)
+      const { data: confirmData, error: confirmInvokeErr } = await supabase.functions.invoke<{
+        success: boolean;
+        error?: string;
+      }>('signup-confirm', { body: { userId } });
+
+      if (confirmInvokeErr || !confirmData?.success) {
+        // Don't proceed to signInWithPassword — it would fail with "Email not confirmed".
+        // Surface a clear error so the user knows to confirm via the email link instead.
+        const reason = confirmData?.error || confirmInvokeErr?.message || 'desconhecido';
+        return {
+          success: false,
+          error: `Não foi possível confirmar o email automaticamente (${reason}). Verifique sua caixa de entrada e use o link de confirmação.`,
+        };
       }
 
       // 1c. Sign in to get authenticated session

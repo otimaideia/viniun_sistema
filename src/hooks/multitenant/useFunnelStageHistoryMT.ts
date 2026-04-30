@@ -94,14 +94,14 @@ export function useFunnelStageTimeMetricsMT(funnelId: string | undefined) {
       if (!funnelId) return [];
 
       const { data, error } = await supabase
-        .from('v_funnel_stage_time_metrics')
+        .from('mt_v_funnel_stage_time_metrics')
         .select('*')
         .eq('funnel_id', funnelId)
         .order('stage_ordem', { ascending: true });
 
       if (error) {
         // View pode não existir ainda, fallback para query manual
-        console.warn('View v_funnel_stage_time_metrics não encontrada, usando fallback');
+        console.warn('View mt_v_funnel_stage_time_metrics não encontrada, usando fallback');
         return [];
       }
 

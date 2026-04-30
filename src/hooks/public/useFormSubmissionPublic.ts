@@ -61,6 +61,7 @@ export interface SubmissionData {
   dados: Record<string, unknown>;
   user_agent: string;
   referrer: string;
+  ip_address?: string | null;
   utm_source?: string | null;
   utm_medium?: string | null;
   utm_campaign?: string | null;

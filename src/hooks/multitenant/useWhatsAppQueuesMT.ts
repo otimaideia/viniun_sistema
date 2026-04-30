@@ -68,7 +68,7 @@ export function useWhatsAppQueuesMT(filters?: QueueFilters) {
     queryKey: ['mt-whatsapp-queue-stats', tenant?.id, franchise?.id, filters],
     queryFn: async (): Promise<QueueStats[]> => {
       let q = supabase
-        .from('v_whatsapp_queue_stats')
+        .from('mt_v_whatsapp_queue_stats')
         .select('*');
 
       if (accessLevel === 'tenant' && tenant) {
