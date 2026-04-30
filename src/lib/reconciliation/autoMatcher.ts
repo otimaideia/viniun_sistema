@@ -36,7 +36,7 @@ function tokenize(text: string): Set<string> {
       .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
-      .split(/[\s\-\/\.\,\;\:\(\)]+/)
+      .split(/[\s\-/.,;:()]+/)
       .filter(t => t.length > 2)
   );
 }

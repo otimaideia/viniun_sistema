@@ -89,11 +89,7 @@ export function LeadMiniCRM({ leadId, leadPhone, leadPhoneCountryCode, leadName,
 
   // Criar atividade
   const handleAddActivity = async (data: LeadActivityInsert) => {
-    try {
-      await createActivityAsync(data);
-    } catch (error) {
-      throw error;
-    }
+    await createActivityAsync(data);
   };
 
   // Handlers para timeline

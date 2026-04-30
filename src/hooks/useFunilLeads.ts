@@ -597,7 +597,7 @@ export function useFunilLeadMutations() {
           user_id: tenantContext.user?.id,
           user_nome: tenantContext.user?.email || 'Sistema',
         });
-      } catch {}
+      } catch { /* ignore */ }
 
       return { sourceFunnelId, destinationFunnelId };
     },

@@ -141,7 +141,6 @@ export function useWahaConfigAdapter(franchiseIdOverride?: string) {
 
         if (wahaConfigError) {
           console.warn('[useWahaConfigAdapter] Erro ao buscar mt_waha_config:', wahaConfigError.message);
-        } else {
         }
 
         // PRIORIDADE 2: Fallback para mt_whatsapp_sessions

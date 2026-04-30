@@ -92,7 +92,7 @@ export default function FunilVendas() {
 
   const handleViewModeChange = (mode: 'kanban' | 'list') => {
     setViewMode(mode);
-    try { localStorage.setItem('funil-view-mode', mode); } catch {}
+    try { localStorage.setItem('funil-view-mode', mode); } catch { /* ignore */ }
   };
 
   // Filtros
@@ -674,7 +674,7 @@ export default function FunilVendas() {
                   });
                   setTransferLead(null);
                   setTransferFunnelId('');
-                } catch {}
+                } catch { /* ignore */ }
               }}
             >
               {isTransferring ? 'Transferindo...' : 'Transferir'}

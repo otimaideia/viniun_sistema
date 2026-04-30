@@ -106,21 +106,7 @@ export default function CargoPermissoes() {
   // Encontrar o role atual
   const currentRole = roles.find(r => r.id === roleId);
 
-  // Verificar permissão de acesso
-  if (accessLevel !== 'platform' && accessLevel !== 'tenant' && accessLevel !== 'franchise') {
-    return (
-      <div className="text-center py-12">
-        <Shield className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-        <p className="text-muted-foreground">
-          Você não tem permissão para acessar esta página.
-        </p>
-      </div>
-    );
-  }
-
-  const isLoading = isLoadingRoles || isLoadingPermissions || isLoadingRolePermissions;
-
-  // Filtrar módulos por busca
+  // Filtrar módulos por busca (Hooks must be called before early returns)
   const filteredModules = useMemo(() => {
     if (!searchTerm) return permissionsByModule;
 
@@ -160,6 +146,20 @@ export default function CargoPermissoes() {
 
     return { total, granted, percentage: total > 0 ? Math.round((granted / total) * 100) : 0 };
   }, [permissionsByModule, isGranted]);
+
+  // Verificar permissão de acesso
+  if (accessLevel !== 'platform' && accessLevel !== 'tenant' && accessLevel !== 'franchise') {
+    return (
+      <div className="text-center py-12">
+        <Shield className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+        <p className="text-muted-foreground">
+          Você não tem permissão para acessar esta página.
+        </p>
+      </div>
+    );
+  }
+
+  const isLoading = isLoadingRoles || isLoadingPermissions || isLoadingRolePermissions;
 
   // Handler para toggle de permissão
   const handleToggle = async (permissionId: string, currentGranted: boolean) => {

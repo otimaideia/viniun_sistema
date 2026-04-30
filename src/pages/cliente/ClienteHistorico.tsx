@@ -162,7 +162,7 @@ function AppointmentList({ appointments, emptyMessage = 'Nenhum agendamento enco
             month: 'long',
             year: 'numeric',
           });
-        } catch {}
+        } catch { /* ignore */ }
 
         return (
           <Card key={ag.id} className="hover:shadow-sm transition-shadow">

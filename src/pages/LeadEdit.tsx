@@ -405,6 +405,14 @@ export default function LeadEdit() {
     }
   }, [isNew, searchParams]);
 
+  // Filtrar franquias visíveis por nível de acesso (antes de early returns para respeitar Rules of Hooks)
+  const availableFranquias = useMemo(() => {
+    if (accessLevel === 'franchise' && franchise) {
+      return franqueados.filter(f => f.id === franchise.id);
+    }
+    return franqueados;
+  }, [franqueados, accessLevel, franchise]);
+
   if (isLoading || loadingFranqueados) {
     return (
       <DashboardLayout>
@@ -488,14 +496,6 @@ export default function LeadEdit() {
       }
     });
   };
-
-  // Filtrar franquias visíveis por nível de acesso
-  const availableFranquias = useMemo(() => {
-    if (accessLevel === 'franchise' && franchise) {
-      return franqueados.filter(f => f.id === franchise.id);
-    }
-    return franqueados;
-  }, [franqueados, accessLevel, franchise]);
 
   // Toggle de serviço para multi-select
   const handleServicoToggle = (servicoNome: string) => {

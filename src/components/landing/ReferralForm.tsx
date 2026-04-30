@@ -236,7 +236,6 @@ const ReferralForm = () => {
           } else {
             sonnerToast.success(`${completeFriends.length} indicação(ões) registrada(s) com sucesso.`);
           }
-        } else {
         }
 
         // Aguardar um momento para garantir que tudo foi salvo

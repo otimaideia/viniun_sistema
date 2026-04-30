@@ -103,14 +103,16 @@ export function ChatHeaderV2({
   isBlocked = false,
   onSearchInConversation,
 }: ChatHeaderV2Props) {
-  if (!chat) return null;
-
   // Force re-render every 30s to recalculate waiting time
+  // Hooks MUST be called before any early returns
   const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
   useEffect(() => {
+    if (!chat) return;
     const interval = setInterval(forceUpdate, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, [chat]);
+
+  if (!chat) return null;
 
   const initials = getInitials(chat.nome_contato);
   const displayName = safeText(chat.nome_contato) || safeText(chat.numero_telefone) || "Contato";

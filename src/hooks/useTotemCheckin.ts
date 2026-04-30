@@ -118,14 +118,21 @@ export function useTotemCheckin(): UseTotemCheckinReturn {
         .select('id, nome, telefone, cpf')
         .eq('tenant_id', tenantId);  // MT: FILTRO OBRIGATÓRIO
 
+      // cleaned is digits-only by construction; assert defensively before interpolation
+      if (!/^\d+$/.test(cleaned)) {
+        setError('Entrada inválida');
+        return [];
+      }
+
       if (searchByCPF) {
-        // Buscar por CPF (com ou sem formatação)
-        leadQuery = leadQuery.or(`cpf.eq.${cleaned},cpf.eq.${cleanCPF(cpfOrPhone)}`);
+        const cpfVariants = Array.from(new Set([cleaned, cleanCPF(cpfOrPhone)].filter(Boolean)));
+        leadQuery = leadQuery.in('cpf', cpfVariants);
       } else {
-        // Buscar por telefone - múltiplos formatos (+55, 55, sem prefixo)
         const withCountry = `55${cleaned}`;
         const withPlus = `+55${cleaned}`;
-        leadQuery = leadQuery.or(`telefone.eq.${cleaned},telefone.eq.${withCountry},telefone.eq.${withPlus},telefone.ilike.%${cleaned}`);
+        leadQuery = leadQuery.or(
+          `telefone.eq.${cleaned},telefone.eq.${withCountry},telefone.eq.${withPlus},telefone.ilike.%${cleaned}`
+        );
       }
 
       const { data: leads, error: leadError } = await leadQuery;

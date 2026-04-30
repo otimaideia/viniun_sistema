@@ -176,6 +176,40 @@ interface DynamicFieldProps {
   setValue?: ReturnType<typeof useForm>['setValue'];
 }
 
+interface PhoneIntlFieldProps {
+  field: { value: string; onChange: (v: string) => void; onBlur: () => void };
+  campo: FormularioCampo;
+  disabled?: boolean;
+  errors: Record<string, { message?: string }>;
+  setValue?: ReturnType<typeof useForm>['setValue'];
+}
+
+const PhoneIntlField = ({ field, campo, disabled, errors, setValue }: PhoneIntlFieldProps) => {
+  const [countryCode, setCountryCode] = useState('55');
+
+  return (
+    <PhoneInputInternational
+      value={field.value}
+      countryCode={countryCode}
+      onChange={(value) => field.onChange(value)}
+      onCountryChange={(code) => {
+        setCountryCode(code);
+        if (campo.campo_lead === 'whatsapp' || campo.campo_lead === 'telefone') {
+          const countryFieldName = `${campo.nome}_codigo_pais`;
+          if (setValue) {
+            setValue(countryFieldName, code);
+          }
+        }
+      }}
+      onBlur={field.onBlur}
+      placeholder={campo.placeholder}
+      disabled={disabled}
+      error={!!errors[campo.nome]}
+      showCountryName
+    />
+  );
+};
+
 const DynamicField = ({ campo, control, errors, onCepChange, disabled, setValue }: DynamicFieldProps) => {
   const [cepLoading, setCepLoading] = useState(false);
 
@@ -346,37 +380,15 @@ const DynamicField = ({ campo, control, errors, onCepChange, disabled, setValue 
             name={campo.nome}
             control={control}
             defaultValue=""
-            render={({ field }) => {
-              // O campo armazena tanto o número quanto o código do país
-              // Formato interno: { phone: string, countryCode: string }
-              // Mas para compatibilidade, salvamos apenas o número formatado
-              const [countryCode, setCountryCode] = useState('55');
-
-              return (
-                <PhoneInputInternational
-                  value={field.value}
-                  countryCode={countryCode}
-                  onChange={(value) => {
-                    field.onChange(value);
-                  }}
-                  onCountryChange={(code) => {
-                    setCountryCode(code);
-                    // Se houver campo_lead para código do país, preencher
-                    if (campo.campo_lead === 'whatsapp' || campo.campo_lead === 'telefone') {
-                      const countryFieldName = `${campo.nome}_codigo_pais`;
-                      if (setValue) {
-                        setValue(countryFieldName, code);
-                      }
-                    }
-                  }}
-                  onBlur={field.onBlur}
-                  placeholder={campo.placeholder}
-                  disabled={disabled}
-                  error={!!errors[campo.nome]}
-                  showCountryName
-                />
-              );
-            }}
+            render={({ field }) => (
+              <PhoneIntlField
+                field={field}
+                campo={campo}
+                disabled={disabled}
+                errors={errors}
+                setValue={setValue}
+              />
+            )}
           />
         );
 

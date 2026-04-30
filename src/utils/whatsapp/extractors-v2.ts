@@ -405,7 +405,7 @@ export function isPhoneNumberV2(value: string): boolean {
   const cleaned = value.replace(/\s+/g, '');
 
   // Padrão: aceita + opcional, parênteses, dígitos, hífens
-  const phonePattern = /^[\+\(]?[\d\s\-()]+$/;
+  const phonePattern = /^[+(]?[\d\s\-()]+$/;
 
   // Deve ter pelo menos 8 dígitos (mínimo para um telefone válido)
   const digitCount = (cleaned.match(/\d/g) || []).length;

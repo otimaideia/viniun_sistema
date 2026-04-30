@@ -804,7 +804,7 @@ export default function UsuarioEdit() {
       } else {
         toast({
           title: 'Erro ao salvar',
-          description: error instanceof Error ? error.message : 'Erro desconhecido' || 'Não foi possível salvar o usuário.',
+          description: error instanceof Error ? error.message : 'Não foi possível salvar o usuário.',
           variant: 'destructive',
         });
       }

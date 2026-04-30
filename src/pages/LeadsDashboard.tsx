@@ -521,7 +521,7 @@ export default function LeadsDashboard() {
                         value={percentage}
                         className="h-2"
                         style={{
-                          // @ts-ignore
+                          // @ts-expect-error CSS custom property
                           "--progress-background": stage.color,
                         } as React.CSSProperties}
                       />

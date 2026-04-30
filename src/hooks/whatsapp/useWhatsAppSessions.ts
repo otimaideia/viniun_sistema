@@ -184,7 +184,6 @@ export function useWhatsAppSessions(franqueadoId?: string) {
                 syncedSessions.push(newSession as WhatsAppSession);
               }
             }
-          } else {
           }
           // Se não tem franqueadoId válido, criar sessão virtual para exibição
           if (!isValidUUID) {

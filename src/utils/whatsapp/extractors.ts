@@ -75,7 +75,7 @@ export function isPhoneNumber(value: string): boolean {
 
   // Padrão: aceita + opcional, parênteses, dígitos, hífens
   // Exemplos: +5513991234567, (13) 99123-4567, 13 99123-4567, (13)99123-4567
-  const phonePattern = /^[\+\(]?[\d\s\-()]+$/;
+  const phonePattern = /^[+(]?[\d\s\-()]+$/;
 
   // Deve ter pelo menos 8 dígitos (mínimo para um telefone válido)
   const digitCount = (cleaned.match(/\d/g) || []).length;

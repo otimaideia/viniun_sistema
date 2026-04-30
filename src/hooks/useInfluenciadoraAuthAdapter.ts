@@ -362,7 +362,7 @@ export function useInfluenciadoraAuthAdapter() {
         const normalizedDigits = identifier.replace(/\D/g, '');
         // CPF: 11 dígitos numéricos COM formatação de CPF (pontos/traço) OU dígitos que passam validação
         // Telefone celular BR: 11 dígitos = DDD(2) + 9 + número(8) — o 3º dígito é sempre 9
-        const hasCpfFormatting = /^\d{3}[.\-]\d{3}[.\-]\d{3}[.\-]\d{2}$/.test(identifier.trim());
+        const hasCpfFormatting = /^\d{3}[.-]\d{3}[.-]\d{3}[.-]\d{2}$/.test(identifier.trim());
         const isCpfIdentifier = !isEmailIdentifier && normalizedDigits.length === 11
           && !normalizedDigits.startsWith('55')
           && (hasCpfFormatting || normalizedDigits[2] !== '9');

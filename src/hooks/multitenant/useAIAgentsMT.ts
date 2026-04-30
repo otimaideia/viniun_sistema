@@ -14,6 +14,7 @@ export function useAIAgentsMT() {
       let q = (supabase as any)
         .from('mt_ai_agents')
         .select('*')
+        .is('deleted_at', null)
         .eq('is_active', true)
         .order('ordem', { ascending: true });
 
@@ -84,7 +85,11 @@ export function useAIAgentsMT() {
     mutationFn: async (id: string) => {
       const { error } = await (supabase as any)
         .from('mt_ai_agents')
-        .delete()
+        .update({
+          deleted_at: new Date().toISOString(),
+          is_active: false,
+          updated_at: new Date().toISOString(),
+        })
         .eq('id', id);
 
       if (error) throw error;
@@ -124,7 +129,15 @@ export function useAIAgentsMT() {
 
       const { data, error } = await (supabase as any)
         .from('mt_ai_agents')
-        .insert({ ...rest, codigo: newCodigo, nome: newNome })
+        .insert({
+          ...rest,
+          codigo: newCodigo,
+          nome: newNome,
+          tenant_id: (rest as any).tenant_id || tenant?.id,
+          franchise_id: (rest as any).franchise_id ?? franchise?.id ?? null,
+          deleted_at: null,
+          is_active: true,
+        })
         .select()
         .single();
 

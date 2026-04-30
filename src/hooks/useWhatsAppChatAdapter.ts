@@ -838,15 +838,12 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
 
       // Auto-atribuir conversa ao atendente que enviou (se ainda não atribuída)
       if (user?.id) {
-        const { count: assignCount } = await supabase
+        await supabase
           .from('mt_whatsapp_conversations')
           .update({ assigned_to: user.id, assigned_at: now } as any)
           .eq('id', selectedConversaId)
           .is('assigned_to', null)
           .select('id', { count: 'exact', head: true });
-
-        if (assignCount === 0) {
-        }
       }
 
       // === LOG DE ROTEAMENTO (se híbrido ativo) ===
@@ -1046,15 +1043,12 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
 
       // Auto-atribuir conversa ao atendente que enviou (se ainda não atribuída)
       if (user?.id) {
-        const { count: assignCount } = await supabase
+        await supabase
           .from('mt_whatsapp_conversations')
           .update({ assigned_to: user.id, assigned_at: now } as any)
           .eq('id', selectedConversaId)
           .is('assigned_to', null)
           .select('id', { count: 'exact', head: true });
-
-        if (assignCount === 0) {
-        }
       }
 
       // Atualizar mensagem otimista
@@ -1874,7 +1868,6 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
 
                     if (funnelError) {
                       console.error('[SYNC] Erro ao adicionar lead ao funil:', funnelError.message);
-                    } else {
                     }
                   }
                 }

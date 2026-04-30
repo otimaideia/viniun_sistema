@@ -64,7 +64,7 @@ export function useVendasMT(filters?: SaleFilters) {
     const { data: lastSale } = await supabase
       .from('mt_sales')
       .select('numero_venda')
-      .eq('tenant_id', tenant?.id!)
+      .eq('tenant_id', tenant?.id ?? '')
       .like('numero_venda', `${prefix}%`)
       .order('numero_venda', { ascending: false })
       .limit(1);

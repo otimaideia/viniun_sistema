@@ -287,7 +287,7 @@ export default function ClienteAgendar() {
             const inf = referral.influencer as { nome?: string; nome_artistico?: string };
             influencerNome = inf.nome || inf.nome_artistico || '';
           }
-        } catch {}
+        } catch { /* ignore */ }
       }
 
       const servicoNome = 'Avaliação + Sessões de Serviços Exclusivos';
@@ -340,7 +340,7 @@ export default function ClienteAgendar() {
             type: 'cliente',
           });
           clienteTokenLink = `${origin}/cliente/agendar/${franchiseSlug || ''}?token=${clienteToken}`;
-        } catch {}
+        } catch { /* ignore */ }
       }
 
       // Token para o influenciador (acesso à área de indicações)
@@ -362,7 +362,7 @@ export default function ClienteAgendar() {
             });
             influencerTokenLink = `${origin}/influenciadores/painel?token=${infToken}`;
           }
-        } catch {}
+        } catch { /* ignore */ }
       }
 
       // Link para a empresa (lead no painel admin)

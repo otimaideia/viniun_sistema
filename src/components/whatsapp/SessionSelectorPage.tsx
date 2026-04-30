@@ -252,6 +252,7 @@ export function SessionSelectorPage() {
         const sessao = validSessions[i];
         setSyncAllProgress({ current: i + 1, total: validSessions.length, currentSession: sessao.nome || sessao.session_name });
         if (sessao.status !== 'working') { totalErrors++; continue; }
+        if (!sessao.tenant_id) { totalErrors++; continue; }
         try {
           const wahaChats = await wahaApi.getChats(sessao.session_name);
           if (!wahaChats?.length) continue;
@@ -271,14 +272,15 @@ export function SessionSelectorPage() {
             }
             if (!contactPicture && !chatId.includes('@g.us')) contactPicture = generateDefaultAvatar(contactName || phone);
             const { data: existing } = await supabase.from("mt_whatsapp_conversations")
-              .select("id").eq("session_id", sessao.id).eq("chat_id", chatId).maybeSingle();
+              .select("id").eq("session_id", sessao.id).eq("chat_id", chatId)
+              .eq("tenant_id", sessao.tenant_id).maybeSingle();
             if (existing) {
               await supabase.from("mt_whatsapp_conversations").update({
                 contact_name: contactName, contact_phone: phone || null, contact_avatar: contactPicture,
                 is_group: chatId.includes("@g.us") || chatId.includes("@broadcast") || chatId.includes("@newsletter"),
                 last_message_at: chat.lastMessageAt || new Date().toISOString(),
                 unread_count: chat.unreadCount || 0, updated_at: new Date().toISOString(),
-              }).eq("id", existing.id);
+              }).eq("id", existing.id).eq("tenant_id", sessao.tenant_id);
             } else {
               await supabase.from("mt_whatsapp_conversations").insert({
                 tenant_id: sessao.tenant_id, franchise_id: sessao.franchise_id, session_id: sessao.id,
@@ -331,6 +333,7 @@ export function SessionSelectorPage() {
   const handleSyncSession = useCallback(async (sessaoIdToSync: string) => {
     const sessao = validSessions.find(s => s.id === sessaoIdToSync);
     if (!sessao) { toast.error("Sessão não encontrada"); return; }
+    if (!sessao.tenant_id) { toast.error("Sessão sem tenant_id válido"); return; }
     if (!wahaConfig?.api_url || !wahaConfig?.api_key) { toast.error("WAHA não configurado"); return; }
     syncCancelledBySessionRef.current[sessaoIdToSync] = false;
     setSyncProgressBySession(prev => ({ ...prev, [sessaoIdToSync]: { isRunning: true, current: 0, total: 0, currentChat: 'Iniciando...' } }));
@@ -362,24 +365,26 @@ export function SessionSelectorPage() {
         }
         if (!contactPicture && !chatId.includes('@g.us')) contactPicture = generateDefaultAvatar(contactName || phone);
         const { data: existingInSession } = await supabase.from("mt_whatsapp_conversations")
-          .select("id").eq("session_id", sessaoIdToSync).eq("chat_id", chatId).maybeSingle();
+          .select("id").eq("session_id", sessaoIdToSync).eq("chat_id", chatId)
+          .eq("tenant_id", sessao.tenant_id).maybeSingle();
         if (existingInSession) {
           await supabase.from("mt_whatsapp_conversations").update({
             contact_name: contactName, contact_phone: phone || null, contact_avatar: contactPicture,
             is_group: chatId.includes("@g.us") || chatId.includes("@broadcast") || chatId.includes("@newsletter"),
             last_message_at: chat.lastMessageAt || new Date().toISOString(),
             unread_count: chat.unreadCount || 0, updated_at: new Date().toISOString(),
-          }).eq("id", existingInSession.id);
+          }).eq("id", existingInSession.id).eq("tenant_id", sessao.tenant_id);
         } else {
           const { data: existingByPhone } = await supabase.from("mt_whatsapp_conversations")
             .select("id, session_id, chat_id").eq("contact_phone", phone)
+            .eq("tenant_id", sessao.tenant_id)
             .neq("session_id", sessaoIdToSync).limit(1).maybeSingle();
           if (existingByPhone) {
             await supabase.from("mt_whatsapp_conversations").update({
               session_id: sessaoIdToSync, chat_id: chatId, contact_name: contactName, contact_phone: phone || null,
               contact_avatar: contactPicture, last_message_at: chat.lastMessageAt || new Date().toISOString(),
               unread_count: chat.unreadCount || 0, updated_at: new Date().toISOString(),
-            }).eq("id", existingByPhone.id);
+            }).eq("id", existingByPhone.id).eq("tenant_id", sessao.tenant_id);
           } else {
             await supabase.from("mt_whatsapp_conversations").insert({
               tenant_id: sessao.tenant_id, franchise_id: sessao.franchise_id, session_id: sessaoIdToSync,

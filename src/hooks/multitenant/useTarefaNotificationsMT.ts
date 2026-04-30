@@ -329,7 +329,6 @@ A tarefa *"${task.titulo}"* está atrasada!
 
           if (!result.success) {
             console.error(`[TarefaNotif] Falha ao enviar para ${recipient.phone}:`, result.error);
-          } else {
           }
 
           return result;

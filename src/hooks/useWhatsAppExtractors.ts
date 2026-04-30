@@ -45,7 +45,7 @@ export function isPhoneNumberV3(value: string): boolean {
   if (!value || typeof value !== 'string') return false;
 
   const cleaned = value.replace(/\s+/g, '');
-  const phonePattern = /^[\+\(]?[\d\s\-()]+$/;
+  const phonePattern = /^[+(]?[\d\s\-()]+$/;
 
   if (!phonePattern.test(cleaned)) return false;
 

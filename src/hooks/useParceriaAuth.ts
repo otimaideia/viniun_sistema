@@ -102,8 +102,6 @@ async function sendEmailCode(email: string, code: string, nome: string): Promise
 
     if (!result.success) {
       console.warn('[EMAIL] Falha ao enviar:', result.error);
-      if (result.error?.includes('SMTP não configurado')) {
-      }
       return false;
     }
 

@@ -1,5 +1,6 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useLeadAdapter, useLeadsAdapter, useLeadHistoryAdapter, useIndicacoesAdapter } from "@/hooks/useLeadsAdapter";
 import { useTenantContext } from "@/contexts/TenantContext";
 import { useResponsibleUsersAdapter } from "@/hooks/useResponsibleUsersAdapter";
@@ -264,6 +265,7 @@ function MetaMessengerTab({ leadId }: { leadId: string }) {
 export default function LeadDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { tenant, franchise, accessLevel } = useTenantContext();
 
   // Usar adapter que escolhe entre legacy e multi-tenant automaticamente
@@ -484,8 +486,8 @@ export default function LeadDetail() {
       if (updateError) throw updateError;
 
       toast.success(`Código de indicação gerado: ${code}`);
-      // Recarrega a página para atualizar os dados
-      window.location.reload();
+      // Invalida o cache para refetch dos dados do lead (queryKey real do useLeadsMT)
+      queryClient.invalidateQueries({ queryKey: ['mt-leads'], exact: false });
     } catch (error) {
       console.error("Erro ao gerar código:", error);
       toast.error("Erro ao gerar código de indicação");
@@ -499,7 +501,7 @@ export default function LeadDetail() {
     setIsDeleting(true);
     try {
       deleteLeadMutation.mutate(lead.id);
-      toast.success("Lead excluido com sucesso!");
+      toast.success("Lead excluído com sucesso!");
       navigate("/");
     } catch (error) {
       toast.error("Erro ao excluir lead");
@@ -524,8 +526,8 @@ export default function LeadDetail() {
     return (
       <DashboardLayout>
         <div className="flex flex-col items-center justify-center py-12">
-          <h2 className="text-xl font-semibold text-foreground mb-2">Lead nao encontrado</h2>
-          <p className="text-muted-foreground mb-4">O lead solicitado nao existe ou foi removido.</p>
+          <h2 className="text-xl font-semibold text-foreground mb-2">Lead não encontrado</h2>
+          <p className="text-muted-foreground mb-4">O lead solicitado não existe ou foi removido.</p>
           <Button onClick={() => navigate("/")}>Voltar para Leads</Button>
         </div>
       </DashboardLayout>
@@ -535,7 +537,7 @@ export default function LeadDetail() {
   const handleWhatsApp = () => {
     const cleanPhone = cleanPhoneNumber(lead.telefone);
     const codigoPais = lead.whatsapp_codigo_pais || lead.telefone_codigo_pais || '55';
-    const primeiroNome = lead.nome.split(" ")[0];
+    const primeiroNome = lead.nome?.split(" ")[0] || "cliente";
     const mensagem = encodeURIComponent(
       `Ola ${primeiroNome}! Tudo bem? Aqui e da Viniun!`
     );
