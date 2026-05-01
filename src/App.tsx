@@ -654,6 +654,7 @@ const App = () => (
               <Sonner />
               <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/entrar" element={<Login />} />
             <Route path="/registro" element={<Register />} />
             <Route path="/esqueci-senha" element={<ForgotPassword />} />
             <Route path="/aguardando-aprovacao" element={<PendingApproval />} />

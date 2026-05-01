@@ -124,6 +124,21 @@ export default {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-5px)" },
         },
+        "blob-1": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "33%": { transform: "translate(8%, -6%) scale(1.08)" },
+          "66%": { transform: "translate(-6%, 8%) scale(0.95)" },
+        },
+        "blob-2": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "33%": { transform: "translate(-10%, 6%) scale(1.1)" },
+          "66%": { transform: "translate(8%, -4%) scale(0.92)" },
+        },
+        "blob-3": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "33%": { transform: "translate(6%, 10%) scale(0.95)" },
+          "66%": { transform: "translate(-8%, -6%) scale(1.05)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -134,6 +149,9 @@ export default {
         shimmer: "shimmer 2s linear infinite",
         glow: "glow 2s ease-in-out infinite",
         "bounce-gentle": "bounce-gentle 2s ease-in-out infinite",
+        "blob-1": "blob-1 14s ease-in-out infinite",
+        "blob-2": "blob-2 18s ease-in-out infinite",
+        "blob-3": "blob-3 16s ease-in-out infinite",
       },
     },
   },

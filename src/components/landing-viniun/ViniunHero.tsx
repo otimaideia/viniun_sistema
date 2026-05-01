@@ -45,7 +45,7 @@ export default function ViniunHero() {
                 className="text-base px-8 border-viniun-navy text-viniun-navy hover:bg-viniun-navy/5"
                 asChild
               >
-                <Link to="/login">Acessar Plataforma</Link>
+                <Link to="/entrar">Acessar Plataforma</Link>
               </Button>
             </div>
 

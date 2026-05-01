@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Sparkles, Loader2, MessageCircle, Mail, ArrowLeft, Phone } from 'lucide-react';
 import { VerificationMethod } from '@/hooks/useInfluenciadoraAuthAdapter';
+import { AuthSplitLayout } from '@/components/auth/AuthSplitLayout';
 
 type Step = 'identifier' | 'method' | 'code';
 
@@ -85,21 +86,23 @@ export default function LoginInfluenciadora() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#662E8E]/5 to-[#F2B705]/5">
-        <Loader2 className="h-8 w-8 animate-spin text-[#662E8E]" />
-      </div>
+      <AuthSplitLayout backHref="/entrar" backLabel="Outros tipos de acesso">
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-[#662E8E]" />
+        </div>
+      </AuthSplitLayout>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#662E8E]/5 via-white to-[#F2B705]/5 p-4">
-      {/* Background decorations */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#662E8E]/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#F2B705]/10 rounded-full blur-3xl" />
-      </div>
-
-      <div className="relative w-full max-w-md">
+    <AuthSplitLayout
+      backHref="/entrar"
+      backLabel="Outros tipos de acesso"
+      accentFrom="#662E8E"
+      accentVia="#9333ea"
+      accentTo="#F2B705"
+    >
+      <div className="w-full">
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#662E8E] to-[#662E8E]/80 shadow-lg mb-4">
@@ -304,6 +307,6 @@ export default function LoginInfluenciadora() {
           </p>
         </div>
       </div>
-    </div>
+    </AuthSplitLayout>
   );
 }

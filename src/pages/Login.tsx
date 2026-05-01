@@ -16,6 +16,7 @@ import {
 import { LogIn, Loader2, Building2, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AuthSplitLayout } from "@/components/auth/AuthSplitLayout";
 // Logo removido - usa branding do tenant detectado
 import type { Tenant } from "@/types/multitenant";
 
@@ -45,8 +46,14 @@ const Login = () => {
 
   // Logo e textos dinâmicos baseados no branding do tenant detectado
   const currentLogo = detectedBranding?.logo_url;
-  const title = detectedBranding?.texto_login_titulo || "Sistema Imobiliário";
-  const subtitle = detectedBranding?.texto_login_subtitulo || "Acesse sua conta";
+  const greeting = (() => {
+    const h = new Date().getHours();
+    if (h < 12) return "Bom dia";
+    if (h < 18) return "Boa tarde";
+    return "Boa noite";
+  })();
+  const title = detectedBranding?.texto_login_titulo || `${greeting}!`;
+  const subtitle = detectedBranding?.texto_login_subtitulo || "Que bom te ver por aqui — entre para continuar";
   const tenantName = detectedTenant?.nome_fantasia || "Sistema";
 
   // Cores do branding (usa primária do tenant ou mantém default do tema)
@@ -126,41 +133,26 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-svh bg-background flex items-center justify-center px-4 py-8 sm:p-6">
-      <Card className="w-full max-w-sm sm:max-w-md border-border/50 shadow-card animate-fade-in">
-        <CardHeader className="space-y-3 sm:space-y-4 text-center px-4 sm:px-6 pt-6 sm:pt-8">
-          <div className="flex flex-col items-center gap-3 sm:gap-4">
-            {isDetecting ? (
-              <div className="h-12 sm:h-16 flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-              </div>
-            ) : currentLogo ? (
-              <img
-                src={currentLogo}
-                alt={tenantName}
-                className="h-12 sm:h-16 object-contain"
-              />
-            ) : (
-              <div className="h-12 sm:h-16 flex items-center justify-center">
-                <Building2 className="h-10 w-10 text-primary" />
-              </div>
-            )}
-            <div>
-              <CardTitle className="text-lg sm:text-xl">{title}</CardTitle>
-              <CardDescription className="text-xs sm:text-sm">{subtitle}</CardDescription>
+    <AuthSplitLayout backHref="/" backLabel="Voltar para Home">
+      <Card className="w-full border-border/50 shadow-card animate-fade-in">
+        <CardHeader className="space-y-3 sm:space-y-4 text-left px-4 sm:px-6 pt-6 sm:pt-8">
+          {isDetecting ? (
+            <div className="h-12 flex items-center">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
             </div>
+          ) : currentLogo ? (
+            <img
+              src={currentLogo}
+              alt={tenantName}
+              className="h-10 sm:h-12 object-contain self-start"
+            />
+          ) : null}
+          <div className="space-y-1">
+            <CardTitle className="text-2xl sm:text-3xl font-bold tracking-tight">
+              {title}
+            </CardTitle>
+            <CardDescription className="text-sm">{subtitle}</CardDescription>
           </div>
-
-          {/* Indicador do tenant detectado */}
-          {detectedTenant && !isDetecting && (
-            <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-              <Building2 className="h-3 w-3" />
-              <span>{tenantName}</span>
-              {detectionMethod === 'default' && (
-                <span className="text-[10px]">(padrão)</span>
-              )}
-            </div>
-          )}
         </CardHeader>
 
         <CardContent className="px-4 sm:px-6 pb-6 sm:pb-8">
@@ -285,7 +277,34 @@ const Login = () => {
           </div>
         </CardContent>
       </Card>
-    </div>
+
+      <details className="group mt-6 text-center">
+        <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground transition-colors list-none">
+          <span className="inline-flex items-center gap-1">
+            Outro tipo de acesso?
+            <span className="text-primary group-open:hidden">Ver opções</span>
+            <span className="text-primary hidden group-open:inline">Ocultar</span>
+          </span>
+        </summary>
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs">
+          <Link to="/corretor/login" className="text-muted-foreground hover:text-primary transition-colors">
+            Corretor
+          </Link>
+          <span className="text-border">•</span>
+          <Link to="/parceiro/login" className="text-muted-foreground hover:text-primary transition-colors">
+            Parceiro
+          </Link>
+          <span className="text-border">•</span>
+          <Link to="/influenciadores/login" className="text-muted-foreground hover:text-primary transition-colors">
+            Influenciador(a)
+          </Link>
+          <span className="text-border">•</span>
+          <Link to="/cliente-imovel/login" className="text-muted-foreground hover:text-primary transition-colors">
+            Cliente
+          </Link>
+        </div>
+      </details>
+    </AuthSplitLayout>
   );
 };
 

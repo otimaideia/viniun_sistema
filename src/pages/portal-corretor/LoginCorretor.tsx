@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Building2, ArrowRight, Loader2, KeyRound } from "lucide-react";
+import { AuthSplitLayout } from "@/components/auth/AuthSplitLayout";
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -29,8 +30,8 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
-      <Card className="w-full max-w-md">
+    <AuthSplitLayout backHref="/entrar" backLabel="Outros tipos de acesso">
+      <Card className="w-full">
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
             <Building2 className="h-8 w-8 text-primary" />
@@ -90,7 +91,7 @@ function LoginForm() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </AuthSplitLayout>
   );
 }
 

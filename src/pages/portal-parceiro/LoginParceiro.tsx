@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Building2, Loader2, MessageCircle, Mail, ArrowLeft } from 'lucide-react';
 import { VerificationMethod } from '@/hooks/useParceriaAuth';
+import { AuthSplitLayout } from '@/components/auth/AuthSplitLayout';
 
 type Step = 'identifier' | 'method' | 'code';
 
@@ -86,21 +87,23 @@ export default function LoginParceiro() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600/5 to-emerald-500/5">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-      </div>
+      <AuthSplitLayout backHref="/entrar" backLabel="Outros tipos de acesso">
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        </div>
+      </AuthSplitLayout>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-600/5 via-white to-emerald-500/5 p-4">
-      {/* Background decorations */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl" />
-      </div>
-
-      <div className="relative w-full max-w-md">
+    <AuthSplitLayout
+      backHref="/entrar"
+      backLabel="Outros tipos de acesso"
+      accentFrom="#2563eb"
+      accentVia="#3b82f6"
+      accentTo="#10b981"
+    >
+      <div className="w-full">
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 shadow-lg mb-4">
@@ -305,6 +308,6 @@ export default function LoginParceiro() {
           </p>
         </div>
       </div>
-    </div>
+    </AuthSplitLayout>
   );
 }

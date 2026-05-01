@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Home, ArrowRight, Loader2, ArrowLeft } from "lucide-react";
+import { AuthSplitLayout } from "@/components/auth/AuthSplitLayout";
 
 function generateCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -235,8 +236,14 @@ export default function LoginClienteImovel() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <AuthSplitLayout
+      backHref="/entrar"
+      backLabel="Outros tipos de acesso"
+      accentFrom="#3b82f6"
+      accentVia="#6366f1"
+      accentTo="#8b5cf6"
+    >
+      <Card className="w-full">
         <CardHeader className="text-center">
           <Home className="h-10 w-10 mx-auto text-primary mb-2" />
           <CardTitle>Portal do Cliente</CardTitle>
@@ -297,6 +304,6 @@ export default function LoginClienteImovel() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </AuthSplitLayout>
   );
 }

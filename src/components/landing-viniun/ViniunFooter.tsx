@@ -15,7 +15,7 @@ const resourceLinks = [
 ];
 
 const accessLinks = [
-  { label: 'Entrar na Plataforma', href: '/login', isRoute: true },
+  { label: 'Entrar na Plataforma', href: '/entrar', isRoute: true },
   { label: 'Criar Conta Grátis', href: '/cadastro', isRoute: true },
 ];
 

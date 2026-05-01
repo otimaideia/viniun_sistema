@@ -66,7 +66,7 @@ export default function ViniunHeader() {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/login" className="gap-2">
+              <Link to="/entrar" className="gap-2">
                 <LogIn className="h-4 w-4" />
                 Entrar
               </Link>
@@ -113,7 +113,7 @@ export default function ViniunHeader() {
 
                   <div className="flex flex-col gap-3 pt-4 border-t">
                     <Button variant="outline" asChild>
-                      <Link to="/login" className="gap-2">
+                      <Link to="/entrar" className="gap-2">
                         <LogIn className="h-4 w-4" />
                         Entrar na Plataforma
                       </Link>
