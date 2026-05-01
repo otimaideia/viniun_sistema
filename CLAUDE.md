@@ -1282,12 +1282,12 @@ npm run preview      # Preview do build
 ### Repositório Git
 ```bash
 # ÚNICO remote — Coolify puxa automaticamente daqui
-origin → https://github.com/otimaideia/sistema-otima-crm-whatsapp.git
+origin → https://github.com/otimaideia/viniun_sistema.git
 ```
 
 ### Coolify App (Deploy Automático)
 - **URL**: https://coolify.viniun.com.br/project/ps4sk44kkcowcc08g48cg4cg/environment/cck0kw448oowss080oco8wsk/application/vcgg4sgwkkg4c0wwg4c84gk8
-- Puxa automaticamente do repo `sistema-otima-crm-whatsapp.git` ao dar push
+- Puxa automaticamente do repo `viniun_sistema.git` ao dar push
 
 ### Deploy do Frontend
 ```bash
@@ -1898,7 +1898,7 @@ GROUP BY t.slug ORDER BY t.slug;
 
 ### Frontend (React/Vite)
 - **Método**: `git push origin main` → Coolify puxa automaticamente e faz build + deploy
-- **Repositório**: `origin` → https://github.com/otimaideia/sistema-otima-crm-whatsapp.git
+- **Repositório**: `origin` → https://github.com/otimaideia/viniun_sistema.git
 - **NUNCA** usar SSH/SCP para subir arquivos do frontend
 - **NUNCA** usar SSH para reiniciar containers do frontend
 
