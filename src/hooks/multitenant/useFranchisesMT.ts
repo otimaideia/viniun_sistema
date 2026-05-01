@@ -167,8 +167,10 @@ export function useFranchisesMT(filters?: MTFranchiseFilters) {
         `)
         .order('nome', { ascending: true });
 
-      // Filtro por tenant (platform admin pode ver todas)
-      if (accessLevel !== 'platform' && tenant) {
+      // Filtro por tenant — sempre respeita o tenant ativo do contexto.
+      // Platform admin vê dados do tenant atualmente selecionado no header,
+      // não de todos os tenants ao mesmo tempo (evita vazamento na UI).
+      if (tenant) {
         q = q.eq('tenant_id', tenant.id);
       }
 
