@@ -123,7 +123,7 @@ export function usePriceComplianceMT(filters?: ComplianceFilters) {
 
         // Fetch services pricing for compliance comparison
         const serviceIds = [...new Set(items.filter(i => i.service_id).map(i => i.service_id))];
-        let servicesMap = new Map<string, any>();
+        const servicesMap = new Map<string, any>();
 
         if (serviceIds.length > 0) {
           const { data: servicesData } = await supabase

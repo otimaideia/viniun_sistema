@@ -1212,7 +1212,7 @@ export default function WhatsAppBroadcastEdit() {
                           }
 
                           // Substituir placeholders
-                          let text = form.message_text
+                          const text = form.message_text
                             .replace(/\{nome\}/gi, name)
                             .replace(/\{telefone\}/gi, phone);
 

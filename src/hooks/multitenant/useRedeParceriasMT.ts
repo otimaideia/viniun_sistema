@@ -20,7 +20,7 @@ export function useRedeParceriasMT() {
     queryFn: async (): Promise<MTNetworkPartnership[]> => {
       if (!tenant && accessLevel !== 'platform') throw new Error('Tenant não carregado.');
 
-      let q = supabase
+      const q = supabase
         .from('mt_network_partnerships' as any)
         .select(`
           *,

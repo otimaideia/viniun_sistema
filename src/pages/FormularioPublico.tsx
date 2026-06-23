@@ -911,7 +911,7 @@ export default function FormularioPublico() {
       // Mapear campos para lead
       formulario.campos?.forEach((campo) => {
         if (campo.campo_lead && data[campo.nome] !== undefined) {
-          let valor = data[campo.nome];
+          const valor = data[campo.nome];
           // Ignorar valores vazios para evitar erros de tipo (ex: date vazio → "")
           if (valor === '' || valor === null || valor === undefined) return;
           switch (campo.campo_lead) {

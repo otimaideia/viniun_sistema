@@ -223,7 +223,7 @@ async function queryCountByResponsible(
 
   // Resolve user names from mt_users
   const userIds = Object.keys(stats).filter(id => id !== 'Não atribuído');
-  let nameMap: Record<string, string> = {};
+  const nameMap: Record<string, string> = {};
   if (userIds.length > 0) {
     const { data: users } = await supabase
       .from('mt_users')
@@ -405,7 +405,7 @@ async function queryConversionByUser(
 
   // Resolve user names
   const userIds = Object.keys(stats).filter(id => id !== 'Não atribuído');
-  let nameMap: Record<string, string> = {};
+  const nameMap: Record<string, string> = {};
   if (userIds.length > 0) {
     const { data: users } = await supabase
       .from('mt_users')

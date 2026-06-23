@@ -1745,8 +1745,9 @@ O código é capturado em `FormularioPublico.tsx` e registrado na tabela `mt_inf
 ### Painel Admin
 - **URL Local**: http://localhost:8080
 - **URL Produção**: https://www.viniun.com.br (ou https://www.)
-- **Email**: contato@viniun.com.br
-- **Senha**: viniun@2025M
+- ⚠️ **`contato@viniun.com.br` / `viniun@2025M` são INVÁLIDAS** (auth retorna `invalid_credentials`)
+- **Admin real (platform_admin)**: `admin@viniun.com.br` (senha não documentada)
+- **Usuário de testes E2E (tenant_admin viniun)**: `e2e-test@viniun.com.br` / `E2eTest@viniun2026`
 
 ### WAHA Server
 - **URL**: https://waha.otimaideia.com.br

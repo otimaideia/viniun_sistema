@@ -178,7 +178,7 @@ const statusConfig: Record<WhatsAppSessaoStatus, { label: string; color: string;
 // Formatar telefone para exibição
 const formatPhoneForDisplay = (phone: string | null): string => {
   if (!phone) return '';
-  let cleaned = phone.replace(/@.*$/, '').replace(/\D/g, '');
+  const cleaned = phone.replace(/@.*$/, '').replace(/\D/g, '');
   if (cleaned.startsWith('55') && cleaned.length >= 12) {
     const ddd = cleaned.slice(2, 4);
     const part1 = cleaned.slice(4, 9);

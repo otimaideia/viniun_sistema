@@ -257,7 +257,7 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
       const assignedIds = [...new Set((conversas || []).map((c: any) => c.assigned_to).filter((id: string) => id && UUID_VALIDATE.test(id)))];
       const leadResponsavelIds = [...new Set((conversas || []).map((c: any) => c.lead?.atribuido_para).filter((id: string) => id && UUID_VALIDATE.test(id)))];
       const allUserIds = [...new Set([...assignedIds, ...leadResponsavelIds])];
-      let userNameMap: Record<string, string> = {};
+      const userNameMap: Record<string, string> = {};
       if (allUserIds.length > 0) {
         const { data: users } = await supabase
           .from('mt_users')
@@ -366,7 +366,7 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
       const assignedIds = [...new Set(displayConversas.map((c: any) => c.assigned_to).filter((id: string) => id && UUID_VALIDATE2.test(id)))];
       const leadResponsavelIds = [...new Set(displayConversas.map((c: any) => c.lead?.atribuido_para).filter((id: string) => id && UUID_VALIDATE2.test(id)))];
       const allUserIds = [...new Set([...assignedIds, ...leadResponsavelIds])];
-      let userNameMap: Record<string, string> = {};
+      const userNameMap: Record<string, string> = {};
       if (allUserIds.length > 0) {
         const { data: users } = await supabase
           .from('mt_users')
@@ -2410,7 +2410,7 @@ export function useWhatsAppChatAdapter(sessionName: string | null, sessaoId: str
         // Buscar nomes dos responsáveis
         const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
         const assignedIds = [...new Set((data || []).map((c: DbConversaMT) => c.assigned_to).filter((id): id is string => !!id && UUID_RE.test(id)))];
-        let userNameMap: Record<string, string> = {};
+        const userNameMap: Record<string, string> = {};
         if (assignedIds.length > 0) {
           const { data: users } = await supabase
             .from('mt_users')

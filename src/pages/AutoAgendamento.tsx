@@ -127,7 +127,7 @@ export default function AutoAgendamento() {
 
       try {
         // Load franchise by slug or ID
-        let franchiseQuery = supabase
+        const franchiseQuery = supabase
           .from('mt_franchises' as never)
           .select('id, tenant_id, nome, slug')
           .eq('is_active', true);

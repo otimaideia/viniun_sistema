@@ -16,12 +16,18 @@ import { Input } from "@/components/ui/input";
 import {
   ArrowLeft, Edit, Network, Building2, Globe, Lock, Users2,
   Plus, Trash2, Eye, Heart, DollarSign, Home, Bed, Maximize,
+  Download, Copy, Check, Instagram, MessageCircle, ExternalLink, Share2,
 } from "lucide-react";
+import { toast } from "sonner";
+import { downloadTabelaPdf } from "@/lib/tabelaPdf";
+import type { TabelaPublicaMeta, TabelaPublicaItem } from "@/hooks/public/useTabelasPublicas";
 
 function formatCurrency(value: number | null | undefined): string {
   if (!value) return "-";
   return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
 }
+
+const WHATSAPP_NUMERO = "5513991888100"; // ⚠️ CONFIGURAR número real do viniun
 
 export default function RedeTabelaDetail() {
   const navigate = useNavigate();
@@ -38,6 +44,80 @@ export default function RedeTabelaDetail() {
   const [interestTipo, setInterestTipo] = useState<string>("consulta");
 
   const isOwner = tabela?.tenant_id === tenant?.id;
+  const [linkCopiado, setLinkCopiado] = useState(false);
+
+  const isPublica = tabela?.visibilidade === "publica";
+  const linkPublico = typeof window !== "undefined" ? `${window.location.origin}/tabela/${id}` : "";
+  const wa = (msg: string) => `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`;
+
+  // Mapeia dados do admin para o formato do gerador de PDF / distribuição
+  const pdfMeta = (): TabelaPublicaMeta => ({
+    id: tabela!.id,
+    nome: tabela!.nome,
+    descricao: tabela!.descricao ?? null,
+    tipo: tabela!.tipo ?? null,
+    validade_inicio: (tabela as any)?.validade_inicio ?? null,
+    validade_fim: (tabela as any)?.validade_fim ?? null,
+    total_imoveis: itens.length,
+    foto_capa_url: (tabela as any)?.foto_capa_url ?? null,
+  });
+  const pdfItens = (): TabelaPublicaItem[] =>
+    itens.map((it: any, idx: number) => ({
+      id: it.id,
+      slug: it.property?.slug ?? null,
+      ref_code: it.property?.ref_code ?? null,
+      titulo: it.property?.titulo ?? null,
+      dormitorios: it.property?.dormitorios ?? null,
+      suites: it.property?.suites ?? null,
+      banheiros: it.property?.banheiros ?? null,
+      garagens: it.property?.garagens ?? null,
+      area_total: it.property?.area_total ?? it.property?.area_construida ?? null,
+      area_util: null,
+      valor_venda: it.property?.valor_venda ?? null,
+      valor_promocao: null,
+      lancamento: it.property?.lancamento ?? null,
+      destaque: null,
+      distancia_praia: null,
+      aceita_financiamento: null,
+      bairro: it.property?.location_bairro?.nome ?? null,
+      cidade: it.property?.location_cidade?.nome ?? null,
+      foto: it.property?.foto_destaque_url ?? null,
+      valor_rede: it.valor_rede ?? null,
+      observacoes: it.observacoes ?? null,
+      ordem: it.ordem ?? idx,
+    }));
+
+  const baixarPdf = () => {
+    downloadTabelaPdf(pdfMeta(), pdfItens(), { whatsapp: "(13) 99188-8100", site: "viniun.com.br" });
+    toast.success("Gerando PDF...");
+  };
+  const copiarLink = async () => {
+    try {
+      await navigator.clipboard.writeText(linkPublico);
+      setLinkCopiado(true);
+      toast.success("Link público copiado!");
+      setTimeout(() => setLinkCopiado(false), 2000);
+    } catch {
+      toast.error("Não foi possível copiar");
+    }
+  };
+  const copiarCaption = () => {
+    if (!tabela) return;
+    const linhas = [
+      `🏖️ ${tabela.nome}`,
+      tabela.descricao ?? "",
+      "",
+      ...itens.slice(0, 6).map((i: any) =>
+        `📍 ${i.property?.location_bairro?.nome ?? "Praia Grande"} • ${i.property?.dormitorios ?? "?"} dorm • ${formatCurrency(i.valor_rede || i.property?.valor_venda)}`),
+      "",
+      "📲 Receba a tabela completa no WhatsApp (link na bio)",
+      "#praiagrande #imoveis #lancamentos #tabelasdeimoveis #tabelaspraiagrande",
+    ];
+    navigator.clipboard.writeText(linhas.join("\n")).then(
+      () => toast.success("Legenda do Instagram copiada!"),
+      () => toast.error("Não foi possível copiar"),
+    );
+  };
 
   if (isLoading) return <Skeleton className="h-96 w-full" />;
   if (!tabela) return <div className="text-center py-12 text-muted-foreground">Tabela não encontrada.</div>;
@@ -133,6 +213,37 @@ export default function RedeTabelaDetail() {
           <CardContent><div className="text-2xl font-bold flex items-center gap-2"><Heart className="h-5 w-5" /> {tabela.total_interesses || 0}</div></CardContent>
         </Card>
       </div>
+
+      {/* Distribuir */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2"><Share2 className="h-4 w-4" /> Distribuir tabela</CardTitle>
+          <CardDescription>
+            {isPublica
+              ? "Tabela pública — compartilhe o link, PDF ou poste no Instagram."
+              : "Tabela não é pública. Para gerar link compartilhável, defina a visibilidade como \"pública\" na edição."}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-wrap gap-2">
+          <Button onClick={baixarPdf} variant="outline" size="sm"><Download className="h-4 w-4 mr-2" /> Baixar PDF</Button>
+          <Button onClick={copiarCaption} variant="outline" size="sm"><Instagram className="h-4 w-4 mr-2" /> Legenda Instagram</Button>
+          {isPublica && (
+            <>
+              <Button onClick={copiarLink} variant="outline" size="sm">
+                {linkCopiado ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />} Copiar link público
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <a href={wa(`Confira a tabela "${tabela.nome}": ${linkPublico}`)} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="h-4 w-4 mr-2" /> Enviar no WhatsApp
+                </a>
+              </Button>
+              <Button asChild variant="ghost" size="sm">
+                <a href={linkPublico} target="_blank" rel="noopener noreferrer"><ExternalLink className="h-4 w-4 mr-2" /> Abrir página pública</a>
+              </Button>
+            </>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Lista de Imóveis */}
       <Card>

@@ -9,24 +9,24 @@ import { TenantProvider } from "@/contexts/TenantContext";
 import { BrandingProvider } from "@/contexts/BrandingContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import Index from "./pages/Index";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import ForgotPassword from "./pages/ForgotPassword";
-import PendingApproval from "./pages/PendingApproval";
-import Users from "./pages/Users";
-import UsuarioDetail from "./pages/UsuarioDetail";
-import UsuarioEdit from "./pages/UsuarioEdit";
-import Franqueados from "./pages/Franqueados";
-import FranqueadoDetail from "./pages/FranqueadoDetail";
-import FranqueadoEdit from "./pages/FranqueadoEdit";
-import MinhaFranquia from "./pages/MinhaFranquia";
-import Franquia from "./pages/Franquia";
-import Indicacoes from "./pages/Indicacoes";
-import IndicacaoDetail from "./pages/IndicacaoDetail";
-import Agendamentos from "./pages/Agendamentos";
-import AgendamentoDetail from "./pages/AgendamentoDetail";
-import AgendamentoEdit from "./pages/AgendamentoEdit";
+const Index = lazy(() => import("./pages/Index"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const PendingApproval = lazy(() => import("./pages/PendingApproval"));
+const Users = lazy(() => import("./pages/Users"));
+const UsuarioDetail = lazy(() => import("./pages/UsuarioDetail"));
+const UsuarioEdit = lazy(() => import("./pages/UsuarioEdit"));
+const Franqueados = lazy(() => import("./pages/Franqueados"));
+const FranqueadoDetail = lazy(() => import("./pages/FranqueadoDetail"));
+const FranqueadoEdit = lazy(() => import("./pages/FranqueadoEdit"));
+const MinhaFranquia = lazy(() => import("./pages/MinhaFranquia"));
+const Franquia = lazy(() => import("./pages/Franquia"));
+const Indicacoes = lazy(() => import("./pages/Indicacoes"));
+const IndicacaoDetail = lazy(() => import("./pages/IndicacaoDetail"));
+const Agendamentos = lazy(() => import("./pages/Agendamentos"));
+const AgendamentoDetail = lazy(() => import("./pages/AgendamentoDetail"));
+const AgendamentoEdit = lazy(() => import("./pages/AgendamentoEdit"));
 // Recrutamento: lazy loading para reduzir bundle inicial
 const Recrutamento = lazy(() => import("./pages/Recrutamento"));
 const VagaDetail = lazy(() => import("./pages/VagaDetail"));
@@ -36,130 +36,132 @@ const CandidatoEdit = lazy(() => import("./pages/CandidatoEdit"));
 const EntrevistaDetail = lazy(() => import("./pages/EntrevistaDetail"));
 const EntrevistaEdit = lazy(() => import("./pages/EntrevistaEdit"));
 // Configuracoes antiga removida - usando ConfiguracoesIndex como hub
-import Servicos from "./pages/Servicos";
-import ServicosRouter from "./pages/ServicosRouter";
-import ServicoDetail from "./pages/ServicoDetail";
-import ServicoEdit from "./pages/ServicoEdit";
-import PrecificacaoDashboard from "./pages/precificacao/PrecificacaoDashboard";
-import PrecificacaoDetail from "./pages/precificacao/PrecificacaoDetail";
-import AnaliseConcorrencia from "./pages/precificacao/AnaliseConcorrencia";
-import Concorrentes from "./pages/precificacao/Concorrentes";
-import ConcorrenteEdit from "./pages/precificacao/ConcorrenteEdit";
-import PacoteDetail from "./pages/PacoteDetail";
-import PacoteEdit from "./pages/PacoteEdit";
-import LeadDetail from "./pages/LeadDetail";
-import LeadEdit from "./pages/LeadEdit";
-import Leads from "./pages/Leads";
-import LeadsDashboard from "./pages/LeadsDashboard";
-import FunilVendas from "./pages/FunilVendas";
-import FunilConfig from "./pages/FunilConfig";
-import FunilRelatorios from "./pages/FunilRelatorios";
-import WhatsAppSessoes from "./pages/WhatsAppSessoes";
-import WhatsAppSessoes2 from "./pages/WhatsAppSessoes2";
-import WhatsAppChat from "./pages/WhatsAppChat";
-import WhatsAppDashboard from "./pages/WhatsAppDashboard";
-import WhatsAppStatus from "./pages/WhatsAppStatus";
-import WhatsAppAutomacoes from "./pages/WhatsAppAutomacoes";
-import WhatsAppConfiguracoes from "./pages/WhatsAppConfiguracoes";
-import Chatbot from "./pages/Chatbot";
-import WhatsAppRelatorios from "./pages/WhatsAppRelatorios";
-import WhatsAppRespostasRapidas from "./pages/WhatsAppRespostasRapidas";
-import WhatsAppTemplates from "./pages/WhatsAppTemplates";
-import WhatsAppFilas from "./pages/WhatsAppFilas";
-import WhatsAppFilaDetail from "./pages/WhatsAppFilaDetail";
-import WhatsAppFilaEdit from "./pages/WhatsAppFilaEdit";
-import WhatsAppBotConfig from "./pages/WhatsAppBotConfig";
-import AIAgents from "./pages/AIAgents";
-import AIAgentEdit from "./pages/AIAgentEdit";
+const Servicos = lazy(() => import("./pages/Servicos"));
+const ServicosRouter = lazy(() => import("./pages/ServicosRouter"));
+const ServicoDetail = lazy(() => import("./pages/ServicoDetail"));
+const ServicoEdit = lazy(() => import("./pages/ServicoEdit"));
+const PrecificacaoDashboard = lazy(() => import("./pages/precificacao/PrecificacaoDashboard"));
+const PrecificacaoDetail = lazy(() => import("./pages/precificacao/PrecificacaoDetail"));
+const AnaliseConcorrencia = lazy(() => import("./pages/precificacao/AnaliseConcorrencia"));
+const Concorrentes = lazy(() => import("./pages/precificacao/Concorrentes"));
+const ConcorrenteEdit = lazy(() => import("./pages/precificacao/ConcorrenteEdit"));
+const PacoteDetail = lazy(() => import("./pages/PacoteDetail"));
+const PacoteEdit = lazy(() => import("./pages/PacoteEdit"));
+const LeadDetail = lazy(() => import("./pages/LeadDetail"));
+const LeadEdit = lazy(() => import("./pages/LeadEdit"));
+const Leads = lazy(() => import("./pages/Leads"));
+const LeadsDashboard = lazy(() => import("./pages/LeadsDashboard"));
+const FunilVendas = lazy(() => import("./pages/FunilVendas"));
+const FunilConfig = lazy(() => import("./pages/FunilConfig"));
+const FunilRelatorios = lazy(() => import("./pages/FunilRelatorios"));
+const WhatsAppSessoes = lazy(() => import("./pages/WhatsAppSessoes"));
+const WhatsAppSessoes2 = lazy(() => import("./pages/WhatsAppSessoes2"));
+const WhatsAppChat = lazy(() => import("./pages/WhatsAppChat"));
+const WhatsAppDashboard = lazy(() => import("./pages/WhatsAppDashboard"));
+const WhatsAppStatus = lazy(() => import("./pages/WhatsAppStatus"));
+const WhatsAppAutomacoes = lazy(() => import("./pages/WhatsAppAutomacoes"));
+const WhatsAppConfiguracoes = lazy(() => import("./pages/WhatsAppConfiguracoes"));
+const Chatbot = lazy(() => import("./pages/Chatbot"));
+const WhatsAppRelatorios = lazy(() => import("./pages/WhatsAppRelatorios"));
+const WhatsAppRespostasRapidas = lazy(() => import("./pages/WhatsAppRespostasRapidas"));
+const WhatsAppTemplates = lazy(() => import("./pages/WhatsAppTemplates"));
+const WhatsAppFilas = lazy(() => import("./pages/WhatsAppFilas"));
+const WhatsAppFilaDetail = lazy(() => import("./pages/WhatsAppFilaDetail"));
+const WhatsAppFilaEdit = lazy(() => import("./pages/WhatsAppFilaEdit"));
+const WhatsAppBotConfig = lazy(() => import("./pages/WhatsAppBotConfig"));
+const AIAgents = lazy(() => import("./pages/AIAgents"));
+const AIAgentEdit = lazy(() => import("./pages/AIAgentEdit"));
 // WhatsApp Híbrido (WAHA + Meta Cloud API)
-import WhatsAppHybridConfig from "./pages/configuracoes/WhatsAppHybridConfig";
-import WhatsAppProviders from "./pages/configuracoes/WhatsAppProviders";
-import WhatsAppRouting from "./pages/configuracoes/WhatsAppRouting";
-import WhatsAppCustos from "./pages/WhatsAppCustos";
-import WhatsAppMetaTemplates from "./pages/WhatsAppMetaTemplates";
-import WhatsAppRoutingLogs from "./pages/WhatsAppRoutingLogs";
-import WhatsAppHybridStats from "./pages/WhatsAppHybridStats";
+const WhatsAppHybridConfig = lazy(() => import("./pages/configuracoes/WhatsAppHybridConfig"));
+const WhatsAppProviders = lazy(() => import("./pages/configuracoes/WhatsAppProviders"));
+const WhatsAppRouting = lazy(() => import("./pages/configuracoes/WhatsAppRouting"));
+const WhatsAppCustos = lazy(() => import("./pages/WhatsAppCustos"));
+const WhatsAppMetaTemplates = lazy(() => import("./pages/WhatsAppMetaTemplates"));
+const WhatsAppRoutingLogs = lazy(() => import("./pages/WhatsAppRoutingLogs"));
+const WhatsAppHybridStats = lazy(() => import("./pages/WhatsAppHybridStats"));
 // WhatsApp Broadcast & Grupos
-import WhatsAppBroadcast from "./pages/WhatsAppBroadcast";
-import WhatsAppBroadcastEdit from "./pages/WhatsAppBroadcastEdit";
-import WhatsAppBroadcastDetail from "./pages/WhatsAppBroadcastDetail";
-import WhatsAppListas from "./pages/WhatsAppListas";
-import WhatsAppListaEdit from "./pages/WhatsAppListaEdit";
-import WhatsAppListaDetail from "./pages/WhatsAppListaDetail";
-import WhatsAppGrupos from "./pages/WhatsAppGrupos";
-import WhatsAppGrupoDetail from "./pages/WhatsAppGrupoDetail";
-import WhatsAppGrupoBulkAdd from "./pages/WhatsAppGrupoBulkAdd";
-import WhatsAppGrupoOperacoes from "./pages/WhatsAppGrupoOperacoes";
-import { MetaMessengerConfig } from "./pages/MetaMessengerConfig";
-import { MetaConversations } from "./pages/MetaConversations";
-import { MetaChat } from "./pages/MetaChat";
-import Formularios from "./pages/Formularios";
-import FormularioNovo from "./pages/FormularioNovo";
-import FormularioEdit from "./pages/FormularioEdit";
-import FormularioDetail from "./pages/FormularioDetail";
-import FormularioPublico from "./pages/FormularioPublico";
-import VagasPublicas from "./pages/VagasPublicas";
-import NotFound from "./pages/NotFound";
+const WhatsAppBroadcast = lazy(() => import("./pages/WhatsAppBroadcast"));
+const WhatsAppBroadcastEdit = lazy(() => import("./pages/WhatsAppBroadcastEdit"));
+const WhatsAppBroadcastDetail = lazy(() => import("./pages/WhatsAppBroadcastDetail"));
+const WhatsAppListas = lazy(() => import("./pages/WhatsAppListas"));
+const WhatsAppListaEdit = lazy(() => import("./pages/WhatsAppListaEdit"));
+const WhatsAppListaDetail = lazy(() => import("./pages/WhatsAppListaDetail"));
+const WhatsAppGrupos = lazy(() => import("./pages/WhatsAppGrupos"));
+const WhatsAppGrupoDetail = lazy(() => import("./pages/WhatsAppGrupoDetail"));
+const WhatsAppGrupoBulkAdd = lazy(() => import("./pages/WhatsAppGrupoBulkAdd"));
+const WhatsAppGrupoOperacoes = lazy(() => import("./pages/WhatsAppGrupoOperacoes"));
+const MetaMessengerConfig = lazy(() => import("./pages/MetaMessengerConfig").then(m => ({ default: m.MetaMessengerConfig })));
+const MetaConversations = lazy(() => import("./pages/MetaConversations").then(m => ({ default: m.MetaConversations })));
+const MetaChat = lazy(() => import("./pages/MetaChat").then(m => ({ default: m.MetaChat })));
+const Formularios = lazy(() => import("./pages/Formularios"));
+const FormularioNovo = lazy(() => import("./pages/FormularioNovo"));
+const FormularioEdit = lazy(() => import("./pages/FormularioEdit"));
+const FormularioDetail = lazy(() => import("./pages/FormularioDetail"));
+const FormularioPublico = lazy(() => import("./pages/FormularioPublico"));
+const VagasPublicas = lazy(() => import("./pages/VagasPublicas"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Landing pages (lazy loading - public)
 const LandingViniun = lazy(() => import("./pages/landing/LandingViniun"));
+const TabelasLanding = lazy(() => import("./pages/tabelas/TabelasLanding"));
+const TabelaPublica = lazy(() => import("./pages/tabelas/TabelaPublica"));
 const SignupEmpresa = lazy(() => import("./pages/landing/SignupEmpresa"));
 const SignupSucesso = lazy(() => import("./pages/landing/SignupSucesso"));
 
 // Influenciadoras (Admin)
-import Influenciadoras from "./pages/Influenciadoras";
-import InfluenciadorasDashboard from "./pages/InfluenciadorasDashboard";
-import InfluenciadorasLista from "./pages/InfluenciadorasLista";
-import InfluenciadorasIndicacoes from "./pages/InfluenciadorasIndicacoes";
-import InfluenciadoraDetail from "./pages/InfluenciadoraDetail";
-import InfluenciadoraEdit from "./pages/InfluenciadoraEdit";
-import InfluenciadoraContratoEdit from "./pages/InfluenciadoraContratoEdit";
-import InfluenciadoraPagamentoEdit from "./pages/InfluenciadoraPagamentoEdit";
-import InfluenciadoraPostEdit from "./pages/InfluenciadoraPostEdit";
-import InfluenciadoraContratoPreview from "./pages/InfluenciadoraContratoPreview";
-import InfluenciadoraContratoAssinatura from "./pages/InfluenciadoraContratoAssinatura";
-import InfluenciadoraNotifConfig from "./pages/influenciadoras/InfluenciadoraNotifConfig";
-import InfluenciadoraReferralNotifConfig from "./pages/influenciadoras/InfluenciadoraReferralNotifConfig";
+const Influenciadoras = lazy(() => import("./pages/Influenciadoras"));
+const InfluenciadorasDashboard = lazy(() => import("./pages/InfluenciadorasDashboard"));
+const InfluenciadorasLista = lazy(() => import("./pages/InfluenciadorasLista"));
+const InfluenciadorasIndicacoes = lazy(() => import("./pages/InfluenciadorasIndicacoes"));
+const InfluenciadoraDetail = lazy(() => import("./pages/InfluenciadoraDetail"));
+const InfluenciadoraEdit = lazy(() => import("./pages/InfluenciadoraEdit"));
+const InfluenciadoraContratoEdit = lazy(() => import("./pages/InfluenciadoraContratoEdit"));
+const InfluenciadoraPagamentoEdit = lazy(() => import("./pages/InfluenciadoraPagamentoEdit"));
+const InfluenciadoraPostEdit = lazy(() => import("./pages/InfluenciadoraPostEdit"));
+const InfluenciadoraContratoPreview = lazy(() => import("./pages/InfluenciadoraContratoPreview"));
+const InfluenciadoraContratoAssinatura = lazy(() => import("./pages/InfluenciadoraContratoAssinatura"));
+const InfluenciadoraNotifConfig = lazy(() => import("./pages/influenciadoras/InfluenciadoraNotifConfig"));
+const InfluenciadoraReferralNotifConfig = lazy(() => import("./pages/influenciadoras/InfluenciadoraReferralNotifConfig"));
 
 // Parcerias (Admin)
-import Parcerias from "./pages/Parcerias";
-import ParceriaDetail from "./pages/ParceriaDetail";
-import ParceriaEdit from "./pages/ParceriaEdit";
+const Parcerias = lazy(() => import("./pages/Parcerias"));
+const ParceriaDetail = lazy(() => import("./pages/ParceriaDetail"));
+const ParceriaEdit = lazy(() => import("./pages/ParceriaEdit"));
 
 // Portal do Parceiro (Self-Service)
-import PortalParceiro from "./pages/portal-parceiro/PortalParceiro";
-import PortalParceiroIndicacoes from "./pages/portal-parceiro/PortalParceiroIndicacoes";
-import LoginParceiro from "./pages/portal-parceiro/LoginParceiro";
-import CadastroParceiro from "./pages/portal-parceiro/CadastroParceiro";
+const PortalParceiro = lazy(() => import("./pages/portal-parceiro/PortalParceiro"));
+const PortalParceiroIndicacoes = lazy(() => import("./pages/portal-parceiro/PortalParceiroIndicacoes"));
+const LoginParceiro = lazy(() => import("./pages/portal-parceiro/LoginParceiro"));
+const CadastroParceiro = lazy(() => import("./pages/portal-parceiro/CadastroParceiro"));
 import { ParceriaAuthProvider } from "@/contexts/ParceriaAuthContext";
 import { ParceriaProtectedRoute } from "@/components/parceiro-portal";
 
 // Portal da Influenciadora (Público + Self-Service)
-import CadastroInfluenciadora from "./pages/influenciadora/CadastroInfluenciadora";
-import LoginInfluenciadora from "./pages/influenciadora/LoginInfluenciadora";
-import PortalInfluenciadora from "./pages/influenciadora/PortalInfluenciadora";
-import MeuPerfilInfluenciadora from "./pages/influenciadora/MeuPerfilInfluenciadora";
-import MeusValoresInfluenciadora from "./pages/influenciadora/MeusValoresInfluenciadora";
-import MinhasIndicacoesInfluenciadora from "./pages/influenciadora/MinhasIndicacoesInfluenciadora";
-import MeusGanhosInfluenciadora from "./pages/influenciadora/MeusGanhosInfluenciadora";
-import MinhasPermutasInfluenciadora from "./pages/influenciadora/MinhasPermutasInfluenciadora";
-import MeusPostsInfluenciadora from "./pages/influenciadora/MeusPostsInfluenciadora";
-import MeuContratoInfluenciadora from "./pages/influenciadora/MeuContratoInfluenciadora";
-import MinhasPromocoesInfluenciadora from "./pages/influenciadora/MinhasPromocoesInfluenciadora";
-import OnboardingInfluenciadora from "./pages/influenciadora/OnboardingInfluenciadora";
+const CadastroInfluenciadora = lazy(() => import("./pages/influenciadora/CadastroInfluenciadora"));
+const LoginInfluenciadora = lazy(() => import("./pages/influenciadora/LoginInfluenciadora"));
+const PortalInfluenciadora = lazy(() => import("./pages/influenciadora/PortalInfluenciadora"));
+const MeuPerfilInfluenciadora = lazy(() => import("./pages/influenciadora/MeuPerfilInfluenciadora"));
+const MeusValoresInfluenciadora = lazy(() => import("./pages/influenciadora/MeusValoresInfluenciadora"));
+const MinhasIndicacoesInfluenciadora = lazy(() => import("./pages/influenciadora/MinhasIndicacoesInfluenciadora"));
+const MeusGanhosInfluenciadora = lazy(() => import("./pages/influenciadora/MeusGanhosInfluenciadora"));
+const MinhasPermutasInfluenciadora = lazy(() => import("./pages/influenciadora/MinhasPermutasInfluenciadora"));
+const MeusPostsInfluenciadora = lazy(() => import("./pages/influenciadora/MeusPostsInfluenciadora"));
+const MeuContratoInfluenciadora = lazy(() => import("./pages/influenciadora/MeuContratoInfluenciadora"));
+const MinhasPromocoesInfluenciadora = lazy(() => import("./pages/influenciadora/MinhasPromocoesInfluenciadora"));
+const OnboardingInfluenciadora = lazy(() => import("./pages/influenciadora/OnboardingInfluenciadora"));
 import { InfluenciadoraAuthProvider } from "@/contexts/InfluenciadoraAuthContext";
 import { InfluenciadoraProtectedRoute } from "@/components/influenciadora-portal";
 
 // Novos Módulos - Fase 1
-import Diretorias from "./pages/configuracoes/Diretorias";
-import Metas from "./pages/Metas";
-import Aprovacoes from "./pages/Aprovacoes";
-import Automacoes from "./pages/Automacoes";
-import ApiWebhooks from "./pages/ApiWebhooks";
-import YesIA from "./pages/YesIA";
-import CampanhasIndex from "./pages/campanhas/CampanhasIndex";
-import CampanhaDetail from "./pages/campanhas/CampanhaDetail";
-import CampanhaEdit from "./pages/campanhas/CampanhaEdit";
+const Diretorias = lazy(() => import("./pages/configuracoes/Diretorias"));
+const Metas = lazy(() => import("./pages/Metas"));
+const Aprovacoes = lazy(() => import("./pages/Aprovacoes"));
+const Automacoes = lazy(() => import("./pages/Automacoes"));
+const ApiWebhooks = lazy(() => import("./pages/ApiWebhooks"));
+const YesIA = lazy(() => import("./pages/YesIA"));
+const CampanhasIndex = lazy(() => import("./pages/campanhas/CampanhasIndex"));
+const CampanhaDetail = lazy(() => import("./pages/campanhas/CampanhaDetail"));
+const CampanhaEdit = lazy(() => import("./pages/campanhas/CampanhaEdit"));
 
 // Promoções (lazy loading)
 const Promocoes = lazy(() => import("./pages/promocoes/Promocoes"));
@@ -167,61 +169,61 @@ const PromocaoEdit = lazy(() => import("./pages/promocoes/PromocaoEdit"));
 const PromocaoDetail = lazy(() => import("./pages/promocoes/PromocaoDetail"));
 
 // Marketing
-import Marketing from "./pages/Marketing";
-import MarketingTemplates from "./pages/MarketingTemplates";
-import MarketingCampanhas from "./pages/MarketingCampanhas";
-import MarketingAssets from "./pages/MarketingAssets";
-import MarketingGaleria from "./pages/MarketingGaleria";
-import MarketingAnalytics from "./pages/MarketingAnalytics";
+const Marketing = lazy(() => import("./pages/Marketing"));
+const MarketingTemplates = lazy(() => import("./pages/MarketingTemplates"));
+const MarketingCampanhas = lazy(() => import("./pages/MarketingCampanhas"));
+const MarketingAssets = lazy(() => import("./pages/MarketingAssets"));
+const MarketingGaleria = lazy(() => import("./pages/MarketingGaleria"));
+const MarketingAnalytics = lazy(() => import("./pages/MarketingAnalytics"));
 
 // Relatórios
-import Ranking from "./pages/relatorios/Ranking";
-import RelatoriosIndex from "./pages/relatorios/RelatoriosIndex";
+const Ranking = lazy(() => import("./pages/relatorios/Ranking"));
+const RelatoriosIndex = lazy(() => import("./pages/relatorios/RelatoriosIndex"));
 
 // Configurações
-import ConfiguracoesIndex from "./pages/configuracoes/ConfiguracoesIndex";
-import Permissoes from "./pages/configuracoes/Permissoes";
-import Modulos from "./pages/configuracoes/Modulos";
-import ModulosCrud from "./pages/configuracoes/ModulosCrud";
-import Integracoes from "./pages/configuracoes/Integracoes";
-import MinhaEmpresa from "./pages/configuracoes/MinhaEmpresa";
+const ConfiguracoesIndex = lazy(() => import("./pages/configuracoes/ConfiguracoesIndex"));
+const Permissoes = lazy(() => import("./pages/configuracoes/Permissoes"));
+const Modulos = lazy(() => import("./pages/configuracoes/Modulos"));
+const ModulosCrud = lazy(() => import("./pages/configuracoes/ModulosCrud"));
+const Integracoes = lazy(() => import("./pages/configuracoes/Integracoes"));
+const MinhaEmpresa = lazy(() => import("./pages/configuracoes/MinhaEmpresa"));
 
 // Onboarding
-import TenantOnboarding from "./pages/onboarding/TenantOnboarding";
+const TenantOnboarding = lazy(() => import("./pages/onboarding/TenantOnboarding"));
 
 // Multi-tenant CRUD
-import Empresas from "./pages/configuracoes/Empresas";
-import EmpresaDetail from "./pages/configuracoes/EmpresaDetail";
-import EmpresaEdit from "./pages/configuracoes/EmpresaEdit";
-import MTFranquias from "./pages/configuracoes/Franquias";
-import MTFranquiaDetail from "./pages/configuracoes/FranquiaDetail";
-import MTFranquiaEdit from "./pages/configuracoes/FranquiaEdit";
-import MTUsuarios from "./pages/configuracoes/Usuarios";
-import MTUsuarioDetail from "./pages/configuracoes/UsuarioDetail";
-import MTUsuarioEdit from "./pages/configuracoes/UsuarioEdit";
+const Empresas = lazy(() => import("./pages/configuracoes/Empresas"));
+const EmpresaDetail = lazy(() => import("./pages/configuracoes/EmpresaDetail"));
+const EmpresaEdit = lazy(() => import("./pages/configuracoes/EmpresaEdit"));
+const MTFranquias = lazy(() => import("./pages/configuracoes/Franquias"));
+const MTFranquiaDetail = lazy(() => import("./pages/configuracoes/FranquiaDetail"));
+const MTFranquiaEdit = lazy(() => import("./pages/configuracoes/FranquiaEdit"));
+const MTUsuarios = lazy(() => import("./pages/configuracoes/Usuarios"));
+const MTUsuarioDetail = lazy(() => import("./pages/configuracoes/UsuarioDetail"));
+const MTUsuarioEdit = lazy(() => import("./pages/configuracoes/UsuarioEdit"));
 
 // Multi-tenant: Dashboard Profiles
-import DashboardProfiles from "./pages/configuracoes/DashboardProfiles";
-import DashboardProfileDetail from "./pages/configuracoes/DashboardProfileDetail";
-import DashboardProfileEdit from "./pages/configuracoes/DashboardProfileEdit";
-import DashboardBoardConfig from "./pages/configuracoes/DashboardBoardConfig";
+const DashboardProfiles = lazy(() => import("./pages/configuracoes/DashboardProfiles"));
+const DashboardProfileDetail = lazy(() => import("./pages/configuracoes/DashboardProfileDetail"));
+const DashboardProfileEdit = lazy(() => import("./pages/configuracoes/DashboardProfileEdit"));
+const DashboardBoardConfig = lazy(() => import("./pages/configuracoes/DashboardBoardConfig"));
 
 // Multi-tenant: Departamentos e Equipes
-import Departamentos from "./pages/configuracoes/Departamentos";
-import DepartamentoDetail from "./pages/configuracoes/DepartamentoDetail";
-import DepartamentoEdit from "./pages/configuracoes/DepartamentoEdit";
-import Equipes from "./pages/configuracoes/Equipes";
-import EquipeDetail from "./pages/configuracoes/EquipeDetail";
-import EquipeEdit from "./pages/configuracoes/EquipeEdit";
+const Departamentos = lazy(() => import("./pages/configuracoes/Departamentos"));
+const DepartamentoDetail = lazy(() => import("./pages/configuracoes/DepartamentoDetail"));
+const DepartamentoEdit = lazy(() => import("./pages/configuracoes/DepartamentoEdit"));
+const Equipes = lazy(() => import("./pages/configuracoes/Equipes"));
+const EquipeDetail = lazy(() => import("./pages/configuracoes/EquipeDetail"));
+const EquipeEdit = lazy(() => import("./pages/configuracoes/EquipeEdit"));
 
 // Multi-tenant: Cargos e Permissões
-import Cargos from "./pages/configuracoes/Cargos";
-import CargoPermissoes from "./pages/configuracoes/CargoPermissoes";
+const Cargos = lazy(() => import("./pages/configuracoes/Cargos"));
+const CargoPermissoes = lazy(() => import("./pages/configuracoes/CargoPermissoes"));
 
 // Multi-tenant: Cofre de Senhas
-import CofreSenhas from "./pages/configuracoes/CofreSenhas";
-import CofreSenhasDetail from "./pages/configuracoes/CofreSenhasDetail";
-import CofreSenhasEdit from "./pages/configuracoes/CofreSenhasEdit";
+const CofreSenhas = lazy(() => import("./pages/configuracoes/CofreSenhas"));
+const CofreSenhasDetail = lazy(() => import("./pages/configuracoes/CofreSenhasDetail"));
+const CofreSenhasEdit = lazy(() => import("./pages/configuracoes/CofreSenhasEdit"));
 
 // Jornada do Cliente - Módulos novos (lazy loading)
 const NotificacoesAgendamento = lazy(() => import("./pages/configuracoes/NotificacoesAgendamento"));
@@ -245,9 +247,9 @@ const AutoAgendamento = lazy(() => import("./pages/AutoAgendamento"));
 const SelfSchedulingConfig = lazy(() => import("./pages/configuracoes/SelfSchedulingConfig"));
 
 // Documentos
-import Documentos from "./pages/Documentos";
-import DocumentoDetail from "./pages/DocumentoDetail";
-import DocumentoEdit from "./pages/DocumentoEdit";
+const Documentos = lazy(() => import("./pages/Documentos"));
+const DocumentoDetail = lazy(() => import("./pages/DocumentoDetail"));
+const DocumentoEdit = lazy(() => import("./pages/DocumentoEdit"));
 
 // Estoque (lazy loading)
 const EstoqueDashboard = lazy(() => import("./pages/estoque/EstoqueDashboard"));
@@ -385,23 +387,23 @@ const AttributionReport = lazy(() => import("./pages/ia/traffic/AttributionRepor
 const CreativeAnalysis = lazy(() => import("./pages/ia/traffic/CreativeAnalysis"));
 
 // Portal Franquia
-import FranquiaDashboard from "./pages/franquia/FranquiaDashboard";
-import FranquiaLeads from "./pages/franquia/FranquiaLeads";
-import FranquiaFunil from "./pages/franquia/FranquiaFunil";
-import FranquiaMetas from "./pages/franquia/FranquiaMetas";
-import FranquiaConfiguracoes from "./pages/franquia/FranquiaConfiguracoes";
-import FranquiaServicos from "./pages/franquia/FranquiaServicos";
-import FranquiaFormularios from "./pages/franquia/FranquiaFormularios";
-import FranquiaRelatorios from "./pages/franquia/FranquiaRelatorios";
-import FranquiaWhatsApp from "./pages/franquia/FranquiaWhatsApp";
-import FranquiaRanking from "./pages/franquia/FranquiaRanking";
-import FranquiaUsuarios from "./pages/franquia/FranquiaUsuarios";
-import FranquiaCampanhas from "./pages/franquia/FranquiaCampanhas";
-import FranquiaPerfil from "./pages/franquia/FranquiaPerfil";
+const FranquiaDashboard = lazy(() => import("./pages/franquia/FranquiaDashboard"));
+const FranquiaLeads = lazy(() => import("./pages/franquia/FranquiaLeads"));
+const FranquiaFunil = lazy(() => import("./pages/franquia/FranquiaFunil"));
+const FranquiaMetas = lazy(() => import("./pages/franquia/FranquiaMetas"));
+const FranquiaConfiguracoes = lazy(() => import("./pages/franquia/FranquiaConfiguracoes"));
+const FranquiaServicos = lazy(() => import("./pages/franquia/FranquiaServicos"));
+const FranquiaFormularios = lazy(() => import("./pages/franquia/FranquiaFormularios"));
+const FranquiaRelatorios = lazy(() => import("./pages/franquia/FranquiaRelatorios"));
+const FranquiaWhatsApp = lazy(() => import("./pages/franquia/FranquiaWhatsApp"));
+const FranquiaRanking = lazy(() => import("./pages/franquia/FranquiaRanking"));
+const FranquiaUsuarios = lazy(() => import("./pages/franquia/FranquiaUsuarios"));
+const FranquiaCampanhas = lazy(() => import("./pages/franquia/FranquiaCampanhas"));
+const FranquiaPerfil = lazy(() => import("./pages/franquia/FranquiaPerfil"));
 
 // Loja Pública (Sem autenticação)
-import LojaPublica from "./pages/LojaPublica";
-import LojaProdutoPublico from "./pages/LojaProdutoPublico";
+const LojaPublica = lazy(() => import("./pages/LojaPublica"));
+const LojaProdutoPublico = lazy(() => import("./pages/LojaProdutoPublico"));
 
 // ═══════════════════════════════════════════════════
 // IMOBILIÁRIO - Lazy imports (15 módulos)
@@ -479,16 +481,16 @@ const ClienteContratosPage = lazy(() => import("./pages/portal-cliente-imovel/Cl
 const ClienteFaturasPage = lazy(() => import("./pages/portal-cliente-imovel/ClienteFaturas"));
 
 // Totem e Portal do Cliente (Público)
-import Totem from "./pages/Totem";
+const Totem = lazy(() => import("./pages/Totem"));
 const TotemPonto = lazy(() => import("./pages/TotemPonto"));
 const TotemPresenca = lazy(() => import("./pages/TotemPresenca"));
-import ClienteLogin from "./pages/cliente/ClienteLogin";
-import ClienteDashboard from "./pages/cliente/ClienteDashboard";
-import ClienteAgendamentos from "./pages/cliente/ClienteAgendamentos";
-import ClienteServicos from "./pages/cliente/ClienteServicos";
-import ClienteHistorico from "./pages/cliente/ClienteHistorico";
-import ClientePerfil from "./pages/cliente/ClientePerfil";
-import ClienteAgendar from "./pages/cliente/ClienteAgendar";
+const ClienteLogin = lazy(() => import("./pages/cliente/ClienteLogin"));
+const ClienteDashboard = lazy(() => import("./pages/cliente/ClienteDashboard"));
+const ClienteAgendamentos = lazy(() => import("./pages/cliente/ClienteAgendamentos"));
+const ClienteServicos = lazy(() => import("./pages/cliente/ClienteServicos"));
+const ClienteHistorico = lazy(() => import("./pages/cliente/ClienteHistorico"));
+const ClientePerfil = lazy(() => import("./pages/cliente/ClientePerfil"));
+const ClienteAgendar = lazy(() => import("./pages/cliente/ClienteAgendar"));
 import { ClienteAuthProvider } from "@/contexts/ClienteAuthContext";
 import { ClienteProtectedRoute } from "@/components/cliente";
 
@@ -643,6 +645,12 @@ const isLandingDomain = () => {
   return LANDING_DOMAINS.includes(window.location.hostname);
 };
 
+const RouteFallback = () => (
+  <div className="flex items-center justify-center h-screen w-full">
+    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary" />
+  </div>
+);
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -652,6 +660,7 @@ const App = () => (
             <BrandingProvider>
               <Toaster />
               <Sonner />
+              <Suspense fallback={<RouteFallback />}>
               <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/entrar" element={<Login />} />
@@ -660,6 +669,11 @@ const App = () => (
             <Route path="/aguardando-aprovacao" element={<PendingApproval />} />
             <Route path="/cadastro" element={<Suspense fallback={null}><SignupEmpresa /></Suspense>} />
             <Route path="/cadastro/sucesso" element={<Suspense fallback={null}><SignupSucesso /></Suspense>} />
+            {/* Landing pública de Tabelas/Lançamentos — cliente final, sem multi-tenant */}
+            <Route path="/tabelas" element={<TabelasLanding />} />
+            <Route path="/lancamentos" element={<TabelasLanding />} />
+            {/* Tabela pública compartilhável (link p/ cliente/corretor, sem login) */}
+            <Route path="/tabela/:id" element={<TabelaPublica />} />
             <Route path="/" element={
               isLandingDomain()
                 ? <Suspense fallback={null}><LandingViniun /></Suspense>
@@ -1426,6 +1440,7 @@ const App = () => (
 
             <Route path="*" element={<NotFound />} />
               </Routes>
+              </Suspense>
             </BrandingProvider>
           </TenantProvider>
         </AuthProvider>

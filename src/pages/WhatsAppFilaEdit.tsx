@@ -247,6 +247,25 @@ export default function WhatsAppFilaEdit() {
             </CardContent>
           </Card>
 
+          <Card>
+            <CardHeader><CardTitle>Mensagem de Boas-Vindas</CardTitle></CardHeader>
+            <CardContent>
+              <FormField control={form.control} name="welcome_message" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mensagem enviada ao cliente ao entrar na fila</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      rows={3}
+                      placeholder="Bem-vindo! Em breve um atendente irá lhe atender."
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+            </CardContent>
+          </Card>
+
           <div className="flex justify-end gap-3">
             <Button type="button" variant="outline" onClick={() => navigate('/whatsapp/filas')}>Cancelar</Button>
             <Button type="submit" disabled={create.isPending || update.isPending}>

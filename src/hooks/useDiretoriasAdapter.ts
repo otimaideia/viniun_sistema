@@ -115,7 +115,7 @@ export function useDiretoriasAdapter() {
       // Nota: mt_franchises tem campo directory_id
       const directoryIds = (directories || []).map((d: MTDirectory) => d.id);
 
-      let franchiseCounts: Record<string, number> = {};
+      const franchiseCounts: Record<string, number> = {};
       if (directoryIds.length > 0) {
         const { data: franchises } = await supabase
           .from('mt_franchises')

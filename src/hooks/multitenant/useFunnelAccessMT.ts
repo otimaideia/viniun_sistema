@@ -232,7 +232,7 @@ export function useFunnelUserAccessMT(funnelId: string | undefined) {
       const teamIds = (teamResult.data || []).map((t) => t.team_id);
 
       // Buscar regras de acesso que se aplicam ao usuário
-      let q = supabase
+      const q = supabase
         .from('mt_funnel_role_access')
         .select('*')
         .eq('funnel_id', funnelId);

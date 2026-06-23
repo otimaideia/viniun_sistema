@@ -79,10 +79,16 @@ export default function RedeTabelaEdit() {
 
   const onSubmit = async (data: FormData) => {
     try {
+      // Datas vazias devem virar null (coluna DATE rejeita string "")
+      const payload = {
+        ...data,
+        validade_inicio: data.validade_inicio?.trim() ? data.validade_inicio : null,
+        validade_fim: data.validade_fim?.trim() ? data.validade_fim : null,
+      };
       if (isEditing && id) {
-        await update.mutateAsync({ id, ...data });
+        await update.mutateAsync({ id, ...payload });
       } else {
-        await create.mutateAsync(data);
+        await create.mutateAsync(payload);
       }
       navigate("/imoveis/rede");
     } catch {

@@ -153,7 +153,7 @@ export function useDailyReportsMT(date: string, franchiseId?: string) {
           .map(a => a.lead_id);
 
         if (leadIds.length > 0) {
-          let salesConvQuery = supabase
+          const salesConvQuery = supabase
             .from('mt_sales' as any)
             .select('id, lead_id')
             .in('lead_id', leadIds)

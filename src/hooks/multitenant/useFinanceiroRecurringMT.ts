@@ -41,7 +41,7 @@ export function calcularOcorrencias(
     ? new Date(dataFim + 'T00:00:00')
     : (() => { const d = new Date(dataInicio + 'T00:00:00'); d.setFullYear(d.getFullYear() + 1); return d; })();
 
-  let current = new Date(dataInicio + 'T00:00:00');
+  const current = new Date(dataInicio + 'T00:00:00');
   let count = 0;
 
   while (current <= end) {

@@ -127,7 +127,7 @@ export function useTemplates(
       input: UpdateTemplateInput;
     }) => {
       // Se conteúdo foi alterado, re-extrair variáveis
-      let updateData: UpdateTemplateInput = { ...input };
+      const updateData: UpdateTemplateInput = { ...input };
       if (input.content && !input.variables) {
         updateData.variables = extractVariables(input.content);
       }

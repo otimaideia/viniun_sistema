@@ -55,7 +55,7 @@ export function useUsersMT(filters?: { is_active?: boolean; franchise_id?: strin
 
       // Fetch roles for each user
       const userIds = (data || []).map(u => u.id);
-      let rolesMap: Record<string, { codigo: string; nome: string }[]> = {};
+      const rolesMap: Record<string, { codigo: string; nome: string }[]> = {};
 
       if (userIds.length > 0) {
         const { data: userRoles } = await supabase
